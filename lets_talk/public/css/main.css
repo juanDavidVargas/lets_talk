@@ -485,5 +485,22 @@ iframe {
   }
 }
 
+.badge-success {
+    background: #28A745 !important;
+}
+
+.badge-danger {
+    background: #DC3545 !important;
+}
+
+.float-right {
+    float: right !important;
+}
+
+.header-table {
+    background: #21277B !important;
+    color: #FFFFFF !important;
+}
+
 
 

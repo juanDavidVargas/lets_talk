@@ -5,7 +5,7 @@
 <div class="limiter">
     <div class="container-login100">
         <div class="wrap-login100">
-            <form class="login100-form validate-form" method="post" action="{{route('login.store')}}">
+            <form class="login100-form validate-form" method="post" action="{{route('login.store')}}" autocomplete="off">
             @csrf
                 <span class="login100-form-title p-b-26">
                     Welcome
@@ -24,13 +24,13 @@
                     <span class="focus-input100" data-placeholder="Password"></span>
                 </div>
 
-                <div class="text-right">
+                {{-- <div class="text-right">
                     <span class="txt1">
                         <a class="txt2" href="{{route('reset_password')}}">
                             Forgot Password
                         </a>
                     </span>
-                </div>
+                </div> --}}
 
                 <div class="container-login100-form-btn">
                     <div class="wrap-login100-form-btn">

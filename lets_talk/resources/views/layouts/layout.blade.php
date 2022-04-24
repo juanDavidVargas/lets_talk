@@ -38,10 +38,10 @@
     <script src="{{ asset('js/modernizr.custom.js') }}"></script>
     <script src="{{ asset('js/jquery-2.1.3.min.js') }}"></script>
      {{-- <script src="{{asset('vendor/jquery/jquery-3.2.1.min.js')}}"></script> --}}
+
 </head>
 
 <body>
-
 <div class="container">
 
     <div class="row">
@@ -167,5 +167,7 @@
 	<script src="{{asset('vendor/daterangepicker/daterangepicker.js')}}"></script>
 	<script src="{{asset('vendor/countdowntime/countdowntime.js')}}"></script>
 	<script src="{{asset('js/main.js')}}"></script>
+
+    @include('sweetalert::alert')
 </body>
 </html>

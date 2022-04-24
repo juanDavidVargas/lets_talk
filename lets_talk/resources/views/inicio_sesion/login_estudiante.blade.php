@@ -24,13 +24,13 @@
                     <span class="focus-input100" data-placeholder="Contraseña"></span>
                 </div>
 
-                <div class="text-right">
+                {{-- <div class="text-right">
                     <span class="txt1">
                         <a class="txt2" href="{{route('reset_password_student')}}">
                             Olvidé Contraseña
                         </a>
                     </span>
-                </div>
+                </div> --}}
 
                 <div class="container-login100-form-btn">
                     <div class="wrap-login100-form-btn">
