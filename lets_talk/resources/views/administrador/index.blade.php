@@ -34,6 +34,7 @@
                         <th>State</th>
                         <th>Edit</th>
                         <th>Change Status</th>
+                        <th>Update Password</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -53,10 +54,13 @@
                                 <td><span class='badge badge-danger'>Inactive</span></td>
                            @endif
                            <td>
-                               <a href="" class="btn btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                <a href="{{route('administrador.edit', $usuario->id_user)}}" class="btn btn-primary" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                            </td>
                            <td>
-                            <a href="" class="btn btn-warning"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+                                <a href="" class="btn btn-warning" title="Change Status"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+                           </td>
+                           <td>
+                               <a class="btn btn-info" href="" title="Update Password"><i class="fa fa-key" aria-hidden="true"></i></a>
                            </td>
                        </tr>
                    @endforeach

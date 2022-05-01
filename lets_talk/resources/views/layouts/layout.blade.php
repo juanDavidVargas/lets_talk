@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta name="author" content="">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Let's Talk - @yield('title')</title>
     @yield('css')
     <!-- Google Fonts -->
@@ -34,6 +35,10 @@
 	<link rel="stylesheet" type="text/css" href="{{asset('vendor/daterangepicker/daterangepicker.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{asset('css/util.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{asset('css/main.css')}}">
+
+    {{-- Sweetalert2 --}}
+	<link rel="stylesheet" type="text/css" href="{{asset('css/sweetalert2.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{asset('css/sweetalert2.min.css')}}">
     <!--  Js -->
     <script src="{{ asset('js/modernizr.custom.js') }}"></script>
     <script src="{{ asset('js/jquery-2.1.3.min.js') }}"></script>
@@ -167,6 +172,18 @@
 	<script src="{{asset('vendor/daterangepicker/daterangepicker.js')}}"></script>
 	<script src="{{asset('vendor/countdowntime/countdowntime.js')}}"></script>
 	<script src="{{asset('js/main.js')}}"></script>
+
+    {{-- Sweetalert --}}
+	<script src="{{asset('js/sweetalert2.all.js')}}"></script>
+	<script src="{{asset('js/sweetalert2.min.js')}}"></script>
+
+    <script type="text/javascript">
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        </script>
 
     @include('sweetalert::alert')
 </body>

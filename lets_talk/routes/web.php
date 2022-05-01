@@ -18,3 +18,5 @@ Route::get('reset_password_student', 'inicio_sesion\LoginController@resetPasswor
 Route::resource('trainer', 'entrenador\EntrenadorController');
 Route::resource('administrador', 'admin\AdministradorController');
 Route::resource('estudiante', 'estudiante\EstudianteController');
+Route::post('validar_cedula', 'admin\AdministradorController@validarCedula')->name('validar_cedula');
+Route::post('validar_correo', 'admin\AdministradorController@validarCorreo')->name('validar_correo');

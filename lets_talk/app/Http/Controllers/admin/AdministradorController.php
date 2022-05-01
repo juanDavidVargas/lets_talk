@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Http\Responses\administrador\UsuariosShow;
 use App\Http\Responses\administrador\UsuariosStore;
+use App\User;
 use Illuminate\Http\Request;
 
 class AdministradorController extends Controller
@@ -61,7 +62,10 @@ class AdministradorController extends Controller
      */
     public function edit($id)
     {
-        //
+        $usuario = User::find($id);
+        view()->share('usuario', $usuario);
+        $this->share_data();
+        return view('administrador.edit');
     }
 
     /**
@@ -117,5 +121,17 @@ class AdministradorController extends Controller
     {
         $usuariosShow = new  UsuariosShow();
        return $usuariosShow->roles();
+    }
+
+    public function validarCedula(Request $request)
+    {
+        $usuariosShow = new  UsuariosShow();
+       return $usuariosShow->validarDocumento($request);
+    }
+
+    public function validarCorreo(Request $request)
+    {
+        $usuariosShow = new  UsuariosShow();
+       return $usuariosShow->validarCorreo($request);
     }
 }

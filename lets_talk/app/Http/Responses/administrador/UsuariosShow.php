@@ -4,6 +4,7 @@ namespace App\Http\Responses\administrador;
 
 use App\Models\usuarios\Roles;
 use App\Models\usuarios\TipoDocumento;
+use App\User;
 use Exception;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Support\Facades\DB;
@@ -105,6 +106,52 @@ class UsuariosShow implements Responsable
          {
             alert()->error('Error', 'Ha ocurrido un error, contácte el administrador');
             return back();
+        }
+    }
+
+    public function validarDocumento($request)
+    {
+        $numero_documento = request('numero_documento', null);
+
+        try {
+
+            $documento = User::select('numero_documento')
+                                ->where('numero_documento', $numero_documento)
+                                ->get()
+                                ->first();
+
+            if(isset($documento) && !empty($documento) && !is_null($documento))
+            {
+                return response()->json("existe_doc");
+            }
+
+        } catch (Exception $e)
+        {
+            return response()->json("error_exception");
+            exit;
+        }
+    }
+
+    public function validarCorreo($request)
+    {
+        $correo = request('email', null);
+
+        try {
+
+            $correo = User::select('correo')
+                                ->where('correo', $correo)
+                                ->get()
+                                ->first();
+
+            if(isset($correo) && !empty($correo) && !is_null($correo))
+            {
+                return response()->json("existe_correo");
+            }
+
+        } catch (Exception $e)
+        {
+            return response()->json("error_exception_correo");
+            exit;
         }
     }
 }
