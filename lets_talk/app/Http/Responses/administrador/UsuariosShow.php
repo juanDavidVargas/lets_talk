@@ -2,7 +2,8 @@
 
 namespace App\Http\Responses\administrador;
 
-use App\User;
+use App\Models\usuarios\Roles;
+use App\Models\usuarios\TipoDocumento;
 use Exception;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Support\Facades\DB;
@@ -45,6 +46,65 @@ class UsuariosShow implements Responsable
        } catch (Exception $e)
        {
            alert()->error('Error', 'Ha ocurrido un error, contácte el administrador');
+           return back();
        }
+    }
+
+    public function tiposDocumento()
+    {
+        try {
+
+            $tipos_documento = TipoDocumento::select('id', 'descripcion')
+                                            ->get()
+                                            ->pluck('descripcion', 'id');
+
+            return $tipos_documento;
+
+        } catch (Exception $e)
+         {
+            alert()->error('Error', 'Ha ocurrido un error, contácte el administrador');
+            return back();
+        }
+    }
+
+    public function municipios()
+    {
+        try {
+
+            $municipios = DB::table('municipios')
+                        ->join('departamentos', 'departamentos.id_departamento', '=', 'municipios.id_departamento')
+                        ->select('municipios.id_municipio', DB::raw("CONCAT(municipios.descripcion, ' - ', departamentos.descripcion) AS nombre_ciudad"))
+                        ->whereNull('municipios.deleted_at')
+                        ->where('municipios.estado', 1)
+                        ->orderBy('municipios.id_municipio', 'DESC')
+                        ->get()
+                        ->pluck('nombre_ciudad', 'id_municipio');
+
+            return $municipios;
+
+        } catch (Exception $e)
+         {
+            alert()->error('Error', 'Ha ocurrido un error, contácte el administrador');
+            return back();
+        }
+    }
+
+    public function roles()
+    {
+        try {
+
+            $roles = Roles::select('id_rol', 'descripcion')
+                                ->where('estado', 1)
+                                ->orderBy('descripcion', 'ASC')
+                                ->get()
+                                ->pluck('descripcion', 'id_rol');
+
+            return $roles;
+
+        } catch (Exception $e)
+         {
+            alert()->error('Error', 'Ha ocurrido un error, contácte el administrador');
+            return back();
+        }
     }
 }

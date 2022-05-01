@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Responses\administrador\UsuariosShow;
+use App\Http\Responses\administrador\UsuariosStore;
 use Illuminate\Http\Request;
 
 class AdministradorController extends Controller
@@ -26,6 +27,7 @@ class AdministradorController extends Controller
      */
     public function create()
     {
+        $this->share_data();
         return view('administrador.create');
     }
 
@@ -37,7 +39,7 @@ class AdministradorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return new UsuariosStore();
     }
 
     /**
@@ -88,11 +90,32 @@ class AdministradorController extends Controller
     private function share_data()
     {
         view()->share('usuarios', $this->usuarios());
+        view()->share('tipo_documento', $this->tipos_documento());
+        view()->share('municipios', $this->municipios());
+        view()->share('roles', $this->roles());
     }
 
     public function usuarios()
     {
        $usuariosShow = new  UsuariosShow();
        return $usuariosShow->todosLosUsuarios();
+    }
+
+    public function tipos_documento()
+    {
+        $usuariosShow = new  UsuariosShow();
+       return $usuariosShow->tiposDocumento();
+    }
+
+    public function municipios()
+    {
+        $usuariosShow = new  UsuariosShow();
+       return $usuariosShow->municipios();
+    }
+
+    public function roles()
+    {
+        $usuariosShow = new  UsuariosShow();
+       return $usuariosShow->roles();
     }
 }
