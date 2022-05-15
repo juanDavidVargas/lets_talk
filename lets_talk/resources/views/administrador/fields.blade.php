@@ -4,6 +4,8 @@
             {!! Form::text('nombres', isset($usuario) ? $usuario->nombres : null, ['class' => 'input100', 'id' => 'nombres']) !!}
             <span class="focus-input100" data-placeholder="Name"></span>
         </div>
+
+        {!! Form::hidden('id_usuario', isset($usuario) ? $usuario->id_user : null, ['class' => 'input100', 'id' => 'id_usuario']) !!}
     </div>
 
     <div class="col-xs-12 col-sm-12 col-md-3">
@@ -50,14 +52,14 @@
 
     <div class="col-xs-12 col-sm-12 col-md-3">
         <div class="wrap-input100">
-            {!! Form::select('genero', ['-1' => 'Select...', 'M' => 'Masculino', 'F' => 'Femenino'], null, ['class' => 'input100', 'id' => 'genero']) !!}
+            {!! Form::select('genero', ['-1' => 'Select...', 'M' => 'Masculino', 'F' => 'Femenino'], isset($usuario) ? $usuario->genero : null, ['class' => 'input100', 'id' => 'genero']) !!}
             <span class="focus-input100" data-placeholder="Genre"></span>
         </div>
     </div>
 
     <div class="col-xs-12 col-sm-12 col-md-3">
         <div class="wrap-input100 validate-input" data-validate="State Is Required">
-            {!! Form::select('estado', ['-1' => 'Select...', '1' => 'Activo', '0' => 'Inactivo'], null, ['class' => 'input100', 'id' => 'estado']) !!}
+            {!! Form::select('estado', ['-1' => 'Select...', '1' => 'Activo', '0' => 'Inactivo'], isset($usuario) ? $usuario->estado : null, ['class' => 'input100', 'id' => 'estado']) !!}
             <span class="focus-input100" data-placeholder="State"></span>
         </div>
     </div>
@@ -66,28 +68,28 @@
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-3">
         <div class="wrap-input100">
-            {!! Form::text('telefono', null, ['class' => 'input100', 'id' => 'telefono']) !!}
+            {!! Form::text('telefono', isset($usuario) ? $usuario->telefono : null, ['class' => 'input100', 'id' => 'telefono']) !!}
             <span class="focus-input100" data-placeholder="Phone"></span>
         </div>
     </div>
 
     <div class="col-xs-12 col-sm-12 col-md-3">
         <div class="wrap-input100">
-            {!! Form::text('celular', null, ['class' => 'input100', 'id' => 'celular']) !!}
+            {!! Form::text('celular', isset($usuario) ? $usuario->celular : null, ['class' => 'input100', 'id' => 'celular']) !!}
             <span class="focus-input100" data-placeholder="Cell Phone"></span>
         </div>
     </div>
 
     <div class="col-xs-12 col-sm-12 col-md-3">
         <div class="wrap-input100 validate-input" data-validate="Required">
-            {!! Form::email('correo', null, ['class' => 'input100', 'id' => 'correo']) !!}
+            {!! Form::email('correo', isset($usuario) ? $usuario->correo : null, ['class' => 'input100', 'id' => 'correo']) !!}
             <span class="focus-input100" data-placeholder="Email"></span>
         </div>
     </div>
 
     <div class="col-xs-12 col-sm-12 col-md-3">
         <div class="wrap-input100">
-            {!! Form::text('direccion_residencia', null, ['class' => 'input100', 'id' => 'direccion_residencia']) !!}
+            {!! Form::text('direccion_residencia', isset($usuario) ? $usuario->direccion_residencia : null, ['class' => 'input100', 'id' => 'direccion_residencia']) !!}
             <span class="focus-input100" data-placeholder="Residence Address"></span>
         </div>
     </div>
@@ -96,14 +98,14 @@
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-3">
         <div class="wrap-input100">
-            {!! Form::select('id_municipio_residencia', $municipios, null, ['class' => 'input100', 'id' => 'id_municipio_residencia']) !!}
+            {!! Form::select('id_municipio_residencia', $municipios, isset($usuario) ? $usuario->id_municipio_residencia : null, ['class' => 'input100', 'id' => 'id_municipio_residencia']) !!}
             <span class="focus-input100" data-placeholder="Residence City"></span>
         </div>
     </div>
 
     <div class="col-xs-12 col-sm-12 col-md-3">
         <div class="wrap-input100 validate-input" data-validate="Required">
-            {!! Form::select('id_rol', $roles, null, ['class' => 'input100', 'id' => 'id_rol']) !!}
+            {!! Form::select('id_rol', $roles, isset($usuario) ? $usuario->id_rol : null, ['class' => 'input100', 'id' => 'id_rol']) !!}
             <span class="focus-input100" data-placeholder="Role"></span>
         </div>
     </div>

@@ -8,11 +8,13 @@ use Illuminate\Contracts\Support\Responsable;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Responses\administrador\UsuariosShow;
 
 class UsuariosStore implements Responsable
 {
     public function toResponse($request)
     {
+        $usuarioShow = new UsuariosShow();
         $nombres = request('nombres', null);
         $apellidos = request('apellidos', null);
         $id_tipo_documento = request('id_tipo_documento', null);
@@ -29,12 +31,12 @@ class UsuariosStore implements Responsable
         $id_rol = request('id_rol', null);
 
         // Consultamos si ya existe un usuario con la cedula ingresada
-        $consulta_cedula = $this->consultarCedula($numero_documento);
+        $consulta_cedula = $usuarioShow->consultarCedula($numero_documento);
 
         if(isset($consulta_cedula) && !empty($consulta_cedula) &&
            !is_null($consulta_cedula))
         {
-            alert()->info('Info', 'La cédula ingresada ya existe');
+            alert()->info('Info', 'The document number already exists.');
             return back();
         } else {
 
@@ -81,41 +83,21 @@ class UsuariosStore implements Responsable
                 if($nuevo_usuario)
                 {
                     DB::connection('mysql')->commit();
-                    alert()->success('Proceso Exitoso', 'Usuario creado correctamente, el nombre de usuario es: ' . $nuevo_usuario->usuario);
+                    alert()->success('Successful Process', 'User successfully created, the user name is: ' . $nuevo_usuario->usuario);
                     return redirect()->to(route('administrador.index'));
 
                 } else {
                     DB::connection('mysql')->rollback();
+                    alert()->error('Error', 'An error has occurred creating the user, please contact support.');
+                    return redirect()->to(route('administrador.index'));
                 }
 
             } catch (Exception $e)
             {
                 DB::connection('mysql')->rollback();
-                alert()->error('Error', 'Ha ocurrido un error creando el usuario, íntente de nuevo, si el problema persiste contácte a soporte');
+                alert()->error('Error', 'An error has occurred creating the user, try again, if the problem persists contact support.');
                 return back();
             }
-        }
-    }
-
-    private function consultarCedula($numero_documento)
-    {
-        try {
-
-            $cedula = User::where('numero_documento', $numero_documento)
-                            ->get()
-                            ->first();
-
-            if(isset($cedula) && !empty($cedula) && !is_null($cedula))
-            {
-                return $cedula;
-            } else {
-                return null;
-            }
-
-        } catch (Exception $e)
-        {
-            alert()->error('Error', 'Ha ocurrido un error, contácte el administrador');
-            return back();
         }
     }
 
@@ -129,7 +111,7 @@ class UsuariosStore implements Responsable
             return $usuario;
 
         } catch (Exception $e) {
-            alert()->error('Error', 'Ha ocurrido un error, contácte el administrador');
+            alert()->error('Error', 'An error has occurred, try again, if the problem persists contact support.');
             return back();
         }
     }

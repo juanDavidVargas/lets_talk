@@ -46,7 +46,7 @@ class UsuariosShow implements Responsable
 
        } catch (Exception $e)
        {
-           alert()->error('Error', 'Ha ocurrido un error, contácte el administrador');
+           alert()->error('Error', 'An error has occurred, try again, if the problem persists contact support.');
            return back();
        }
     }
@@ -63,7 +63,7 @@ class UsuariosShow implements Responsable
 
         } catch (Exception $e)
          {
-            alert()->error('Error', 'Ha ocurrido un error, contácte el administrador');
+            alert()->error('Error', 'An error has occurred, try again, if the problem persists contact support.');
             return back();
         }
     }
@@ -85,7 +85,7 @@ class UsuariosShow implements Responsable
 
         } catch (Exception $e)
          {
-            alert()->error('Error', 'Ha ocurrido un error, contácte el administrador');
+            alert()->error('Error', 'An error has occurred, try again, if the problem persists contact support.');
             return back();
         }
     }
@@ -104,7 +104,7 @@ class UsuariosShow implements Responsable
 
         } catch (Exception $e)
          {
-            alert()->error('Error', 'Ha ocurrido un error, contácte el administrador');
+            alert()->error('Error', 'An error has occurred, try again, if the problem persists contact support.');
             return back();
         }
     }
@@ -152,6 +152,51 @@ class UsuariosShow implements Responsable
         {
             return response()->json("error_exception_correo");
             exit;
+        }
+    }
+
+    public function consultarCedula($numero_documento)
+    {
+        try {
+
+            $cedula = User::where('numero_documento', $numero_documento)
+                            ->get()
+                            ->first();
+
+            if(isset($cedula) && !empty($cedula) && !is_null($cedula))
+            {
+                return $cedula;
+            } else {
+                return null;
+            }
+
+        } catch (Exception $e)
+        {
+            alert()->error('Error', 'An error has occurred, try again, if the problem persists contact support.');
+            return back();
+        }
+    }
+
+    public function consultarCedula2($numero_documento, $id_user)
+    {
+        try {
+
+            $cedula = User::where('numero_documento', $numero_documento)
+                            ->whereNotIn('id_user', array($id_user))
+                            ->get()
+                            ->first();
+
+            if(isset($cedula) && !empty($cedula) && !is_null($cedula))
+            {
+                return $cedula;
+            } else {
+                return null;
+            }
+
+        } catch (Exception $e)
+        {
+            alert()->error('Error', 'An error has occurred, try again, if the problem persists contact support.');
+            return back();
         }
     }
 }

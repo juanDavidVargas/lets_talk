@@ -62,7 +62,7 @@
                     Swal.fire({
                         position: 'center',
                         title: 'Info!',
-                        html:  'Ya existe un registro con la cédula ingresada!',
+                        html:  'There is already a record with the document number entered!',
                         type: 'info',
                         showCancelButton: false,
                         showConfirmButton: false,
@@ -79,7 +79,7 @@
                     Swal.fire({
                         position: 'center',
                         title: 'Error!',
-                        html:  'Ha ocurrido un error, contácte a soporte',
+                        html:  'An error occurred, contact support!',
                         type: 'error',
                         showCancelButton: false,
                         showConfirmButton: false,
@@ -113,7 +113,7 @@
                     Swal.fire({
                         position: 'center',
                         title: 'Info!',
-                        html:  'Ya existe un correo similar en nuestra base de datos!',
+                        html:  'A similar email already exists in our database!',
                         type: 'info',
                         showCancelButton: false,
                         showConfirmButton: false,
@@ -130,7 +130,7 @@
                     Swal.fire({
                         position: 'center',
                         title: 'Error!',
-                        html:  'Ha ocurrido un error, contácte a soporte',
+                        html:  'An error occurred, contact support!',
                         type: 'error',
                         showCancelButton: false,
                         showConfirmButton: false,

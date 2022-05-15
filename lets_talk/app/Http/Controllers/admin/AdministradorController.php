@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Http\Responses\administrador\UsuariosShow;
 use App\Http\Responses\administrador\UsuariosStore;
+use App\Http\Responses\administrador\UsuariosUpdate;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -77,7 +78,7 @@ class AdministradorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return new UsuariosUpdate();
     }
 
     /**
@@ -133,5 +134,11 @@ class AdministradorController extends Controller
     {
         $usuariosShow = new  UsuariosShow();
        return $usuariosShow->validarCorreo($request);
+    }
+
+    public function cambiarEstadoUsuario(Request $request)
+    {
+       $usuariosUpd = new UsuariosUpdate();
+        return $usuariosUpd->cambiarEstado($request);
     }
 }

@@ -55,9 +55,11 @@
                            @endif
                            <td>
                                 <a href="{{route('administrador.edit', $usuario->id_user)}}" class="btn btn-primary" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+
+                                <input type="hidden" name="id_user" id="id_user" value="{{$usuario->id_user}}">
                            </td>
                            <td>
-                                <a href="" class="btn btn-warning" title="Change Status"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+                                <a href="#" class="btn btn-warning" title="Change Status"><i class="fa fa-refresh" aria-hidden="true" id="cambiar_estado"></i></a>
                            </td>
                            <td>
                                <a class="btn btn-info" href="" title="Update Password"><i class="fa fa-key" aria-hidden="true"></i></a>
@@ -83,6 +85,84 @@
 
         $('#tbl_users').DataTable({
             'ordering': false
+        });
+    });
+
+    $("#cambiar_estado").click(function(){
+
+        let id_user = $("#id_user").val();
+
+        Swal.fire({
+            title: 'You really want',
+            html: 'to change the status of this user?',
+            type: 'info',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.value) {
+
+                $.ajax({
+                    async: true,
+                    url: "{{route('cambiar_estado')}}",
+                    type: "POST",
+                    dataType: "JSON",
+                    data: {
+                        'id_user': id_user
+                    },
+                    success: function(response)
+                    {
+                        if(response == "-1")
+                        {
+                            Swal.fire({
+                                position: 'center',
+                                title: 'Error!',
+                                html:  'An error occurred, try again, if the problem persists contact support.',
+                                type: 'info',
+                                showCancelButton: false,
+                                showConfirmButton: false,
+                                allowOutsideClick: false,
+                                allowEscapeKey:false,
+                                timer: 6000
+                            });
+                        }
+
+                        if(response == 0 || response == "0")
+                        {
+                            Swal.fire({
+                                position: 'center',
+                                title: 'Error!',
+                                html:  'An error occurred, try again, if the problem persists contact support.',
+                                type: 'info',
+                                showCancelButton: false,
+                                showConfirmButton: false,
+                                allowOutsideClick: false,
+                                allowEscapeKey:false,
+                                timer: 6000
+                            });
+                        }
+
+                        if(response == "success")
+                        {
+                            Swal.fire({
+                                position: 'center',
+                                title: 'Success!',
+                                html:  "The user's status has been successfully updated",
+                                type: 'success',
+                                showCancelButton: false,
+                                showConfirmButton: false,
+                                allowOutsideClick: false,
+                                allowEscapeKey:false,
+                                timer: 2000
+                            });
+
+                            setTimeout(function(){
+                                window.location.reload();
+                            }, 3000);
+                        }
+                    }
+                });
+            }
         });
     });
 
