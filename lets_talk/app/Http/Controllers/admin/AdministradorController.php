@@ -18,8 +18,19 @@ class AdministradorController extends Controller
      */
     public function index()
     {
-        $this->share_data();
-        return view('administrador.index');
+        $sesion = $this->validarVariablesSesion();
+
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+
+            $this->share_data();
+            return view('administrador.index');
+        }
     }
 
     /**
@@ -29,8 +40,18 @@ class AdministradorController extends Controller
      */
     public function create()
     {
-        $this->share_data();
-        return view('administrador.create');
+        $sesion = $this->validarVariablesSesion();
+
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            $this->share_data();
+            return view('administrador.create');
+        }
     }
 
     /**
@@ -41,7 +62,17 @@ class AdministradorController extends Controller
      */
     public function store(Request $request)
     {
-        return new UsuariosStore();
+        $sesion = $this->validarVariablesSesion();
+
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            return new UsuariosStore();
+        }
     }
 
     /**
@@ -52,7 +83,20 @@ class AdministradorController extends Controller
      */
     public function show($id)
     {
-        //
+        $sesion = $this->validarVariablesSesion();
+
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            $usuario = User::find($id);
+            view()->share('usuario', $usuario);
+            $this->share_data();
+            return view('administrador.show');
+        }
     }
 
     /**
@@ -63,10 +107,20 @@ class AdministradorController extends Controller
      */
     public function edit($id)
     {
-        $usuario = User::find($id);
-        view()->share('usuario', $usuario);
-        $this->share_data();
-        return view('administrador.edit');
+        $sesion = $this->validarVariablesSesion();
+
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            $usuario = User::find($id);
+            view()->share('usuario', $usuario);
+            $this->share_data();
+            return view('administrador.edit');
+        }
     }
 
     /**
@@ -78,7 +132,17 @@ class AdministradorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return new UsuariosUpdate();
+        $sesion = $this->validarVariablesSesion();
+
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            return new UsuariosUpdate();
+        }
     }
 
     /**
@@ -89,7 +153,17 @@ class AdministradorController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $sesion = $this->validarVariablesSesion();
+
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+
+        }
     }
 
     private function share_data()
@@ -102,43 +176,141 @@ class AdministradorController extends Controller
 
     public function usuarios()
     {
-       $usuariosShow = new  UsuariosShow();
-       return $usuariosShow->todosLosUsuarios();
+        $sesion = $this->validarVariablesSesion();
+
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            $usuariosShow = new  UsuariosShow();
+            return $usuariosShow->todosLosUsuarios();
+        }
     }
 
     public function tipos_documento()
     {
-        $usuariosShow = new  UsuariosShow();
-       return $usuariosShow->tiposDocumento();
+        $sesion = $this->validarVariablesSesion();
+
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            $usuariosShow = new  UsuariosShow();
+           return $usuariosShow->tiposDocumento();
+        }
     }
 
     public function municipios()
     {
-        $usuariosShow = new  UsuariosShow();
-       return $usuariosShow->municipios();
+        $sesion = $this->validarVariablesSesion();
+
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            $usuariosShow = new  UsuariosShow();
+           return $usuariosShow->municipios();
+        }
     }
 
     public function roles()
     {
-        $usuariosShow = new  UsuariosShow();
-       return $usuariosShow->roles();
+        $sesion = $this->validarVariablesSesion();
+
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            $usuariosShow = new  UsuariosShow();
+           return $usuariosShow->roles();
+        }
     }
 
     public function validarCedula(Request $request)
     {
-        $usuariosShow = new  UsuariosShow();
-       return $usuariosShow->validarDocumento($request);
+        $sesion = $this->validarVariablesSesion();
+
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            $usuariosShow = new  UsuariosShow();
+           return $usuariosShow->validarDocumento($request);
+        }
     }
 
     public function validarCorreo(Request $request)
     {
-        $usuariosShow = new  UsuariosShow();
-       return $usuariosShow->validarCorreo($request);
+        $sesion = $this->validarVariablesSesion();
+
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            $usuariosShow = new  UsuariosShow();
+           return $usuariosShow->validarCorreo($request);
+        }
     }
 
     public function cambiarEstadoUsuario(Request $request)
     {
-       $usuariosUpd = new UsuariosUpdate();
-        return $usuariosUpd->cambiarEstado($request);
+        $sesion = $this->validarVariablesSesion();
+
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            $usuariosUpd = new UsuariosUpdate();
+             return $usuariosUpd->cambiarEstado($request);
+        }
+    }
+
+    public function actualizarClave(Request $request)
+    {
+        $sesion = $this->validarVariablesSesion();
+
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            $usuariosUpd = new UsuariosUpdate();
+            return $usuariosUpd->cambiarClave($request);
+        }
+    }
+
+    public function validarVariablesSesion()
+    {
+        $variables_sesion =[];
+        $id_usuario = session('usuario_id');
+        array_push($variables_sesion, $id_usuario);
+        $username = session('username');
+        array_push($variables_sesion, $username);
+        $sesion_iniciada = session('sesion_iniciada');
+        array_push($variables_sesion, $sesion_iniciada);
+        return $variables_sesion;
     }
 }

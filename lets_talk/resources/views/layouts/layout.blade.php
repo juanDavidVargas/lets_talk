@@ -50,11 +50,29 @@
 <div class="container">
 
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="col-xs-6 col-sm-6 col-md-6">
             <div class="logo-box">
                 <img src="{{asset('img/logo.png')}}" alt="logo" class="logo logo-img">
             </div>
         </div>
+
+        @if(Request::path() == '/' || Request::path() == "login" ||
+            Request::path() == "login_estudiante")
+
+            <div class="col-xs-6 col-sm-6 col-md-6">
+                <div class="sign-out">
+                    &nbsp;
+                </div>
+            </div>
+        @else
+        <div class="col-xs-6 col-sm-6 col-md-6">
+            <div class="sign-out">
+                <a href="{{route('logout')}}" title="Cerrar Sesión">
+                    <i class="fa fa-sign-out fa-3x" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+        @endif
     </div>
 
     @yield('content')

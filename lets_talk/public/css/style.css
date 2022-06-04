@@ -3161,7 +3161,41 @@ a:focus {
 .link {
     color: #000 !important;
 }
-
 .padding {
     padding-top: 25px !important;
+}
+/* Inicio estilos botones sweealert */
+.swal2-popup .swal2-styled.swal2-cancel {
+    background-color: #ccc !important;
+    font-weight: bold !important;
+}
+.swal2-popup .swal2-styled.swal2-confirm {
+    background-color: #5CB85C !important;
+    font-weight: bold !important;
+}
+/* Fin estilos botones sweealert */
+
+#loaderGif{
+    background-size: 75px;
+    position: fixed;
+    /* left: 0px;
+    top: 0px; */
+    left: 30vw;
+    top: 5vw;
+    width: 100%;
+    height: 100vh;
+    z-index: 20;
+}
+.ocultar {
+    display: none !important;
+}
+.sign-out {
+    float: right !important;
+    margin-top: 2vw !important;
+}
+.sign-out a {
+    text-decoration: none !important
+}
+.sign-out a i {
+    color: #1D9BF0 !important;
 }

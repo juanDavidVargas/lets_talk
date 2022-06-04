@@ -32,6 +32,7 @@
                         <th>Email</th>
                         <th>Role</th>
                         <th>State</th>
+                        <th>View Details</th>
                         <th>Edit</th>
                         <th>Change Status</th>
                         <th>Update Password</th>
@@ -54,15 +55,17 @@
                                 <td><span class='badge badge-danger'>Inactive</span></td>
                            @endif
                            <td>
+                                <a href="{{route('administrador.show', $usuario->id_user)}}" class="btn btn-secondary" title="View Details"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                           </td>
+                           <td>
                                 <a href="{{route('administrador.edit', $usuario->id_user)}}" class="btn btn-primary" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-
                                 <input type="hidden" name="id_user" id="id_user" value="{{$usuario->id_user}}">
                            </td>
                            <td>
                                 <a href="#" class="btn btn-warning" title="Change Status"><i class="fa fa-refresh" aria-hidden="true" id="cambiar_estado"></i></a>
                            </td>
                            <td>
-                               <a class="btn btn-info" href="" title="Update Password"><i class="fa fa-key" aria-hidden="true"></i></a>
+                               <button class="btn btn-info" title="Update Password" id="pass_update"><i class="fa fa-key" aria-hidden="true"></i></button>
                            </td>
                        </tr>
                    @endforeach
@@ -70,6 +73,12 @@
             </table>
         </div>
     </div>
+</div>
+
+@include('administrador.modal')
+
+<div id="loaderGif" class="ocultar">
+    <img src="{{asset('img/processing.gif')}}" alt="processing">
 </div>
 
 @stop
@@ -110,6 +119,11 @@
                     data: {
                         'id_user': id_user
                     },
+                    beforeSend: function()
+                    {
+                        $("#loaderGif").show();
+                        $("#loaderGif").removeClass('ocultar');
+                    },
                     success: function(response)
                     {
                         if(response == "-1")
@@ -125,6 +139,8 @@
                                 allowEscapeKey:false,
                                 timer: 6000
                             });
+
+                            $("#loaderGif").hide();
                         }
 
                         if(response == 0 || response == "0")
@@ -140,6 +156,8 @@
                                 allowEscapeKey:false,
                                 timer: 6000
                             });
+
+                            $("#loaderGif").hide();
                         }
 
                         if(response == "success")
@@ -155,6 +173,102 @@
                                 allowEscapeKey:false,
                                 timer: 2000
                             });
+
+                            $("#loaderGif").hide();
+
+                            setTimeout(function(){
+                                window.location.reload();
+                            }, 3000);
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+    $("#pass_update").click(function()
+    {
+        let id_user = $("#id_user").val();
+
+        Swal.fire({
+            title: 'Update Password',
+            html: '<input class="form-control" placeholder="Entered the new password" type="password" name="change_clave" id="change_clave">',
+            type: 'info',
+            showCancelButton: true,
+            confirmButtonText: 'Update',
+            cancelButtonText: 'Cancel',
+            cancelButtonClassName: 'color-cancel-button'
+        }).then((result) =>
+        {
+            let new_clave = $("#change_clave").val();
+
+            if (result.value)
+            {
+                $.ajax({
+                    async: true,
+                    url: "{{route('actualizar_clave')}}",
+                    type: "POST",
+                    dataType: "JSON",
+                    data: {
+                        'id_user': id_user,
+                        'clave': new_clave
+                    },
+                    beforeSend: function()
+                    {
+                        $("#loaderGif").show();
+                        $("#loaderGif").removeClass('ocultar');
+                    },
+                    success: function(response)
+                    {
+                        if(response == "-1")
+                        {
+                            Swal.fire({
+                                position: 'center',
+                                title: 'Error!',
+                                html:  'The password is required',
+                                type: 'error',
+                                showCancelButton: false,
+                                showConfirmButton: false,
+                                allowOutsideClick: false,
+                                allowEscapeKey:false,
+                                timer: 3000
+                            });
+
+                            $("#loaderGif").hide();
+                        }
+
+                        if(response == 0 || response == "0")
+                        {
+                            Swal.fire({
+                                position: 'center',
+                                title: 'Error!',
+                                html:  'An error occurred, try again, if the problem persists contact support.',
+                                type: 'info',
+                                showCancelButton: false,
+                                showConfirmButton: false,
+                                allowOutsideClick: false,
+                                allowEscapeKey:false,
+                                timer: 5000
+                            });
+
+                            $("#loaderGif").hide();
+                        }
+
+                        if(response == "success")
+                        {
+                            Swal.fire({
+                                position: 'center',
+                                title: 'Success!',
+                                html:  "The user's password has been successfully updated",
+                                type: 'success',
+                                showCancelButton: false,
+                                showConfirmButton: false,
+                                allowOutsideClick: false,
+                                allowEscapeKey:false,
+                                timer: 2000
+                            });
+
+                            $("#loaderGif").hide();
 
                             setTimeout(function(){
                                 window.location.reload();

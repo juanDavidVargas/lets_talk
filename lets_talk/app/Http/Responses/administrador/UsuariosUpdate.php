@@ -8,6 +8,7 @@ use Illuminate\Contracts\Support\Responsable;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Responses\administrador\UsuariosShow;
+use Illuminate\Support\Facades\Hash;
 
 class UsuariosUpdate implements Responsable
 {
@@ -41,11 +42,9 @@ class UsuariosUpdate implements Responsable
         } else {
 
             $fecha_nacimiento = Carbon::parse($fecha_nacimiento)->timestamp;
-
             DB::connection('mysql')->beginTransaction();
-
-            try {
-
+            try
+            {
                 $usuario_update = User::find($id_user);
                 $usuario_update->nombres = strtoupper($nombres);
                 $usuario_update->apellidos = strtoupper($apellidos);
@@ -88,11 +87,9 @@ class UsuariosUpdate implements Responsable
     {
         $id_usuario = request('id_user', null);
         $estado = " (CASE WHEN estado = 1 THEN 0 ELSE 1 END) ";
-
         DB::connection('mysql')->beginTransaction();
-
-        try {
-
+        try
+        {
             $estado_usuario = DB::table('usuarios')
                                 ->where('id_user', $id_usuario)
                                 ->update([
@@ -102,6 +99,7 @@ class UsuariosUpdate implements Responsable
             if($estado_usuario)
             {
                 DB::connection('mysql')->commit();
+                sleep(2);
                 return response()->json("success");
             } else {
                 DB::connection('mysql')->rollback();
@@ -110,9 +108,44 @@ class UsuariosUpdate implements Responsable
 
         } catch (Exception $e)
         {
-            dd($e);
             DB::connection('mysql')->rollback();
             return response()->json(-1);
+        }
+    }
+
+    public function cambiarClave($request)
+    {
+        DB::connection('mysql')->beginTransaction();
+
+        try {
+
+            $id_usuario = request('id_user', null);
+            $clave_nueva = request('clave', null);
+
+            if(empty($clave_nueva) || is_null($clave_nueva))
+            {
+                return response()->json(-1);
+            }
+
+            $user = User::all()->find($id_usuario);
+            $user->password = Hash::make($clave_nueva);
+            $user->save();
+
+            if($user)
+            {
+                DB::connection('mysql')->commit();
+                sleep(2);
+                return response()->json("success");
+
+            } else {
+                DB::connection('mysql')->rollback();
+                return response()->json(0);
+            }
+
+        } catch (Exception $e)
+        {
+            DB::connection('mysql')->rollback();
+            return response()->json(0);
         }
     }
 }

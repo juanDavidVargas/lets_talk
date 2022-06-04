@@ -53,7 +53,12 @@ class LoginStore implements Responsable
                     dd("vista estudiante");
 
                   // Rol Administrador
-                } else if($user->id_rol == 2 || $user->id_rol == "2"){
+                } else if($user->id_rol == 2 || $user->id_rol == "2")
+                {
+                     // Creamos las variables de sesion
+                    session()->put('usuario_id', $user->id_user);
+                    session()->put('username', $user->usuario);
+                    session()->put('sesion_iniciada', true);
 
                     return redirect()->to(route('administrador.index'));
                 } else {

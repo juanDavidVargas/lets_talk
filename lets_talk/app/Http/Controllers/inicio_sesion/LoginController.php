@@ -5,6 +5,8 @@ namespace App\Http\Controllers\inicio_sesion;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Responses\inicio_sesion\LoginStore;
+use Exception;
+use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
@@ -102,5 +104,26 @@ class LoginController extends Controller
     public function recoveryPassword(Request $request)
     {
         dd($request);
+    }
+
+    public function logout(Request $request)
+    {
+        try {
+
+            Session::forget('usuario_id');
+            Session::forget('username');
+            Session::forget('sesion_iniciada');
+            Session::flush();
+            $request->session()->flush();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()->to(route('home'));
+
+        } catch (Exception $e)
+        {
+            alert()->error('Error','Ha ocurrido un error');
+            return back();
+        }
     }
 }

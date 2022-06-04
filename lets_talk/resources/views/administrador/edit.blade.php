@@ -50,13 +50,14 @@
 $("#numero_documento").blur(function(){
 
     let num_doc = $("#numero_documento").val();
+    let id_usuario = $("#id_usuario").val();
 
     $.ajax({
         async: false,
         url: "{{route('validar_cedula')}}",
         type: "POST",
         dataType: "json",
-        data: {'numero_documento': num_doc},
+        data: {'numero_documento': num_doc, 'id_usuario': id_usuario},
         success: function(response)
         {
             if(response == "existe_doc")
@@ -101,13 +102,14 @@ $("#numero_documento").blur(function(){
 $("#correo").blur(function(){
 
     let correo = $("#correo").val();
+    let id_usuario = $("#id_usuario").val();
 
     $.ajax({
         async: false,
         url: "{{route('validar_correo')}}",
         type: "POST",
         dataType: "json",
-        data: {'email': correo},
+        data: {'email': correo, 'id_usuario': id_usuario},
         success: function(response)
         {
             if(response == "existe_correo")

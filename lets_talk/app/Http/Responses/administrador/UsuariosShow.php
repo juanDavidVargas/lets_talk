@@ -112,11 +112,13 @@ class UsuariosShow implements Responsable
     public function validarDocumento($request)
     {
         $numero_documento = request('numero_documento', null);
+        $usuario_id = request('id_usuario', null);
 
         try {
 
             $documento = User::select('numero_documento')
                                 ->where('numero_documento', $numero_documento)
+                                ->whereNotIn('id_user', $usuario_id)
                                 ->get()
                                 ->first();
 
@@ -135,11 +137,13 @@ class UsuariosShow implements Responsable
     public function validarCorreo($request)
     {
         $correo = request('email', null);
+        $usuario_id = request('id_usuario', null);
 
         try {
 
             $correo = User::select('correo')
                                 ->where('correo', $correo)
+                                ->whereNotIn('id_user', $usuario_id)
                                 ->get()
                                 ->first();
 
