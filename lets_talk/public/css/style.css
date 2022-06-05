@@ -139,7 +139,7 @@ a:hover {
 }
 @media (min-width:1200px) {
 	.container {
-		width:930px;
+		width:1300px;
 		padding-left:0;
 		padding-right:0;
 		line-height:1.8;
@@ -3198,4 +3198,7 @@ a:focus {
 }
 .sign-out a i {
     color: #1D9BF0 !important;
+}
+.nav {
+    margin-bottom: 10vw !important;
 }

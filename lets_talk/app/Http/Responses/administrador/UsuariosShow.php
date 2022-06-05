@@ -33,7 +33,7 @@ class UsuariosShow implements Responsable
                                      'tipo_documento.descripcion AS tipo_documento',
                                      'municipios.descripcion AS ciudad_nacimiento',
                                      'residencia.descripcion AS ciudad_residencia',
-                                     'roles.descripcion AS nombre_rol')
+                                     'roles.descripcion AS nombre_rol', 'roles.id_rol')
                             ->whereNull('usuarios.deleted_at')
                             ->whereNull('tipo_documento.deleted_at')
                             ->whereNull('municipios.deleted_at')

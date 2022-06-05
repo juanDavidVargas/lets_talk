@@ -34,7 +34,7 @@
                         <th>State</th>
                         <th>View Details</th>
                         <th>Edit</th>
-                        <th>Change Status</th>
+                        <th>Change State</th>
                         <th>Update Password</th>
                     </tr>
                 </thead>
@@ -62,7 +62,15 @@
                                 <input type="hidden" name="id_user" id="id_user" value="{{$usuario->id_user}}">
                            </td>
                            <td>
-                                <a href="#" class="btn btn-warning" title="Change Status"><i class="fa fa-refresh" aria-hidden="true" id="cambiar_estado"></i></a>
+                               @if($usuario->id_rol == 2 || $usuario->id_rol == "2")
+                                    <a href="#" class="btn btn-warning" title="Change Status" disabled>
+                                        <i class="fa fa-refresh" aria-hidden="true" id="cambiar_estado"></i>
+                                    </a>
+                               @else
+                                    <a href="#" class="btn btn-warning" title="Change Status">
+                                        <i class="fa fa-refresh" aria-hidden="true" id="cambiar_estado"></i>
+                                    </a>
+                               @endif
                            </td>
                            <td>
                                <button class="btn btn-info" title="Update Password" id="pass_update"><i class="fa fa-key" aria-hidden="true"></i></button>

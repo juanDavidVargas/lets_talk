@@ -65,13 +65,73 @@
                 </div>
             </div>
         @else
+        {{-- Inicio Menu --}}
         <div class="col-xs-6 col-sm-6 col-md-6">
             <div class="sign-out">
-                <a href="{{route('logout')}}" title="Cerrar Sesión">
-                    <i class="fa fa-sign-out fa-3x" aria-hidden="true"></i>
-                </a>
+                {{-- Rol Entrenador --}}
+                @if($usuario->id_rol == 1 || $usuario->id_rol == "1")
+                <ul class="nav nav-tabs">
+                    <li role="presentation" class="active">
+                        <a class="pointer" href="{{route('administrador.index')}}">Home</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#">Trainer's Agenda</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#">Trainer's Sessions</a>
+                    </li>
+                    <li>
+                        <a href="{{route('logout')}}" title="Cerrar Sesión">
+                            <i class="fa fa-sign-out fa-3x" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                </ul>
+                {{-- Rol Estudiante --}}
+                @elseif($usuario->id_rol == 3 || $usuario->id_rol == "3")
+                    <ul class="nav nav-tabs">
+                        <li role="presentation" class="active">
+                            <a class="pointer" href="{{route('administrador.index')}}">Inicio</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#">Diponibilidad Entrenadores</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#">Reservas</a>
+                        </li>
+                        <li>
+                            <a href="{{route('logout')}}" title="Cerrar Sesión">
+                                <i class="fa fa-sign-out fa-3x" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    {{-- Rol Administrador --}}
+                @else
+                    <ul class="nav nav-tabs">
+                        <li role="presentation" class="active">
+                            <a class="pointer" href="{{route('administrador.index')}}">Home</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#">Trainer's Agenda</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#">Trainer's Sessions</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#">Availability Trainer's</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#">Reservations</a>
+                        </li>
+                        <li>
+                            <a href="{{route('logout')}}" title="Cerrar Sesión">
+                                <i class="fa fa-sign-out fa-3x" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                    </ul>
+                @endif
             </div>
         </div>
+        {{-- Fin Menu --}}
         @endif
     </div>
 
@@ -123,12 +183,12 @@
             </section>
             <!-- Section: Links -->
 
-            <hr class="my-5" />
+            <hr class="my-5"/>
 
             <!-- Section: Text -->
             <section class="mb-5">
                 <div class="row d-flex justify-content-center">
-                    <div class="col-lg-8">
+                    <div class="col-lg-8 col-lg-offset-2">
                         <p>
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt
                             distinctio earum repellat quaerat voluptatibus placeat nam,
