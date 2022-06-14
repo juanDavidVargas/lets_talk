@@ -44,8 +44,9 @@ class LoginStore implements Responsable
                 // Rol entrenador
                 if($user->id_rol == 1 || $user->id_rol == "1")
                 {
-                    // return redirect()->to(route('agenda'));
-                    dd("vista entrenador");
+                    // Creamos las variables de sesion
+                    $this->crearVariablesSesion($user);
+                    return redirect()->to(route('trainer.index'));
 
                    // Rol Estudiante
                 } else if($user->id_rol == 3 || $user->id_rol == "3")
@@ -55,11 +56,8 @@ class LoginStore implements Responsable
                   // Rol Administrador
                 } else if($user->id_rol == 2 || $user->id_rol == "2")
                 {
-                     // Creamos las variables de sesion
-                    session()->put('usuario_id', $user->id_user);
-                    session()->put('username', $user->usuario);
-                    session()->put('sesion_iniciada', true);
-
+                    // Creamos las variables de sesion
+                    $this->crearVariablesSesion($user);
                     return redirect()->to(route('administrador.index'));
                 } else {
 
@@ -79,6 +77,15 @@ class LoginStore implements Responsable
             alert()->error('Error','No se encontraron registros para el usuario ' . $username);
             return back();
         }
+    }
+
+    private function crearVariablesSesion($user)
+    {
+        // Creamos las variables de sesion
+        session()->put('usuario_id', $user->id_user);
+        session()->put('username', $user->usuario);
+        session()->put('sesion_iniciada', true);
+        session()->put('rol', $user->id_rol);
     }
 
     private function consultarUsuario($username)

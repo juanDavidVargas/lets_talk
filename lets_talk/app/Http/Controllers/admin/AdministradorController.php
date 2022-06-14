@@ -23,6 +23,7 @@ class AdministradorController extends Controller
         if(empty($sesion[0]) || is_null($sesion[0]) &&
            empty($sesion[1]) || is_null($sesion[1]) &&
            empty($sesion[2]) || is_null($sesion[2]) &&
+           empty($sesion[3]) || is_null($sesion[3]) &&
            $sesion[2] != true)
         {
             return redirect()->to(route('home'));
@@ -311,6 +312,8 @@ class AdministradorController extends Controller
         array_push($variables_sesion, $username);
         $sesion_iniciada = session('sesion_iniciada');
         array_push($variables_sesion, $sesion_iniciada);
+        $rol_usuario = session('rol');
+        array_push($variables_sesion, $rol_usuario);
         return $variables_sesion;
     }
 }

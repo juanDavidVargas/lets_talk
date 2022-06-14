@@ -113,6 +113,7 @@ class LoginController extends Controller
             Session::forget('usuario_id');
             Session::forget('username');
             Session::forget('sesion_iniciada');
+            Session::forget('rol');
             Session::flush();
             $request->session()->flush();
             $request->session()->invalidate();

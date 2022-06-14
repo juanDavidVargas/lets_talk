@@ -42,13 +42,9 @@
     <!--  Js -->
     <script src="{{ asset('js/modernizr.custom.js') }}"></script>
     <script src="{{ asset('js/jquery-2.1.3.min.js') }}"></script>
-     {{-- <script src="{{asset('vendor/jquery/jquery-3.2.1.min.js')}}"></script> --}}
-
 </head>
-
 <body>
 <div class="container">
-
     <div class="row">
         <div class="col-xs-6 col-sm-6 col-md-6">
             <div class="logo-box">
@@ -65,21 +61,39 @@
                 </div>
             </div>
         @else
+
         {{-- Inicio Menu --}}
         <div class="col-xs-6 col-sm-6 col-md-6">
             <div class="sign-out">
                 {{-- Rol Entrenador --}}
-                @if($usuario->id_rol == 1 || $usuario->id_rol == "1")
+                @if(!is_null(session('rol')) && (session('rol') == 1 || session('rol') == "1"))
                 <ul class="nav nav-tabs">
-                    <li role="presentation" class="active">
-                        <a class="pointer" href="{{route('administrador.index')}}">Home</a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#">Trainer's Agenda</a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#">Trainer's Sessions</a>
-                    </li>
+
+                    @if(Request::path() == "trainer")
+                        <li role="presentation" class="active">
+                            <a href="{{route('trainer.index')}}">Trainer's Sessions</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="{{route('trainer.create')}}">Trainer's Agenda</a>
+                        </li>
+                    @elseif(Request::path() == "trainer/create")
+                        <li role="presentation">
+                            <a href="{{route('trainer.index')}}">Trainer's Sessions</a>
+                        </li>
+                        <li role="presentation" class="active">
+                            <a href="{{route('trainer.create')}}">Trainer's Agenda</a>
+                        </li>
+                    @else
+                        <li role="presentation" class="active">
+                            <a class="pointer" href="{{route('administrador.index')}}">Home</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="{{route('trainer.index')}}">Trainer's Agenda</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="{{route('trainer.index')}}">Trainer's Sessions</a>
+                        </li>
+                    @endif
                     <li>
                         <a href="{{route('logout')}}" title="Cerrar Sesión">
                             <i class="fa fa-sign-out fa-3x" aria-hidden="true"></i>
@@ -87,7 +101,7 @@
                     </li>
                 </ul>
                 {{-- Rol Estudiante --}}
-                @elseif($usuario->id_rol == 3 || $usuario->id_rol == "3")
+                @elseif(!is_null(session('rol')) && (session('rol') == 3 || session('rol') == "3"))
                     <ul class="nav nav-tabs">
                         <li role="presentation" class="active">
                             <a class="pointer" href="{{route('administrador.index')}}">Inicio</a>
