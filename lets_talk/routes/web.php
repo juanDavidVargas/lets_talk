@@ -22,3 +22,5 @@ Route::resource('estudiante', 'estudiante\EstudianteController');
 Route::post('validar_cedula', 'admin\AdministradorController@validarCedula')->name('validar_cedula');
 Route::post('validar_correo', 'admin\AdministradorController@validarCorreo')->name('validar_correo');
 Route::post('actualizar_clave', 'admin\AdministradorController@actualizarClave')->name('actualizar_clave');
+
+Route::post('cargar_eventos_entrenador', 'entrenador\EntrenadorController@cargarEventos')->name('cargar_eventos_entrenador');

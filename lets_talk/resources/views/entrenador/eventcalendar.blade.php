@@ -166,6 +166,12 @@
 </div>
 
 <script>
+
+    $( document ).ready(function()
+    {
+        cargarEventosPorEntrenador();
+    });
+
     mobiscroll.setOptions({
         locale: mobiscroll.localeEs,                                  // Specify language like: locale: mobiscroll.localePl or omit setting to use default
         theme: 'ios',                                                 // Specify theme like: theme: 'ios' or omit setting to use default
@@ -235,8 +241,8 @@
             // },
             // {
             //     id: 4,
-            //     start: '2022-06-15T10:30',
-            //     end: '2022-06-15T11:30',
+            //     start: '2022-06-12T10:30',
+            //     end: '2022-06-12T11:30',
             //     title: 'Stakeholder mtg.',
             //     description: '',
             //     allDay: false,
@@ -244,6 +250,105 @@
             //     color: '#f44437'
             // }
         ];
+
+    function cargarEventosPorEntrenador()
+    {
+        $.ajax({
+            url: "{{route('cargar_eventos_entrenador')}}",
+            type: "POST",
+            dataType: "JSON",
+            success: function(response)
+            {
+                if(response == "error_exception")
+                {
+                    Swal.fire({
+                        position: 'center',
+                        title: 'Error!',
+                        html:  'An error occurred, contact support.',
+                        type: 'error',
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey:false,
+                        timer: 5000
+                    });
+                }
+
+                if(response == "error_query_eventos")
+                {
+                    Swal.fire({
+                        position: 'center',
+                        title: 'Error!',
+                        html:  'An error occurred, contact support.',
+                        type: 'error',
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey:false,
+                        timer: 5000
+                    });
+                }
+
+               $.each(response.agenda, function(index, element)
+               {
+                    myData.push(
+                        {
+                            id: element.id,
+                            start: `${element.start_date}T${element.start_time}`,
+                            end: `${element.end_date}T${element.end_time}`,
+                            title: element.title,
+                            description: element.description,
+                            allDay: element.all_day == 1 ? true : false,
+                            free: element.status_free == 1 ? true : false,
+                            color: element.color,
+                            busy: element.status_busy == 1 ? true : false
+                        }
+                    );
+               });
+
+                var calendar = mobiscroll.eventcalendar('#demo-add-delete-event',
+                {
+                    clickToCreate: 'double',                                      // More info about clickToCreate: https://docs.mobiscroll.com/5-17-0/javascript/eventcalendar#opt-clickToCreate
+                    dragToCreate: true,                                           // More info about dragToCreate: https://docs.mobiscroll.com/5-17-0/javascript/eventcalendar#opt-dragToCreate
+                    dragToMove: true,                                             // More info about dragToMove: https://docs.mobiscroll.com/5-17-0/javascript/eventcalendar#opt-dragToMove
+                    dragToResize: true,                                           // More info about dragToResize: https://docs.mobiscroll.com/5-17-0/javascript/eventcalendar#opt-dragToResize
+                    view: {                                                       // More info about view: https://docs.mobiscroll.com/5-17-0/javascript/eventcalendar#opt-view
+                        calendar: { labels: true }
+                    },
+                    data: myData,                                                // More info about data: https://docs.mobiscroll.com/5-17-0/javascript/eventcalendar#opt-data
+                    onEventClick: function (args)
+                    {                               // More info about onEventClick: https://docs.mobiscroll.com/5-17-0/javascript/eventcalendar#event-onEventClick
+                        oldEvent = Object.assign({}, args.event);
+                        tempEvent = args.event;
+
+                        if (!popup.isVisible())
+                        {
+                            createEditPopup(args);
+                        }
+                    },
+                    onEventCreated: function (args)
+                    {                             // More info about onEventCreated: https://docs.mobiscroll.com/5-17-0/javascript/eventcalendar#event-onEventCreated
+                        popup.close();
+                        // store temporary event
+                        tempEvent = args.event;
+                        createAddPopup(args.target);
+                    },
+                    onEventDeleted: function ()
+                    {                                 // More info about onEventDeleted: https://docs.mobiscroll.com/5-17-0/javascript/eventcalendar#event-onEventDeleted
+                        mobiscroll.snackbar({
+                            button: {
+                                action: function () {
+                                    calendar.addEvent(args.event);
+                                },
+                                text: 'Undo'
+                            },
+                            message: 'Event Deleted!'
+                        });
+                    }
+                });
+            }
+        });
+    }
 
     function createAddPopup(elm)
     {
@@ -264,7 +369,35 @@
                 handler: function ()
                 {
                     var selectedElm = document.querySelector('.crud-color-c.selected');
-                    var valueSelectedElm = selectedElm.getAttribute('data-value');
+                    var valueSelectedElm;
+
+                    if(selectedElm == null || selectedElm == '')
+                    {
+                        valueSelectedElm = null;
+                    } else {
+                        valueSelectedElm = selectedElm.getAttribute('data-value');
+                    }
+
+                    if((titleInput.value == null || titleInput.value == '') ||
+                       (descriptionTextarea.value == null || descriptionTextarea.value == '') ||
+                       (starts.value == null || starts.value == '') ||
+                       (ends.value == null || ends.value == '') ||
+                       (valueSelectedElm == null || valueSelectedElm == ''))
+                    {
+                        popup.close();
+
+                        Swal.fire({
+                            position: 'center',
+                            title: 'Error!',
+                            html:  'Alls fields are required, please check and try again',
+                            type: 'error',
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey:false,
+                            timer: 3000
+                        });
+                    }
 
                     $.ajax({
                         aysn: true,
@@ -285,43 +418,71 @@
                         {
                             if(response == "exception_evento")
                             {
+                                popup.close();
                                 Swal.fire({
-                                position: 'center',
-                                title: 'Error!',
-                                html:  'An error occurred, try again, if the problem persists contact support.',
-                                type: 'info',
-                                showCancelButton: false,
-                                showConfirmButton: false,
-                                allowOutsideClick: false,
-                                allowEscapeKey:false,
-                                timer: 5000
-                            });
+                                    position: 'center',
+                                    title: 'Error!',
+                                    html:  'An error occurred, contact support.',
+                                    type: 'error',
+                                    showCancelButton: false,
+                                    showConfirmButton: false,
+                                    allowOutsideClick: false,
+                                    allowEscapeKey:false,
+                                    timer: 5000
+                                });
+                            }
+
+                            if(response == "error_evento")
+                            {
+                                popup.close();
+                                Swal.fire({
+                                    position: 'center',
+                                    title: 'Error!',
+                                    html:  'An error occurred, try again, if the problem persists contact support.',
+                                    type: 'error',
+                                    showCancelButton: false,
+                                    showConfirmButton: false,
+                                    allowOutsideClick: false,
+                                    allowEscapeKey:false,
+                                    timer: 5000
+                                });
+                            }
+
+                            if(response == "success_evento")
+                            {
+                                Swal.fire({
+                                    position: 'center',
+                                    title: 'Successfully!',
+                                    html:  'Event successfully created',
+                                    type: 'success',
+                                    showCancelButton: false,
+                                    showConfirmButton: false,
+                                    allowOutsideClick: false,
+                                    allowEscapeKey:false,
+                                    timer: 3000
+                                });
+
+                                calendar.updateEvent({
+                                    id: tempEvent.id,
+                                    title: tempEvent.title,
+                                    description: tempEvent.description,
+                                    allDay: tempEvent.allDay,
+                                    start: tempEvent.start,
+                                    end: tempEvent.end,
+                                    color: tempEvent.color,
+                                });
+
+                                // navigate the calendar to the correct view
+                                calendar.navigate(tempEvent.start);
+                                deleteEvent = false;
+                                popup.close();
+
+                                setInterval(function(){
+                                    window.location.reload();
+                                }, 5000);
                             }
                         }
                     });
-
-                    console.log(titleInput.value);
-                    console.log(descriptionTextarea.value);
-                    console.log(allDaySwitch.checked);
-                    console.log(starts.value);
-                    console.log(ends.value);
-                    console.log(valueSelectedElm);
-                    return;
-
-                    calendar.updateEvent({
-                        id: tempEvent.id,
-                        title: tempEvent.title,
-                        description: tempEvent.description,
-                        allDay: tempEvent.allDay,
-                        start: tempEvent.start,
-                        end: tempEvent.end,
-                        color: tempEvent.color,
-                    });
-
-                    // navigate the calendar to the correct view
-                    calendar.navigate(tempEvent.start);
-                    deleteEvent = false;
-                    popup.close();
                 },
                 cssClass: 'mbsc-popup-button-primary'
             }]
@@ -344,7 +505,6 @@
     function createEditPopup(args)
     {
         var ev = args.event;
-
         // show delete button inside edit popup
         deleteButton.style.display = 'block';
 
@@ -360,23 +520,124 @@
                 handler: function ()
                 {
                     var date = range.getVal();
-                    // update event with the new properties on save button click
-                    calendar.updateEvent({
-                        id: ev.id,
-                        title: titleInput.value,
-                        description: descriptionTextarea.value,
-                        allDay: mobiscroll.getInst(allDaySwitch).checked,
-                        start: date[0],
-                        end: date[1],
-                        free: mobiscroll.getInst(freeSegmented).checked,
-                        color: ev.color,
+                    var selectedElm = document.querySelector('.crud-color-c.selected');
+                    var valueSelectedElm;
+
+                    if(selectedElm == null || selectedElm == '')
+                    {
+                        valueSelectedElm = null;
+                    } else {
+                        valueSelectedElm = selectedElm.getAttribute('data-value');
+                    }
+
+                    if((titleInput.value == null || titleInput.value == '') ||
+                       (descriptionTextarea.value == null || descriptionTextarea.value == '') ||
+                       (starts.value == null || starts.value == '') ||
+                       (ends.value == null || ends.value == '') ||
+                       (valueSelectedElm == null || valueSelectedElm == ''))
+                    {
+                        popup.close();
+
+                        Swal.fire({
+                            position: 'center',
+                            title: 'Error!',
+                            html:  'Alls fields are required, please check and try again',
+                            type: 'error',
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey:false,
+                            timer: 3000
+                        });
+                    }
+
+                    $.ajax({
+                        url: "{{route('trainer.update', session('usuario_id'))}}",
+                        type: 'PUT',
+                        dataType: 'json',
+                        data: {
+                            'title': titleInput.value,
+                            'description': descriptionTextarea.value,
+                            'all_day': allDaySwitch.checked,
+                            'starts': starts.value,
+                            'ends': ends.value,
+                            'color': valueSelectedElm,
+                            'status_free': freeSegmented.checked,
+                            'status_busy': busySegmented.checked,
+                            'id_evento': ev.id
+                        },
+                        success: function(response)
+                        {
+                            if(response == "error_evento")
+                            {
+                                popup.close();
+                                Swal.fire({
+                                    position: 'center',
+                                    title: 'Error!',
+                                    html:  'An error occurred, try again, if the problem persists contact support.',
+                                    type: 'error',
+                                    showCancelButton: false,
+                                    showConfirmButton: false,
+                                    allowOutsideClick: false,
+                                    allowEscapeKey:false,
+                                    timer: 5000
+                                });
+                            }
+
+                            if(response == "exception_evento")
+                            {
+                                popup.close();
+                                Swal.fire({
+                                    position: 'center',
+                                    title: 'Error!',
+                                    html:  'An error occurred, contact support.',
+                                    type: 'error',
+                                    showCancelButton: false,
+                                    showConfirmButton: false,
+                                    allowOutsideClick: false,
+                                    allowEscapeKey:false,
+                                    timer: 5000
+                                });
+                            }
+
+                            if(response == "success_evento")
+                            {
+                                Swal.fire({
+                                    position: 'center',
+                                    title: 'Successfully!',
+                                    html:  'Event successfully updated',
+                                    type: 'success',
+                                    showCancelButton: false,
+                                    showConfirmButton: false,
+                                    allowOutsideClick: false,
+                                    allowEscapeKey:false,
+                                    timer: 3000
+                                });
+
+                                 // update event with the new properties on save button click
+                                calendar.updateEvent({
+                                    id: ev.id,
+                                    title: titleInput.value,
+                                    description: descriptionTextarea.value,
+                                    allDay: mobiscroll.getInst(allDaySwitch).checked,
+                                    start: date[0],
+                                    end: date[1],
+                                    free: mobiscroll.getInst(freeSegmented).checked,
+                                    color: ev.color,
+                                });
+
+                                // navigate the calendar to the correct view
+                                calendar.navigate(date[0]);;
+
+                                restoreEvent = false;
+                                popup.close();
+
+                                setInterval(function(){
+                                    window.location.reload();
+                                }, 5000);
+                            }
+                        }
                     });
-
-                    // navigate the calendar to the correct view
-                    calendar.navigate(date[0]);;
-
-                    restoreEvent = false;
-                    popup.close();
                 },
                 cssClass: 'mbsc-popup-button-primary'
             }]
@@ -416,7 +677,7 @@
         view: {                                                       // More info about view: https://docs.mobiscroll.com/5-17-0/javascript/eventcalendar#opt-view
             calendar: { labels: true }
         },
-        data: myData,                                                 // More info about data: https://docs.mobiscroll.com/5-17-0/javascript/eventcalendar#opt-data
+        data: '',                                                // More info about data: https://docs.mobiscroll.com/5-17-0/javascript/eventcalendar#opt-data
         onEventClick: function (args)
         {                               // More info about onEventClick: https://docs.mobiscroll.com/5-17-0/javascript/eventcalendar#event-onEventClick
             oldEvent = Object.assign({}, args.event);

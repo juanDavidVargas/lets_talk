@@ -8,8 +8,14 @@ use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
-class AgendaEntrenadorStore implements Responsable
+class AgendaEntrenadorUpdate implements Responsable
 {
+    private $id_usuario;
+
+    public function __construct($id)
+    {
+        $this->id_usuario = $id;
+    }
     public function toResponse($request)
     {
         $titulo = request('title', null);
@@ -20,6 +26,8 @@ class AgendaEntrenadorStore implements Responsable
         $color = request('color', null);
         $status_free = request('status_free', null);
         $status_busy = request('status_busy', null);
+        $id_evento = request('id_evento', null);
+        $usuario_id = $this->id_usuario;
 
         // Reemplazamos los slash por guiones intermedios
         $fecha_inicio = str_replace("/", "-", $inicio);
@@ -41,22 +49,26 @@ class AgendaEntrenadorStore implements Responsable
                 $hora_fin = substr($fecha_fin, 10);
             }
 
-            $insert_evento = EventoAgendaEntrenador::create([
-                'title' => trim($titulo),
-                'description' => !is_null($descripcion) ? trim($descripcion) : null,
-                'all_day' => $todo_el_dia === "true" ? 1 : 0,
-                'start_date' => trim($fecha_inicio_formato),
-                'start_time' => trim($hora_inicio),
-                'end_date' => trim($fecha_fin_formato),
-                'end_time' => trim($hora_fin),
-                'color' => $color,
-                'status_busy' => $status_busy === "true" ? 1 : 0,
-                'status_free' => $status_free === "true" ? 1 : 0,
-                'state' => 1,
-                'id_usuario' => session('usuario_id')
-            ]);
+            $update_evento = EventoAgendaEntrenador::where('id', $id_evento)
+                                    ->where('state', 1)
+                                    ->whereNull('deleted_at')
+                                    ->where('id_usuario', $usuario_id)
+                                    ->update(
+                                        [
+                                            'title' => trim($titulo),
+                                            'description' => !is_null($descripcion) ? trim($descripcion) : null,
+                                            'all_day' => $todo_el_dia === "true" ? 1 : 0,
+                                            'start_date' => trim($fecha_inicio_formato),
+                                            'start_time' => trim($hora_inicio),
+                                            'end_date' => trim($fecha_fin_formato),
+                                            'end_time' => trim($hora_fin),
+                                            'color' => $color,
+                                            'status_busy' => $status_busy === "true" ? 1 : 0,
+                                            'status_free' => $status_free === "true" ? 1 : 0,
+                                        ]
+                                    );
 
-            if($insert_evento)
+            if($update_evento)
             {
                 DB::connection('mysql')->commit();
                 return response()->json("success_evento");

@@ -5,7 +5,9 @@ namespace App\Http\Controllers\entrenador;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Controllers\admin\AdministradorController;
+use App\Http\Responses\entrenador\AgendaEntrenadorShow;
 use App\Http\Responses\entrenador\AgendaEntrenadorStore;
+use App\Http\Responses\entrenador\AgendaEntrenadorUpdate;
 
 class EntrenadorController extends Controller
 {
@@ -110,7 +112,20 @@ class EntrenadorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $adminCtrl = new AdministradorController();
+        $sesion = $adminCtrl->validarVariablesSesion();
+
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           empty($sesion[3]) || is_null($sesion[3]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+
+            return new AgendaEntrenadorUpdate(session('usuario_id'));
+        }
     }
 
     /**
@@ -122,5 +137,23 @@ class EntrenadorController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function cargarEventos(Request $request)
+    {
+        $adminCtrl = new AdministradorController();
+        $sesion = $adminCtrl->validarVariablesSesion();
+
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           empty($sesion[3]) || is_null($sesion[3]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            $agendaEntrenadorShow = new AgendaEntrenadorShow();
+            return $agendaEntrenadorShow->cargarEventosPorEntrenador();
+        }
     }
 }
