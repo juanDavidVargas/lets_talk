@@ -5,7 +5,6 @@ namespace App\Http\Responses\entrenador;
 use App\Models\entrenador\EventoAgendaEntrenador;
 use Exception;
 use Illuminate\Contracts\Support\Responsable;
-use Illuminate\Support\Facades\DB;
 
 class AgendaEntrenadorShow implements Responsable
 {

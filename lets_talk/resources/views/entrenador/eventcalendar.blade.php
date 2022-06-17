@@ -208,48 +208,7 @@
                 touchUi: false
             }
         },
-        myData = [
-            // {
-            // id: 1,
-            // start: '2022-06-08T13:00',
-            // end: '2022-06-08T13:45',
-            // title: 'Lunch @ Butcher\'s',
-            // description: '',
-            // allDay: false,
-            // free: true,
-            // color: '#009788'
-            // },
-            // {
-            //     id: 2,
-            //     start: '2022-06-14T15:00',
-            //     end: '2022-06-14T16:00',
-            //     title: 'General orientation',
-            //     description: '',
-            //     allDay: false,
-            //     free: false,
-            //     color: '#ff9900'
-            // },
-            // {
-            //     id: 3,
-            //     start: '2022-06-13T18:00',
-            //     end: '2022-06-13T22:00',
-            //     title: 'Dexter BD',
-            //     description: '',
-            //     allDay: false,
-            //     free: true,
-            //     color: '#3f51b5'
-            // },
-            // {
-            //     id: 4,
-            //     start: '2022-06-12T10:30',
-            //     end: '2022-06-12T11:30',
-            //     title: 'Stakeholder mtg.',
-            //     description: '',
-            //     allDay: false,
-            //     free: false,
-            //     color: '#f44437'
-            // }
-        ];
+        myData = [];
 
     function cargarEventosPorEntrenador()
     {
@@ -373,7 +332,7 @@
 
                     if(selectedElm == null || selectedElm == '')
                     {
-                        valueSelectedElm = null;
+                        valueSelectedElm = "#ffeb3c";
                     } else {
                         valueSelectedElm = selectedElm.getAttribute('data-value');
                     }
@@ -381,8 +340,7 @@
                     if((titleInput.value == null || titleInput.value == '') ||
                        (descriptionTextarea.value == null || descriptionTextarea.value == '') ||
                        (starts.value == null || starts.value == '') ||
-                       (ends.value == null || ends.value == '') ||
-                       (valueSelectedElm == null || valueSelectedElm == ''))
+                       (ends.value == null || ends.value == ''))
                     {
                         popup.close();
 
@@ -395,7 +353,7 @@
                             showConfirmButton: false,
                             allowOutsideClick: false,
                             allowEscapeKey:false,
-                            timer: 3000
+                            timer: 5000
                         });
                     }
 
@@ -479,7 +437,7 @@
 
                                 setInterval(function(){
                                     window.location.reload();
-                                }, 5000);
+                                }, 4000);
                             }
                         }
                     });
@@ -520,12 +478,12 @@
                 handler: function ()
                 {
                     var date = range.getVal();
-                    var selectedElm = document.querySelector('.crud-color-c.selected');
-                    var valueSelectedElm;
+                    let selectedElm = document.querySelector('.crud-color-c.selected');
+                    let valueSelectedElm;
 
                     if(selectedElm == null || selectedElm == '')
                     {
-                        valueSelectedElm = null;
+                        valueSelectedElm = "#ffeb3c";
                     } else {
                         valueSelectedElm = selectedElm.getAttribute('data-value');
                     }
@@ -533,8 +491,7 @@
                     if((titleInput.value == null || titleInput.value == '') ||
                        (descriptionTextarea.value == null || descriptionTextarea.value == '') ||
                        (starts.value == null || starts.value == '') ||
-                       (ends.value == null || ends.value == '') ||
-                       (valueSelectedElm == null || valueSelectedElm == ''))
+                       (ends.value == null || ends.value == ''))
                     {
                         popup.close();
 
@@ -547,7 +504,7 @@
                             showConfirmButton: false,
                             allowOutsideClick: false,
                             allowEscapeKey:false,
-                            timer: 3000
+                            timer: 5000
                         });
                     }
 
@@ -634,7 +591,7 @@
 
                                 setInterval(function(){
                                     window.location.reload();
-                                }, 5000);
+                                }, 4000);
                             }
                         }
                     });
@@ -789,22 +746,70 @@
 
     deleteButton.addEventListener('click', function ()
     {
-        // delete current event on button click
-        calendar.removeEvent(oldEvent);
-        popup.close();
-
-        // save a local reference to the deleted event
-        var deletedEvent = tempEvent;
-
-        mobiscroll.snackbar({
-            button: {
-                action: function () {
-                    calendar.addEvent(deletedEvent);
-                },
-                text: 'Undo'
+        $.ajax({
+            async: true,
+            url: `{{route('eliminar_evento')}}`,
+            type: 'DELETE',
+            dataType: 'json',
+            data: {
+                'id': oldEvent.id,
             },
-            message: 'Event Deleted!'
+            success: function (response)
+            {
+                if(response == "error_exception")
+                {
+                    popup.close();
+                    Swal.fire({
+                        position: 'center',
+                        title: 'Error!',
+                        html:  'An error occurred, contact support.',
+                        type: 'error',
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey:false,
+                        timer: 5000
+                    });
+                }
+
+                if(response == "success")
+                {
+                    Swal.fire({
+                        position: 'center',
+                        title: 'Successfully!',
+                        html:  'Event successfully deleted',
+                        type: 'success',
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey:false,
+                        timer: 3000
+                    });
+
+                    // delete current event on button click
+                    calendar.removeEvent(oldEvent);
+                    popup.close();
+
+                    // save a local reference to the deleted event
+                    var deletedEvent = tempEvent;
+
+                    // mobiscroll.snackbar({
+                    //     button: {
+                    //         action: function () {
+                    //             calendar.addEvent(deletedEvent);
+                    //         },
+                    //         text: 'Undo'
+                    //     },
+                    //     message: 'Event successfully deleted!'
+                    // });
+
+                    setInterval(() => {
+                        window.location.reload();
+                    }, 4000);
+                }
+            }
         });
+
     });
 
     colorPicker = mobiscroll.popup('#demo-event-color',
@@ -843,10 +848,12 @@
         {
             selectedElm.classList.remove('selected')
         }
+
         if (newSelected)
         {
             newSelected.classList.add('selected')
         }
+
         if (setColor)
         {
             pickedColor.style.background = color || '';

@@ -20,7 +20,7 @@
 <div class="row p-t-30">
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="table-responsive">
-            <table class="table table-striped table-bordered table-hover" id="tbl_users">
+            <table class="table table-striped table-bordered table-hover" id="tbl_trainer_sessions">
                 <thead>
                     <tr class="header-table">
                         <th>Student's Name</th>
@@ -53,7 +53,7 @@
 
     $( document ).ready(function() {
 
-        $('#tbl_users').DataTable({
+        $('#tbl_trainer_sessions').DataTable({
             'ordering': false
         });
     });

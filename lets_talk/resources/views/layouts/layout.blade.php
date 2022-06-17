@@ -67,51 +67,60 @@
             <div class="sign-out">
                 {{-- Rol Entrenador --}}
                 @if(!is_null(session('rol')) && (session('rol') == 1 || session('rol') == "1"))
-                <ul class="nav nav-tabs">
-
-                    @if(Request::path() == "trainer")
-                        <li role="presentation" class="active">
-                            <a href="{{route('trainer.index')}}">Trainer's Sessions</a>
+                    <ul class="nav nav-tabs">
+                        @if(Request::path() == "trainer")
+                            <li role="presentation">
+                                <a href="{{route('trainer.create')}}">Trainer's Agenda</a>
+                            </li>
+                            <li role="presentation" class="active">
+                                <a href="{{route('trainer.index')}}">Trainer's Sessions</a>
+                            </li>
+                        {{-- @elseif(Request::path() == "trainer/create")
+                            <li role="presentation">
+                                <a href="{{route('trainer.index')}}">Trainer's Sessions</a>
+                            </li>
+                            <li role="presentation" class="active">
+                                <a href="{{route('trainer.create')}}">Trainer's Agenda</a>
+                            </li> --}}
+                        @else
+                            <li role="presentation" class="active">
+                                <a href="{{route('trainer.create')}}">Trainer's Agenda</a>
+                            </li>
+                            <li role="presentation">
+                                <a href="{{route('trainer.index')}}">Trainer's Sessions</a>
+                            </li>
+                        @endif
+                        <li>
+                            <a href="{{route('logout')}}" title="Cerrar Sesión">
+                                <i class="fa fa-sign-out fa-3x" aria-hidden="true"></i>
+                            </a>
                         </li>
-                        <li role="presentation">
-                            <a href="{{route('trainer.create')}}">Trainer's Agenda</a>
-                        </li>
-                    @elseif(Request::path() == "trainer/create")
-                        <li role="presentation">
-                            <a href="{{route('trainer.index')}}">Trainer's Sessions</a>
-                        </li>
-                        <li role="presentation" class="active">
-                            <a href="{{route('trainer.create')}}">Trainer's Agenda</a>
-                        </li>
-                    @else
-                        <li role="presentation" class="active">
-                            <a class="pointer" href="{{route('administrador.index')}}">Home</a>
-                        </li>
-                        <li role="presentation">
-                            <a href="{{route('trainer.index')}}">Trainer's Agenda</a>
-                        </li>
-                        <li role="presentation">
-                            <a href="{{route('trainer.index')}}">Trainer's Sessions</a>
-                        </li>
-                    @endif
-                    <li>
-                        <a href="{{route('logout')}}" title="Cerrar Sesión">
-                            <i class="fa fa-sign-out fa-3x" aria-hidden="true"></i>
-                        </a>
-                    </li>
-                </ul>
+                    </ul>
                 {{-- Rol Estudiante --}}
                 @elseif(!is_null(session('rol')) && (session('rol') == 3 || session('rol') == "3"))
                     <ul class="nav nav-tabs">
-                        <li role="presentation" class="active">
-                            <a class="pointer" href="{{route('administrador.index')}}">Inicio</a>
-                        </li>
-                        <li role="presentation">
-                            <a href="#">Diponibilidad Entrenadores</a>
-                        </li>
-                        <li role="presentation">
-                            <a href="#">Reservas</a>
-                        </li>
+                        @if(Request::path == "student")
+                            <li role="presentation" class="active">
+                                <a href="#">Diponibilidad Entrenadores</a>
+                            </li>
+                            <li role="presentation">
+                                <a href="#">Reservas</a>
+                            </li>
+                        {{-- @elseif(Request::path == "student/create")
+                            <li role="presentation">
+                                <a href="#">Diponibilidad Entrenadores</a>
+                            </li>
+                            <li role="presentation" class="active">
+                                <a href="#">Reservas</a>
+                            </li> --}}
+                        @else
+                            <li role="presentation">
+                                <a href="#">Diponibilidad Entrenadores</a>
+                            </li>
+                            <li role="presentation" class="active">
+                                <a href="#">Reservas</a>
+                            </li>
+                        @endif
                         <li>
                             <a href="{{route('logout')}}" title="Cerrar Sesión">
                                 <i class="fa fa-sign-out fa-3x" aria-hidden="true"></i>

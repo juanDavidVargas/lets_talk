@@ -24,3 +24,4 @@ Route::post('validar_correo', 'admin\AdministradorController@validarCorreo')->na
 Route::post('actualizar_clave', 'admin\AdministradorController@actualizarClave')->name('actualizar_clave');
 
 Route::post('cargar_eventos_entrenador', 'entrenador\EntrenadorController@cargarEventos')->name('cargar_eventos_entrenador');
+Route::delete('eliminar_evento', 'entrenador\EntrenadorController@deleteEvent')->name('eliminar_evento');

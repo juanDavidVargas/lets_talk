@@ -22,7 +22,7 @@ class CreateEventoAgendaEntrenadorTable extends Migration
             $table->string('start_time', 30)->nullable();
             $table->string('end_date', 50);
             $table->string('end_time', 30)->nullable();
-            $table->string('color');
+            $table->string('color')->nullable();
             $table->boolean('status_busy');
             $table->boolean('status_free');
             $table->boolean('state')->default(1);

@@ -156,4 +156,22 @@ class EntrenadorController extends Controller
             return $agendaEntrenadorShow->cargarEventosPorEntrenador();
         }
     }
+
+    public function deleteEvent(Request $request)
+    {
+        $adminCtrl = new AdministradorController();
+        $sesion = $adminCtrl->validarVariablesSesion();
+
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           empty($sesion[3]) || is_null($sesion[3]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            $agendaEntrenadorStore = new AgendaEntrenadorStore();
+            return $agendaEntrenadorStore->eliminarEvento();
+        }
+    }
 }

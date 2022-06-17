@@ -71,4 +71,22 @@ class AgendaEntrenadorStore implements Responsable
             return response()->json('exception_evento');
         }
     }
+
+    public function eliminarEvento()
+    {
+        $id_evento = request('id', null);
+
+        try {
+
+            $evento = EventoAgendaEntrenador::find($id_evento);
+            $evento->delete();
+
+            return response()->json("success");
+
+        } catch (Exception $e)
+        {
+            return response()->json("error_exception");
+        }
+
+    }
 }

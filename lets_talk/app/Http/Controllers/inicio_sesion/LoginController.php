@@ -123,7 +123,7 @@ class LoginController extends Controller
 
         } catch (Exception $e)
         {
-            alert()->error('Error','Ha ocurrido un error');
+            alert()->error('Error','An error has occurred, try again, if the problem persists contact support.');
             return back();
         }
     }

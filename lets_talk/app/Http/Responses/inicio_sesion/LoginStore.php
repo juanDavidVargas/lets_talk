@@ -17,7 +17,7 @@ class LoginStore implements Responsable
         if(!isset($username) || empty($username) || is_null($username) ||
            !isset($pass) || empty($pass) || is_null($pass))
         {
-            alert()->error('Error','El nombre de usuario y la contraseña son obligatorios!');
+            alert()->error('Error','Username and Password are required!');
             return back();
         }
 
@@ -35,7 +35,7 @@ class LoginStore implements Responsable
             if($user->estado == 0 || $user->estado == false ||
                 $user->estado == "false")
             {
-                alert()->error('Error','El usuario ' . $username . ' se encuentra bloqueado, por favor contácte el administrador para desbloquearlo');
+                alert()->error('Error','Username ' . $username . ' is locked, please contact the administrator to unlock it');
                 return back();
             }
 
@@ -46,15 +46,17 @@ class LoginStore implements Responsable
                 {
                     // Creamos las variables de sesion
                     $this->crearVariablesSesion($user);
-                    return redirect()->to(route('trainer.index'));
+                    return redirect()->to(route('trainer.create'));
 
                    // Rol Estudiante
                 } else if($user->id_rol == 3 || $user->id_rol == "3")
                 {
-                    dd("vista estudiante");
+                     // Creamos las variables de sesion
+                     $this->crearVariablesSesion($user);
+                     return redirect()->to(route('student.index'));
 
-                  // Rol Administrador
-                } else if($user->id_rol == 2 || $user->id_rol == "2")
+                } // Rol Administrador
+                else if($user->id_rol == 2 || $user->id_rol == "2")
                 {
                     // Creamos las variables de sesion
                     $this->crearVariablesSesion($user);
@@ -62,19 +64,19 @@ class LoginStore implements Responsable
                 } else {
 
                     // Si el rol es diferente a los mencionados, mostramos mensaje
-                    alert()->error('Error','El usuario ' . $username . 'tiene un rol no válido!');
+                    alert()->error('Error','Username ' . $username . ' has an invalid role!');
                     return back();
                 }
 
             } else {
                 $cont_clave_erronea += 1;
                 $this->actualizarClaveFallas($user->id_user, $cont_clave_erronea);
-                alert()->error('Error','Credenciales inválidas');
+                alert()->error('Error','Invalid Credentials');
                 return back();
             }
 
         } else {
-            alert()->error('Error','No se encontraron registros para el usuario ' . $username);
+            alert()->error('Error','No records were fond for the username ' . $username);
             return back();
         }
     }
@@ -99,7 +101,7 @@ class LoginStore implements Responsable
 
         } catch (Exception $e)
         {
-            alert()->error('Error','Ha ocurrido un error, contácte el administrador para solucionarlo');
+            alert()->error('Error','An error has occurred, try again, if the problem persists contact support.');
             return back();
         }
     }
@@ -114,7 +116,7 @@ class LoginStore implements Responsable
 
         } catch (Exception $e)
         {
-            alert()->error('Error', 'Ha ocurrido un error, contácte el administrador para solucionarlo');
+            alert()->error('Error', 'An error has occurred, try again, if the problem persists contact support.');
             return back();
         }
     }
@@ -127,7 +129,7 @@ class LoginStore implements Responsable
             $user->save();
 
         } catch (Exception $e) {
-            alert()->error('Error', 'Ha ocurrido un error, contácte el administrador para solucionarlo');
+            alert()->error('Error', 'An error has occurred, try again, if the problem persists contact support.');
             return back();
         }
     }
