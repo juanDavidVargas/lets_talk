@@ -15,9 +15,14 @@ class CreateEventoAgendaEntrenadorTable extends Migration
     {
         Schema::create('evento_agenda_entrenador', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title');
-            $table->integer('date')->nullable();
-            $table->boolean('status')->default(1);
+            $table->string('title', 100);
+            $table->string('description', 255);
+            $table->integer('start_date');
+            $table->string('start_time', 10);
+            $table->integer('end_date');
+            $table->string('end_time', 10);
+            $table->boolean('state')->default(1);
+            $table->string('color', 20)->nullable();
             $table->integer('id_usuario')->unsigned()->nullable();
             $table->timestamps();
             $table->softDeletes();

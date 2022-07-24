@@ -14,44 +14,27 @@ class AgendaEntrenadorStore implements Responsable
     {
         $titulo = request('title', null);
         $descripcion = request('description', null);
-        $todo_el_dia = request('all_day', null);
-        $inicio = request('starts', null);
-        $fin = request('ends', null);
+        $inicio = request('start', null);
+        $fin = request('end', null);
+        $hora_inicio = request('start_time', null);
+        $hora_fin = request('end_time', null);
         $color = request('color', null);
-        $status_free = request('status_free', null);
-        $status_busy = request('status_busy', null);
 
-        // Reemplazamos los slash por guiones intermedios
-        $fecha_inicio = str_replace("/", "-", $inicio);
-        $fecha_fin = str_replace("/", "-", $fin);
-
-        $fecha_inicio_formato = substr($fecha_inicio, 0, 10);
-        $fecha_fin_formato = substr($fecha_fin, 0, 10);
+        $fecha_inicio_formato = Carbon::parse($inicio)->timestamp;
+        $fecha_fin_formato = Carbon::parse($fin)->timestamp;
 
         DB::connection('mysql')->beginTransaction();
 
         try
         {
-            if($todo_el_dia === true || $todo_el_dia === "true")
-            {
-                $hora_inicio = "00:00";
-                $hora_fin = "23:59";
-            } else {
-                $hora_inicio = substr($fecha_inicio, 10);
-                $hora_fin = substr($fecha_fin, 10);
-            }
-
             $insert_evento = EventoAgendaEntrenador::create([
                 'title' => trim($titulo),
                 'description' => !is_null($descripcion) ? trim($descripcion) : null,
-                'all_day' => $todo_el_dia === "true" ? 1 : 0,
-                'start_date' => trim($fecha_inicio_formato),
+                'start_date' => $fecha_inicio_formato,
                 'start_time' => trim($hora_inicio),
-                'end_date' => trim($fecha_fin_formato),
+                'end_date' => $fecha_fin_formato,
                 'end_time' => trim($hora_fin),
                 'color' => $color,
-                'status_busy' => $status_busy === "true" ? 1 : 0,
-                'status_free' => $status_free === "true" ? 1 : 0,
                 'state' => 1,
                 'id_usuario' => session('usuario_id')
             ]);
@@ -67,6 +50,7 @@ class AgendaEntrenadorStore implements Responsable
 
         } catch (Exception $e)
         {
+            dd($e);
             DB::connection('mysql')->rollback();
             return response()->json('exception_evento');
         }

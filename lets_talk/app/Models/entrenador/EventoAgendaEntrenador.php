@@ -13,15 +13,12 @@ class EventoAgendaEntrenador extends Model
     protected $fillable = [
        'title',
        'description',
-       'all_day',
        'start_date',
        'start_time',
        'end_date',
        'end_time',
-       'color',
-       'status_busy',
-       'status_free',
        'state',
+       'color',
        'id_usuario'
     ];
 }

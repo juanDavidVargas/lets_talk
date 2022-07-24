@@ -1,15 +1,150 @@
-@extends('layouts.layout')
-@section('title', 'Trainers Agenda')
-@section('css')
-<link rel="stylesheet" type="text/css" href="{{asset('css/dataTables.bootstrap.min.css')}}">
-<link rel="stylesheet" type="text/css" href="{{asset('css/fixedHeader.bootstrap.min.css')}}">
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Let's Talk - Trainer's Agenda</title>
 
-<link rel="stylesheet" href="{{asset('fullcalendar/css/font-awesome.min.css')}}">
-{{-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"> --}}
-<link rel="stylesheet" href="{{asset('fullcalendar/css/styles.css')}}">
-<link rel='stylesheet' type='text/css' href="{{asset('fullcalendar/css/fullcalendar.css')}}" />
-@stop
-@section('content')
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/404.css') }}">
+
+    <link rel="stylesheet" href="{{asset('eventos/css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{asset('eventos/css/main.min.css')}}">
+    <link rel="stylesheet" href="{{asset('eventos/css/styles.css')}}">
+
+    <link rel="stylesheet" href="{{ asset('css/animate.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{asset('vendor/css-hamburgers/hamburgers.min.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{asset('vendor/animsition/css/animsition.min.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{asset('vendor/select2/select2.min.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{asset('vendor/daterangepicker/daterangepicker.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{asset('css/util.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{asset('css/main.css')}}">
+
+    <link rel="stylesheet" href="{{ asset('font-awesome-4.5.0/css/font-awesome.min.css') }}">
+
+    <script src="{{ asset('js/modernizr.custom.js') }}"></script>
+    <script src="{{ asset('js/jquery-2.1.3.min.js') }}"></script>
+
+
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-6 col-sm-6 col-md-6">
+            <div class="logo-box">
+                <img src="{{asset('img/logo.png')}}" alt="logo" class="logo logo-img">
+            </div>
+        </div>
+
+        @if(Request::path() == '/' || Request::path() == "login" ||
+            Request::path() == "login_estudiante")
+
+            <div class="col-xs-6 col-sm-6 col-md-6">
+                <div class="sign-out">
+                    &nbsp;
+                </div>
+            </div>
+        @else
+
+        {{-- Inicio Menu --}}
+        <div class="col-xs-6 col-sm-6 col-md-6">
+            <div class="sign-out">
+                {{-- Rol Entrenador --}}
+                @if(!is_null(session('rol')) && (session('rol') == 1 || session('rol') == "1"))
+                    <ul class="nav nav-tabs">
+                        @if(Request::path() == "trainer")
+                            <li class="nav-item">
+                                <a href="{{route('trainer.create')}}" class="nav-link active" aria-current="page">Trainer's Agenda</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{route('trainer.index')}}" class="nav-link" aria-current="page">Trainer's Sessions</a>
+                            </li>
+                        {{-- @elseif(Request::path() == "trainer/create")
+                            <li role="presentation">
+                                <a href="{{route('trainer.index')}}">Trainer's Sessions</a>
+                            </li>
+                            <li role="presentation" class="active">
+                                <a href="{{route('trainer.create')}}">Trainer's Agenda</a>
+                            </li> --}}
+                        @else
+                            <li class="nav-item">
+                                <a href="{{route('trainer.create')}}" class="nav-link" aria-current="page">Trainer's Agenda</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{route('trainer.index')}}" class="nav-link" aria-current="page">Trainer's Sessions</a>
+                            </li>
+                        @endif
+                        <li>
+                            <a href="{{route('logout')}}" title="Cerrar Sesión">
+                                <i class="fa fa-sign-out fa-3x" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                    </ul>
+                {{-- Rol Estudiante --}}
+                @elseif(!is_null(session('rol')) && (session('rol') == 3 || session('rol') == "3"))
+                    <ul class="nav nav-tabs">
+                        @if(Request::path == "student")
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" aria-current="page">Diponibilidad Entrenadores</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" aria-current="page">Reservas</a>
+                            </li>
+                        {{-- @elseif(Request::path == "student/create")
+                            <li role="presentation">
+                                <a href="#">Diponibilidad Entrenadores</a>
+                            </li>
+                            <li role="presentation" class="active">
+                                <a href="#">Reservas</a>
+                            </li> --}}
+                        @else
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" aria-current="page">Diponibilidad Entrenadores</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" aria-current="page">Reservas</a>
+                            </li>
+                        @endif
+                        <li>
+                            <a href="{{route('logout')}}" title="Cerrar Sesión">
+                                <i class="fa fa-sign-out fa-3x" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    {{-- Rol Administrador --}}
+                @else
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="pointer" href="{{route('administrador.index')}}" class="nav-link" aria-current="page">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('trainer.create')}}" class="nav-link active" aria-current="page">Trainer's Agenda</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('trainer.index')}}" class="nav-link" aria-current="page">Trainer's Sessions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" aria-current="page">Availability Trainer's</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" aria-current="page">Reservations</a>
+                        </li>
+                        <li>
+                            <a href="{{route('logout')}}" title="Cerrar Sesión">
+                                <i class="fa fa-sign-out fa-3x" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                    </ul>
+                @endif
+            </div>
+        </div>
+        {{-- Fin Menu --}}
+        @endif
+    </div>
 
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12">
@@ -25,211 +160,401 @@
 <div class="row p-t-30">
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="border_div">
-                <div class="row">
-                    <div id="content" class="col-lg-12">
-                        <div id="calendar"></div>
+            <div id="calendar"></div>
 
-                        {{-- Inicio Modal --}}
-                        <div class="modal fade" id="modal_event" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="event-title"></h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
+            {{-- Inicio Modal --}}
+            <div class="modal fade" data-backdrop="static" data-keyboard="false" id="myModal" tabindex="-1" aria-labelledby="Label" aria-hidden="true" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-primary text-center">
+                            <h5 class="modal-title" id="titulo">Event Registration</h5>
+                        </div>
+                        {{-- <form id="formulario" autocomplete="off"> --}}
+                        {!! Form::open(['id' => 'formulario', 'autocomplete' => 'off']) !!}
+                        @csrf
                             <div class="modal-body">
-                                <div id="event-description"></div>
+                                <div class="row">
+                                    <div class="col-md-12">
+
+                                        <div class="form-floating mb-3">
+                                            <input type="hidden" id="id" name="id">
+                                            <input id="title" type="text" class="form-control" name="title">
+                                            <label for="title">Event Name</label>
+                                        </div>
+
+                                        <div class="form-floating mb-3">
+                                            <input id="description" type="text" class="form-control" name="description">
+                                            <label for="description">Description</label>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control" id="start" type="date" name="start" readonly="readonly">
+                                            <label for="start" class="form-label">Start Date</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control" id="start_time" type="time" name="start_time">
+                                            <label for="start_time" class="form-label">Start Time</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control" id="end" type="date" name="end">
+                                            <label for="end" class="form-label">End Date</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control" id="end_time" type="time" name="end_time">
+                                            <label for="end_time" class="form-label">End Time</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control" id="color" type="color" name="color">
+                                            <label for="color" class="form-label">Color</label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-danger" id="btnEliminar">Delete</button>
+                                <button type="submit" class="btn btn-success" id="btnAccion">Save</button>
                             </div>
-                            </div>
-                        </div>
-                        </div>
-                        {{-- Fin modal --}}
+                        {{-- </form> --}}
+                        {!! Form::close() !!}
                     </div>
                 </div>
+            </div>
+            {{-- Fin Modal --}}
         </div>
     </div>
 </div>
+</div>
 
-@stop
-@section('scripts')
-{{-- <script src="https://code.jquery.com/jquery-3.2.1.js"></script> --}}
-<script src="{{ asset('js/jquery-3.5.1.js') }}"></script>
-{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script> --}}
-{{-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script> --}}
-<script type='text/javascript' src="{{asset('fullcalendar/js/moment.min.js')}}"></script>
-<script type='text/javascript' src="{{asset('fullcalendar/js/fullcalendar.min.js')}}"></script>
-<script type='text/javascript' src="{{asset('fullcalendar/js/locale/es.js')}}"></script>
+<!-- Footer -->
+<footer class="text-center text-white footer">
+    <!-- Grid container -->
+    <div class="container">
+        <!-- Section: Links -->
+        <section class="mt-5">
+            <!-- Grid row-->
+            <div class="row text-center d-flex justify-content-center pt-5 padding">
+                <!-- Grid column -->
+                <div class="col-md-2 col-md-offset-2">
+                    <h6 class="text-uppercase font-weight-bold">
+                        <a href="#!" class="text-white">About us</a>
+                    </h6>
+                </div>
+                <!-- Grid column -->
 
+                <!-- Grid column -->
+                <div class="col-md-2">
+                    <h6 class="text-uppercase font-weight-bold">
+                        <a href="#!" class="text-white">Services</a>
+                    </h6>
+                </div>
+                <!-- Grid column -->
+
+                <!-- Grid column -->
+                <div class="col-md-2">
+                    <h6 class="text-uppercase font-weight-bold">
+                        <a href="#!" class="text-white">Help</a>
+                    </h6>
+                </div>
+                <!-- Grid column -->
+
+                <!-- Grid column -->
+                <div class="col-md-2">
+                    <h6 class="text-uppercase font-weight-bold">
+                        <a href="#!" class="text-white">Contact</a>
+                    </h6>
+                </div>
+                <!-- Grid column -->
+            </div>
+            <!-- Grid row-->
+        </section>
+        <!-- Section: Links -->
+
+        <hr class="my-5"/>
+
+        <!-- Section: Text -->
+        <section class="mb-5">
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-8 col-lg-offset-2">
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt
+                        distinctio earum repellat quaerat voluptatibus placeat nam,
+                        commodi optio pariatur est quia magnam eum harum corrupti
+                        dicta, aliquam sequi voluptate quas.
+                    </p>
+                </div>
+            </div>
+        </section>
+        <!-- Section: Text -->
+
+        <!-- Section: Social -->
+        <section class="text-center mb-5">
+            <a href="" class="text-white fa-2x facebook">
+                <i class="fa fa-facebook-f"></i>
+            </a>
+            <a href="" class="text-white fa-2x twitter">
+                <i class="fa fa-twitter"></i>
+            </a>
+            <a href="" class="text-white fa-2x google">
+                <i class="fa fa-google"></i>
+            </a>
+            <a href="" class="text-white fa-2x insta">
+                <i class="fa fa-instagram"></i>
+            </a>
+            <a href="" class="text-white fa-2x link">
+                <i class="fa fa-linkedin"></i>
+            </a>
+        </section>
+        <!-- Section: Social -->
+    </div>
+    <!-- Grid container -->
+
+    <!-- Copyright -->
+    <div class="text-center p-3 copy-footer">
+        <p>
+            All Rights Reserved ©
+            <a class="text-white" href="#">Let's Talk</a> {{date('Y')}}
+        </p>
+    </div>
+    <!-- Copyright -->
+</footer>
+
+<script src="{{asset('js/jquery-2.1.3.min.js') }}"></script>
+<script src="{{asset('eventos/js/bootstrap.bundle.min.js')}}"></script>
+<script src="{{asset('eventos/js/main.min.js')}}"></script>
+<script src="{{asset('eventos/js/moment.js')}}"></script>
+<script src="{{asset('eventos/js/es.js')}}"></script>
+<script src="{{asset('eventos/js/sweetalert2.all.min.js')}}"></script>
+{{-- <script src="{{asset('eventos/js/app.js')}}"></script> --}}
 <script>
 
+    let calendarEl = document.getElementById('calendar');
+    let frm = document.getElementById('formulario');
+    let eliminar = document.getElementById('btnEliminar');
+    let myModal = new bootstrap.Modal(document.getElementById('myModal'));
     let min = '06:00:00';
     let max = '22:00:00';
+    const url_store = "{{route('trainer.store')}}";
 
-    function addZero(i) {
-        if (i < 10) {
-            i = '0' + i;
-        }
-        return i;
-    }
-
-    var hoy = new Date();
-    var dd = hoy.getDate();
-    if(dd<10) {
-        dd='0'+dd;
-    }
-
-    if(mm<10) {
-        mm='0'+mm;
-    }
-
-    var mm = hoy.getMonth()+1;
-    var yyyy = hoy.getFullYear();
-
-    dd=addZero(dd);
-    mm=addZero(mm);
-
-    $(document).ready(function() {
-
-        $('#calendar').fullCalendar({
-            height: 560,
-            header: {
-                left: 'prev,next',
-                center: 'title',
-                right: 'agendaDay,agendaWeek,month'
-            },
-            locale: 'en',
-            timezone: 'local',
-            defaultView: 'agendaWeek',
-            editable: true,
-            allDaySlot: false, // true, false
-            eventLimit: true,
-            selectable: true,
-            eventDurationEditable: true,
-            disableDragging: false,
-            disableResizing: false,
-            lazyFetching: false, // Don't change this to true or month view wont work.
-            filter: false,
-            quickSave: false,
-            timeFormat: 'h:mma',
-            defaultColor: '#554079',
-            eventColor: '#554079',
-            weekType: 'agendaWeek',
-            dayType: 'agendaDay',
-            firstDay: 1, // Monday (0=sunday)
-            hiddenDays: [], // [0,1,2,3,4,5,6] to hide days as you wish
-            aspectRatio: 5.35, // will make day boxes bigger
-            weekends: true, // show (true) the weekend or not (false)
-            weekNumbers: false, // show week numbers (true) or not (false)
-            fixedWeekCount: 'true', // true, false
-            slotEventOverlap: true,
-            slotLabelFormat: 'h:mma',
-            slotDuration: "00:15:00",
-            slotLabelInterval: 10,
-            minTime: min,
-            maxTime: max,
-            eventOverlap: true,
-            nowIndicator:true,
-            select: function (start, end, jsEvent)
-            {
-                let event = {"start": start, "end": end};
-
-                if (!calendar.checkTime(event) || event.start.isBefore(event.end, 'day')) {
-                    calendar.fullCalendar('refetchEvents');
-                    return false;
-                }
-                if(event.end > Date.now())
-                {
-                    alert("event select");
-
-                }else{
-                    $('#calendar').fullCalendar('unselect');
-                    swal({
-                        title: 'Error',
-                        text: "No Events Can Be Created On Past Dates",
-                        type: 'error'
-                    });
-                }
-            },
-            dayClick: function (date, jsEvent, view)
-            {
-                $('#calendar').fullCalendar('unselect');
-               alert("event day click: " + date.format());
-            },
-            eventClick: function (calEvent, jsEvent, view)
-            {
-                if (!calendar.checkTime(calEvent) ||
-                     calEvent.start.isBefore(event.end, 'day'))
-                {
-                    $('#calendar').fullCalendar('unselect');
-                    return false;
-                }
-
-                alert("event click");
-            },
-            eventDrop: function (calEvent, delta, revertFunc, jsEvent, ui, view)
-            {
-                if (!calendar.checkTime(calEvent) ||
-                    calEvent.start.isBefore(event.end, 'day') &&
-                    calEvent.start > Date.now())
-                {
-                    $('#calendar').fullCalendar('unselect');
-                    revertFunc();
-                    return false;
-                }
-            },
-            eventResize: function (calEvent, delta, revertFunc) {
-                if (!calendar.checkTime(calEvent) ||
-                     calEvent.start.isBefore(calEvent.end, 'day'))
-                {
-                    $('#calendar').fullCalendar('unselect');
-                    revertFunc();
-                    return false;
-                }
-            },
-            // events: {
-            //     url: "",
-            //     type: 'GET',
-            //     data: {},
-            //     error: function () {
-            //         swal({
-            //             title: 'Error!',
-            //             text: "Ha ocurrido un error",
-            //             type: 'error'
-            //         });
-            //     }
-            // }
-            events: []
-        });
-
-        calendar.checkTime = function (calEvent)
+document.addEventListener('DOMContentLoaded', function ()
+{
+    calendar = new FullCalendar.Calendar(calendarEl, {
+        timeZone: 'local',
+        initialView: 'dayGridMonth',
+        locale: 'en',
+        headerToolbar: {
+            left: 'prev next today',
+            center: 'title',
+            right: 'dayGridMonth listWeek'
+        },
+        events: [],
+        editable: true,
+        dateClick: function (info)
         {
-            if ( calEvent.end.isBefore(Date.now(), 'day') ) {
-                swal({
-                    title: 'Error!',
-                    text: "You cannot create or modify events in the past.",
-                    type: 'error'
-                });
+            let hoy = moment().format('YYYY-MM-DD');
+            let fechaEvento = moment(info.dateStr).format('YYYY-MM-DD');
+
+            if (hoy <= fechaEvento)
+            {
+                frm.reset();
+                eliminar.classList.add('d-none');
+                document.getElementById('start').value = info.dateStr;
+                document.getElementById('end').value = info.dateStr;
+                document.getElementById('id').value = '';
+                document.getElementById('btnAccion').textContent = 'Save';
+                document.getElementById('titulo').textContent = 'Register Event';
+                myModal.show();
+            }
+            else
+            {
+                Swal.fire(
+                    'Error',
+                    'You cannot create or modify events in the past',
+                    'error'
+                )
                 return false;
             }
-            if (calEvent.start.toDate().getHours() < min.split(':')[0] ||
-                calEvent.end.toDate().getHours() > max.split(':')[0]) {
-                swal({
-                    title: 'Error!',
-                    text: "Events Cannot Be Created At This Time",
-                    type: 'error'
-                });
-                return false;
+        },
+
+        eventClick: function (info)
+        {
+            document.getElementById('id').value = info.event.id;
+            document.getElementById('title').value = info.event.title;
+            document.getElementById('start').value = info.event.startStr;
+            document.getElementById('color').value = info.event.backgroundColor;
+            document.getElementById('btnAccion').textContent = 'Modify';
+            document.getElementById('titulo').textContent = 'Update Event';
+            eliminar.classList.remove('d-none');
+            myModal.show();
+        },
+        eventDrop: function (info)
+        {
+            const start = info.event.startStr;
+            const id = info.event.id;
+            const url = base_url + 'Home/drag';
+            const http = new XMLHttpRequest();
+            const formDta = new FormData();
+            formDta.append('start', start);
+            formDta.append('id', id);
+            http.open("POST", url, true);
+            http.send(formDta);
+            http.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log(this.responseText);
+                    const res = JSON.parse(this.responseText);
+                     Swal.fire(
+                         'Avisos?',
+                         res.msg,
+                         res.tipo
+                     )
+                    if (res.estado) {
+                        myModal.hide();
+                        calendar.refetchEvents();
+                    }
+                }
             }
-            return true;
         }
     });
 
+    calendar.render();
+    frm.addEventListener('submit', function (e)
+    {
+        e.preventDefault();
+        const title = document.getElementById('title').value;
+        const description = document.getElementById('description').value;
+        const start = document.getElementById('start').value;
+        const start_time = document.getElementById('start_time').value;
+        const end = document.getElementById('end').value;
+        const end_time = document.getElementById('end_time').value;
+        const color = document.getElementById('color').value;
+
+        if (title == '' || start == '' || start_time == '' ||
+            end == '' || end_time == '')
+        {
+             Swal.fire(
+                 'Error',
+                 'The fields are required',
+                 'error'
+             )
+        } else
+        {
+            $.ajax({
+                async: true,
+                url: url_store,
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    'title': title,
+                    'description': description,
+                    'start': start,
+                    'start_time': start_time,
+                    'end': end,
+                    'end_time': end_time,
+                    'color': color,
+                },
+                success: function(response)
+                {
+                    if(response == "exception_evento")
+                    {
+                        myModal.hide();
+                        Swal.fire({
+                            position: 'center',
+                            title: 'Error!',
+                            html:  'An error occurred, contact support.',
+                            type: 'error',
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey:false,
+                            timer: 5000
+                        });
+                    }
+
+                    if(response == "error_evento")
+                    {
+                        myModal.hide();
+                        Swal.fire({
+                            position: 'center',
+                            title: 'Error!',
+                            html:  'An error occurred, try again, if the problem persists contact support.',
+                            type: 'error',
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey:false,
+                            timer: 5000
+                        });
+                    }
+
+                    if(response == "success_evento")
+                    {
+                        Swal.fire({
+                            position: 'center',
+                            title: 'Successfully!',
+                            html:  'Event successfully created',
+                            type: 'success',
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey:false,
+                            timer: 3000
+                        });
+
+                        setInterval(() => {
+                            window.location.reload();
+                        }, 4000);
+                    }
+                }
+            });
+        }
+    });
+    eliminar.addEventListener('click', function () {
+        myModal.hide();
+        Swal.fire({
+            title: 'Advertencia?',
+            text: "Esta seguro de eliminar!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const url = base_url + 'Home/eliminar/' + document.getElementById('id').value;
+                const http = new XMLHttpRequest();
+                http.open("GET", url, true);
+                http.send();
+                http.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        console.log(this.responseText);
+                        const res = JSON.parse(this.responseText);
+                        Swal.fire(
+                            'Avisos?',
+                            res.msg,
+                            res.tipo
+                        )
+                        if (res.estado) {
+                            calendar.refetchEvents();
+                        }
+                    }
+                }
+            }
+        })
+    });
+});
+
 </script>
-@endsection
+</body>
+</html>
 

@@ -358,7 +358,7 @@
                     }
 
                     $.ajax({
-                        aysn: true,
+                        async: true,
                         url: "{{route('trainer.store')}}",
                         type: "POST",
                         dataType: "json",
