@@ -25,8 +25,8 @@
     <link rel="stylesheet" href="{{ asset('css/404.css') }}">
 
     {{-- Styles Login Entrenador --}}
-    <link rel="icon" type="image/png" href="{{asset('favicon.ico')}}"/>
-	<link rel="stylesheet" type="text/css" href="{{asset('iconic/css/material-design-iconic-font.min.css')}}">
+    {{-- <link rel="icon" type="image/png" href="{{asset('favicon.ico')}}"/>
+	<link rel="stylesheet" type="text/css" href="{{asset('iconic/css/material-design-iconic-font.min.css')}}"> --}}
      <link rel="stylesheet" href="{{ asset('css/animate.min.css') }}">
 	{{-- <link rel="stylesheet" type="text/css" href="{{asset('vendor/animate/animate.css')}}"> --}}
 	<link rel="stylesheet" type="text/css" href="{{asset('vendor/css-hamburgers/hamburgers.min.css')}}">
@@ -42,6 +42,7 @@
     <!--  Js -->
     <script src="{{ asset('js/modernizr.custom.js') }}"></script>
     <script src="{{ asset('js/jquery-2.1.3.min.js') }}"></script>
+
 </head>
 <body>
 <div class="container">
@@ -134,10 +135,10 @@
                             <a class="pointer" href="{{route('administrador.index')}}">Home</a>
                         </li>
                         <li role="presentation">
-                            <a href="#">Trainer's Agenda</a>
+                            <a href="{{route('trainer.create')}}">Trainer's Agenda</a>
                         </li>
                         <li role="presentation">
-                            <a href="#">Trainer's Sessions</a>
+                            <a href="{{route('trainer.index')}}">Trainer's Sessions</a>
                         </li>
                         <li role="presentation">
                             <a href="#">Availability Trainer's</a>
