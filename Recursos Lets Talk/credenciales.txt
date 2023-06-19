@@ -1,0 +1,32 @@
+Administrador
+username: jvargas
+Password: juvape
+
+Entrenador
+username: jvargas1
+password: juvape1
+
+username: dpenagos
+password: dpenagos
+
+Estudiante
+username: jvargas2
+password: juvape2
+
+FIGMA:
+https://www.figma.com/file/ewJtv7VwCukoDHplPmUNly/Untitled?node-id=0%3A1&t=SFIOZaC9HiovHDXd-0
+
+TRELLO:
+https://trello.com/b/U9wyz7VG/lets-talk
+
+Link instrucciones DataTable:
+https://www.itsolutionstuff.com/post/laravel-7-yajra-datatables-exampleexample.html
+
+Credenciales Cpanel
+Cpanel	http://jgmcdigital.com/cpanel
+
+Cpanel	http://jgmcdigital.com:2083
+
+Login	jgmcdigi
+
+Pw	Mowgli22052015
