@@ -1,7 +1,7 @@
 Administrador
 username: jvargas
-pass: juvape1
 Password: juvape
+pass: juvape1 -- NO ES
 
 Entrenador
 username: jvargas1
@@ -38,14 +38,6 @@ git branch jgmc
 
 Le informo al Git la creación de la nueva rama
 git push --set-upstream origin jgmc
-
-// ======================================================================================================
-
-# DB_HOST=jgmcdigital.com
-# DB_PORT=3306
-# DB_DATABASE=jgmcdigi_lets_talk
-# DB_USERNAME=jgmcdigi_letstalk
-# DB_PASSWORD=Lets_Talk2023*
 
 // ======================================================================================================
 
