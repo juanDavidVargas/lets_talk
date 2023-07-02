@@ -22,11 +22,3 @@ https://trello.com/b/U9wyz7VG/lets-talk
 Link instrucciones DataTable:
 https://www.itsolutionstuff.com/post/laravel-7-yajra-datatables-exampleexample.html
 
-Credenciales Cpanel
-Cpanel	http://jgmcdigital.com/cpanel
-
-Cpanel	http://jgmcdigital.com:2083
-
-Login	jgmcdigi
-
-Pw	Mowgli22052015

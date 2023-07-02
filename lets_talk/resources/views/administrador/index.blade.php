@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 @section('title', 'Index')
 @section('css')
-<link href="{{asset('DataTables/datatables.min.css')}}"/>
+    <link href="{{asset('DataTables/datatables.min.css')}}"/>
 @stop
 @section('content')
 
@@ -19,7 +19,7 @@
 <div class="row p-t-30">
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="table-responsive">
-            <table class="table table-striped table-bordered table-hover dt-button" id="tbl_users">
+            <table class="table table-striped table-bordered table-hover dt-button" id="tbl_users" aria-describedby="tabla usuarios">
                 <thead>
                     <tr class="header-table">
                         <th>Name</th>
@@ -39,61 +39,61 @@
                     </tr>
                 </thead>
                 <tbody>
-                   @foreach ($usuarios as $usuario)
-                       <tr>
-                           <td>{{$usuario->nombres}}</td>
-                           <td>{{$usuario->apellidos}}</td>
-                           <td>{{$usuario->usuario}}</td>
-                           <td>{{$usuario->tipo_documento}}</td>
-                           <td>{{$usuario->numero_documento}}</td>
-                           <td>{{$usuario->correo}}</td>
+                    @foreach ($usuarios as $usuario)
+                        <tr>
+                            <td>{{$usuario->nombres}}</td>
+                            <td>{{$usuario->apellidos}}</td>
+                            <td>{{$usuario->usuario}}</td>
+                            <td>{{$usuario->tipo_documento}}</td>
+                            <td>{{$usuario->numero_documento}}</td>
+                            <td>{{$usuario->correo}}</td>
 
-                           <td>{{$usuario->nombre_rol}}</td>
+                            <td>{{$usuario->nombre_rol}}</td>
 
-                           @if($usuario->id_rol == 3 || $usuario->id_rol == "3")
-                                <td>
-                                    <span class="badge badge-warning">
-                                        {{$usuario->niveles}}
-                                    </span>
-                                </td>
+                            @if($usuario->id_rol == 3 || $usuario->id_rol == "3")
+                                    <td>
+                                        <span class="badge badge-warning">
+                                            {{$usuario->niveles}}
+                                        </span>
+                                    </td>
+                                    <td>---</td>
+                            @else
                                 <td>---</td>
-                           @else
-                               <td>---</td>
-                               <td>
-                                    <span class="badge badge-info">
-                                        {{$usuario->desc_tip_ing}}
-                                    </span>
-                               </td>
-                           @endif
+                                <td>
+                                        <span class="badge badge-info">
+                                            {{$usuario->desc_tip_ing}}
+                                        </span>
+                                </td>
+                            @endif
 
-                           @if($usuario->estado == 1 || $usuario->estado)
-                                <td><span class='badge badge-success'>Active</span></td>
-                           @else
-                                <td><span class='badge badge-danger'>Inactive</span></td>
-                           @endif
-                           <td>
-                                <a href="{{route('administrador.show', $usuario->id_user)}}" class="btn btn-secondary" title="View Details"><i class="fa fa-eye" aria-hidden="true"></i></a>
-                           </td>
-                           <td>
-                                <a href="{{route('administrador.edit', $usuario->id_user)}}" class="btn btn-primary" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                <input type="hidden" name="id_user" id="id_user" value="{{$usuario->id_user}}">
-                           </td>
-                           <td>
-                               @if($usuario->id_rol == 2 || $usuario->id_rol == "2")
-                                    <a href="#" class="btn btn-warning" title="Change Status" disabled>
-                                        <i class="fa fa-refresh" aria-hidden="true" id="cambiar_estado"></i>
-                                    </a>
-                               @else
-                                    <a href="#" class="btn btn-warning" title="Change Status">
-                                        <i class="fa fa-refresh" aria-hidden="true" id="cambiar_estado"></i>
-                                    </a>
-                               @endif
-                           </td>
-                           <td>
-                               <button class="btn btn-info" title="Update Password" id="pass_update_{{$usuario->id_user}}"><i class="fa fa-key" aria-hidden="true" onclick="updatePassword({{$usuario->id_user}})"></i></button>
-                           </td>
-                       </tr>
-                   @endforeach
+                            @if($usuario->estado == 1 || $usuario->estado)
+                                    <td><span class='badge badge-success'>Active</span></td>
+                            @else
+                                    <td><span class='badge badge-danger'>Inactive</span></td>
+                            @endif
+                            <td>
+                                    <a href="{{route('administrador.show', $usuario->id_user)}}" class="btn btn-secondary" title="View Details"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                            </td>
+                            <td>
+                                    <a href="{{route('administrador.edit', $usuario->id_user)}}" class="btn btn-primary" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <input type="hidden" name="id_user" id="id_user" value="{{$usuario->id_user}}">
+                            </td>
+                            <td>
+                                @if($usuario->id_rol == 2 || $usuario->id_rol == "2")
+                                        <a href="#" class="btn btn-warning" title="Change Status" disabled>
+                                            <i class="fa fa-refresh" aria-hidden="true" id="cambiar_estado"></i>
+                                        </a>
+                                @else
+                                        <a href="#" class="btn btn-warning" title="Change Status">
+                                            <i class="fa fa-refresh" aria-hidden="true" id="cambiar_estado"></i>
+                                        </a>
+                                @endif
+                            </td>
+                            <td>
+                                <button class="btn btn-info" title="Update Password" id="pass_update_{{$usuario->id_user}}"><i class="fa fa-key" aria-hidden="true" onclick="updatePassword({{$usuario->id_user}})"></i></button>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>

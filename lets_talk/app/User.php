@@ -33,12 +33,11 @@ class User extends Authenticatable
         'id_municipio_residencia',
         'fecha_ingreso_sistema',
         'id_rol',
-        'clave_fallas',
         'skype',
         'zoom',
         'id_nivel',
         'id_tipo_ingles',
-        'id_primer_contacto'
+        'clave_fallas'
     ];
 
     protected $hidden = [
