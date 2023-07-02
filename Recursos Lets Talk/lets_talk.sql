@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.0.1
+-- version 4.9.5
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 19-06-2023 a las 23:04:32
--- Versión del servidor: 10.1.32-MariaDB
--- Versión de PHP: 7.2.5
+-- Servidor: localhost:3306
+-- Tiempo de generación: 02-07-2023 a las 21:13:29
+-- Versión del servidor: 5.7.24
+-- Versión de PHP: 7.4.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -21,6 +21,45 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `lets_talk`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `contactos`
+--
+
+CREATE TABLE `contactos` (
+  `id_contacto` int(10) UNSIGNED NOT NULL,
+  `id_user` int(10) UNSIGNED DEFAULT NULL,
+  `id_primer_contacto` int(10) UNSIGNED DEFAULT NULL,
+  `primer_telefono` varchar(191) DEFAULT NULL,
+  `primer_celular` varchar(191) DEFAULT NULL,
+  `primer_correo` varchar(191) DEFAULT NULL,
+  `primer_skype` varchar(191) DEFAULT NULL,
+  `primer_zoom` varchar(191) DEFAULT NULL,
+  `id_segundo_contacto` int(10) UNSIGNED DEFAULT NULL,
+  `segundo_telefono` varchar(191) DEFAULT NULL,
+  `segundo_celular` varchar(191) DEFAULT NULL,
+  `segundo_correo` varchar(191) DEFAULT NULL,
+  `segundo_skype` varchar(191) DEFAULT NULL,
+  `segundo_zoom` varchar(191) DEFAULT NULL,
+  `id_opcional_contacto` int(10) UNSIGNED DEFAULT NULL,
+  `opcional_telefono` varchar(191) DEFAULT NULL,
+  `opcional_celular` varchar(191) DEFAULT NULL,
+  `opcional_correo` varchar(191) DEFAULT NULL,
+  `opcional_skype` varchar(191) DEFAULT NULL,
+  `opcional_zoom` varchar(191) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `contactos`
+--
+
+INSERT INTO `contactos` (`id_contacto`, `id_user`, `id_primer_contacto`, `primer_telefono`, `primer_celular`, `primer_correo`, `primer_skype`, `primer_zoom`, `id_segundo_contacto`, `segundo_telefono`, `segundo_celular`, `segundo_correo`, `segundo_skype`, `segundo_zoom`, `id_opcional_contacto`, `opcional_telefono`, `opcional_celular`, `opcional_correo`, `opcional_skype`, `opcional_zoom`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(3, 7, 4, NULL, NULL, 'juan@correo.com', NULL, NULL, 2, NULL, '3005555555', NULL, NULL, NULL, 5, NULL, NULL, NULL, NULL, 'jgmc', '2023-06-30 20:33:29', '2023-07-01 02:43:49', NULL);
 
 -- --------------------------------------------------------
 
@@ -234,8 +273,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (21, '2023_01_08_220143_create_table_niveles', 11),
 (22, '2023_01_08_221713_add_column_id_nivel_to_usuarios', 11),
 (23, '2023_02_05_164907_create_tipo_ingles_table', 12),
-(24, '2023_02_05_170535_add_column_id_tipo_ingles', 13),
-(25, '2023_06_18_160113_create_primer_contacto', 13);
+(25, '2023_06_18_160113_create_tipo_contacto', 14),
+(26, '2023_02_05_170535_add_column_id_tipo_ingles', 15),
+(29, '2023_06_26_191602_create_contactos', 16);
 
 -- --------------------------------------------------------
 
@@ -8543,31 +8583,6 @@ CREATE TABLE `password_resets` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `primer_contacto`
---
-
-CREATE TABLE `primer_contacto` (
-  `id_primer_contacto` int(10) UNSIGNED NOT NULL,
-  `contacto_descripcion` varchar(191) DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Volcado de datos para la tabla `primer_contacto`
---
-
-INSERT INTO `primer_contacto` (`id_primer_contacto`, `contacto_descripcion`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'Phone', '2023-06-19 16:04:00', '2023-06-19 16:04:00', NULL),
-(2, 'Whatsapp', '2023-06-19 16:04:00', '2023-06-19 16:04:00', NULL),
-(3, 'Skype', '2023-06-19 16:04:00', '2023-06-19 16:04:00', NULL),
-(4, 'Email', '2023-06-19 16:04:00', '2023-06-19 16:04:00', NULL),
-(5, 'Zoom', '2023-06-19 16:04:00', '2023-06-19 16:04:00', NULL);
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `roles`
 --
 
@@ -8588,6 +8603,31 @@ INSERT INTO `roles` (`id_rol`, `descripcion`, `estado`, `created_at`, `updated_a
 (1, 'ENTRENADOR', 1, '2022-04-23 22:45:00', '2022-04-23 22:45:00', NULL),
 (2, 'ADMINISTRADOR', 1, '2022-04-23 22:45:00', '2022-04-23 22:45:00', NULL),
 (3, 'ESTUDIANTE', 1, '2022-04-23 22:45:00', '2022-04-23 22:45:00', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tipo_contacto`
+--
+
+CREATE TABLE `tipo_contacto` (
+  `id_tipo_contacto` int(10) UNSIGNED NOT NULL,
+  `tipo_contacto` varchar(191) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `tipo_contacto`
+--
+
+INSERT INTO `tipo_contacto` (`id_tipo_contacto`, `tipo_contacto`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'Phone', NULL, NULL, NULL),
+(2, 'Whatsapp - Celular', NULL, NULL, NULL),
+(3, 'Skype', NULL, NULL, NULL),
+(4, 'Email', NULL, NULL, NULL),
+(5, 'Zoom', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -8666,8 +8706,7 @@ CREATE TABLE `usuarios` (
   `skype` varchar(191) DEFAULT NULL,
   `zoom` varchar(191) DEFAULT NULL,
   `id_nivel` int(10) UNSIGNED DEFAULT NULL,
-  `id_tipo_ingles` int(11) DEFAULT NULL,
-  `id_primer_contacto` int(10) UNSIGNED DEFAULT NULL,
+  `id_tipo_ingles` int(10) UNSIGNED DEFAULT NULL,
   `clave_fallas` int(11) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -8678,15 +8717,26 @@ CREATE TABLE `usuarios` (
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`id_user`, `usuario`, `password`, `nombres`, `apellidos`, `numero_documento`, `id_tipo_documento`, `id_municipio_nacimiento`, `fecha_nacimiento`, `genero`, `estado`, `telefono`, `celular`, `correo`, `contacto2`, `contacto_opcional`, `direccion_residencia`, `id_municipio_residencia`, `fecha_ingreso_sistema`, `id_rol`, `skype`, `zoom`, `id_nivel`, `id_tipo_ingles`, `id_primer_contacto`, `clave_fallas`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'jvargas', '$2y$10$kjKl4j0BYIly49ejeY9gm.vnuhXrqYZX9XuV3kCZo7sz6VpiJsTpq', 'JUAN DAVID', 'VARGAS PENAGOS', '1128453257', 1, 13797, 661910400, 'M', 1, '3029748', '3113057658', 'davidvargas.jdvp@gmail.com', NULL, NULL, 'Calle 51 A Sur', 8750, 1651425221, 2, NULL, NULL, NULL, 1, NULL, 1, '2022-05-01 22:13:41', '2023-02-13 00:56:29', NULL),
-(2, 'jvargas1', '$2y$10$AklR6CIbH2no6mGdHGgbtesIhab9LKUtLIyLKzHGMgtGvSXPxXdla', 'JUAN', 'VARGAS PENAGOS', '123456', 1, 8750, 661910400, 'M', 1, '34567856', '3045679809', 'juan@mail.com', NULL, NULL, 'Calle 51 A Sur 34', 8750, 1655225248, 1, NULL, NULL, NULL, 2, NULL, 0, '2022-06-14 21:47:28', '2023-02-05 22:58:20', NULL),
-(3, 'jvargas2', '$2y$10$tyxcDxIggjBJh8gTG7lSl.l/9npsjn7HEx2kMVpiSDpaJa51NaG5m', 'JUAN', 'VARGAS', '12345', 1, 13797, 972950400, 'M', 1, '12345', '54321', 'juan1@gmail.com', NULL, NULL, 'calle 10', 15957, 1664131780, 3, NULL, NULL, 2, NULL, NULL, 0, '2022-09-25 23:49:41', '2023-02-05 22:59:14', NULL),
-(4, 'dpenagos', '$2y$10$7F.PZQHgF3Z/dQN.FMsnauAA37F0ZUZ5P/43F2i2m3.yB8Sfp1o6i', 'DAVID', 'PENAGOS', '2345678901', 1, 11578, 521769600, 'M', 1, '3127895643', '3127895643', 'david@gmail.com', '32078654323', NULL, 'Calle 123', 11578, 1676226510, 1, NULL, NULL, NULL, 1, NULL, 0, '2023-02-12 23:28:30', '2023-02-12 23:32:59', NULL);
+INSERT INTO `usuarios` (`id_user`, `usuario`, `password`, `nombres`, `apellidos`, `numero_documento`, `id_tipo_documento`, `id_municipio_nacimiento`, `fecha_nacimiento`, `genero`, `estado`, `telefono`, `celular`, `correo`, `contacto2`, `contacto_opcional`, `direccion_residencia`, `id_municipio_residencia`, `fecha_ingreso_sistema`, `id_rol`, `skype`, `zoom`, `id_nivel`, `id_tipo_ingles`, `clave_fallas`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'jvargas', '$2y$10$kjKl4j0BYIly49ejeY9gm.vnuhXrqYZX9XuV3kCZo7sz6VpiJsTpq', 'JUAN DAVID', 'VARGAS PENAGOS', '1128453257', 1, 13797, 661910400, 'M', 1, '3029748', '3113057658', 'davidvargas.jdvp@gmail.com', NULL, NULL, 'Calle 51 A Sur', 8750, 1651425221, 2, NULL, NULL, NULL, NULL, 1, '2022-05-01 22:13:41', '2023-02-13 00:56:29', NULL),
+(2, 'jvargas1', '$2y$10$AklR6CIbH2no6mGdHGgbtesIhab9LKUtLIyLKzHGMgtGvSXPxXdla', 'JUAN', 'VARGAS PENAGOS', '123456', 1, 8750, 661910400, 'M', 1, '34567856', '3045679809', 'juan@mail.com', NULL, NULL, 'Calle 51 A Sur 34', 8750, 1655225248, 1, NULL, NULL, NULL, NULL, 0, '2022-06-14 21:47:28', '2023-02-05 22:58:20', NULL),
+(3, 'jvargas2', '$2y$10$tyxcDxIggjBJh8gTG7lSl.l/9npsjn7HEx2kMVpiSDpaJa51NaG5m', 'JUAN', 'VARGAS', '12345', 1, 13797, 972950400, 'M', 1, '12345', '54321', 'juan1@gmail.com', NULL, NULL, 'calle 10', 15957, 1664131780, 3, NULL, NULL, 2, NULL, 0, '2022-09-25 23:49:41', '2023-02-05 22:59:14', NULL),
+(4, 'dpenagos', '$2y$10$7F.PZQHgF3Z/dQN.FMsnauAA37F0ZUZ5P/43F2i2m3.yB8Sfp1o6i', 'DAVID', 'PENAGOS', '2345678901', 1, 11578, 521769600, 'M', 1, '3127895643', '3127895643', 'david@gmail.com', '32078654323', NULL, 'Calle 123', 11578, 1676226510, 1, NULL, NULL, NULL, NULL, 0, '2023-02-12 23:28:30', '2023-02-12 23:32:59', NULL),
+(7, 'jmejia', '$2y$10$n2Cs9TZCl1hJ1P/IO.Id6eiDYPmGfc1oVG5QlXzALY9Nd76wNmcEy', 'JUAN GMO', 'MEJIA', '42355087954jgmc', 1, 8750, 138585600, 'M', 1, NULL, NULL, 'juan@correo.com', NULL, NULL, 'calle 1', 13405, 1688139209, 2, NULL, NULL, NULL, 1, 0, '2023-06-30 20:33:29', '2023-07-01 02:43:49', NULL);
 
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `contactos`
+--
+ALTER TABLE `contactos`
+  ADD PRIMARY KEY (`id_contacto`),
+  ADD KEY `contactos_id_user_foreign` (`id_user`),
+  ADD KEY `contactos_id_primer_contacto_foreign` (`id_primer_contacto`),
+  ADD KEY `contactos_id_segundo_contacto_foreign` (`id_segundo_contacto`),
+  ADD KEY `contactos_id_opcional_contacto_foreign` (`id_opcional_contacto`);
 
 --
 -- Indices de la tabla `departamentos`
@@ -8757,18 +8807,18 @@ ALTER TABLE `password_resets`
   ADD KEY `password_resets_email_index` (`email`);
 
 --
--- Indices de la tabla `primer_contacto`
---
-ALTER TABLE `primer_contacto`
-  ADD PRIMARY KEY (`id_primer_contacto`);
-
---
 -- Indices de la tabla `roles`
 --
 ALTER TABLE `roles`
   ADD PRIMARY KEY (`id_rol`),
   ADD UNIQUE KEY `roles_descripcion_unique` (`descripcion`),
   ADD KEY `estado_roles_id_estado_estados_fk` (`estado`);
+
+--
+-- Indices de la tabla `tipo_contacto`
+--
+ALTER TABLE `tipo_contacto`
+  ADD PRIMARY KEY (`id_tipo_contacto`);
 
 --
 -- Indices de la tabla `tipo_documento`
@@ -8796,11 +8846,17 @@ ALTER TABLE `usuarios`
   ADD KEY `usuarios_id_rol_foreign` (`id_rol`),
   ADD KEY `usuarios_estado_id_estado_estados_fk` (`estado`),
   ADD KEY `usuarios_id_nivel_foreign` (`id_nivel`),
-  ADD KEY `usuarios_id_primer_contacto_primer_contacto_fk` (`id_primer_contacto`);
+  ADD KEY `usuarios_id_tipo_ingles_foreign` (`id_tipo_ingles`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
 --
+
+--
+-- AUTO_INCREMENT de la tabla `contactos`
+--
+ALTER TABLE `contactos`
+  MODIFY `id_contacto` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `departamentos`
@@ -8836,7 +8892,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT de la tabla `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT de la tabla `municipios`
@@ -8857,16 +8913,16 @@ ALTER TABLE `paises`
   MODIFY `id_pais` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=226;
 
 --
--- AUTO_INCREMENT de la tabla `primer_contacto`
---
-ALTER TABLE `primer_contacto`
-  MODIFY `id_primer_contacto` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
 -- AUTO_INCREMENT de la tabla `roles`
 --
 ALTER TABLE `roles`
   MODIFY `id_rol` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `tipo_contacto`
+--
+ALTER TABLE `tipo_contacto`
+  MODIFY `id_tipo_contacto` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `tipo_documento`
@@ -8884,11 +8940,20 @@ ALTER TABLE `tipo_ingles`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_user` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_user` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Restricciones para tablas volcadas
 --
+
+--
+-- Filtros para la tabla `contactos`
+--
+ALTER TABLE `contactos`
+  ADD CONSTRAINT `contactos_id_opcional_contacto_foreign` FOREIGN KEY (`id_opcional_contacto`) REFERENCES `tipo_contacto` (`id_tipo_contacto`),
+  ADD CONSTRAINT `contactos_id_primer_contacto_foreign` FOREIGN KEY (`id_primer_contacto`) REFERENCES `tipo_contacto` (`id_tipo_contacto`),
+  ADD CONSTRAINT `contactos_id_segundo_contacto_foreign` FOREIGN KEY (`id_segundo_contacto`) REFERENCES `tipo_contacto` (`id_tipo_contacto`),
+  ADD CONSTRAINT `contactos_id_user_foreign` FOREIGN KEY (`id_user`) REFERENCES `usuarios` (`id_user`);
 
 --
 -- Filtros para la tabla `departamentos`
@@ -8924,9 +8989,9 @@ ALTER TABLE `usuarios`
   ADD CONSTRAINT `usuarios_id_municipio_nacimiento_foreign` FOREIGN KEY (`id_municipio_nacimiento`) REFERENCES `municipios` (`id_municipio`),
   ADD CONSTRAINT `usuarios_id_municipio_residencia_foreign` FOREIGN KEY (`id_municipio_residencia`) REFERENCES `municipios` (`id_municipio`),
   ADD CONSTRAINT `usuarios_id_nivel_foreign` FOREIGN KEY (`id_nivel`) REFERENCES `niveles` (`id_nivel`),
-  ADD CONSTRAINT `usuarios_id_primer_contacto_primer_contacto_fk` FOREIGN KEY (`id_primer_contacto`) REFERENCES `primer_contacto` (`id_primer_contacto`),
   ADD CONSTRAINT `usuarios_id_rol_foreign` FOREIGN KEY (`id_rol`) REFERENCES `roles` (`id_rol`),
-  ADD CONSTRAINT `usuarios_id_tipo_documento_foreign` FOREIGN KEY (`id_tipo_documento`) REFERENCES `tipo_documento` (`id`);
+  ADD CONSTRAINT `usuarios_id_tipo_documento_foreign` FOREIGN KEY (`id_tipo_documento`) REFERENCES `tipo_documento` (`id`),
+  ADD CONSTRAINT `usuarios_id_tipo_ingles_foreign` FOREIGN KEY (`id_tipo_ingles`) REFERENCES `tipo_ingles` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
