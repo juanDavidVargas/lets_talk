@@ -65,7 +65,7 @@
     </div>
 </div>
 
-<div class="row">
+{{-- <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-3 select2" id="div_primer_contacto">
         <div class="wrap-input100 validate-input" data-validate="Required">
             {!! Form::select('id_primer_contacto', $primer_contacto, isset($usuario) ? $usuario->primer_contacto : null, ['class' => 'input100', 'id' => 'id_primer_contacto']) !!}
@@ -107,7 +107,7 @@
             <span class="focus-input100" data-placeholder="Zoom"></span>
         </div>
     </div>
-</div>
+</div> --}}
 
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-3">

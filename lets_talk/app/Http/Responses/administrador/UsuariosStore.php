@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Responses\administrador\UsuariosShow;
+use App\Models\usuarios\Contacto;
 
 class UsuariosStore implements Responsable
 {
@@ -35,29 +36,27 @@ class UsuariosStore implements Responsable
         $zoom = request('zoom', null);
         $id_nivel = request('id_nivel', null);
         $id_tipo_ingles = request('id_tipo_ingles', null);
-        $id_primer_contacto = request('id_primer_contacto', null);
 
-        if(isset($id_rol) && $id_rol == 3)
-        {
+        // ==========================================================================
+        
+        if(isset($id_rol) && $id_rol == 3) {
             $nivel_ingles = $id_nivel;
             $tipo_ingles = null;
-
-        } else
-        {
+        } else {
             $nivel_ingles = null;
             $tipo_ingles = $id_tipo_ingles;
         }
+        
+        // ==========================================================================
 
         // Consultamos si ya existe un usuario con la cedula ingresada
         $consulta_cedula = $usuarioShow->consultarCedula($numero_documento);
 
         if(isset($consulta_cedula) && !empty($consulta_cedula) &&
-           !is_null($consulta_cedula))
-        {
+           !is_null($consulta_cedula)) {
             alert()->info('Info', 'The document number already exists.');
             return back();
         } else {
-
             // Contruimos el nombre de usuario
             $separar_apellidos = explode(" ", $apellidos);
             $usuario = substr($this->quitarCaracteresEspeciales(trim($nombres)), 0,1) . trim($this->quitarCaracteresEspeciales($separar_apellidos[0]));
@@ -76,7 +75,6 @@ class UsuariosStore implements Responsable
             DB::connection('mysql')->beginTransaction();
 
             try {
-
                 $nuevo_usuario = User::create([
                     'usuario' => $usuario.$complemento,
                     'password' => Hash::make($numero_documento),
@@ -101,13 +99,89 @@ class UsuariosStore implements Responsable
                     'zoom' => $zoom,
                     'id_nivel' => $nivel_ingles,
                     'id_tipo_ingles' => $tipo_ingles,
-                    'id_primer_contacto' => $id_primer_contacto,
                     'clave_fallas' => 0
                 ]);
 
                 if($nuevo_usuario)
                 {
                     DB::connection('mysql')->commit();
+
+                    // ==========================================================================
+                    // ==========================================================================
+
+                    $idPrimerContacto = request('id_primer_contacto', null);
+                    
+                    if (isset($idPrimerContacto) && $idPrimerContacto != "-1") {
+                        $idPrimerContacto = request('id_primer_contacto', null);
+                    } else {
+                        $idPrimerContacto = null;
+                    }
+                    $primerTelefono = request('primer_telefono', null);
+                    $primerCelular = request('primer_celular', null);
+                    $primerCorreo = request('primer_correo', null);
+                    $primerSkype = request('primer_skype', null);
+                    $primerZoom = request('primer_zoom', null);
+
+                    // =====================================
+                    
+                    $idSegundoContacto = request('id_segundo_contacto', null);
+
+                    if (isset($idSegundoContacto) && $idSegundoContacto != "-1") {
+                        $idSegundoContacto = request('id_segundo_contacto', null);
+                    } else {
+                        $idSegundoContacto = null;
+                    }
+                    $segundoTelefono = request('segundo_telefono', null);
+                    $segundoCelular = request('segundo_celular', null);
+                    $segundoCorreo = request('segundo_correo', null);
+                    $segundoSkype = request('segundo_skype', null);
+                    $segundoZoom = request('segundo_zoom', null);
+
+                    // =====================================
+
+                    $idOpcionalContacto = request('id_opcional_contacto', null);
+
+                    if (isset($idOpcionalContacto) && $idOpcionalContacto != "-1") {
+                        $idOpcionalContacto = request('id_opcional_contacto', null);
+                    } else {
+                        $idOpcionalContacto = null;
+                    }
+                    $opcionalTelefono = request('opcional_telefono', null);
+                    $opcionalCelular = request('opcional_celular', null);
+                    $opcionalCorreo = request('opcional_correo', null);
+                    $opcionalSkype = request('opcional_skype', null);
+                    $opcionalZoom = request('opcional_zoom', null);
+
+                    $idUser = User::select('id_user')->orderBy('id_user', 'DESC')->first();
+
+                    if (isset($idUser) && !is_null($idUser) && !empty($idUser)) {
+                        Contacto::create([
+                            'id_user' => $idUser->id_user,
+                            'id_primer_contacto' => $idPrimerContacto,
+                            'primer_telefono' => $primerTelefono,
+                            'primer_celular' => $primerCelular,
+                            'primer_correo' => $primerCorreo,
+                            'primer_skype' => $primerSkype,
+                            'primer_zoom' => $primerZoom,
+                            'id_segundo_contacto' => $idSegundoContacto,
+                            'segundo_telefono' => $segundoTelefono,
+                            'segundo_celular' => $segundoCelular,
+                            'segundo_correo' => $segundoCorreo,
+                            'segundo_skype' => $segundoSkype,
+                            'segundo_zoom' => $segundoZoom,
+                            'id_opcional_contacto' => $idOpcionalContacto,
+                            'opcional_telefono' => $opcionalTelefono,
+                            'opcional_celular' => $opcionalCelular,
+                            'opcional_correo' => $opcionalCorreo,
+                            'opcional_skype' => $opcionalSkype,
+                            'opcional_zoom' => $opcionalZoom
+                        ]);
+                    }
+                    DB::connection('mysql')->commit();
+
+                    // ==========================================================================
+                    // ==========================================================================
+
                     alert()->success('Successful Process', 'User successfully created, the user name is: ' . $nuevo_usuario->usuario . ' and the password is: ' . $numero_documento);
                     return redirect()->to(route('administrador.index'));
 
@@ -119,6 +193,7 @@ class UsuariosStore implements Responsable
 
             } catch (Exception $e)
             {
+                // dd($e);
                 DB::connection('mysql')->rollback();
                 alert()->error('Error', 'An error has occurred creating the user, try again, if the problem persists contact support.');
                 return back();

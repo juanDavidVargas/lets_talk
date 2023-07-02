@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePrimerContacto extends Migration
+class CreateTipoContacto extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreatePrimerContacto extends Migration
      */
     public function up()
     {
-        Schema::create('primer_contacto', function (Blueprint $table) {
-            $table->increments('id_primer_contacto')->unsigned();
-            $table->string('contacto_descripcion')->nullable();
+        Schema::create('tipo_contacto', function (Blueprint $table) {
+            $table->increments('id_tipo_contacto')->unsigned();
+            $table->string('tipo_contacto')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,6 +28,6 @@ class CreatePrimerContacto extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('primer_contacto');
+        Schema::dropIfExists('tipo_contacto');
     }
 }

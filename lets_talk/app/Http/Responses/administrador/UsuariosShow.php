@@ -18,7 +18,6 @@ class UsuariosShow implements Responsable
     public function todosLosUsuarios()
     {
        try {
-
             $usuarios = DB::table('usuarios')
                             ->join('tipo_documento', 'tipo_documento.id', '=', 'usuarios.id_tipo_documento')
                             ->join('municipios', 'municipios.id_municipio', '=', 'usuarios.id_municipio_nacimiento')
@@ -26,24 +25,54 @@ class UsuariosShow implements Responsable
                             ->join('roles', 'roles.id_rol', '=', 'usuarios.id_rol')
                             ->leftJoin('niveles', 'niveles.id_nivel', '=', 'usuarios.id_nivel')
                             ->leftJoin('tipo_ingles', 'tipo_ingles.id', '=', 'usuarios.id_tipo_ingles')
-                            ->select('usuarios.id_user', 'usuarios.usuario',
-                                     'usuarios.nombres', 'usuarios.apellidos',
+                            ->leftJoin('contactos', 'contactos.id_user', '=', 'usuarios.id_user')
+                            ->leftJoin('tipo_contacto as tipo_primer_contacto', 'tipo_primer_contacto.id_tipo_contacto', '=', 'contactos.id_primer_contacto')
+                            ->leftJoin('tipo_contacto as tipo_segundo_contacto', 'tipo_segundo_contacto.id_tipo_contacto', '=', 'contactos.id_segundo_contacto')
+                            ->leftJoin('tipo_contacto as tipo_opcional_contacto', 'tipo_opcional_contacto.id_tipo_contacto', '=', 'contactos.id_opcional_contacto')
+                            ->select('usuarios.id_user',
+                                     'usuarios.usuario',
+                                     'usuarios.nombres',
+                                     'usuarios.apellidos',
                                      'usuarios.numero_documento',
                                      'usuarios.fecha_nacimiento',
-                                     'usuarios.genero', 'usuarios.estado',
-                                     'usuarios.telefono', 'usuarios.celular',
-                                     'usuarios.correo', 'usuarios.direccion_residencia',
-                                     'usuarios.contacto2', 'usuarios.contacto_opcional',
-                                     'usuarios.skype', 'usuarios.zoom',
+                                     'usuarios.genero',
+                                     'usuarios.estado',
+                                     'usuarios.telefono',
+                                     'usuarios.celular',
+                                     'usuarios.correo',
+                                     'usuarios.direccion_residencia',
+                                     'usuarios.contacto2',
+                                     'usuarios.contacto_opcional',
+                                     'usuarios.skype',
+                                     'usuarios.zoom',
                                      'usuarios.fecha_ingreso_sistema AS fecha_ingreso',
                                      'tipo_documento.descripcion AS tipo_documento',
                                      'municipios.descripcion AS ciudad_nacimiento',
                                      'residencia.descripcion AS ciudad_residencia',
-                                     'roles.descripcion AS nombre_rol', 'roles.id_rol',
+                                     'roles.descripcion AS nombre_rol',
+                                     'roles.id_rol',
                                      'niveles.nivel_descripcion AS niveles',
                                      'niveles.id_nivel',
                                      'tipo_ingles.id AS id_tip_ing',
-                                     'tipo_ingles.descripcion AS desc_tip_ing'
+                                     'tipo_ingles.descripcion AS desc_tip_ing',
+                                     'tipo_primer_contacto.tipo_contacto AS primer_contacto_tipo',
+                                     'contactos.primer_telefono',
+                                     'contactos.primer_celular',
+                                     'contactos.primer_correo',
+                                     'contactos.primer_skype',
+                                     'contactos.primer_zoom',
+                                     'tipo_segundo_contacto.tipo_contacto AS segundo_contacto_tipo',
+                                     'contactos.segundo_telefono',
+                                     'contactos.segundo_celular',
+                                     'contactos.segundo_correo',
+                                     'contactos.segundo_skype',
+                                     'contactos.segundo_zoom',
+                                     'tipo_opcional_contacto.tipo_contacto AS opcional_contacto_tipo',
+                                     'contactos.opcional_telefono',
+                                     'contactos.opcional_celular',
+                                     'contactos.opcional_correo',
+                                     'contactos.opcional_skype',
+                                     'contactos.opcional_zoom',
                                     )
                             ->whereNull('usuarios.deleted_at')
                             ->whereNull('tipo_documento.deleted_at')
@@ -54,7 +83,6 @@ class UsuariosShow implements Responsable
                             ->orderBy('usuarios.id_user', 'DESC')
                             ->get()
                             ->toarray();
-
             return $usuarios;
 
        } catch (Exception $e)
@@ -107,7 +135,7 @@ class UsuariosShow implements Responsable
                         ->select('municipios.id_municipio', DB::raw("CONCAT(municipios.descripcion, ' - ', departamentos.descripcion) AS nombre_ciudad"))
                         ->whereNull('municipios.deleted_at')
                         ->where('municipios.estado', 1)
-                        ->orderBy('municipios.id_municipio', 'DESC')
+                        ->orderBy('municipios.descripcion', 'ASC')
                         ->get()
                         ->pluck('nombre_ciudad', 'id_municipio');
 

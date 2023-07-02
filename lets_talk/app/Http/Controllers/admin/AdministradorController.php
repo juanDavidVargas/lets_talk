@@ -11,7 +11,7 @@ use App\User;
 use Exception;
 use Illuminate\Http\Request;
 use App\Models\usuarios\Nivel;
-use App\Models\usuarios\PrimerContacto;
+use App\Models\usuarios\TipoContacto;
 use App\Models\entrenador\DisponibilidadEntrenadores;
 use Illuminate\Support\Facades\DB;
 
@@ -34,7 +34,6 @@ class AdministradorController extends Controller
         {
             return redirect()->to(route('home'));
         } else {
-
             $this->share_data();
             return view('administrador.index');
         }
@@ -123,7 +122,8 @@ class AdministradorController extends Controller
         {
             return redirect()->to(route('home'));
         } else {
-            $usuario = User::find($id);
+            // $usuario0 = User::find($id);
+            $usuario = $this->consultarUserEdit($id);
             view()->share('usuario', $usuario);
             $this->share_data();
             return view('administrador.edit');
@@ -182,10 +182,10 @@ class AdministradorController extends Controller
         view()->share('niveles', Nivel::orderBy('id_nivel','asc')->pluck('nivel_descripcion', 'id_nivel'));
         view()->share('disponibilidades', $this->traerDisponibilidades());
         view()->share('tipo_ingles', $this->tipoIngles());
-        view()->share('primer_contacto', PrimerContacto::orderBy('contacto_descripcion','asc')->pluck('contacto_descripcion', 'id_primer_contacto'));
+        view()->share('tipo_contacto', TipoContacto::orderBy('tipo_contacto','asc')->pluck('tipo_contacto', 'id_tipo_contacto'));
     }
 
-    private function tipoIngles()
+    public function tipoIngles()
     {
         $sesion = $this->validarVariablesSesion();
 
@@ -392,7 +392,7 @@ class AdministradorController extends Controller
         }
     }
 
-    private function traerDisponibilidades()
+    public function traerDisponibilidades()
     {
         try
         {
@@ -464,5 +464,80 @@ class AdministradorController extends Controller
             alert()->error('Error', 'An error has occurred deleting the Schedule, try again, if the problem persists contact support.');
             return back();
         }
+    }
+
+    // ======================================================
+
+    public function consultarUserEdit($idUser)
+    {
+        return DB::table('usuarios')
+                    ->join('tipo_documento', 'tipo_documento.id', '=', 'usuarios.id_tipo_documento')
+                    ->join('municipios', 'municipios.id_municipio', '=', 'usuarios.id_municipio_nacimiento')
+                    ->join('municipios as residencia', 'residencia.id_municipio', '=', 'usuarios.id_municipio_residencia')
+                    ->join('roles', 'roles.id_rol', '=', 'usuarios.id_rol')
+                    ->leftJoin('niveles', 'niveles.id_nivel', '=', 'usuarios.id_nivel')
+                    ->leftJoin('tipo_ingles', 'tipo_ingles.id', '=', 'usuarios.id_tipo_ingles')
+                    ->leftJoin('contactos', 'contactos.id_user', '=', 'usuarios.id_user')
+                    ->leftJoin('tipo_contacto as tipo_primer_contacto', 'tipo_primer_contacto.id_tipo_contacto', '=', 'contactos.id_primer_contacto')
+                    ->leftJoin('tipo_contacto as tipo_segundo_contacto', 'tipo_segundo_contacto.id_tipo_contacto', '=', 'contactos.id_segundo_contacto')
+                    ->leftJoin('tipo_contacto as tipo_opcional_contacto', 'tipo_opcional_contacto.id_tipo_contacto', '=', 'contactos.id_opcional_contacto')
+                    ->select('usuarios.id_user',
+                                'usuarios.usuario',
+                                'usuarios.nombres',
+                                'usuarios.apellidos',
+                                'usuarios.id_tipo_documento',
+                                'usuarios.numero_documento',
+                                'usuarios.id_municipio_nacimiento',
+                                'usuarios.fecha_nacimiento',
+                                'usuarios.genero',
+                                'usuarios.estado',
+                                'usuarios.telefono',
+                                'usuarios.celular',
+                                'usuarios.correo',
+                                'usuarios.id_municipio_residencia',
+                                'usuarios.direccion_residencia',
+                                'usuarios.contacto2',
+                                'usuarios.contacto_opcional',
+                                'usuarios.skype',
+                                'usuarios.zoom',
+                                'usuarios.fecha_ingreso_sistema AS fecha_ingreso',
+                                'usuarios.id_tipo_ingles',
+                                'tipo_documento.descripcion AS tipo_documento',
+                                'municipios.descripcion AS ciudad_nacimiento',
+                                'residencia.descripcion AS ciudad_residencia',
+                                'roles.descripcion AS nombre_rol',
+                                'roles.id_rol',
+                                'niveles.nivel_descripcion AS niveles',
+                                'niveles.id_nivel',
+                                'tipo_ingles.id AS id_tip_ing',
+                                'tipo_ingles.descripcion AS desc_tip_ing',
+                                'tipo_primer_contacto.id_tipo_contacto AS primer_contacto_tipo',
+                                'contactos.primer_telefono',
+                                'contactos.primer_celular',
+                                'contactos.primer_correo',
+                                'contactos.primer_skype',
+                                'contactos.primer_zoom',
+                                'tipo_segundo_contacto.id_tipo_contacto AS segundo_contacto_tipo',
+                                'contactos.segundo_telefono',
+                                'contactos.segundo_celular',
+                                'contactos.segundo_correo',
+                                'contactos.segundo_skype',
+                                'contactos.segundo_zoom',
+                                'tipo_opcional_contacto.id_tipo_contacto AS opcional_contacto_tipo',
+                                'contactos.opcional_telefono',
+                                'contactos.opcional_celular',
+                                'contactos.opcional_correo',
+                                'contactos.opcional_skype',
+                                'contactos.opcional_zoom',
+                            )
+                    ->where('usuarios.id_user', $idUser)
+                    ->whereNull('usuarios.deleted_at')
+                    ->whereNull('tipo_documento.deleted_at')
+                    ->whereNull('municipios.deleted_at')
+                    ->whereNull('residencia.deleted_at')
+                    ->whereNull('roles.deleted_at')
+                    ->whereNull('niveles.deleted_at')
+                    ->orderBy('usuarios.id_user', 'DESC')
+                    ->first();
     }
 }
