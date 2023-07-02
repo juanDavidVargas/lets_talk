@@ -1,7 +1,7 @@
 Administrador
 username: jvargas
-pass: juvape1
 Password: juvape
+pass: juvape1 -- NO ES
 
 Entrenador
 username: jvargas1
@@ -28,23 +28,20 @@ https://datatables.net/download/
 // ======================================================================================================
 
 GIT
-https://github.com/juanDavidVargas/letsTalk.git
-
-GIT FORKED
-https://github.com/jgmejiaco/letsTalk
+https://github.com/juanDavidVargas/lets_talk
 
 // ======================================================================================================
 
 Creo la Nueva rama a partir de la rama "main"
 git checkout -b jgmc main
+git branch jgmc
 
 Le informo al Git la creación de la nueva rama
 git push --set-upstream origin jgmc
 
 // ======================================================================================================
 
-# DB_HOST=jgmcdigital.com
-# DB_PORT=3306
-# DB_DATABASE=jgmcdigi_lets_talk
-# DB_USERNAME=jgmcdigi_letstalk
-# DB_PASSWORD=Lets_Talk2023*
+prueba nueva rama
+
+git config --global user.name "John Doe"
+git config --global user.email johndoe@example.com
