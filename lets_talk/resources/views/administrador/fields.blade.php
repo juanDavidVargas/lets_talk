@@ -76,7 +76,7 @@
 {{-- =========================================================== --}}
 
 <div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-3">
+    <div class="col-xs-12 col-sm-12 col-md-3" id="div_id_primer_contacto">
         <div class="wrap-input100 validate-input" data-validate="">
             {!! Form::select('id_primer_contacto', $tipo_contacto, isset($usuario) ? $usuario->primer_contacto_tipo : null, ['class' => 'input100 select2', 'id' => 'id_primer_contacto']) !!}
             <span class="focus-input100" data-placeholder="First Contact"></span>
@@ -120,7 +120,7 @@
 
     {{-- ========================================= --}}
 
-    <div class="col-xs-12 col-sm-12 col-md-3">
+    <div class="col-xs-12 col-sm-12 col-md-3" id="div_id_segundo_contacto">
         <div class="wrap-input100 validate-input" data-validate="">
             {!! Form::select('id_segundo_contacto', $tipo_contacto, isset($usuario) ? $usuario->segundo_contacto_tipo : null, ['class' => 'input100 select2', 'id' => 'id_segundo_contacto']) !!}
             <span class="focus-input100" data-placeholder="Second Contact"></span>
@@ -164,7 +164,7 @@
 
     {{-- ========================================= --}}
 
-    <div class="col-xs-12 col-sm-12 col-md-3">
+    <div class="col-xs-12 col-sm-12 col-md-3" id="div_id_opcional_contacto">
         <div class="wrap-input100 validate-input" data-validate="">
             {!! Form::select('id_opcional_contacto', $tipo_contacto, isset($usuario) ? $usuario->opcional_contacto_tipo : null, ['class' => 'input100 select2', 'id' => 'id_opcional_contacto']) !!}
             <span class="focus-input100" data-placeholder="Optional Contact"></span>

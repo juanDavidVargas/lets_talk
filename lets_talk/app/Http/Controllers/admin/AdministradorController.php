@@ -98,7 +98,8 @@ class AdministradorController extends Controller
         {
             return redirect()->to(route('home'));
         } else {
-            $usuario = User::find($id);
+            // $usuario = User::find($id);
+            $usuario = $this->consultarUserEdit($id);
             view()->share('usuario', $usuario);
             $this->share_data();
             return view('administrador.show');
