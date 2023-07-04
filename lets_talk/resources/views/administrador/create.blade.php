@@ -29,6 +29,8 @@
 {{-- ================================================================================== --}}
 
 @section('scripts')
+    <script src="{{asset('validate/cdnjs.cloudflare.com_ajax_libs_jquery_3.4.0_jquery.min.js')}}"></script>
+    <script src="{{asset('validate/cdnjs.cloudflare.com_ajax_libs_jquery-validate_1.19.0_jquery.validate.min.js')}}"></script>
 
 <script>
     $(document).ready(function() {
@@ -67,6 +69,57 @@
 
             $("#id_tipo_ingles").trigger('focus');
         }
+
+        // =============================================================================
+
+        form_new_user = $('#form_new_user');
+
+        form_new_user.validate({
+            rules: {
+                // DATOS GENERALES
+                nombres: {required: true},
+                apellidos: {required: true},
+                id_tipo_documento: {required: true},
+                numero_documento: {required: true},
+                id_municipio_nacimiento: {required: true},
+                fecha_nacimiento: {required: true},
+                genero: {required: true},
+                estado: {required: true},
+                correo: {required: true},
+                direccion_residencia: {required: true},
+                id_municipio_residencia: {required: true},
+                id_rol: {required: true},
+                id_nivel: {required: true},
+                id_tipo_ingles: {required: true},
+
+                // =========================
+
+                // PRIMER CONTACTO
+                primer_telefono : {required: true},
+                primer_celular: {required: true},
+                primer_correo: {required: true},
+                primer_skype: {required: true},
+                primer_zoom: {required: true},
+
+                // =========================
+
+                // SEGUNDO CONTACTO
+                segundo_telefono : {required: true},
+                segundo_celular: {required: true},
+                segundo_correo: {required: true},
+                segundo_skype: {required: true},
+                segundo_zoom: {required: true},
+
+                // =========================
+                
+                // OPCIONAL CONTACTO
+                opcional_telefono : {required: true},
+                opcional_celular: {required: true},
+                opcional_correo: {required: true},
+                opcional_skype: {required: true},
+                opcional_zoom: {required: true}
+            } // FIN Rules
+        }); // FIN Validate
     });
 
     // ==================================================================================

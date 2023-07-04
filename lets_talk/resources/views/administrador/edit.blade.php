@@ -16,14 +16,21 @@
     </div>
 </div>
 <hr>
-{!! Form::model($usuario, ['method' => 'PUT', 'route' => ['administrador.update', $usuario->id_user], 'class' => 'login100-form', 'autocomplete' => 'off']) !!}
+{!! Form::model($usuario, ['method' => 'PUT', 'route' => ['administrador.update', $usuario->id_user], 'class' => 'login100-form', 'id' => 'form_edit_user', 'autocomplete' => 'off']) !!}
 
-@include('administrador.fields')
+    @include('administrador.fields')
 
 {!! Form::close() !!}
 
 @stop
+
+{{-- =========================================================================== --}}
+{{-- =========================================================================== --}}
+
 @section('scripts')
+    <script src="{{asset('validate/cdnjs.cloudflare.com_ajax_libs_jquery_3.4.0_jquery.min.js')}}"></script>
+    <script src="{{asset('validate/cdnjs.cloudflare.com_ajax_libs_jquery-validate_1.19.0_jquery.validate.min.js')}}"></script>
+
 <script>
     $(document).ready(function() {
         window.$(".select2").prepend(new Option("Select Contact...", "-1"));
@@ -69,6 +76,37 @@
 
         // =============================================================================
 
+        form_edit_user = $('#form_edit_user');
+
+        form_edit_user.validate({
+            rules: {
+                // PRIMER CONTACTO
+                primer_telefono : {required: true},
+                primer_celular: {required: true},
+                primer_correo: {required: true},
+                primer_skype: {required: true},
+                primer_zoom: {required: true},
+
+                // =========================
+
+                // SEGUNDO CONTACTO
+                segundo_telefono : {required: true},
+                segundo_celular: {required: true},
+                segundo_correo: {required: true},
+                segundo_skype: {required: true},
+                segundo_zoom: {required: true},
+
+                // =========================
+                
+                // OPCIONAL CONTACTO
+                opcional_telefono : {required: true},
+                opcional_celular: {required: true},
+                opcional_correo: {required: true},
+                opcional_skype: {required: true},
+                opcional_zoom: {required: true}
+            } // FIN Rules
+        }); // FIN Validate
+
         let primer_contacto_tipo_editado = @json($usuario->primer_contacto_tipo);
         let segundo_contacto_tipo_editado = @json($usuario->segundo_contacto_tipo);
         let opcional_contacto_tipo_editado = @json($usuario->opcional_contacto_tipo);
@@ -83,6 +121,7 @@
 
             if (primer_contacto_tipo_editado == 1) {  // Phone
                 $("#div_primer_telefono").removeClass('ocultar');
+                $("#primer_telefono").trigger('focus');
                 $("#div_primer_celular_whatsapp").addClass('ocultar');
                 $("#div_primer_celular_whatsapp").hide('slow');
                 $("#div_primer_correo").addClass('ocultar');
@@ -91,9 +130,9 @@
                 $("#div_primer_skype").hide('slow');
                 $("#div_primer_zoom").addClass('ocultar');
                 $("#div_primer_zoom").hide('slow');
-                $("#primer_telefono").trigger('focus');
             } else if (primer_contacto_tipo_editado == 2) { // Whatsapp - Celular
                 $("#div_primer_celular_whatsapp").removeClass('ocultar');
+                $("#primer_celular").trigger('focus');
                 $("#div_primer_telefono").addClass('ocultar');
                 $("#div_primer_telefono").hide('slow');
                 $("#div_primer_correo").addClass('ocultar');
@@ -102,9 +141,9 @@
                 $("#div_primer_skype").hide('slow');
                 $("#div_primer_zoom").addClass('ocultar');
                 $("#div_primer_zoom").hide('slow');
-                $("#primer_celular").trigger('focus');
             } else if (primer_contacto_tipo_editado == 3) { // Skype
                 $("#div_primer_skype").removeClass('ocultar');
+                $("#primer_skype").trigger('focus');
                 $("#div_primer_telefono").addClass('ocultar');
                 $("#div_primer_telefono").hide('slow');
                 $("#div_primer_celular_whatsapp").addClass('ocultar');
@@ -113,9 +152,9 @@
                 $("#div_primer_correo").hide('slow');
                 $("#div_primer_zoom").addClass('ocultar');
                 $("#div_primer_zoom").hide('slow');
-                $("#primer_skype").trigger('focus');
             } else if (primer_contacto_tipo_editado == 4) { // Email
                 $("#div_primer_correo").removeClass('ocultar');
+                $("#primer_correo").trigger('focus');
                 $("#div_primer_telefono").addClass('ocultar');
                 $("#div_primer_telefono").hide('slow');
                 $("#div_primer_celular_whatsapp").addClass('ocultar');
@@ -124,9 +163,9 @@
                 $("#div_primer_skype").hide('slow');
                 $("#div_primer_zoom").addClass('ocultar');
                 $("#div_primer_zoom").hide('slow');
-                $("#primer_correo").trigger('focus');
             } else if (primer_contacto_tipo_editado == 5) { // Zoom
                 $("#div_primer_zoom").removeClass('ocultar');
+                $("#primer_zoom").trigger('focus');
                 $("#div_primer_telefono").addClass('ocultar');
                 $("#div_primer_telefono").hide('slow');
                 $("#div_primer_celular_whatsapp").addClass('ocultar');
@@ -135,7 +174,6 @@
                 $("#div_primer_skype").hide('slow');
                 $("#div_primer_correo").addClass('ocultar');
                 $("#div_primer_correo").hide('slow');
-                $("#primer_zoom").trigger('focus');
             } else {
                 $("#div_primer_telefono").addClass('ocultar');
                 $("#div_primer_telefono").hide('slow');
@@ -159,6 +197,7 @@
             if (segundo_contacto_tipo_editado == 1) // Phone
             {
                 $("#div_segundo_telefono").removeClass('ocultar');
+                $("#segundo_telefono").trigger('focus');
                 $("#div_segundo_celular_whatsapp").addClass('ocultar');
                 $("#div_segundo_celular_whatsapp").hide('slow');
                 $("#div_segundo_correo").addClass('ocultar');
@@ -167,10 +206,10 @@
                 $("#div_segundo_skype").hide('slow');
                 $("#div_segundo_zoom").addClass('ocultar');
                 $("#div_segundo_zoom").hide('slow');
-                $("#segundo_telefono").trigger('focus');
             } else if (segundo_contacto_tipo_editado == 2) // Whatsapp - Celular
             {
                 $("#div_segundo_celular_whatsapp").removeClass('ocultar');
+                $("#segundo_celular").trigger('focus');
                 $("#div_segundo_telefono").addClass('ocultar');
                 $("#div_segundo_telefono").hide('slow');
                 $("#div_segundo_correo").addClass('ocultar');
@@ -179,10 +218,10 @@
                 $("#div_segundo_skype").hide('slow');
                 $("#div_segundo_zoom").addClass('ocultar');
                 $("#div_segundo_zoom").hide('slow');
-                $("#segundo_celular").trigger('focus');
             } else if (segundo_contacto_tipo_editado == 3) // Skype
             {
                 $("#div_segundo_skype").removeClass('ocultar');
+                $("#segundo_skype").trigger('focus');
                 $("#div_segundo_telefono").addClass('ocultar');
                 $("#div_segundo_telefono").hide('slow');
                 $("#div_segundo_celular_whatsapp").addClass('ocultar');
@@ -191,10 +230,10 @@
                 $("#div_segundo_correo").hide('slow');
                 $("#div_segundo_zoom").addClass('ocultar');
                 $("#div_segundo_zoom").hide('slow');
-                $("#segundo_skype").trigger('focus');
             } else if (segundo_contacto_tipo_editado == 4) // Email
             {
                 $("#div_segundo_correo").removeClass('ocultar');
+                $("#segundo_correo").trigger('focus');
                 $("#div_segundo_telefono").addClass('ocultar');
                 $("#div_segundo_telefono").hide('slow');
                 $("#div_segundo_celular_whatsapp").addClass('ocultar');
@@ -203,10 +242,10 @@
                 $("#div_segundo_skype").hide('slow');
                 $("#div_segundo_zoom").addClass('ocultar');
                 $("#div_segundo_zoom").hide('slow');
-                $("#segundo_correo").trigger('focus');
             } else if (segundo_contacto_tipo_editado == 5) // Zoom
             {
                 $("#div_segundo_zoom").removeClass('ocultar');
+                $("#segundo_zoom").trigger('focus');
                 $("#div_segundo_telefono").addClass('ocultar');
                 $("#div_segundo_telefono").hide('slow');
                 $("#div_segundo_celular_whatsapp").addClass('ocultar');
@@ -215,7 +254,6 @@
                 $("#div_segundo_skype").hide('slow');
                 $("#div_segundo_correo").addClass('ocultar');
                 $("#div_segundo_correo").hide('slow');
-                $("#segundo_zoom").trigger('focus');
             } else {
                 $("#div_segundo_telefono").addClass('ocultar');
                 $("#div_segundo_telefono").hide('slow');
@@ -239,6 +277,7 @@
             if (opcional_contacto_tipo_editado == 1) // Phone
             {
                 $("#div_opcional_telefono").removeClass('ocultar');
+                $("#opcional_telefono").trigger('focus');
                 $("#div_opcional_celular_whatsapp").addClass('ocultar');
                 $("#div_opcional_celular_whatsapp").hide('slow');
                 $("#div_opcional_correo").addClass('ocultar');
@@ -247,10 +286,10 @@
                 $("#div_opcional_skype").hide('slow');
                 $("#div_opcional_zoom").addClass('ocultar');
                 $("#div_opcional_zoom").hide('slow');
-                $("#opcional_telefono").trigger('focus');
             } else if (opcional_contacto_tipo_editado == 2) // Whatsapp - Celular
             {
                 $("#div_opcional_celular_whatsapp").removeClass('ocultar');
+                $("#opcional_celular").trigger('focus');
                 $("#div_opcional_telefono").addClass('ocultar');
                 $("#div_opcional_telefono").hide('slow');
                 $("#div_opcional_correo").addClass('ocultar');
@@ -259,10 +298,10 @@
                 $("#div_opcional_skype").hide('slow');
                 $("#div_opcional_zoom").addClass('ocultar');
                 $("#div_opcional_zoom").hide('slow');
-                $("#opcional_celular").trigger('focus');
             } else if (opcional_contacto_tipo_editado == 3) // Skype
             {
                 $("#div_opcional_skype").removeClass('ocultar');
+                $("#opcional_skype").trigger('focus');
                 $("#div_opcional_telefono").addClass('ocultar');
                 $("#div_opcional_telefono").hide('slow');
                 $("#div_opcional_celular_whatsapp").addClass('ocultar');
@@ -271,10 +310,10 @@
                 $("#div_opcional_correo").hide('slow');
                 $("#div_opcional_zoom").addClass('ocultar');
                 $("#div_opcional_zoom").hide('slow');
-                $("#opcional_skype").trigger('focus');
             } else if (opcional_contacto_tipo_editado == 4) // Email
             {
                 $("#div_opcional_correo").removeClass('ocultar');
+                $("#opcional_correo").trigger('focus');
                 $("#div_opcional_telefono").addClass('ocultar');
                 $("#div_opcional_telefono").hide('slow');
                 $("#div_opcional_celular_whatsapp").addClass('ocultar');
@@ -283,10 +322,10 @@
                 $("#div_opcional_skype").hide('slow');
                 $("#div_opcional_zoom").addClass('ocultar');
                 $("#div_opcional_zoom").hide('slow');
-                $("#opcional_correo").trigger('focus');
             } else if (opcional_contacto_tipo_editado == 5) // Zoom
             {
                 $("#div_opcional_zoom").removeClass('ocultar');
+                $("#opcional_zoom").trigger('focus');
                 $("#div_opcional_telefono").addClass('ocultar');
                 $("#div_opcional_telefono").hide('slow');
                 $("#div_opcional_celular_whatsapp").addClass('ocultar');
@@ -295,7 +334,6 @@
                 $("#div_opcional_skype").hide('slow');
                 $("#div_opcional_correo").addClass('ocultar');
                 $("#div_opcional_correo").hide('slow');
-                $("#opcional_zoom").trigger('focus');
             } else {
                 $("#div_opcional_telefono").addClass('ocultar');
                 $("#div_opcional_telefono").hide('slow');
@@ -432,12 +470,10 @@
             $("#id_nivel").trigger('focus');
 
         } else {
-
             $("#div_nivel").hide('slow');
             $("#div_nivel").addClass('ocultar');
             $("#div_tipo_ing").show('slow');
             $("#div_tipo_ing").removeClass('ocultar');
-
             $("#id_tipo_ingles").trigger('focus');
         }
     });
@@ -641,7 +677,6 @@
             $("#div_opcional_correo").hide('slow');
             $("#div_opcional_skype").addClass('ocultar');
             $("#div_opcional_skype").hide('slow');
-            $("#opcional_skype").removeAttr('required');
             $("#div_opcional_zoom").addClass('ocultar');
             $("#div_opcional_zoom").hide('slow');
         } else if (opcional_contacto_valor == 3) // Skype
@@ -674,15 +709,13 @@
         {
             $("#div_opcional_zoom").removeClass('ocultar');
             $("#opcional_zoom").trigger('focus');
-            $("#opcional_zoom").attr('required', 'required');
+            $("#opcional_zoom").attr('required');
             $("#div_opcional_telefono").addClass('ocultar');
             $("#div_opcional_telefono").hide('slow');
             $("#div_opcional_celular_whatsapp").addClass('ocultar');
             $("#div_opcional_celular_whatsapp").hide('slow');
-            $("#opcional_celular_whatsapp").removeAttr('required');
             $("#div_opcional_skype").addClass('ocultar');
             $("#div_opcional_skype").hide('slow');
-            $("#opcional_skype").removeAttr('required');
             $("#div_opcional_correo").addClass('ocultar');
             $("#div_opcional_correo").hide('slow');
         } else {
