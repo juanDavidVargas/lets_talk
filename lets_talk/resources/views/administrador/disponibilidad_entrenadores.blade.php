@@ -144,10 +144,19 @@
         });
     }
 
-    function selectAllPending(params) {
-        $('#select_pending').val()
-        
-    }
+    $('#select_pending').on('change', function() {
+        if( $(this).is(':checked') ){
+            // Hacer algo si el checkbox ha sido seleccionado
+            alert("El checkbox con valor " + $(this).val() + " ha sido seleccionado");
+            console.log($(this).val());
+        } else {
+            // Hacer algo si el checkbox ha sido deseleccionado
+            alert("El checkbox con valor " + $(this).val() + " ha sido deseleccionado");
+            console.log($(this).val());
+        }
+    });
+
+   
 
 </script>
 @endsection

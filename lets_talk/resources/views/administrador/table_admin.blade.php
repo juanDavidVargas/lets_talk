@@ -24,7 +24,7 @@
     @if(session('rol') == 2)
         <td class="d-flex justify-content-center" style="text-align: center; vertical-align:middle;">
             @if($disponibilidad->state == 2)
-                <input type="checkbox" name="availability_pending" id="availability_pending">
+                <input type="checkbox" name="availability_pending_{{$disponibilidad->id}}" id="availability_pending_{{$disponibilidad->id}}">
             @else
                 <span></span>
             @endif
