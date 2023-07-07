@@ -6,6 +6,7 @@
     <td>{{$disponibilidad->end_date}}</td>
     <td>{{$disponibilidad->end_time}}</td>
     <td>{{$disponibilidad->nombres}} {{$disponibilidad->apellidos}}</td>
+
     @if(session('rol') == 2)
     <td>
         @if($disponibilidad->state == 1 )
@@ -19,8 +20,18 @@
         @endif
     </td>
     @endif
-    <td>
 
+    @if(session('rol') == 2)
+        <td class="d-flex justify-content-center" style="text-align: center; vertical-align:middle;">
+            @if($disponibilidad->state == 2)
+                <input type="checkbox" name="availability_pending" id="availability_pending">
+            @else
+                <span></span>
+            @endif
+        </td>
+    @endif
+
+    <td>
         @if($disponibilidad->state == 1 && session('rol') == 2)
             <a href="#" class="btn btn-sm btn-success ocultar rounded" title="Approve" id="btn_aprove" disabled onclick="actualizarEstadoEvento(1, {{$disponibilidad->id}})">Approve</a>
         @elseif($disponibilidad->state == 2 && session('rol') == 2)

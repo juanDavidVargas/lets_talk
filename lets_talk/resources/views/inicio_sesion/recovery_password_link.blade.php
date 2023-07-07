@@ -16,12 +16,9 @@
 
                     {{-- ================================== --}}
 
-                    {{-- @php
-                        dd($id);
-                    @endphp --}}
+                    <input type="hidden" name="id_user" id="id_user" value="{{$id}}">
 
                     {{-- ================================== --}}
-
                     
                     <div class="wrap-input100 validate-input" data-validate="Password is required">
                         <span class="btn-show-pass">

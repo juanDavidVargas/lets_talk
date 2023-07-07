@@ -35,6 +35,9 @@
                         <th>End Time</th>
                         <th>Trainer</th>
                         <th>State</th>
+                        <th>Select all
+                            <input type="checkbox" name="select_pending" id="select_pending" class="ml-3" style="margin-left:2rem;">
+                        </th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -139,6 +142,11 @@
             }
 
         });
+    }
+
+    function selectAllPending(params) {
+        $('#select_pending').val()
+        
     }
 
 </script>

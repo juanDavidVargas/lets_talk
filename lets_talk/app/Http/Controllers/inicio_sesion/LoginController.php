@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Session;
 use App\User;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PasswordRecovery\MailPasswordRecovery;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class LoginController extends Controller
 {
@@ -147,9 +149,11 @@ class LoginController extends Controller
             ->send(new MailPasswordRecovery($idUserRecovery, $usuarioRecovery, $correoRecovery));
 
             // $this->recoveryPasswordLink($idUserRecovery);
+            // self::recoveryPasswordLink($idUserRecovery);
 
             alert()->info('Info','The recovery password information has been sent to your email.');
             return view('inicio_sesion.login');
+            // return redirect()->to(route('inicio_sesion.login'));
         } else {
             alert()->error('Error','This email does not exist.');
             return back();
@@ -160,26 +164,50 @@ class LoginController extends Controller
     {
         // dd($userId);
         // $id = $userId;
+        $id = 7;
 
-        return view('inicio_sesion.recovery_password_link');
-        // return view('inicio_sesion.recovery_password_link', compact('id'));
+        // return view('inicio_sesion.recovery_password_link');
+        return view('inicio_sesion.recovery_password_link', compact('id'));
     }
 
     public function recoveryPasswordPost(Request $request)
     {
         // dd($request);
         
+        $idUser = $request->id_user;
         $newPass = $request->new_pass;
         $confirmNewPass = $request->confirm_new_pass;
         
-        // dd($newPass, $confirmNewPass);
-
         if ($newPass != $confirmNewPass) {
             alert()->error('Error','New Password and Confirm New Password must be the same!');
             return back();
         } else {
-            alert()->info('Info','Password Changed!');
-            return back();
+            DB::connection('mysql')->beginTransaction();
+            
+            try {
+                $userPassUpdate = User::where('id_user', $idUser)
+                                        ->update(
+                                            [
+                                                'password' => Hash::make($newPass)
+                                            ]
+                                        );
+
+                if($userPassUpdate) {
+                    DB::connection('mysql')->commit();
+                    alert()->success('Successfull Process', 'Password updated correctly.');
+                    return view('inicio_sesion.login');
+
+                } else {
+                    DB::connection('mysql')->rollback();
+                    alert()->error('error', 'An error occurred updating the user, try again, if the problem persists contact support.');
+                    return back();
+                }
+            } catch (Exception $e) {
+                dd($e);
+                DB::connection('mysql')->rollback();
+                alert()->error('Error', 'An error occurred updating the user, try again, if the problem persists contact support.');
+                return back();
+            }
         }
     }
 }
