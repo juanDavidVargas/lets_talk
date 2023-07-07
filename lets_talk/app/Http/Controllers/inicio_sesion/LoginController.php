@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Http\Responses\inicio_sesion\LoginStore;
 use Exception;
 use Illuminate\Support\Facades\Session;
+use App\User;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PasswordRecovery\MailPasswordRecovery;
 
 class LoginController extends Controller
 {
@@ -38,6 +41,7 @@ class LoginController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request);
         return new LoginStore();
     }
 
@@ -124,6 +128,57 @@ class LoginController extends Controller
         } catch (Exception $e)
         {
             alert()->error('Error','An error has occurred, try again, if the problem persists contact support.');
+            return back();
+        }
+    }
+
+    public function recoveryPasswordEmail(Request $request)
+    {
+        $emailRecovery = $request->pass_recovery;
+
+        $consultaRecoveryPass = User::select('id_user','usuario','correo')->where('correo', $emailRecovery)->first();
+
+        if (isset($consultaRecoveryPass) && !empty($consultaRecoveryPass) && !is_null($consultaRecoveryPass)) {
+            $idUserRecovery = $consultaRecoveryPass->id_user;
+            $usuarioRecovery = $consultaRecoveryPass->usuario;
+            $correoRecovery = $consultaRecoveryPass->correo;
+
+            Mail::to('jgmejiaco@gmail.com')
+            ->send(new MailPasswordRecovery($idUserRecovery, $usuarioRecovery, $correoRecovery));
+
+            // $this->recoveryPasswordLink($idUserRecovery);
+
+            alert()->info('Info','The recovery password information has been sent to your email.');
+            return view('inicio_sesion.login');
+        } else {
+            alert()->error('Error','This email does not exist.');
+            return back();
+        }
+    }
+
+    public function recoveryPasswordLink()
+    {
+        // dd($userId);
+        // $id = $userId;
+
+        return view('inicio_sesion.recovery_password_link');
+        // return view('inicio_sesion.recovery_password_link', compact('id'));
+    }
+
+    public function recoveryPasswordPost(Request $request)
+    {
+        // dd($request);
+        
+        $newPass = $request->new_pass;
+        $confirmNewPass = $request->confirm_new_pass;
+        
+        // dd($newPass, $confirmNewPass);
+
+        if ($newPass != $confirmNewPass) {
+            alert()->error('Error','New Password and Confirm New Password must be the same!');
+            return back();
+        } else {
+            alert()->info('Info','Password Changed!');
             return back();
         }
     }

@@ -11,6 +11,7 @@ class LoginStore implements Responsable
 {
     public function toResponse($request)
     {
+        // dd($request);
         try
         {
             $username = request('username', null);
