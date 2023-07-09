@@ -145,35 +145,23 @@ class LoginController extends Controller
             $usuarioRecovery = $consultaRecoveryPass->usuario;
             $correoRecovery = $consultaRecoveryPass->correo;
 
-            Mail::to('jgmejiaco@gmail.com')
+            Mail::to($correoRecovery)
             ->send(new MailPasswordRecovery($idUserRecovery, $usuarioRecovery, $correoRecovery));
-
-            // $this->recoveryPasswordLink($idUserRecovery);
-            // self::recoveryPasswordLink($idUserRecovery);
-
             alert()->info('Info','The recovery password information has been sent to your email.');
             return view('inicio_sesion.login');
-            // return redirect()->to(route('inicio_sesion.login'));
         } else {
             alert()->error('Error','This email does not exist.');
             return back();
         }
     }
 
-    public function recoveryPasswordLink()
+    public function recoveryPasswordLink($id)
     {
-        // dd($userId);
-        // $id = $userId;
-        $id = 7;
-
-        // return view('inicio_sesion.recovery_password_link');
         return view('inicio_sesion.recovery_password_link', compact('id'));
     }
 
     public function recoveryPasswordPost(Request $request)
     {
-        // dd($request);
-        
         $idUser = $request->id_user;
         $newPass = $request->new_pass;
         $confirmNewPass = $request->confirm_new_pass;

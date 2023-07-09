@@ -14,7 +14,7 @@ Route::get('reset_password', 'inicio_sesion\LoginController@resetPassword')->nam
 Route::get('reset_password_student', 'inicio_sesion\LoginController@resetPasswordStudent')->name('reset_password_student');
 Route::get('recovery_password', 'inicio_sesion\LoginController@recoveryPassword')->name('recovery_password');
 Route::post('recovery_password_email', 'inicio_sesion\LoginController@recoveryPasswordEmail')->name('recovery_password_email');
-Route::get('recovery_password_link', 'inicio_sesion\LoginController@recoveryPasswordLink')->name('recovery_password_link');
+Route::get('recovery_password_link/{id}', 'inicio_sesion\LoginController@recoveryPasswordLink')->name('recovery_password_link');
 Route::post('recovery_password_post', 'inicio_sesion\LoginController@recoveryPasswordPost')->name('recovery_password_post');
 Route::get('logout', 'inicio_sesion\LoginController@logout')->name('logout');
 

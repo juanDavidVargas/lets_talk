@@ -43,8 +43,8 @@
     <p>The email <b>{{$correoRecovery}}</b> requested the password recovery</p>
     {{-- /$idUserRecovery --}}
     <p>
-        <a href="{{route('recovery_password_link')}}" class="btn btn_disponibilidad">Change your password</a>
-        {{-- <a href="{{route('recovery_password_link/'$idUserRecovery)}}" class="btn btn_disponibilidad">Change your password</a> --}}
+        {{-- <a href="{{route('recovery_password_link')}}" class="btn btn_disponibilidad">Change your password</a> --}}
+        <a href="{{route('recovery_password_link',$idUserRecovery)}}" class="btn btn_disponibilidad">Change Password</a>
     </p>
 
     <p>This message is automatic, please don´t reply</p>
