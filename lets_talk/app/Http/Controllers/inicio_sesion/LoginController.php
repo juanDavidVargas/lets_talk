@@ -137,7 +137,12 @@ class LoginController extends Controller
     public function recoveryPasswordEmail(Request $request)
     {
         $emailRecovery = $request->pass_recovery;
-        $consultaRecoveryPass = User::select('id_user','usuario','correo')->where('correo', $emailRecovery)->first();
+        $documentRecovery = $request->numero_documento;
+
+        $consultaRecoveryPass = User::select('id_user','usuario','correo', 'numero_documento')
+                                    ->where('correo', $emailRecovery)
+                                    ->where('numero_documento', $documentRecovery)
+                                    ->first();
 
         if (isset($consultaRecoveryPass) && !empty($consultaRecoveryPass) && !is_null($consultaRecoveryPass)) {
             $idUserRecovery = $consultaRecoveryPass->id_user;
@@ -149,7 +154,7 @@ class LoginController extends Controller
             alert()->info('Info','The recovery password information has been sent to your email.');
             return view('inicio_sesion.login');
         } else {
-            alert()->error('Error','This email does not exist.');
+            alert()->error('Error','Please, verify your email and Document Id, one of them does not exist.');
             return back();
         }
     }
