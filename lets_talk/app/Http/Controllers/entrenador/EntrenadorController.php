@@ -9,6 +9,9 @@ use App\Http\Responses\entrenador\AgendaEntrenadorShow;
 use App\Http\Responses\entrenador\AgendaEntrenadorStore;
 use App\Http\Responses\entrenador\AgendaEntrenadorUpdate;
 use App\Models\entrenador\DisponibilidadEntrenadores;
+use App\User;
+use Illuminate\Support\Facades\DB;
+use App\Http\Responses\administrador\DisponibilidadShow;
 
 class EntrenadorController extends Controller
 {
@@ -30,7 +33,7 @@ class EntrenadorController extends Controller
         {
             return redirect()->to(route('home'));
         } else {
-
+            view()->share('students', $this->cargarTrainerSession());
             return view('entrenador.index');
         }
     }
@@ -195,5 +198,29 @@ class EntrenadorController extends Controller
             $agendaEntrenadorShow = new AgendaEntrenadorShow();
             return $agendaEntrenadorShow->cargarInfoEventoPorId($request);
         }
+    }
+
+    // ==================================================
+
+    public function cargarTrainerSession()
+    {
+        return DB::table('usuarios')
+                    ->leftjoin('evento_agenda_entrenador', 'evento_agenda_entrenador.id_usuario', '=', 'usuarios.id_user')
+                    ->leftjoin('estados', 'estados.id_estado', '=', 'evento_agenda_entrenador.state')
+                    ->select(
+                        'evento_agenda_entrenador.id AS id_sesion',
+                        'evento_agenda_entrenador.start_date',
+                        'evento_agenda_entrenador.start_time',
+                        'evento_agenda_entrenador.state',
+                        DB::raw("CONCAT(usuarios.nombres, ' ', usuarios.apellidos) AS nombre_completo"),
+                        'estados.descripcion_estado'
+                    )
+                    ->where('usuarios.estado', 1)
+                    ->where('usuarios.id_rol', 3)
+                    ->whereNull('usuarios.deleted_at')
+                    ->whereNull('evento_agenda_entrenador.deleted_at')
+                    ->whereIn('evento_agenda_entrenador.state', [1])
+                    ->orderBy('evento_agenda_entrenador.id', 'DESC')
+                    ->get();
     }
 }
