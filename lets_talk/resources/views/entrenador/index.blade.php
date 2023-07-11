@@ -63,11 +63,37 @@
         function seeDetails(id_sesion) {
             // alert(`el id de la sesión es: ${id_sesion}`);
 
-            Swal.fire(
-                'Info!',
-                'Funciona bien!',
-                'info'
-            );
+            html = '<p><strong>SESSION DETAILS</strong></p>';
+            html += `<p>el id de la sesión es: ${id_sesion}</p>`;
+            html += '<p>Student name HERE</p>';
+            html += `<p>PHONE</p>`;
+            html += `<p>EMAIL</p>`;
+            html += `<p>ZOOM</p>`;
+            html += `<p>ZOOM PASS</p>`;
+            html += `<p>LEVEL</p>`;
+            html += `<p>SESSION INFO</p>`;
+            html += `<p>1ST CONACT.............VALOR</p>`;
+            html += `<p>2ND CONACT.............VALOR</p>`;
+            html += `<p>INTERNAL EVALUATION (NOTES)</p>`;
+            html += `<p>BOTÓN SAVE EVALUATION</p>`;
+            html += `<p>BOTÓN OLD EVALUATION</p>`;
+            html += `Fin`;
+
+            Swal.fire({
+                // title: '<strong>SESSION DETAILS</strong>',
+                // icon: 'info',
+                html: html,
+                showCloseButton: true,
+                showCancelButton: true,
+                focusConfirm: false,
+                allowOutsideClick: false,
+                confirmButtonText:
+                    '<i class="fa fa-thumbs-up"></i> Great!',
+                confirmButtonAriaLabel: 'Thumbs up, great!',
+                cancelButtonText:
+                    '<i class="fa fa-thumbs-down"></i>',
+                cancelButtonAriaLabel: 'Thumbs down'
+            })
 
         }
     </script>
