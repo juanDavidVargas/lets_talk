@@ -72,41 +72,91 @@
                     'id_user': idUser
                 },
                 success: function(response) {
+                    console.log(response[0].nombre_completo);
 
-                    console.log(response);
-                    
+                    html = `<p><strong>SESSION DETAILS</strong></p>`;
+                    html += `<p>el id del usuario es: ${response[0].id_user}</p>`;
+                    html += `<p>${response[0].nombre_completo}</p>`;
+
+                    if (response[0].celular) {
+                        html += `<p>PHONE ${response[0].celular}</p>`;
+                    } else {
+                        html += `<p>PHONE</p>`;
+                    }
+
+                    if (response[0].correo) {
+                        html += `<p>EMAIL ${response[0].correo}</p>`;
+                    } else {
+                        html += `<p>EMAIL</p>`;
+                    }
+
+                    if (response[0].zoom) {
+                        html += `<p>ZOOM ${response[0].zoom}</p>`;
+                    } else {
+                        html += `<p>ZOOM</p>`;
+                    }
+
+                    if (response[0].zoom_clave) {
+                        html += `<p>ZOOM PASS ${response[0].zoom_clave}</p>`;
+                    } else {
+                        html += `<p>ZOOM PASS</p>`;
+                    }
+
+                    if (response[0].nivel_descripcion) {
+                        html += `<p>LEVEL ${response[0].nivel_descripcion}</p>`;
+                    } else {
+                        html += `<p>LEVEL</p>`;
+                    }
+
+                    html += `<p>SESSION INFO</p>`;
+
+                    if (response[0].id_primer_contacto = 1) {
+                        html += `<p>1ST CONTACT ${response[0].primer_telefono}</p>`; // Phone
+                    } else if (response[0].id_primer_contacto = 2) {
+                        html += `<p>1ST CONTACT ${response[0].primer_celular}</p>`; // Whatsapp-Celular
+                    } else if (response[0].id_primer_contacto = 3) {
+                        html += `<p>1ST CONTACT ${response[0].primer_skype}</p>`; // Skype
+                    } else if (response[0].id_primer_contacto = 4) {
+                        html += `<p>1ST CONTACT ${response[0].primer_correo}</p>`; // Email
+                    } else if (response[0].id_primer_contacto = 5) {
+                        html += `<p>1ST CONTACT ${response[0].primer_zoom}</p>`; // Zoom
+                    } else {
+                        html += `<p>1ST CONTACT</p>`; // Null
+                    }
+
+                    if (response[0].id_segundo_contacto = 1) {
+                        html += `<p>2ND CONTACT ${response[0].segundo_telefono}</p>`; // Phone
+                    } else if (response[0].id_primer_contacto = 2) {
+                        html += `<p>2ND CONTACT ${response[0].segundo_celular}</p>`; // Whatsapp-Celular
+                    } else if (response[0].id_primer_contacto = 3) {
+                        html += `<p>2ND CONTACT ${response[0].segundo_skype}</p>`; // Skype
+                    } else if (response[0].id_primer_contacto = 4) {
+                        html += `<p>2ND CONTACT ${response[0].segundo_correo}</p>`; // Email
+                    } else if (response[0].id_primer_contacto = 5) {
+                        html += `<p>2ND CONTACT ${response[0].segundo_zoom}</p>`; // Zoom
+                    } else {
+                        html += `<p>2ND CONTACT</p>`; // Null
+                    }
+
+                    html += `<p>INTERNAL EVALUATION (NOTES)</p>`;
+                    html += `<p>BOTÓN SAVE EVALUATION</p>`;
+                    html += `<p>BOTÓN OLD EVALUATION</p>`;
+
+                    Swal.fire({
+                        html: html,
+                        showCloseButton: true,
+                        showCancelButton: true,
+                        focusConfirm: false,
+                        allowOutsideClick: false,
+                        confirmButtonText:
+                            '<i class="fa fa-thumbs-up"></i> Great!',
+                        confirmButtonAriaLabel: 'Thumbs up, great!',
+                        cancelButtonText:
+                            '<i class="fa fa-thumbs-down"></i>',
+                        cancelButtonAriaLabel: 'Thumbs down'
+                    })
                 }
             });
-
-            // html = '<p><strong>SESSION DETAILS</strong></p>';
-            // html += `<p>el id de la sesión es: ${id_sesion}</p>`;
-            // html += '<p>Student name HERE</p>';
-            // html += `<p>PHONE</p>`;
-            // html += `<p>EMAIL</p>`;
-            // html += `<p>ZOOM</p>`;
-            // html += `<p>ZOOM PASS</p>`;
-            // html += `<p>LEVEL</p>`;
-            // html += `<p>SESSION INFO</p>`;
-            // html += `<p>1ST CONACT.............VALOR</p>`;
-            // html += `<p>2ND CONACT.............VALOR</p>`;
-            // html += `<p>INTERNAL EVALUATION (NOTES)</p>`;
-            // html += `<p>BOTÓN SAVE EVALUATION</p>`;
-            // html += `<p>BOTÓN OLD EVALUATION</p>`;
-            // html += `Fin`;
-
-            // Swal.fire({
-            //     html: html,
-            //     showCloseButton: true,
-            //     showCancelButton: true,
-            //     focusConfirm: false,
-            //     allowOutsideClick: false,
-            //     confirmButtonText:
-            //         '<i class="fa fa-thumbs-up"></i> Great!',
-            //     confirmButtonAriaLabel: 'Thumbs up, great!',
-            //     cancelButtonText:
-            //         '<i class="fa fa-thumbs-down"></i>',
-            //     cancelButtonAriaLabel: 'Thumbs down'
-            // })
         }
     </script>
 @endsection

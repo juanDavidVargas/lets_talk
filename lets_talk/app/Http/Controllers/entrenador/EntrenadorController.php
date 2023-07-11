@@ -244,6 +244,7 @@ class EntrenadorController extends Controller
                         'usuarios.zoom',
                         'usuarios.zoom_clave',
                         'usuarios.id_nivel',
+                        'niveles.nivel_descripcion',
                         'contactos.id_primer_contacto',
                         'contactos.primer_telefono',
                         'contactos.primer_celular',
