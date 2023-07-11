@@ -12,6 +12,8 @@ use App\Models\entrenador\DisponibilidadEntrenadores;
 use App\User;
 use Illuminate\Support\Facades\DB;
 use App\Http\Responses\administrador\DisponibilidadShow;
+use App\Models\usuarios\Nivel;
+use App\Models\usuarios\Contacto;
 
 class EntrenadorController extends Controller
 {
@@ -208,6 +210,7 @@ class EntrenadorController extends Controller
                     ->leftjoin('evento_agenda_entrenador', 'evento_agenda_entrenador.id_usuario', '=', 'usuarios.id_user')
                     ->leftjoin('estados', 'estados.id_estado', '=', 'evento_agenda_entrenador.state')
                     ->select(
+                        'usuarios.id_user',
                         'evento_agenda_entrenador.id AS id_sesion',
                         'evento_agenda_entrenador.start_date',
                         'evento_agenda_entrenador.start_time',
@@ -226,29 +229,46 @@ class EntrenadorController extends Controller
 
     // ==================================================
 
-    public function cargaDetalleSesion($idUser)
+    public function cargaDetalleSesion(Request $request)
     {
-        return DB::table('usuarios')
-                    ->leftjoin('evento_agenda_entrenador', 'evento_agenda_entrenador.id_usuario', '=', 'usuarios.id_user')
-                    ->leftjoin('estados', 'estados.id_estado', '=', 'evento_agenda_entrenador.state')
+        $idUser = $request->id_user;
+
+        $query = DB::table('usuarios')
+                    ->leftjoin('niveles', 'niveles.id_nivel', '=', 'usuarios.id_nivel')
+                    ->leftjoin('contactos', 'contactos.id_user', '=', 'usuarios.id_user')
                     ->select(
                         DB::raw("CONCAT(usuarios.nombres, ' ', usuarios.apellidos) AS nombre_completo"),
-                        'usuarios.id_nivel',
+                        'usuarios.id_user',
                         'usuarios.celular',
                         'usuarios.correo',
                         'usuarios.zoom',
-                        'evento_agenda_entrenador.start_date',
-                        'evento_agenda_entrenador.start_time',
-                        'evento_agenda_entrenador.state',
-                        'estados.descripcion_estado'
+                        'usuarios.zoom_clave',
+                        'usuarios.id_nivel',
+                        'contactos.id_primer_contacto',
+                        'contactos.primer_telefono',
+                        'contactos.primer_celular',
+                        'contactos.primer_correo',
+                        'contactos.primer_skype',
+                        'contactos.primer_zoom',
+                        'contactos.id_segundo_contacto',
+                        'contactos.segundo_telefono',
+                        'contactos.segundo_celular',
+                        'contactos.segundo_correo',
+                        'contactos.segundo_skype',
+                        'contactos.segundo_zoom',
+                        'contactos.id_opcional_contacto',
+                        'contactos.opcional_telefono',
+                        'contactos.opcional_celular',
+                        'contactos.opcional_correo',
+                        'contactos.opcional_skype',
+                        'contactos.opcional_zoom',
                     )
                     ->where('usuarios.id_user', $idUser)
                     ->where('usuarios.estado', 1)
                     ->where('usuarios.id_rol', 3)
                     ->whereNull('usuarios.deleted_at')
-                    ->whereNull('evento_agenda_entrenador.deleted_at')
-                    ->whereIn('evento_agenda_entrenador.state', [1])
-                    ->orderBy('evento_agenda_entrenador.id', 'DESC')
-                    ->get();
+                    ->first();
+
+        return response()->json([$query]);
     }
 }
