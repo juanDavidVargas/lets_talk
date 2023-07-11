@@ -41,8 +41,6 @@ class UsuariosShow implements Responsable
                                      'usuarios.celular',
                                      'usuarios.correo',
                                      'usuarios.direccion_residencia',
-                                     'usuarios.contacto2',
-                                     'usuarios.contacto_opcional',
                                      'usuarios.skype',
                                      'usuarios.zoom',
                                      'usuarios.fecha_ingreso_sistema AS fecha_ingreso',

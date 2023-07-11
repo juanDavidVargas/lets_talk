@@ -37,8 +37,6 @@
         $("#celular").trigger('focus');
         $("#direccion_residencia").trigger('focus');
         $("#correo").trigger('focus');
-        $("#contacto2").trigger('focus');
-        $("#contacto_opcional").trigger('focus');
         $("#skype").trigger('focus');
         $("#zoom").trigger('focus');
         $("#genero").trigger('focus');

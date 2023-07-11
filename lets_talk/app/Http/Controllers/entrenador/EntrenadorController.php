@@ -223,4 +223,32 @@ class EntrenadorController extends Controller
                     ->orderBy('evento_agenda_entrenador.id', 'DESC')
                     ->get();
     }
+
+    // ==================================================
+
+    public function cargaDetalleSesion($idUser)
+    {
+        return DB::table('usuarios')
+                    ->leftjoin('evento_agenda_entrenador', 'evento_agenda_entrenador.id_usuario', '=', 'usuarios.id_user')
+                    ->leftjoin('estados', 'estados.id_estado', '=', 'evento_agenda_entrenador.state')
+                    ->select(
+                        DB::raw("CONCAT(usuarios.nombres, ' ', usuarios.apellidos) AS nombre_completo"),
+                        'usuarios.id_nivel',
+                        'usuarios.celular',
+                        'usuarios.correo',
+                        'usuarios.zoom',
+                        'evento_agenda_entrenador.start_date',
+                        'evento_agenda_entrenador.start_time',
+                        'evento_agenda_entrenador.state',
+                        'estados.descripcion_estado'
+                    )
+                    ->where('usuarios.id_user', $idUser)
+                    ->where('usuarios.estado', 1)
+                    ->where('usuarios.id_rol', 3)
+                    ->whereNull('usuarios.deleted_at')
+                    ->whereNull('evento_agenda_entrenador.deleted_at')
+                    ->whereIn('evento_agenda_entrenador.state', [1])
+                    ->orderBy('evento_agenda_entrenador.id', 'DESC')
+                    ->get();
+    }
 }

@@ -27,8 +27,6 @@ class User extends Authenticatable
         'telefono',
         'celular',
         'correo',
-        'contacto2',
-        'contacto_opcional',
         'direccion_residencia',
         'id_municipio_residencia',
         'fecha_ingreso_sistema',

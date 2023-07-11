@@ -27,8 +27,6 @@ class UsuariosStore implements Responsable
         $telefono = request('telefono', null);
         $celular = request('celular', null);
         $correo = request('correo', null);
-        $contacto2 = request('contacto2', null);
-        $contacto_opcional = request('contacto_opcional', null);
         $direccion_residencia = request('direccion_residencia', null);
         $id_municipio_residencia = request('id_municipio_residencia', null);
         $id_rol = request('id_rol', null);
@@ -89,8 +87,6 @@ class UsuariosStore implements Responsable
                     'telefono' => $telefono,
                     'celular' => $celular,
                     'correo' => $correo,
-                    'contacto2' => $contacto2,
-                    'contacto_opcional' => $contacto_opcional,
                     'direccion_residencia' => $direccion_residencia,
                     'id_municipio_residencia' => $id_municipio_residencia,
                     'fecha_ingreso_sistema' => $fecha_ingreso_sistema,

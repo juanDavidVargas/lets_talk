@@ -27,8 +27,6 @@ class UsuariosUpdate implements Responsable
         $telefono = request('telefono', null);
         $celular = request('celular', null);
         $correo = request('correo', null);
-        $contacto2 = request('contacto2', null);
-        $contacto_opcional = request('contacto_opcional', null);
         $direccion_residencia = request('direccion_residencia', null);
         $id_municipio_residencia = request('id_municipio_residencia', null);
         $id_rol = request('id_rol', null);
@@ -209,31 +207,6 @@ class UsuariosUpdate implements Responsable
             DB::connection('mysql')->beginTransaction();
             try
             {
-                // $usuario_update = User::find($id_user);
-                // $usuario_update = $this->consultarUserUpdate($id_user);
-                // dd($usuario_update->apellidos);
-                // $usuario_update->nombres = strtoupper($nombres);
-                // $usuario_update->apellidos = strtoupper($apellidos);
-                // $usuario_update->numero_documento = $numero_documento;
-                // $usuario_update->id_tipo_documento = $id_tipo_documento;
-                // $usuario_update->id_municipio_nacimiento = $id_municipio_nacimiento;
-                // $usuario_update->fecha_nacimiento = $fecha_nacimiento;
-                // $usuario_update->genero = $genero;
-                // $usuario_update->estado = $estado;
-                // $usuario_update->telefono = $telefono;
-                // $usuario_update->celular = $celular;
-                // $usuario_update->correo = $correo;
-                // $usuario_update->contacto2 = $contacto2;
-                // $usuario_update->contacto_opcional = $contacto_opcional;
-                // $usuario_update->direccion_residencia = $direccion_residencia;
-                // $usuario_update->id_municipio_residencia = $id_municipio_residencia;
-                // $usuario_update->id_rol = $id_rol;
-                // $usuario_update->skype = $skype;
-                // $usuario_update->zoom = $zoom;
-                // $usuario_update->id_nivel = $nivel_ingles;
-                // $usuario_update->id_tipo_ingles = $tipo_ingles;
-                // $usuario_update->save();
-
                 $usuarioUpdate = User::where('id_user', $id_user)
                                     ->update(
                                         [
@@ -248,8 +221,6 @@ class UsuariosUpdate implements Responsable
                                             'telefono' => $telefono,
                                             'celular' => $celular,
                                             'correo' => $correo,
-                                            'contacto2' => $contacto2,
-                                            'contacto_opcional' => $contacto_opcional,
                                             'direccion_residencia' => $direccion_residencia,
                                             'id_municipio_residencia' => $id_municipio_residencia,
                                             'id_rol' => $id_rol,
@@ -397,8 +368,6 @@ class UsuariosUpdate implements Responsable
                                 'usuarios.correo',
                                 'usuarios.id_municipio_residencia',
                                 'usuarios.direccion_residencia',
-                                'usuarios.contacto2',
-                                'usuarios.contacto_opcional',
                                 'usuarios.skype',
                                 'usuarios.zoom',
                                 'usuarios.fecha_ingreso_sistema AS fecha_ingreso',

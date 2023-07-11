@@ -497,8 +497,6 @@ class AdministradorController extends Controller
                                 'usuarios.correo',
                                 'usuarios.id_municipio_residencia',
                                 'usuarios.direccion_residencia',
-                                'usuarios.contacto2',
-                                'usuarios.contacto_opcional',
                                 'usuarios.skype',
                                 'usuarios.zoom',
                                 'usuarios.fecha_ingreso_sistema AS fecha_ingreso',

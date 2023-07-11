@@ -36,7 +36,7 @@
                                 <td>{{$student->nombre_completo}}</td>
                                 <td>{{$student->start_date}}</td>
                                 <td>{{$student->start_time}}</td>
-                                <td><a href="#" id="btn_delete_schedule_{{$student->id_sesion}}" onclick="seeDetails('{{$student->id_sesion}}')">SEE DETAILS</a></td>
+                                <td><a href="#" id="trainer_sesion_detail_{{$student->id_sesion}}" onclick="seeDetails('{{$student->id_sesion}}')">SEE DETAILS</a></td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -61,7 +61,13 @@
         });
 
         function seeDetails(id_sesion) {
-            alert(`el id de la sesión es: ${id_sesion}`);
+            // alert(`el id de la sesión es: ${id_sesion}`);
+
+            Swal.fire(
+                'Info!',
+                'Funciona bien!',
+                'info'
+            );
 
         }
     </script>
