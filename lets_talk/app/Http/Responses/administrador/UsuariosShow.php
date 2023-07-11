@@ -43,6 +43,7 @@ class UsuariosShow implements Responsable
                                      'usuarios.direccion_residencia',
                                      'usuarios.skype',
                                      'usuarios.zoom',
+                                     'usuarios.zoom_clave',
                                      'usuarios.fecha_ingreso_sistema AS fecha_ingreso',
                                      'tipo_documento.descripcion AS tipo_documento',
                                      'municipios.descripcion AS ciudad_nacimiento',

@@ -32,6 +32,7 @@ class UsuariosStore implements Responsable
         $id_rol = request('id_rol', null);
         $skype = request('skype', null);
         $zoom = request('zoom', null);
+        $zoomClave = request('zoom_clave', null);
         $id_nivel = request('id_nivel', null);
         $id_tipo_ingles = request('id_tipo_ingles', null);
 
@@ -93,6 +94,7 @@ class UsuariosStore implements Responsable
                     'id_rol' => $id_rol,
                     'skype' => $skype,
                     'zoom' => $zoom,
+                    'zoom_clave' => $zoomClave,
                     'id_nivel' => $nivel_ingles,
                     'id_tipo_ingles' => $tipo_ingles,
                     'clave_fallas' => 0
@@ -178,7 +180,7 @@ class UsuariosStore implements Responsable
                     // ==========================================================================
                     // ==========================================================================
 
-                    alert()->success('Successful Process', 'User successfully created, the user name is: ' . $nuevo_usuario->usuario . ' and the password is: ' . $numero_documento);
+                    alert()->success('Successful Process', 'User successfully created, the user name is: ' . $nuevo_usuario->usuario . ' and the password is you document ID');
                     return redirect()->to(route('administrador.index'));
 
                 } else {

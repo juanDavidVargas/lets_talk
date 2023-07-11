@@ -33,6 +33,7 @@ class User extends Authenticatable
         'id_rol',
         'skype',
         'zoom',
+        'zoom_clave',
         'id_nivel',
         'id_tipo_ingles',
         'clave_fallas'

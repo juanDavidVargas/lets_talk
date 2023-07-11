@@ -39,6 +39,7 @@
         $("#correo").trigger('focus');
         $("#skype").trigger('focus');
         $("#zoom").trigger('focus');
+        $("#zoom_clave").trigger('focus');
         $("#genero").trigger('focus');
         $("#id_municipio_residencia").trigger('focus');
         $("#id_rol").trigger('focus');

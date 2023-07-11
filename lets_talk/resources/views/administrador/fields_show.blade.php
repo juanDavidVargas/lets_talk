@@ -70,6 +70,27 @@
             <span class="focus-input100 text-danger" data-placeholder="Email" id="correo"></span>
         </div>
     </div>
+
+    <div class="col-xs-12 col-sm-12 col-md-3" id="div_celular">
+        <div class="wrap-input100 validate-input" data-validate="Required">
+            {!! Form::text('celular', isset($usuario) ? $usuario->celular : null, ['class' => 'input100', 'id' => 'celular']) !!}
+            <span class="focus-input100 text-danger" data-placeholder="Whatsapp" id="celular"></span>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-12 col-md-3" id="div_zoom">
+        <div class="wrap-input100 validate-input" data-validate="Required">
+            {!! Form::text('zoom', isset($usuario) ? $usuario->zoom : null, ['class' => 'input100', 'id' => 'zoom']) !!}
+            <span class="focus-input100 text-danger" data-placeholder="Zoom" id="zoom"></span>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-12 col-md-3" id="div_zoom_clave">
+        <div class="wrap-input100 validate-input" data-validate="Required">
+            {!! Form::text('zoom_clave', isset($usuario) ? $usuario->zoom_clave : null, ['class' => 'input100', 'id' => 'zoom_clave']) !!}
+            <span class="focus-input100 text-danger" data-placeholder="Zoom Pass" id="zoom_clave"></span>
+        </div>
+    </div>
 </div>
 
 {{-- =========================================================== --}}
