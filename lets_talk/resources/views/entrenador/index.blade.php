@@ -56,9 +56,31 @@
             margin-top: 5rem;
             margin-bottom: 2rem;
         }
-
         textarea {
             resize: none;
+            background: #ECF3FF;
+            box-shadow: 0px 4px 4px 0px #0000004D inset;
+        }
+        .btn-evaluation {
+            font-family: Encode Sans;
+            font-size: 18px;
+            font-weight: 400;
+            line-height: 23px;
+            letter-spacing: 0em;
+            background: #FFFFFF;
+            border: 1px solid #FFFFFF;
+            color: white;
+            box-shadow: 0px 4px 4px 0px #00000040;
+            padding: 1rem
+        }
+        .flex{
+            display: flex;
+        }
+        .flex-start{
+            justify-content: flex-start;
+        }
+        .flex-end{
+            justify-content: flex-end !important;
         }
     </style>
     
@@ -324,8 +346,15 @@
 
                     html += `<p class="gral-font margin-y">INTERNAL EVALUATION (NOTES)</p>`;
                     html += `<textarea name="internal_val" id="internal_val" class="w100" rows="10"></textarea>`;
-                    html += `<p>BOTÓN SAVE EVALUATION</p>`;
-                    html += `<p>BOTÓN OLD EVALUATION</p>`;
+                    html += `   <div class="margin-top flex flex-end">
+                                    <button class="btn-evaluation">BOTÓN SAVE EVALUATION</button>
+                                </div>
+                    `;
+
+                    html += `   <div class="flex flex-start" style="margin-top:3rem;">
+                                    <button class="btn-evaluation">BOTÓN OLD EVALUATION</button>
+                                </div>
+                    `;
 
                     Swal.fire({
                         html: html,
