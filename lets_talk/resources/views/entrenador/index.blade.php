@@ -4,6 +4,37 @@
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{asset('css/dataTables.bootstrap.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('css/fixedHeader.bootstrap.min.css')}}">
+
+    <style>
+        .left-align{
+            text-align:left;
+        }
+
+        .right-align{
+            text-align: right;
+        }
+
+        .color-low{
+            color:#31ED2D;
+        }
+
+        .color-mid{
+            color:#EABC19;
+        }
+
+        .color-hi{
+            color:#FF0000;
+        }
+
+        .w50{
+            width: 50%;
+        }
+
+        .w100{
+            width: 100%;
+        }
+    </style>
+    
 @stop
 
 @section('content')
@@ -36,7 +67,7 @@
                                 <td>{{$student->nombre_completo}}</td>
                                 <td>{{$student->start_date}}</td>
                                 <td>{{$student->start_time}}</td>
-                                <td><a href="#" id="trainer_sesion_detail_{{$student->id_sesion}}" onclick="seeDetails({{$student->id_sesion}},{{$student->id_user}})">SEE DETAILS</a></td>
+                                <td><a href="#" id="trainer_sesion_detail_{{$student->id_sesion}}" onclick="seeDetails({{$student->id_sesion}},{{$student->id_user}})" style="color: #434C6A;">SEE DETAILS</a></td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -47,8 +78,8 @@
 @stop
 
 @section('scripts')
-    <script src="{{ asset('js/jquery-3.5.1.js') }}"></script>
-    <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{asset('js/jquery-3.5.1.js') }}"></script>
+    <script src="{{asset('js/jquery.dataTables.min.js') }}"></script>
     <script src="{{asset('js/dataTables.bootstrap.min.js')}}"></script>
     <script src="{{asset('js/dataTables.fixedHeader.min.js')}}"></script>
 
@@ -60,10 +91,10 @@
             });
         });
 
-        function seeDetails(idSesion,idUser) {
-            // console.log(idUser);
-            // alert(`el id de la sesión es: ${id_sesion}`);
+        // ===================================================
+        // ===================================================
 
+        function seeDetails(idSesion,idUser) {
             $.ajax({
                 url: "{{route('detalle_sesion_entrenador')}}",
                 type: "POST",
@@ -73,70 +104,167 @@
                 },
                 success: function(response) {
                     console.log(response[0].nombre_completo);
-
+                    
                     html = `<p><strong>SESSION DETAILS</strong></p>`;
-                    html += `<p>el id del usuario es: ${response[0].id_user}</p>`;
-                    html += `<p>${response[0].nombre_completo}</p>`;
+                    // html += `<p>el id del usuario es: ${response[0].id_user}</p>`;
+
+                    // ==============================================
+
+                    html += `
+                            <div class="d-flex flex-row" style="padding:0; width:100%">
+                                <div style="width:50%">
+                                    <p style="color:#33326C;text-align:left;">${response[0].nombre_completo}</p>
+                                </div>
+                    `;
+                                if (response[0].nivel_descripcion) {
+                                    if (response[0].nivel_descripcion == "LOW") {
+                                        html += `<div class="d-flex flex-row" style="padding:0; width:50%;">
+                                                    <p style="width:50%;">LEVEL:</p>
+                                                    <p class="color-low right-align w50">${response[0].nivel_descripcion}</p>
+                                                 </div>
+                                        `;
+                                    } else if (response[0].nivel_descripcion == "MID") {
+                                        html += `<div class="d-flex flex-row" style="padding:0; width:50%;">
+                                                    <p style="width:50%;">LEVEL:</p>
+                                                    <p class="color-mid right-align w50">${response[0].nivel_descripcion}</p>
+                                                 </div>
+                                        `;
+                                    } else if (response[0].nivel_descripcion == "HI") {
+                                        html += `<div class="d-flex flex-row" style="padding:0; width:50%;">
+                                                    <p style="width:50%;">LEVEL:</p>
+                                                    <p class="color-hi right-align w50">${response[0].nivel_descripcion}</p>
+                                                 </div>
+                                        `;
+                                    }
+                                } else {
+                                    html += `<div class="col-md-6" style="padding:0"><p>LEVEL: </p></div>`;
+                                }
+                    html += `
+                            </div>
+                    `;
+
+                    // ==============================================
 
                     if (response[0].celular) {
-                        html += `<p>PHONE ${response[0].celular}</p>`;
+                        html += `<p style="text-align:left;">PHONE: ${response[0].celular}</p>`;
                     } else {
-                        html += `<p>PHONE</p>`;
+                        html += `<p style="text-align:left;">PHONE: </p>`;
                     }
 
                     if (response[0].correo) {
-                        html += `<p>EMAIL ${response[0].correo}</p>`;
+                        html += `<p style="text-align:left;">EMAIL: ${response[0].correo}</p>`;
                     } else {
-                        html += `<p>EMAIL</p>`;
+                        html += `<p style="text-align:left;">EMAIL: </p>`;
                     }
 
-                    if (response[0].zoom) {
-                        html += `<p>ZOOM ${response[0].zoom}</p>`;
-                    } else {
-                        html += `<p>ZOOM</p>`;
-                    }
+                    // ==============================================
 
-                    if (response[0].zoom_clave) {
-                        html += `<p>ZOOM PASS ${response[0].zoom_clave}</p>`;
-                    } else {
-                        html += `<p>ZOOM PASS</p>`;
-                    }
+                    html += `
+                            <div class="d-flex flex-row" style="padding:0; width:100%">
+                                <div style="margin-right:1rem;">
+                    `;
+                                    if (response[0].zoom) {
+                                        html += `<p style="text-align:left;">ZOOM: ${response[0].zoom}</p>`;
+                                    } else {
+                                        html += `<p style="text-align:left;">ZOOM: </p>`;
+                                    }
+                    html += `   </div>`;
 
-                    if (response[0].nivel_descripcion) {
-                        html += `<p>LEVEL ${response[0].nivel_descripcion}</p>`;
-                    } else {
-                        html += `<p>LEVEL</p>`;
-                    }
+                    html += `   <div>`;
+                                    if (response[0].zoom_clave) {
+                                        html += `<p style="text-align:left;">ZOOM PASS: ${response[0].zoom_clave}</p>`;
+                                    } else {
+                                        html += `<p style="text-align:left;">PASS: </p>`;
+                                    }
+                    html += `   </div>`;
+                    html += `
+                            </div>
+                    `;
+                    
+                    // ==============================================
 
                     html += `<p>SESSION INFO</p>`;
 
-                    if (response[0].id_primer_contacto = 1) {
-                        html += `<p>1ST CONTACT ${response[0].primer_telefono}</p>`; // Phone
-                    } else if (response[0].id_primer_contacto = 2) {
-                        html += `<p>1ST CONTACT ${response[0].primer_celular}</p>`; // Whatsapp-Celular
-                    } else if (response[0].id_primer_contacto = 3) {
-                        html += `<p>1ST CONTACT ${response[0].primer_skype}</p>`; // Skype
-                    } else if (response[0].id_primer_contacto = 4) {
-                        html += `<p>1ST CONTACT ${response[0].primer_correo}</p>`; // Email
-                    } else if (response[0].id_primer_contacto = 5) {
-                        html += `<p>1ST CONTACT ${response[0].primer_zoom}</p>`; // Zoom
-                    } else {
-                        html += `<p>1ST CONTACT</p>`; // Null
+                    
+                    if (response[0].id_primer_contacto == 1) { // Phone
+                        html += `   <div class="d-flex flex-row w100" style="">
+                                        <p class="left-align w50">1ST CONTACT:</p>
+                                        <p class="left-align w50">${response[0].primer_telefono}</p>
+                                    </div>
+                        `;
+                    } else if (response[0].id_primer_contacto == 2) { // Whatsapp-Celular
+                        html += `   <div class="d-flex flex-row w100" style="">
+                                        <p class="left-align w50">1ST CONTACT:</p>
+                                        <p class="left-align w50">${response[0].primer_celular}</p>
+                                    </div>
+                        `;
+                    } else if (response[0].id_primer_contacto == 3) { // Skype
+                        html += `   <div class="d-flex flex-row w100" style="">
+                                        <p class="left-align w50">1ST CONTACT:</p>
+                                        <p class="left-align w50">${response[0].primer_skype}</p>
+                                    </div>
+                        `;
+                    } else if (response[0].id_primer_contacto == 4) { // Email
+                        html += `   <div class="d-flex flex-row w100" style="">
+                                        <p class="left-align w50">1ST CONTACT:</p>
+                                        <p class="left-align w50">${response[0].primer_correo}</p>
+                                    </div>
+                        `;
+                    } else if (response[0].id_primer_contacto == 5) { // Zoom
+                        html += `   <div class="d-flex flex-row w100" style="">
+                                        <p class="left-align w50">1ST CONTACT:</p>
+                                        <p class="left-align w50">${response[0].primer_zoom}</p>
+                                    </div>
+                        `;
+                    } else { // Null
+                        html += `   <div class="d-flex flex-row w100" style="">
+                                        <p class="left-align w50">1ST CONTACT:</p>
+                                        <p class="left-align w50"></p>
+                                    </div>
+                        `;
                     }
 
-                    if (response[0].id_segundo_contacto = 1) {
-                        html += `<p>2ND CONTACT ${response[0].segundo_telefono}</p>`; // Phone
-                    } else if (response[0].id_primer_contacto = 2) {
-                        html += `<p>2ND CONTACT ${response[0].segundo_celular}</p>`; // Whatsapp-Celular
-                    } else if (response[0].id_primer_contacto = 3) {
-                        html += `<p>2ND CONTACT ${response[0].segundo_skype}</p>`; // Skype
-                    } else if (response[0].id_primer_contacto = 4) {
-                        html += `<p>2ND CONTACT ${response[0].segundo_correo}</p>`; // Email
-                    } else if (response[0].id_primer_contacto = 5) {
-                        html += `<p>2ND CONTACT ${response[0].segundo_zoom}</p>`; // Zoom
-                    } else {
-                        html += `<p>2ND CONTACT</p>`; // Null
+                    // ==============================================
+
+                    if (response[0].id_segundo_contacto == 1) { // Phone
+                        html += `   <div class="d-flex flex-row w100" style="">
+                                        <p class="left-align w50">2ND CONTACT:</p>
+                                        <p class="left-align w50">${response[0].segundo_telefono}</p>
+                                    </div>
+                        `;
+                    } else if (response[0].id_segundo_contacto == 2) { // Whatsapp-Celular
+                        html += `   <div class="d-flex flex-row w100" style="">
+                                        <p class="left-align w50">2ND CONTACT:</p>
+                                        <p class="left-align w50">${response[0].segundo_celular}</p>
+                                    </div>
+                        `;
+                    } else if (response[0].id_segundo_contacto == 3) { // Skype
+                        html += `   <div class="d-flex flex-row w100" style="">
+                                        <p class="left-align w50">2ND CONTACT:</p>
+                                        <p class="left-align w50">${response[0].segundo_skype}</p>
+                                    </div>
+                        `;
+                    } else if (response[0].id_segundo_contacto == 4) { // Email
+                        html += `   <div class="d-flex flex-row w100" style="">
+                                        <p class="left-align w50">2ND CONTACT:</p>
+                                        <p class="left-align w50">${response[0].segundo_correo}</p>
+                                    </div>
+                        `;
+                    } else if (response[0].id_segundo_contacto == 5) { // Zoom
+                        html += `   <div class="d-flex flex-row w100" style="">
+                                        <p class="left-align w50">2ND CONTACT:</p>
+                                        <p class="left-align w50">${response[0].segundo_zoom}</p>
+                                    </div>
+                        `;
+                    } else { // Null
+                        html += `   <div class="d-flex flex-row w100" style="">
+                                        <p class="left-align w50">2ND CONTACT:</p>
+                                        <p class="left-align w50"></p>
+                                    </div>
+                        `;
                     }
+
+                    // ==============================================
 
                     html += `<p>INTERNAL EVALUATION (NOTES)</p>`;
                     html += `<p>BOTÓN SAVE EVALUATION</p>`;
