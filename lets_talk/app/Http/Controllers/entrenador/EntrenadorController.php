@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Responses\administrador\DisponibilidadShow;
 use App\Models\usuarios\Nivel;
 use App\Models\usuarios\Contacto;
+use App\Models\entrenador\EvaluacionInterna;
 
 class EntrenadorController extends Controller
 {
@@ -277,6 +278,36 @@ class EntrenadorController extends Controller
 
     public function evaluacionInternaEntrenador(Request $request)
     {
-        dd($request);
+        // dd($request);
+        $evaluacionInterna = request('evaluacion_interna', null);
+        $idEstudiante = request('id_estudiante', null);
+        $idInstructor = request('id_instructor', null);
+        
+        // dd($idEstudiante, $idInstructor, $evaluacionInterna);
+
+        DB::connection('mysql')->beginTransaction();
+
+        try {
+            $evaluacionInternaCreate = EvaluacionInterna::create([
+                'evaluacion_interna' => $evaluacionInterna,
+                'id_estudiante' => $idEstudiante,
+                'id_instructor' => $idInstructor,
+            ]);
+
+            if ($evaluacionInternaCreate) {
+                DB::connection('mysql')->commit();
+                alert()->success('Successful Process', 'Internal valuation created');
+                return redirect()->to(route('administrador.index'));
+            } else {
+                DB::connection('mysql')->rollback();
+                alert()->error('Error', 'An error has occurred creating the user, please contact support.');
+                return redirect()->to(route('administrador.index'));
+            }
+            
+        } catch (Exception $e) {
+            DB::connection('mysql')->rollback();
+            alert()->error('Error', 'An error has occurred creating the user, try again, if the problem persists contact support.');
+            return back();
+        }
     }
 }
