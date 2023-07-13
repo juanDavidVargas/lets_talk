@@ -272,4 +272,11 @@ class EntrenadorController extends Controller
 
         return response()->json([$query]);
     }
+
+    // ==================================================
+
+    public function evaluacionInternaEntrenador(Request $request)
+    {
+        dd($request);
+    }
 }

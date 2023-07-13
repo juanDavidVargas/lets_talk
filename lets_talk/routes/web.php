@@ -35,6 +35,7 @@ Route::get('disponibilidad_entrenadores', 'admin\AdministradorController@disponi
 Route::get('disponibilidad', 'estudiante\EstudianteController@disponibilidad')->name('estudiante.disponibilidad');
 Route::post('actualizar_disponibilidad_entrenador', 'admin\AdministradorController@actualizarDisponibilidad')->name('actualizar_evento');
 Route::post('detalle_sesion_entrenador', 'entrenador\EntrenadorController@cargaDetalleSesion')->name('detalle_sesion_entrenador');
+Route::post('evaluacion_interna_entrenador', 'entrenador\EntrenadorController@evaluacionInternaEntrenador')->name('evaluacion_interna_entrenador');
 
 Route::get('disponibilidad_admin', 'admin\AdministradorController@vistaAdminDisponibilidad')->name('administrador.disponibilidad_admin');
 Route::post('disponibilidad_admin_store', 'admin\AdministradorController@storeAdminDisponibilidad')->name('administrador.disponibilidad_admin_store');

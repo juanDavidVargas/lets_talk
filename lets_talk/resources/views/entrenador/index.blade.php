@@ -344,12 +344,18 @@
 
                     // ==============================================
 
-                    html += `<p class="gral-font margin-y">INTERNAL EVALUATION (NOTES)</p>`;
-                    html += `<textarea name="internal_val" id="internal_val" class="w100" rows="10"></textarea>`;
+                    html += `   <p class="gral-font margin-y">INTERNAL EVALUATION (NOTES)</p>`;
+                    html += `   {!! Form::open(['method' => 'POST', 'route' => ['evaluacion_interna_entrenador'],'class'=>['form-horizontal form-bordered']]) !!}`;
+                    html += `   @csrf`;
+                    
+                    html += `   <input type="text" name="id_estudiante" id="id_estudiante" value="${response[0].id_user}"/>`;
+                    html += `   <textarea name="evaluacion_interna" id="evaluacion_interna" class="w100" rows="10"></textarea>`;
                     html += `   <div class="margin-top flex flex-end">
-                                    <button class="btn-evaluation">SAVE EVALUATION</button>
+                                    <button type="submit" class="btn-evaluation">SAVE EVALUATION</button>
                                 </div>
                     `;
+                                    /*// {!! Form::submit(trans('global.app_add'), ['class' => 'btn btn-success']) !!}*/
+                    html += `   {!! Form::close() !!}`;
 
                     html += `   <div class="flex flex-start" style="margin-top:3rem;">
                                     <button class="btn-evaluation">OLD EVALUATION</button>
