@@ -347,19 +347,20 @@
                     html += `<p class="gral-font margin-y">INTERNAL EVALUATION (NOTES)</p>`;
                     html += `<textarea name="internal_val" id="internal_val" class="w100" rows="10"></textarea>`;
                     html += `   <div class="margin-top flex flex-end">
-                                    <button class="btn-evaluation">BOTÓN SAVE EVALUATION</button>
+                                    <button class="btn-evaluation">SAVE EVALUATION</button>
                                 </div>
                     `;
 
                     html += `   <div class="flex flex-start" style="margin-top:3rem;">
-                                    <button class="btn-evaluation">BOTÓN OLD EVALUATION</button>
+                                    <button class="btn-evaluation">OLD EVALUATION</button>
                                 </div>
                     `;
 
                     Swal.fire({
                         html: html,
-                        showCloseButton: false,
+                        showCloseButton: true,
                         showCancelButton: false,
+                        showConfirmButton: false,
                         focusConfirm: false,
                         allowOutsideClick: false,
                         width: 850,
