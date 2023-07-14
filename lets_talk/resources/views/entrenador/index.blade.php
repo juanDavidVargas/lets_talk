@@ -82,6 +82,16 @@
         .flex-end{
             justify-content: flex-end !important;
         }
+        table {
+            width: 100%;
+        }
+        thead th {
+            text-align: center;
+        }
+        th, td {
+            border-style: double;
+            /* border: 1px solid black; */
+        }
     </style>
     
 @stop
@@ -354,11 +364,10 @@
                                     <button type="submit" class="btn-evaluation">SAVE EVALUATION</button>
                                 </div>
                     `;
-                                    /*// {!! Form::submit(trans('global.app_add'), ['class' => 'btn btn-success']) !!}*/
                     html += `   {!! Form::close() !!}`;
 
                     html += `   <div class="flex flex-start" style="margin-top:3rem;">
-                                    <button class="btn-evaluation">OLD EVALUATION</button>
+                                    <button class="btn-evaluation" id="old_valuation">OLD EVALUATION</button>
                                 </div>
                     `;
                                     
@@ -375,6 +384,66 @@
                         padding: '5em',
                         background: '#fff',
                     });
+
+                    // ==============================================
+
+                    $('#old_valuation').on('click', function () {
+                        let idUserVal = $('#id_estudiante').val();
+                        console.log(idUserVal);
+                        // alert(`old evaluation ${idUserVal}`);
+
+                        $.ajax({
+                            url: "{{route('consulta_evaluacion_interna')}}",
+                            type: "POST",
+                            dataType: "json",
+                            data: {
+                                'id_estudiante': idUserVal
+                            },
+                            success: function(response) {
+                                response.forEach(element => {
+                                    console.log(element.nombre_completo);
+                                    console.log(element.evaluacion_interna);
+
+                                    html = ``;
+                                    html += `<table border style="border-style: double;">`;
+                                    html +=     `<thead style="border-style: double;">`;
+                                    html +=         `<tr style="border-style: double;">`;
+                                    html +=             `<th style="border-style: double;">Student</th>`;
+                                    html +=             `<th style="border-style: double;">Notes</th>`;
+                                    html +=             `<th style="border-style: double;">Instructor</th>`;
+                                    html +=         `</tr>`;
+                                    html +=     `</thead>`;
+                                    html +=     `<body style="border-style: double;">`;
+                                    html +=         `<tr style="border-style: double;">`;
+                                    html +=             `<td style="border-style: double;">${element.nombre_completo}</td>`;
+                                    html +=             `<td style="border-style: double;">${element.evaluacion_interna}</td>`;
+                                    html +=             `<td style="border-style: double;">Nombre Instructor</td>`;
+                                    html +=         `</tr>`;
+                                    html +=     `</body>`;
+                                    html += `<table>`;
+
+                                    Swal.fire({
+                                        html: html,
+                                        showCloseButton: true,
+                                        showCancelButton: false,
+                                        showConfirmButton: false,
+                                        focusConfirm: false,
+                                        allowOutsideClick: false,
+                                        width: 850,
+                                        padding: '5em',
+                                        background: '#fff',
+                                    });
+                                });
+                            }
+                        });
+                    })
+
+                    
+
+                    
+
+                    
+                        
                 }
             });
         }
