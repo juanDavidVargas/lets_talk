@@ -84,14 +84,16 @@
         }
         table {
             width: 100%;
+            border-collapse: separate;
+            border-spacing:  3px;
+            border: double;
         }
         thead th {
             text-align: center;
         }
-        th, td {
-            border-style: double;
-            /* border: 1px solid black; */
-        }
+        /* th, td {
+            border: double;
+        } */
     </style>
     
 @stop
@@ -405,19 +407,19 @@
                                     console.log(element.evaluacion_interna);
 
                                     html = ``;
-                                    html += `<table border style="border-style: double;">`;
-                                    html +=     `<thead style="border-style: double;">`;
-                                    html +=         `<tr style="border-style: double;">`;
-                                    html +=             `<th style="border-style: double;">Student</th>`;
-                                    html +=             `<th style="border-style: double;">Notes</th>`;
-                                    html +=             `<th style="border-style: double;">Instructor</th>`;
+                                    html += `<table border>`;
+                                    html +=     `<thead>`;
+                                    html +=         `<tr>`;
+                                    html +=             `<th>Student</th>`;
+                                    html +=             `<th>Notes</th>`;
+                                    html +=             `<th>Instructor</th>`;
                                     html +=         `</tr>`;
                                     html +=     `</thead>`;
-                                    html +=     `<body style="border-style: double;">`;
-                                    html +=         `<tr style="border-style: double;">`;
-                                    html +=             `<td style="border-style: double;">${element.nombre_completo}</td>`;
-                                    html +=             `<td style="border-style: double;">${element.evaluacion_interna}</td>`;
-                                    html +=             `<td style="border-style: double;">Nombre Instructor</td>`;
+                                    html +=     `<body>`;
+                                    html +=         `<tr>`;
+                                    html +=             `<td>${element.nombre_completo}</td>`;
+                                    html +=             `<td>${element.evaluacion_interna}</td>`;
+                                    html +=             `<td>Nombre Instructor</td>`;
                                     html +=         `</tr>`;
                                     html +=     `</body>`;
                                     html += `<table>`;
