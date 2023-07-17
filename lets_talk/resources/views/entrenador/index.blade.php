@@ -419,11 +419,11 @@
                                 html = ``;
                                 html += `<table border=1 style="border-collapse:separate !important" cellspacing="10">`;
                                 html +=     `<thead>`;
-                                html +=         `<tr>`;
-                                html +=             `<th style="text-align:center;width:15%;">STUDENT</th>`;
-                                html +=             `<th style="text-align:center;width:55%;">NOTES</th>`;
-                                html +=             `<th style="text-align:center;width:15%;">INSTRUCTOR</th>`;
-                                html +=             `<th style="text-align:center;width:15%;">DATE</th>`;
+                                html +=         `<tr style="background-color: #21277B">`;
+                                html +=             `<th style="text-align:center;width:15%;color:white;">STUDENT</th>`;
+                                html +=             `<th style="text-align:center;width:55%;color:white;">NOTES</th>`;
+                                html +=             `<th style="text-align:center;width:15%;color:white;">INSTRUCTOR</th>`;
+                                html +=             `<th style="text-align:center;width:15%;color:white;">DATE</th>`;
                                 html +=         `</tr>`;
                                 html +=     `</thead>`;
                                 html +=     `<body>`;

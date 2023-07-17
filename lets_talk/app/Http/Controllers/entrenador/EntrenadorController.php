@@ -316,18 +316,20 @@ class EntrenadorController extends Controller
     public function consultaEvaluacionInterna(Request $request)
     {
         $idEstudiante = intval($request->id_estudiante);
+        // $idInstructor = intval($request->id_instructor);
 
         return DB::table('evaluacion_interna')
-                    ->leftjoin('usuarios', 'usuarios.id_user', '=', 'evaluacion_interna.id_estudiante')
-                    ->where('usuarios.id_user', $idEstudiante)
+                    ->leftjoin('usuarios as estudiante', 'estudiante.id_user', '=', 'evaluacion_interna.id_estudiante')
+                    ->leftjoin('usuarios as instructor', 'instructor.id_user', '=', 'evaluacion_interna.id_instructor')
+                    ->where('evaluacion_interna.id_estudiante', $idEstudiante)
+                    ->where('evaluacion_interna.id_instructor', 7)
                     ->select(
-                        DB::raw("CONCAT(usuarios.nombres, ' ', usuarios.apellidos) AS nombre_estudiante"),
+                        DB::raw("CONCAT(estudiante.nombres, ' ', estudiante.apellidos) AS nombre_estudiante"),
                         'evaluacion_interna.evaluacion_interna',
-                        DB::raw("CONCAT(usuarios.nombres, ' ', usuarios.apellidos) AS nombre_instructor"),
+                        DB::raw("CONCAT(instructor.nombres, ' ', instructor.apellidos) AS nombre_instructor"),
                         'evaluacion_interna.created_at',
                     )
                     ->orderBy('evaluacion_interna.created_at','DESC')
                     ->get();
-                    // ->toSql();
     }
 }
