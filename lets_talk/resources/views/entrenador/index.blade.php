@@ -1,9 +1,14 @@
 @extends('layouts.layout')
 @section('title', 'Trainers Sessions')
 
+{{-- ============================================================== --}}
+{{-- ============================================================== --}}
+
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{asset('css/dataTables.bootstrap.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('css/fixedHeader.bootstrap.min.css')}}">
+    {{-- <link rel="stylesheet" type="text/css" href="{{asset('css/sweetalert2.min.css')}}"> --}}
+    {{-- <link rel="stylesheet" type="text/css" href="{{asset('css/sweetalert2.css')}}"> --}}
 
     <style>
         .left-align{
@@ -82,21 +87,29 @@
         .flex-end{
             justify-content: flex-end !important;
         }
-        table {
+        table{
+            table-layout: fixed;
             width: 100%;
-            border-collapse: separate;
-            border-spacing:  3px;
-            border: double;
+            border-collapse:separate !important;
+            background: #ECF3FF;
+            border-spacing: 50px;
+            /* cellspacing:100px; */
+            /* font-weight:bold; */
         }
-        thead th {
-            text-align: center;
+        th, td {
+            word-wrap: break-word;
         }
-        /* th, td {
-            border: double;
-        } */
+        .swal2-cancel {
+            background-color: #1D9BF0;
+            padding: 1rem !important;
+            color: #FFF !important;
+            box-shadow: 0px 4px 4px 0px #00000040;
+        }
     </style>
-    
 @stop
+
+{{-- ============================================================== --}}
+{{-- ============================================================== --}}
 
 @section('content')
     <div class="row">
@@ -138,15 +151,19 @@
     </div>
 @stop
 
+{{-- ============================================================== --}}
+{{-- ============================================================== --}}
+
 @section('scripts')
     <script src="{{asset('js/jquery-3.5.1.js') }}"></script>
     <script src="{{asset('js/jquery.dataTables.min.js') }}"></script>
     <script src="{{asset('js/dataTables.bootstrap.min.js')}}"></script>
     <script src="{{asset('js/dataTables.fixedHeader.min.js')}}"></script>
+    {{-- <script src="{{asset('js/sweetalert2.min.js')}}"></script> --}}
+    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
 
-    <script>
-        $( document ).ready(function() {
-
+    <script type="text/javascript">
+        $(document ).ready(function() {
             $('#tbl_trainer_sessions').DataTable({
                 'ordering': false
             });
@@ -164,8 +181,6 @@
                     'id_user': idUser
                 },
                 success: function(response) {
-                    console.log(response[0].nombre_completo);
-                    
                     html = `<p class="gral-font center-align"><strong>SESSION DETAILS</strong></p>`;
 
                     // ==============================================
@@ -359,14 +374,15 @@
                     html += `   <p class="gral-font margin-y">INTERNAL EVALUATION (NOTES)</p>`;
                     html += `   {!! Form::open(['method' => 'POST', 'route' => ['evaluacion_interna_entrenador'],'class'=>['form-horizontal form-bordered']]) !!}`;
                     html += `   @csrf`;
-                    
-                    html += `   <input type="text" name="id_estudiante" id="id_estudiante" value="${response[0].id_user}"/>`; // captuta id estudiante
-                    html += `   <textarea name="evaluacion_interna" id="evaluacion_interna" class="w100" rows="10"></textarea>`;
-                    html += `   <div class="margin-top flex flex-end">
-                                    <button type="submit" class="btn-evaluation">SAVE EVALUATION</button>
-                                </div>
+                    html += `       <input type="hidden" name="id_estudiante" id="id_estudiante" value="${response[0].id_user}"/>`;
+                    html += `       <textarea name="evaluacion_interna" class="w100" rows="10"></textarea>`;
+                    html += `       <div class="margin-top flex flex-end">
+                                        <button type="submit" class="btn-evaluation">SAVE EVALUATION</button>
+                                    </div>
                     `;
                     html += `   {!! Form::close() !!}`;
+
+                    // ==============================================
 
                     html += `   <div class="flex flex-start" style="margin-top:3rem;">
                                     <button class="btn-evaluation" id="old_valuation">OLD EVALUATION</button>
@@ -391,8 +407,6 @@
 
                     $('#old_valuation').on('click', function () {
                         let idUserVal = $('#id_estudiante').val();
-                        console.log(idUserVal);
-                        // alert(`old evaluation ${idUserVal}`);
 
                         $.ajax({
                             url: "{{route('consulta_evaluacion_interna')}}",
@@ -402,50 +416,50 @@
                                 'id_estudiante': idUserVal
                             },
                             success: function(response) {
-                                response.forEach(element => {
-                                    console.log(element.nombre_completo);
-                                    console.log(element.evaluacion_interna);
+                                html = ``;
+                                html += `<table border=1 style="border-collapse:separate !important" cellspacing="10">`;
+                                html +=     `<thead>`;
+                                html +=         `<tr>`;
+                                html +=             `<th style="text-align:center;width:15%;">STUDENT</th>`;
+                                html +=             `<th style="text-align:center;width:55%;">NOTES</th>`;
+                                html +=             `<th style="text-align:center;width:15%;">INSTRUCTOR</th>`;
+                                html +=             `<th style="text-align:center;width:15%;">DATE</th>`;
+                                html +=         `</tr>`;
+                                html +=     `</thead>`;
+                                html +=     `<body>`;
+                                                response.forEach(element => {
+                                                    html += `<tr>`;
+                                                    html +=     `<td style="width:15%;">${element.nombre_estudiante}</td>`;
+                                                    html +=     `<td style="width:55%;" class="valuation">${element.evaluacion_interna}</td>`;
+                                                    html +=     `<td style="width:15%;">${element.nombre_instructor}</td>`;
+                                                    html +=     `<td style="width:15%;">${element.created_at}</td>`;
+                                                    html += `</tr>`;
+                                                });
+                                html +=     `</body>`;
+                                html += `<table>`;
 
-                                    html = ``;
-                                    html += `<table border>`;
-                                    html +=     `<thead>`;
-                                    html +=         `<tr>`;
-                                    html +=             `<th>Student</th>`;
-                                    html +=             `<th>Notes</th>`;
-                                    html +=             `<th>Instructor</th>`;
-                                    html +=         `</tr>`;
-                                    html +=     `</thead>`;
-                                    html +=     `<body>`;
-                                    html +=         `<tr>`;
-                                    html +=             `<td>${element.nombre_completo}</td>`;
-                                    html +=             `<td>${element.evaluacion_interna}</td>`;
-                                    html +=             `<td>Nombre Instructor</td>`;
-                                    html +=         `</tr>`;
-                                    html +=     `</body>`;
-                                    html += `<table>`;
-
-                                    Swal.fire({
-                                        html: html,
-                                        showCloseButton: true,
-                                        showCancelButton: false,
-                                        showConfirmButton: false,
-                                        focusConfirm: false,
-                                        allowOutsideClick: false,
-                                        width: 850,
-                                        padding: '5em',
-                                        background: '#fff',
-                                    });
+                                Swal.fire({
+                                    html: html,
+                                    showCloseButton: false,
+                                    showConfirmButton: false,
+                                    showCancelButton: true,
+                                    cancelButtonText: 'GET ME BACK',
+                                    focusConfirm: false,
+                                    allowOutsideClick: false,
+                                    width: 1000,
+                                    padding: '3em',
+                                    background: '#fff',
+                                    buttonsStyling: false,
+                                    buttons:{
+                                        cancelButton: {customClass:'swal2-cancel'}
+                                    }
                                 });
                             }
                         });
                     })
 
-                    
+                    // ==============================================
 
-                    
-
-                    
-                        
                 }
             });
         }
