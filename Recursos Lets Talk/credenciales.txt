@@ -13,6 +13,9 @@ Estudiante
 username: jvargas2
 password: juvape2
 
+GIT:
+https://github.com/juanDavidVargas/lets_talk
+
 FIGMA:
 https://www.figma.com/file/ewJtv7VwCukoDHplPmUNly/Untitled?node-id=0%3A1&t=SFIOZaC9HiovHDXd-0
 
