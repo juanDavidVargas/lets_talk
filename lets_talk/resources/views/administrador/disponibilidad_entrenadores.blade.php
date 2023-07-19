@@ -78,17 +78,34 @@
 {{-- ===================================== --}}
 
 @section('scripts')
-    <script src="{{ asset('js/jquery-3.5.1.js') }}"></script>
-    <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{asset('js/jquery-3.5.1.js') }}"></script>
+    <script src="{{asset('js/jquery.dataTables.min.js') }}"></script>
     <script src="{{asset('js/dataTables.bootstrap.min.js')}}"></script>
     <script src="{{asset('js/dataTables.fixedHeader.min.js')}}"></script>
 
     <script>
         $(document).ready(function() {
-
             $('#tbl_availability').DataTable({
                 'ordering': false
             });
+
+            // ========================================
+
+            // if ($('#select_pending').is(':not(:checked)')) {
+            //     // $("input:checkbox[id^='pending_']").attr('checked',false);
+
+            //     $('#btn_aprove_all').on('click', function() {
+            //         alert('Select all option must be checked');
+            //     });
+                
+            //     $('#btn_reject_all').on('click', function() {
+            //         alert('Select all option must be checked');
+            //     });
+                
+            //     $('#btn_delete_all').on('click', function() {
+            //         alert('Select all option must be checked');
+            //     });
+            // }
         });
 
         // ===========================================
@@ -171,14 +188,14 @@
         // ===========================================
 
         $('#select_pending').on('change', function() {
-            if( $(this).is(':checked') ){
+            if ($('#select_pending').is(':checked')) {
                 $("input:checkbox[id^='pending_']").attr('checked',true);
 
                 var idEventos;
                 idEventos = $("input:checkbox[id^='pending_']:checked").map(function() {
                     return $(this).attr('id');
                 }).get();
-                alert('IDS: ' + idEventos);
+                // alert('IDS: ' + idEventos);
 
                 arrayIds = [];
 
@@ -189,8 +206,12 @@
 
                 console.log(arrayIds);
 
+                on = $('#select_pending').val();
+                console.log(`encendido ${on}`);
+
                 $('#btn_aprove_all').on('click', function() {
                     alert('click en aprobar todo');
+                    
                 });
 
                 $('#btn_reject_all').on('click', function() {
@@ -200,13 +221,94 @@
                 $('#btn_delete_all').on('click', function() {
                     alert('click en eliminar todo');
                 });
-                
-
             } else {
-                console.log($(this).val());
                 $("input:checkbox[id^='pending_']").attr('checked',false);
+
+                off = $('#select_pending').val();
+                console.log(`apagado ${off}`);
+
+                $('#btn_aprove_all').on('click', function() {
+                    Swal.fire(
+                        'Info',
+                        'Select all option must be checked',
+                        'info'
+                    )
+                });
+                
+                $('#btn_reject_all').on('click', function() {
+                    Swal.fire(
+                        'Info',
+                        'Select all option must be checked',
+                        'info'
+                    )
+                });
+                
+                $('#btn_delete_all').on('click', function() {
+                    Swal.fire(
+                        'Info',
+                        'Select all option must be checked',
+                        'info'
+                    )
+                });
             }
         });
+
+        // ===========================================
+
+        // $('#select_pending').on('change', function() {
+        //     if( $(this).is(':checked') ){
+        //         $("input:checkbox[id^='pending_']").attr('checked',true);
+
+        //         var idEventos;
+        //         idEventos = $("input:checkbox[id^='pending_']:checked").map(function() {
+        //             return $(this).attr('id');
+        //         }).get();
+        //         alert('IDS: ' + idEventos);
+
+        //         arrayIds = [];
+
+        //         idEventos.forEach(id => {
+        //             eventoId = id.substr(8);
+        //             arrayIds.push(eventoId);
+        //         });
+
+        //         console.log(arrayIds);
+
+        //         $('#btn_aprove_all').on('click', function() {
+        //             alert('click en aprobar todo');
+        //         });
+
+        //         $('#btn_reject_all').on('click', function() {
+        //             alert('click en rechazar todo');
+        //         });
+
+        //         $('#btn_delete_all').on('click', function() {
+        //             alert('click en eliminar todo');
+        //         });
+                
+
+        //     } else {
+        //         console.log($(this).val());
+        //         // $("input:checkbox[id^='pending_']").attr('checked',false);
+                
+        //         if ($('#select_pending').is(':not(:checked)')) {
+
+        //             $("input:checkbox[id^='pending_']").attr('checked',false);
+
+        //             $('#btn_aprove_all').on('click', function() {
+        //                 alert('Select all option must be checked');
+        //             });
+                    
+        //             $('#btn_reject_all').on('click', function() {
+        //                 alert('Select all option must be checked');
+        //             });
+                    
+        //             $('#btn_delete_all').on('click', function() {
+        //                 alert('Select all option must be checked');
+        //             });
+        //         }
+        //     }
+        // })
 
         // ===========================================
 
