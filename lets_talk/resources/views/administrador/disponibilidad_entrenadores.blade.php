@@ -19,11 +19,11 @@
                 <h1 class="text-center text-uppercase">Availability Trainer's</h1>
 
                 <div class="mt-5">
-                    @foreach ($disponibilidades as $disponibilidad)
+                    {{-- @foreach ($disponibilidades as $disponibilidad)
                         @php
                             $idDisponibilidad = $disponibilidad->id;
                         @endphp
-                    @endforeach
+                    @endforeach --}}
                     <a href="#" class="btn btn-sm btn-success" id="btn_aprove_all">Approve All</a>
                     <a href="#" class="btn btn-sm btn-warning" id="btn_reject_all">Reject All</a>
                     <a href="#" class="btn btn-sm btn-danger" id="btn_delete_all">Delete All</a>
@@ -92,18 +92,28 @@
             // ========================================
 
             // if ($('#select_pending').is(':not(:checked)')) {
-            //     // $("input:checkbox[id^='pending_']").attr('checked',false);
-
             //     $('#btn_aprove_all').on('click', function() {
-            //         alert('Select all option must be checked');
+            //         Swal.fire(
+            //             'Info',
+            //             'Select all option must be checked',
+            //             'info'
+            //         )
             //     });
                 
             //     $('#btn_reject_all').on('click', function() {
-            //         alert('Select all option must be checked');
+            //         Swal.fire(
+            //             'Info',
+            //             'Select all option must be checked',
+            //             'info'
+            //         )
             //     });
                 
             //     $('#btn_delete_all').on('click', function() {
-            //         alert('Select all option must be checked');
+            //         Swal.fire(
+            //             'Info',
+            //             'Select all option must be checked',
+            //             'info'
+            //         )
             //     });
             // }
         });
@@ -185,17 +195,25 @@
             });
         }
 
-        // ===========================================
+        // =================================================================
+        // =================================================================
+        // =================================================================
 
+        // jQuery(document).on('change', '#select_pending', function() {
+        // $('#select_pending').on('click', function() {
         $('#select_pending').on('change', function() {
-            if ($('#select_pending').is(':checked')) {
+            $("#select_pending").attr('checked',true);
+
+            checked = $('#select_pending').is(':checked');
+            
+            if (checked == true) {
+                console.log(`checked ${checked}`);
                 $("input:checkbox[id^='pending_']").attr('checked',true);
 
                 var idEventos;
                 idEventos = $("input:checkbox[id^='pending_']:checked").map(function() {
                     return $(this).attr('id');
                 }).get();
-                // alert('IDS: ' + idEventos);
 
                 arrayIds = [];
 
@@ -206,26 +224,23 @@
 
                 console.log(arrayIds);
 
-                on = $('#select_pending').val();
-                console.log(`encendido ${on}`);
-
                 $('#btn_aprove_all').on('click', function() {
-                    alert('click en aprobar todo');
-                    
+                    alert('aprove all');
                 });
 
                 $('#btn_reject_all').on('click', function() {
-                    alert('click en rechazar todo');
+                    alert('reject all');
                 });
 
                 $('#btn_delete_all').on('click', function() {
-                    alert('click en eliminar todo');
+                    alert('delete all');
                 });
+
             } else {
                 $("input:checkbox[id^='pending_']").attr('checked',false);
+                $("#select_pending").attr('checked',false);
 
-                off = $('#select_pending').val();
-                console.log(`apagado ${off}`);
+                console.log(`checked ${checked}`);
 
                 $('#btn_aprove_all').on('click', function() {
                     Swal.fire(
@@ -254,64 +269,6 @@
         });
 
         // ===========================================
-
-        // $('#select_pending').on('change', function() {
-        //     if( $(this).is(':checked') ){
-        //         $("input:checkbox[id^='pending_']").attr('checked',true);
-
-        //         var idEventos;
-        //         idEventos = $("input:checkbox[id^='pending_']:checked").map(function() {
-        //             return $(this).attr('id');
-        //         }).get();
-        //         alert('IDS: ' + idEventos);
-
-        //         arrayIds = [];
-
-        //         idEventos.forEach(id => {
-        //             eventoId = id.substr(8);
-        //             arrayIds.push(eventoId);
-        //         });
-
-        //         console.log(arrayIds);
-
-        //         $('#btn_aprove_all').on('click', function() {
-        //             alert('click en aprobar todo');
-        //         });
-
-        //         $('#btn_reject_all').on('click', function() {
-        //             alert('click en rechazar todo');
-        //         });
-
-        //         $('#btn_delete_all').on('click', function() {
-        //             alert('click en eliminar todo');
-        //         });
-                
-
-        //     } else {
-        //         console.log($(this).val());
-        //         // $("input:checkbox[id^='pending_']").attr('checked',false);
-                
-        //         if ($('#select_pending').is(':not(:checked)')) {
-
-        //             $("input:checkbox[id^='pending_']").attr('checked',false);
-
-        //             $('#btn_aprove_all').on('click', function() {
-        //                 alert('Select all option must be checked');
-        //             });
-                    
-        //             $('#btn_reject_all').on('click', function() {
-        //                 alert('Select all option must be checked');
-        //             });
-                    
-        //             $('#btn_delete_all').on('click', function() {
-        //                 alert('Select all option must be checked');
-        //             });
-        //         }
-        //     }
-        // })
-
-        // ===========================================
-
         
     </script>
 @endsection
