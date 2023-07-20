@@ -27,13 +27,12 @@ class UsuariosStore implements Responsable
         $telefono = request('telefono', null);
         $celular = request('celular', null);
         $correo = request('correo', null);
-        $contacto2 = request('contacto2', null);
-        $contacto_opcional = request('contacto_opcional', null);
         $direccion_residencia = request('direccion_residencia', null);
         $id_municipio_residencia = request('id_municipio_residencia', null);
         $id_rol = request('id_rol', null);
         $skype = request('skype', null);
         $zoom = request('zoom', null);
+        $zoomClave = request('zoom_clave', null);
         $id_nivel = request('id_nivel', null);
         $id_tipo_ingles = request('id_tipo_ingles', null);
 
@@ -89,14 +88,13 @@ class UsuariosStore implements Responsable
                     'telefono' => $telefono,
                     'celular' => $celular,
                     'correo' => $correo,
-                    'contacto2' => $contacto2,
-                    'contacto_opcional' => $contacto_opcional,
                     'direccion_residencia' => $direccion_residencia,
                     'id_municipio_residencia' => $id_municipio_residencia,
                     'fecha_ingreso_sistema' => $fecha_ingreso_sistema,
                     'id_rol' => $id_rol,
                     'skype' => $skype,
                     'zoom' => $zoom,
+                    'zoom_clave' => $zoomClave,
                     'id_nivel' => $nivel_ingles,
                     'id_tipo_ingles' => $tipo_ingles,
                     'clave_fallas' => 0
@@ -182,7 +180,7 @@ class UsuariosStore implements Responsable
                     // ==========================================================================
                     // ==========================================================================
 
-                    alert()->success('Successful Process', 'User successfully created, the user name is: ' . $nuevo_usuario->usuario . ' and the password is: ' . $numero_documento);
+                    alert()->success('Successful Process', 'User successfully created, the user name is: ' . $nuevo_usuario->usuario . ' and the password is you document ID');
                     return redirect()->to(route('administrador.index'));
 
                 } else {

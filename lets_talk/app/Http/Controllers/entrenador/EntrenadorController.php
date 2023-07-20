@@ -9,6 +9,12 @@ use App\Http\Responses\entrenador\AgendaEntrenadorShow;
 use App\Http\Responses\entrenador\AgendaEntrenadorStore;
 use App\Http\Responses\entrenador\AgendaEntrenadorUpdate;
 use App\Models\entrenador\DisponibilidadEntrenadores;
+use App\User;
+use Illuminate\Support\Facades\DB;
+use App\Http\Responses\administrador\DisponibilidadShow;
+use App\Models\usuarios\Nivel;
+use App\Models\usuarios\Contacto;
+use App\Models\entrenador\EvaluacionInterna;
 
 class EntrenadorController extends Controller
 {
@@ -30,7 +36,7 @@ class EntrenadorController extends Controller
         {
             return redirect()->to(route('home'));
         } else {
-
+            view()->share('students', $this->cargarTrainerSession());
             return view('entrenador.index');
         }
     }
@@ -195,5 +201,135 @@ class EntrenadorController extends Controller
             $agendaEntrenadorShow = new AgendaEntrenadorShow();
             return $agendaEntrenadorShow->cargarInfoEventoPorId($request);
         }
+    }
+
+    // ==================================================
+
+    public function cargarTrainerSession()
+    {
+        return DB::table('usuarios')
+                    ->leftjoin('evento_agenda_entrenador', 'evento_agenda_entrenador.id_usuario', '=', 'usuarios.id_user')
+                    ->leftjoin('estados', 'estados.id_estado', '=', 'evento_agenda_entrenador.state')
+                    ->select(
+                        'usuarios.id_user',
+                        'evento_agenda_entrenador.id AS id_sesion',
+                        'evento_agenda_entrenador.start_date',
+                        'evento_agenda_entrenador.start_time',
+                        'evento_agenda_entrenador.state',
+                        DB::raw("CONCAT(usuarios.nombres, ' ', usuarios.apellidos) AS nombre_completo"),
+                        'estados.descripcion_estado'
+                    )
+                    ->where('usuarios.estado', 1)
+                    ->where('usuarios.id_rol', 3)
+                    ->whereNull('usuarios.deleted_at')
+                    ->whereNull('evento_agenda_entrenador.deleted_at')
+                    ->whereIn('evento_agenda_entrenador.state', [1])
+                    ->orderBy('evento_agenda_entrenador.id', 'DESC')
+                    ->get();
+    }
+
+    // ==================================================
+
+    public function cargaDetalleSesion(Request $request)
+    {
+        $idUser = $request->id_user;
+
+        $query = DB::table('usuarios')
+                    ->leftjoin('niveles', 'niveles.id_nivel', '=', 'usuarios.id_nivel')
+                    ->leftjoin('contactos', 'contactos.id_user', '=', 'usuarios.id_user')
+                    ->select(
+                        DB::raw("CONCAT(usuarios.nombres, ' ', usuarios.apellidos) AS nombre_completo"),
+                        'usuarios.id_user',
+                        'usuarios.celular',
+                        'usuarios.correo',
+                        'usuarios.zoom',
+                        'usuarios.zoom_clave',
+                        'usuarios.id_nivel',
+                        'niveles.nivel_descripcion',
+                        'contactos.id_primer_contacto',
+                        'contactos.primer_telefono',
+                        'contactos.primer_celular',
+                        'contactos.primer_correo',
+                        'contactos.primer_skype',
+                        'contactos.primer_zoom',
+                        'contactos.id_segundo_contacto',
+                        'contactos.segundo_telefono',
+                        'contactos.segundo_celular',
+                        'contactos.segundo_correo',
+                        'contactos.segundo_skype',
+                        'contactos.segundo_zoom',
+                        'contactos.id_opcional_contacto',
+                        'contactos.opcional_telefono',
+                        'contactos.opcional_celular',
+                        'contactos.opcional_correo',
+                        'contactos.opcional_skype',
+                        'contactos.opcional_zoom',
+                    )
+                    ->where('usuarios.id_user', $idUser)
+                    ->where('usuarios.estado', 1)
+                    ->where('usuarios.id_rol', 3)
+                    ->whereNull('usuarios.deleted_at')
+                    ->first();
+
+        return response()->json([$query]);
+    }
+
+    // ==================================================
+
+    public function evaluacionInternaEntrenador(Request $request)
+    {
+        // dd($request);
+        $evaluacionInterna = request('evaluacion_interna', null);
+        $idEstudiante = request('id_estudiante', null);
+        $idInstructor = request('id_instructor', null);
+        
+        // dd($idEstudiante, $idInstructor, $evaluacionInterna);
+
+        DB::connection('mysql')->beginTransaction();
+
+        try {
+            $evaluacionInternaCreate = EvaluacionInterna::create([
+                'evaluacion_interna' => $evaluacionInterna,
+                'id_estudiante' => $idEstudiante,
+                'id_instructor' => $idInstructor,
+            ]);
+
+            if ($evaluacionInternaCreate) {
+                DB::connection('mysql')->commit();
+                alert()->success('Successful Process', 'Internal valuation created');
+                return redirect()->to(route('trainer.index'));
+            } else {
+                DB::connection('mysql')->rollback();
+                alert()->error('Error', 'An error has occurred creating the user, please contact support.');
+                return redirect()->to(route('entrenador.index'));
+            }
+            
+        } catch (Exception $e) {
+            DB::connection('mysql')->rollback();
+            alert()->error('Error', 'An error has occurred creating the user, try again, if the problem persists contact support.');
+            return back();
+        }
+    }
+
+    // ==================================================
+
+    public function consultaEvaluacionInterna(Request $request)
+    {
+        $idEstudiante = intval($request->id_estudiante);
+        // $idInstructor = intval($request->id_instructor);
+
+        return DB::table('evaluacion_interna')
+                    ->leftjoin('usuarios as estudiante', 'estudiante.id_user', '=', 'evaluacion_interna.id_estudiante')
+                    ->leftjoin('usuarios as instructor', 'instructor.id_user', '=', 'evaluacion_interna.id_instructor')
+                    ->where('evaluacion_interna.id_estudiante', $idEstudiante)
+                    ->where('evaluacion_interna.id_instructor', 7)
+                    ->select(
+                        DB::raw("CONCAT(estudiante.nombres, ' ', estudiante.apellidos) AS nombre_estudiante"),
+                        'evaluacion_interna.evaluacion_interna',
+                        DB::raw("CONCAT(instructor.nombres, ' ', instructor.apellidos) AS nombre_instructor"),
+                        'evaluacion_interna.created_at',
+                    )
+                    ->orderBy('evaluacion_interna.created_at','DESC')
+                    ->get();
     }
 }

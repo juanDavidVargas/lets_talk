@@ -98,7 +98,6 @@ class AdministradorController extends Controller
         {
             return redirect()->to(route('home'));
         } else {
-            // $usuario = User::find($id);
             $usuario = $this->consultarUserEdit($id);
             view()->share('usuario', $usuario);
             $this->share_data();
@@ -123,7 +122,6 @@ class AdministradorController extends Controller
         {
             return redirect()->to(route('home'));
         } else {
-            // $usuario0 = User::find($id);
             $usuario = $this->consultarUserEdit($id);
             view()->share('usuario', $usuario);
             $this->share_data();
@@ -497,10 +495,9 @@ class AdministradorController extends Controller
                                 'usuarios.correo',
                                 'usuarios.id_municipio_residencia',
                                 'usuarios.direccion_residencia',
-                                'usuarios.contacto2',
-                                'usuarios.contacto_opcional',
                                 'usuarios.skype',
                                 'usuarios.zoom',
+                                'usuarios.zoom_clave',
                                 'usuarios.fecha_ingreso_sistema AS fecha_ingreso',
                                 'usuarios.id_tipo_ingles',
                                 'tipo_documento.descripcion AS tipo_documento',

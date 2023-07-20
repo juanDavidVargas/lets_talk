@@ -43,8 +43,6 @@
         $("#fecha_nacimiento").trigger('focus');
         $("#estado").trigger('focus');
         $("#direccion_residencia").trigger('focus');
-        $("#contacto2").trigger('focus');
-        $("#contacto_opcional").trigger('focus');
         $("#genero").trigger('focus');
         $("#id_municipio_residencia").trigger('focus');
         $("#id_rol").trigger('focus');
