@@ -20,6 +20,7 @@
 
                 <div class="mt-5">
 <<<<<<< HEAD
+<<<<<<< HEAD
                     @foreach ($disponibilidades as $disponibilidad)
                         @php
                             $idDisponibilidad = $disponibilidad->id;
@@ -32,6 +33,13 @@
                         @endphp
                     @endforeach --}}
 >>>>>>> b06c5352d758d0d26b1b213472846647ec746300
+=======
+                    {{-- @foreach ($disponibilidades as $disponibilidad)
+                        @php
+                            $idDisponibilidad = $disponibilidad->id;
+                        @endphp
+                    @endforeach --}}
+>>>>>>> 11d4bcededddfd3fc5701d32d307dd6cf3319b52
                     <a href="#" class="btn btn-sm btn-success" id="btn_aprove_all">Approve All</a>
                     <a href="#" class="btn btn-sm btn-warning" id="btn_reject_all">Reject All</a>
                     <a href="#" class="btn btn-sm btn-danger" id="btn_delete_all">Delete All</a>
@@ -101,25 +109,40 @@
 
             // if ($('#select_pending').is(':not(:checked)')) {
 <<<<<<< HEAD
+<<<<<<< HEAD
             //     // $("input:checkbox[id^='pending_']").attr('checked',false);
 
-            //     $('#btn_aprove_all').on('click', function() {
-            //         alert('Select all option must be checked');
-            //     });
-                
-            //     $('#btn_reject_all').on('click', function() {
-            //         alert('Select all option must be checked');
-            //     });
-                
-            //     $('#btn_delete_all').on('click', function() {
-            //         alert('Select all option must be checked');
 =======
+>>>>>>> 11d4bcededddfd3fc5701d32d307dd6cf3319b52
             //     $('#btn_aprove_all').on('click', function() {
             //         Swal.fire(
             //             'Info',
             //             'Select all option must be checked',
             //             'info'
             //         )
+            //     });
+                
+            //     $('#btn_reject_all').on('click', function() {
+            //         Swal.fire(
+            //             'Info',
+            //             'Select all option must be checked',
+            //             'info'
+            //         )
+            //     });
+                
+            //     $('#btn_delete_all').on('click', function() {
+<<<<<<< HEAD
+            //         alert('Select all option must be checked');
+=======
+            //     $('#btn_aprove_all').on('click', function() {
+=======
+>>>>>>> 11d4bcededddfd3fc5701d32d307dd6cf3319b52
+            //         Swal.fire(
+            //             'Info',
+            //             'Select all option must be checked',
+            //             'info'
+            //         )
+<<<<<<< HEAD
             //     });
                 
             //     $('#btn_reject_all').on('click', function() {
@@ -137,6 +160,8 @@
             //             'info'
             //         )
 >>>>>>> b06c5352d758d0d26b1b213472846647ec746300
+=======
+>>>>>>> 11d4bcededddfd3fc5701d32d307dd6cf3319b52
             //     });
             // }
         });
@@ -219,9 +244,18 @@
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         // ===========================================
+=======
+        // =================================================================
+        // =================================================================
+        // =================================================================
+>>>>>>> 11d4bcededddfd3fc5701d32d307dd6cf3319b52
 
+        // jQuery(document).on('change', '#select_pending', function() {
+        // $('#select_pending').on('click', function() {
         $('#select_pending').on('change', function() {
+<<<<<<< HEAD
             if ($('#select_pending').is(':checked')) {
 =======
         // =================================================================
@@ -231,13 +265,18 @@
         // jQuery(document).on('change', '#select_pending', function() {
         // $('#select_pending').on('click', function() {
         $('#select_pending').on('change', function() {
+=======
+>>>>>>> 11d4bcededddfd3fc5701d32d307dd6cf3319b52
             $("#select_pending").attr('checked',true);
 
             checked = $('#select_pending').is(':checked');
             
             if (checked == true) {
                 console.log(`checked ${checked}`);
+<<<<<<< HEAD
 >>>>>>> b06c5352d758d0d26b1b213472846647ec746300
+=======
+>>>>>>> 11d4bcededddfd3fc5701d32d307dd6cf3319b52
                 $("input:checkbox[id^='pending_']").attr('checked',true);
 
                 var idEventos;
@@ -245,9 +284,12 @@
                     return $(this).attr('id');
                 }).get();
 <<<<<<< HEAD
+<<<<<<< HEAD
                 // alert('IDS: ' + idEventos);
 =======
 >>>>>>> b06c5352d758d0d26b1b213472846647ec746300
+=======
+>>>>>>> 11d4bcededddfd3fc5701d32d307dd6cf3319b52
 
                 arrayIds = [];
 
@@ -259,24 +301,29 @@
                 console.log(arrayIds);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
                 on = $('#select_pending').val();
                 console.log(`encendido ${on}`);
 
+=======
+>>>>>>> 11d4bcededddfd3fc5701d32d307dd6cf3319b52
                 $('#btn_aprove_all').on('click', function() {
-                    alert('click en aprobar todo');
-                    
+                    alert('aprove all');
                 });
 
                 $('#btn_reject_all').on('click', function() {
-                    alert('click en rechazar todo');
+                    alert('reject all');
                 });
 
                 $('#btn_delete_all').on('click', function() {
-                    alert('click en eliminar todo');
+                    alert('delete all');
                 });
+
             } else {
                 $("input:checkbox[id^='pending_']").attr('checked',false);
+                $("#select_pending").attr('checked',false);
 
+<<<<<<< HEAD
                 off = $('#select_pending').val();
                 console.log(`apagado ${off}`);
 =======
@@ -298,6 +345,9 @@
 
                 console.log(`checked ${checked}`);
 >>>>>>> b06c5352d758d0d26b1b213472846647ec746300
+=======
+                console.log(`checked ${checked}`);
+>>>>>>> 11d4bcededddfd3fc5701d32d307dd6cf3319b52
 
                 $('#btn_aprove_all').on('click', function() {
                     Swal.fire(
@@ -326,6 +376,7 @@
         });
 
         // ===========================================
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         // $('#select_pending').on('change', function() {
@@ -387,6 +438,8 @@
 
 =======
 >>>>>>> b06c5352d758d0d26b1b213472846647ec746300
+=======
+>>>>>>> 11d4bcededddfd3fc5701d32d307dd6cf3319b52
         
     </script>
 @endsection
