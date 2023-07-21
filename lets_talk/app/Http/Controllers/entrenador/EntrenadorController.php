@@ -15,6 +15,7 @@ use App\Http\Responses\administrador\DisponibilidadShow;
 use App\Models\usuarios\Nivel;
 use App\Models\usuarios\Contacto;
 use App\Models\entrenador\EvaluacionInterna;
+use App\Models\entrenador\EventoAgendaEntrenador;
 
 class EntrenadorController extends Controller
 {
@@ -332,4 +333,53 @@ class EntrenadorController extends Controller
                     ->orderBy('evaluacion_interna.created_at','DESC')
                     ->get();
     }
+
+    // ==================================================
+
+    public function aprobarEvento(Request $request)
+    {
+        // dd($request);
+        // dd($id_evento);
+        // $arrayIdEventos = $request->id_evento;
+        $idEvento = $request['id_evento'];
+        $idEvento = str_replace('"','',$idEvento);
+        dd($idEvento);
+
+        // foreach ($idEvento as $evento) {
+        //     dd($evento);
+        // }
+        
+
+        DB::connection('mysql')->beginTransaction();
+        
+        try {
+
+            // foreach ($arrayIdEventos as $idEvento) {
+                $retorno = EventoAgendaEntrenador::where('id', $idEvento)
+                        ->update(
+                            [
+                                'state' => 1,
+                            ]
+                        );
+            // }
+
+            if($retorno) {
+                DB::connection('mysql')->commit();
+                return response()->json("success");
+            } else {
+                DB::connection('mysql')->rollback();
+                return response()->json("error");
+            }
+
+        } catch (Exception $e) {
+            dd($e);
+            DB::connection('mysql')->rollback();
+            // return response()->json(-1);
+            return back();
+        }
+
+        
+
+    }
+    
 }

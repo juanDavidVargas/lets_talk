@@ -202,8 +202,6 @@
         // jQuery(document).on('change', '#select_pending', function() {
         // $('#select_pending').on('click', function() {
         $('#select_pending').on('change', function() {
-            $("#select_pending").attr('checked',true);
-
             checked = $('#select_pending').is(':checked');
             
             if (checked == true) {
@@ -225,20 +223,46 @@
                 console.log(arrayIds);
 
                 $('#btn_aprove_all').on('click', function() {
-                    alert('aprove all');
+                    $.ajax({
+                        url: "{{route('aprobar_evento')}}",
+                        type: "POST",
+                        dataType: "JSON",
+                        data: {'id_evento': JSON.stringify(arrayIds)},
+                        // beforeSend: function() {
+                        //     $("#loaderGif").show();
+                        //     $("#loaderGif").removeClass('ocultar');
+                        // },
+                        success: function (response) {
+                            console.log(response);
+                            if (response == 'success') {
+                                console.log('Update exitoso');
+                                alert('Update exitoso');
+                            } else {
+                                console.log('Update error');
+                                alert('Update error');
+                            }
+                        }
+                    })
+                    // alert('aprove all');
+                    // return;
                 });
+
+                // ===============================
 
                 $('#btn_reject_all').on('click', function() {
                     alert('reject all');
+                    // return;
                 });
+
+                // ===============================
 
                 $('#btn_delete_all').on('click', function() {
                     alert('delete all');
+                    // return;
                 });
 
             } else {
                 $("input:checkbox[id^='pending_']").attr('checked',false);
-                $("#select_pending").attr('checked',false);
 
                 console.log(`checked ${checked}`);
 
