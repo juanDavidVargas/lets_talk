@@ -199,8 +199,6 @@
         // =================================================================
         // =================================================================
 
-        // jQuery(document).on('change', '#select_pending', function() {
-        // $('#select_pending').on('click', function() {
         $('#select_pending').on('change', function() {
             checked = $('#select_pending').is(':checked');
             
@@ -234,31 +232,105 @@
                         // },
                         success: function (response) {
                             console.log(response);
-                            if (response == 'success') {
-                                console.log('Update exitoso');
-                                alert('Update exitoso');
+                            if (response == 'exito') {
+                                Swal.fire({
+                                    text: "Event updated succesfully!",
+                                    type: 'success',
+                                    showCancelButton: false,
+                                    confirmButtonText: 'Ok',
+                                }).then((result) => {
+                                    console.log(result);
+                                    if (result.value == true) {
+                                        window.location.reload();
+                                    }
+                                })
                             } else {
                                 console.log('Update error');
-                                alert('Update error');
+                                Swal.fire(
+                                    'Info',
+                                    'There was an error',
+                                    'info'
+                                )
                             }
                         }
                     })
-                    // alert('aprove all');
-                    // return;
                 });
 
                 // ===============================
 
                 $('#btn_reject_all').on('click', function() {
-                    alert('reject all');
-                    // return;
+                    $.ajax({
+                        url: "{{route('rechazar_evento')}}",
+                        type: "POST",
+                        dataType: "JSON",
+                        data: {'id_evento': JSON.stringify(arrayIds)},
+                        // beforeSend: function() {
+                        //     $("#loaderGif").show();
+                        //     $("#loaderGif").removeClass('ocultar');
+                        // },
+                        success: function (response) {
+                            console.log(response);
+                            if (response == 'exito') {
+                                Swal.fire({
+                                    text: "Event rejected succesfully!",
+                                    type: 'success',
+                                    showCancelButton: false,
+                                    confirmButtonText: 'Ok',
+                                }).then((result) => {
+                                    console.log(result);
+                                    if (result.value == true) {
+                                        window.location.reload();
+                                    }
+                                })
+                            } else {
+                                console.log('Update error');
+                                Swal.fire(
+                                    'Info',
+                                    'There was an error',
+                                    'info'
+                                )
+                            }
+                        }
+                    })
                 });
 
                 // ===============================
 
                 $('#btn_delete_all').on('click', function() {
-                    alert('delete all');
-                    // return;
+                    alert('solicitudes eliminadas');
+                    // $.ajax({
+                    //     url: "{{route('eliminar_evento')}}",
+                    //     type: "POST",
+                    //     dataType: "JSON",
+                    //     data: {'id_evento': JSON.stringify(arrayIds)},
+                    //     // beforeSend: function() {
+                    //     //     $("#loaderGif").show();
+                    //     //     $("#loaderGif").removeClass('ocultar');
+                    //     // },
+                    //     success: function (response) {
+                    //         console.log(response);
+                    //         if (response == 'exito') {
+                    //             Swal.fire({
+                    //                 text: "Event deleted succesfully!",
+                    //                 type: 'success',
+                    //                 showCancelButton: false,
+                    //                 confirmButtonText: 'Ok',
+                    //             }).then((result) => {
+                    //                 console.log(result);
+                    //                 if (result.value == true) {
+                    //                     window.location.reload();
+                    //                 }
+                    //             })
+                    //         } else {
+                    //             console.log('Update error');
+                    //             Swal.fire(
+                    //                 'Info',
+                    //                 'There was an error',
+                    //                 'info'
+                    //             )
+                    //         }
+                    //     }
+                    // })
                 });
 
             } else {

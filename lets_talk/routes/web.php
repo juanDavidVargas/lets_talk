@@ -39,6 +39,8 @@ Route::post('evaluacion_interna_entrenador', 'entrenador\EntrenadorController@ev
 Route::post('consulta_evaluacion_interna', 'entrenador\EntrenadorController@consultaEvaluacionInterna')->name('consulta_evaluacion_interna');
 
 Route::post('aprobar_evento', 'entrenador\EntrenadorController@aprobarEvento')->name('aprobar_evento');
+Route::post('rechazar_evento', 'entrenador\EntrenadorController@rechazarEvento')->name('rechazar_evento');
+Route::post('eliminar_evento', 'entrenador\EntrenadorController@eliminarEvento')->name('eliminar_evento');
 
 Route::get('disponibilidad_admin', 'admin\AdministradorController@vistaAdminDisponibilidad')->name('administrador.disponibilidad_admin');
 Route::post('disponibilidad_admin_store', 'admin\AdministradorController@storeAdminDisponibilidad')->name('administrador.disponibilidad_admin_store');
