@@ -257,6 +257,7 @@
                 });
 
                 // ===============================
+                // ===============================
 
                 $('#btn_reject_all').on('click', function() {
                     $.ajax({
@@ -295,42 +296,43 @@
                 });
 
                 // ===============================
+                // ===============================
 
                 $('#btn_delete_all').on('click', function() {
-                    alert('solicitudes eliminadas');
-                    // $.ajax({
-                    //     url: "{{route('eliminar_evento')}}",
-                    //     type: "POST",
-                    //     dataType: "JSON",
-                    //     data: {'id_evento': JSON.stringify(arrayIds)},
-                    //     // beforeSend: function() {
-                    //     //     $("#loaderGif").show();
-                    //     //     $("#loaderGif").removeClass('ocultar');
-                    //     // },
-                    //     success: function (response) {
-                    //         console.log(response);
-                    //         if (response == 'exito') {
-                    //             Swal.fire({
-                    //                 text: "Event deleted succesfully!",
-                    //                 type: 'success',
-                    //                 showCancelButton: false,
-                    //                 confirmButtonText: 'Ok',
-                    //             }).then((result) => {
-                    //                 console.log(result);
-                    //                 if (result.value == true) {
-                    //                     window.location.reload();
-                    //                 }
-                    //             })
-                    //         } else {
-                    //             console.log('Update error');
-                    //             Swal.fire(
-                    //                 'Info',
-                    //                 'There was an error',
-                    //                 'info'
-                    //             )
-                    //         }
-                    //     }
-                    // })
+                    // alert('solicitudes eliminadas');
+                    $.ajax({
+                        url: "{{route('eliminar_evento')}}",
+                        type: "POST",
+                        dataType: "JSON",
+                        data: {'id_evento': JSON.stringify(arrayIds)},
+                        // beforeSend: function() {
+                        //     $("#loaderGif").show();
+                        //     $("#loaderGif").removeClass('ocultar');
+                        // },
+                        success: function (response) {
+                            console.log(response);
+                            if (response == 'exito') {
+                                Swal.fire({
+                                    text: "Event deleted succesfully!",
+                                    type: 'success',
+                                    showCancelButton: false,
+                                    confirmButtonText: 'Ok',
+                                }).then((result) => {
+                                    console.log(result);
+                                    if (result.value == true) {
+                                        window.location.reload();
+                                    }
+                                })
+                            } else {
+                                console.log('Update error');
+                                Swal.fire(
+                                    'Info',
+                                    'There was an error',
+                                    'info'
+                                )
+                            }
+                        }
+                    })
                 });
 
             } else {
@@ -363,9 +365,5 @@
                 });
             }
         });
-
-        // ===========================================
-        // prueba
-        
     </script>
 @endsection
