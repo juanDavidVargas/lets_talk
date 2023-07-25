@@ -292,7 +292,7 @@ class EntrenadorController extends Controller
             $evaluacionInternaCreate = EvaluacionInterna::create([
                 'evaluacion_interna' => $evaluacionInterna,
                 'id_estudiante' => $idEstudiante,
-                'id_instructor' => $idInstructor,
+                'id_instructor' => 7,
             ]);
 
             if ($evaluacionInternaCreate) {
