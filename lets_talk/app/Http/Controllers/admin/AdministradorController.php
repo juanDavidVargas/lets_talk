@@ -538,4 +538,12 @@ class AdministradorController extends Controller
                     ->orderBy('usuarios.id_user', 'DESC')
                     ->first();
     }
+
+    // ======================================================
+
+    public function nivelesIndex()
+    {
+        $niveles = Nivel::select('id_nivel','nivel_descripcion')->orderBy('nivel_descripcion', 'asc')->get();
+        return view('administrador.niveles_index', compact('niveles'));
+    }
 }

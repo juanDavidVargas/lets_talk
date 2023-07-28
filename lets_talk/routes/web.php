@@ -33,6 +33,7 @@ Route::post('actualizar_disponibilidad_entrenador', 'admin\AdministradorControll
 Route::get('disponibilidad_admin', 'admin\AdministradorController@vistaAdminDisponibilidad')->name('administrador.disponibilidad_admin');
 Route::post('disponibilidad_admin_store', 'admin\AdministradorController@storeAdminDisponibilidad')->name('administrador.disponibilidad_admin_store');
 Route::post('disponibilidad_admin_delete', 'admin\AdministradorController@deleteAdminDisponibilidad')->name('administrador.disponibilidad_admin_delete');
+Route::get('niveles_index', 'admin\AdministradorController@nivelesIndex')->name('administrador.niveles_index');
 
 // =======================================================================================================
 

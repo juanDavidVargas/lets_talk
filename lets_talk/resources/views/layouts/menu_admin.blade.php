@@ -25,7 +25,7 @@
     </li>
 
     <li role="presentation">
-        <a href="#">Levels</a>
+        <a href="{{route('administrador.niveles_index')}}">Levels</a>
     </li>
 
     <li>
