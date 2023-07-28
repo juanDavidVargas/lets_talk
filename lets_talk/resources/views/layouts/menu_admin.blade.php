@@ -24,6 +24,10 @@
         <a href="#">Reservations</a>
     </li>
 
+    <li role="presentation">
+        <a href="#">Levels</a>
+    </li>
+
     <li>
         <a href="{{route('logout')}}" title="Cerrar Sesión">
             <i class="fa fa-sign-out fa-3x" aria-hidden="true"></i>

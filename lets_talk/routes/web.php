@@ -18,30 +18,42 @@ Route::get('recovery_password_link/{id}', 'inicio_sesion\LoginController@recover
 Route::post('recovery_password_post', 'inicio_sesion\LoginController@recoveryPasswordPost')->name('recovery_password_post');
 Route::get('logout', 'inicio_sesion\LoginController@logout')->name('logout');
 
-Route::resource('trainer', 'entrenador\EntrenadorController');
+// =======================================================================================================
+
+// Rutas ADMINISTRADOR
 Route::resource('administrador', 'admin\AdministradorController');
 Route::post('cambiar_estado', 'admin\AdministradorController@cambiarEstadoUsuario')->name('cambiar_estado');
-Route::resource('estudiante', 'estudiante\EstudianteController');
 Route::post('validar_cedula', 'admin\AdministradorController@validarCedula')->name('validar_cedula');
 Route::post('validar_cedula_edicion', 'admin\AdministradorController@validarCedulaEdicion')->name('validar_cedula_edicion');
 Route::post('validar_correo', 'admin\AdministradorController@validarCorreo')->name('validar_correo');
 Route::post('validar_correo_edicion', 'admin\AdministradorController@validarCorreoEdicion')->name('validar_correo_edicion');
 Route::post('actualizar_clave', 'admin\AdministradorController@actualizarClave')->name('actualizar_clave');
+Route::get('disponibilidad_entrenadores', 'admin\AdministradorController@disponibilidades')->name('administrador.disponibilidad_entrenadores');
+Route::post('actualizar_disponibilidad_entrenador', 'admin\AdministradorController@actualizarDisponibilidad')->name('actualizar_evento');
+Route::get('disponibilidad_admin', 'admin\AdministradorController@vistaAdminDisponibilidad')->name('administrador.disponibilidad_admin');
+Route::post('disponibilidad_admin_store', 'admin\AdministradorController@storeAdminDisponibilidad')->name('administrador.disponibilidad_admin_store');
+Route::post('disponibilidad_admin_delete', 'admin\AdministradorController@deleteAdminDisponibilidad')->name('administrador.disponibilidad_admin_delete');
 
+// =======================================================================================================
+
+// Rutas ENTRENADOR
+Route::resource('trainer', 'entrenador\EntrenadorController');
 Route::post('cargar_eventos_entrenador', 'entrenador\EntrenadorController@cargarEventos')->name('cargar_eventos_entrenador');
 Route::delete('eliminar_evento', 'entrenador\EntrenadorController@deleteEvent')->name('eliminar_evento');
 Route::post('cargar_info_evento', 'entrenador\EntrenadorController@cargarInfoEventoPorId')->name('cargar_info_evento');
-Route::get('disponibilidad_entrenadores', 'admin\AdministradorController@disponibilidades')->name('administrador.disponibilidad_entrenadores');
-Route::get('disponibilidad', 'estudiante\EstudianteController@disponibilidad')->name('estudiante.disponibilidad');
-Route::post('actualizar_disponibilidad_entrenador', 'admin\AdministradorController@actualizarDisponibilidad')->name('actualizar_evento');
 Route::post('detalle_sesion_entrenador', 'entrenador\EntrenadorController@cargaDetalleSesion')->name('detalle_sesion_entrenador');
 Route::post('evaluacion_interna_entrenador', 'entrenador\EntrenadorController@evaluacionInternaEntrenador')->name('evaluacion_interna_entrenador');
 Route::post('consulta_evaluacion_interna', 'entrenador\EntrenadorController@consultaEvaluacionInterna')->name('consulta_evaluacion_interna');
-
 Route::post('aprobar_evento', 'entrenador\EntrenadorController@aprobarEvento')->name('aprobar_evento');
 Route::post('rechazar_evento', 'entrenador\EntrenadorController@rechazarEvento')->name('rechazar_evento');
 Route::post('eliminar_evento', 'entrenador\EntrenadorController@eliminarEvento')->name('eliminar_evento');
 
-Route::get('disponibilidad_admin', 'admin\AdministradorController@vistaAdminDisponibilidad')->name('administrador.disponibilidad_admin');
-Route::post('disponibilidad_admin_store', 'admin\AdministradorController@storeAdminDisponibilidad')->name('administrador.disponibilidad_admin_store');
-Route::post('disponibilidad_admin_delete', 'admin\AdministradorController@deleteAdminDisponibilidad')->name('administrador.disponibilidad_admin_delete');
+// =======================================================================================================
+
+// Rutas ESTUDIANTE
+Route::resource('estudiante', 'estudiante\EstudianteController');
+Route::get('disponibilidad', 'estudiante\EstudianteController@disponibilidad')->name('estudiante.disponibilidad');
+
+
+
+
