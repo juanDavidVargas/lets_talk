@@ -546,4 +546,40 @@ class AdministradorController extends Controller
         $niveles = Nivel::select('id_nivel','nivel_descripcion')->orderBy('nivel_descripcion', 'asc')->get();
         return view('administrador.niveles_index', compact('niveles'));
     }
+
+    // ======================================================
+
+    public function editarNivel(Request $request)
+    {
+        $idNivel = intval($request->id_nivel);
+        $descripctionNivel = strtoupper($request->descripcion_nivel);
+        // $fileNivel = strtoupper($request->file_nivel);
+        // $idInstructor = request('id_instructor', null);
+
+        // dd($idNivel, $descripctionNivel);
+
+        DB::connection('mysql')->beginTransaction();
+        
+        try {
+            $editarNivel = DB::table('niveles')
+                            ->where('id_nivel', $idNivel)
+                            ->update([
+                                'nivel_descripcion' => $descripctionNivel
+                            ]);
+
+            if($editarNivel) {
+                DB::connection('mysql')->commit();
+                alert()->success('Successful Process', 'Level updated');
+                return redirect()->to(route('administrador.niveles_index'));
+            } else {
+                DB::connection('mysql')->rollback();
+                alert()->error('Error', 'An error has occurred updating the level, please contact support.');
+                return redirect()->to(route('administrador.niveles_index'));
+            }
+        } catch (Exception $e) {
+            dd($e);
+            DB::connection('mysql')->rollback();
+            return response()->json(-1);
+        }
+    }
 }
