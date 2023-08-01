@@ -26,9 +26,9 @@
         </div>
     </div>
 
-    <div class="row p-b-20 float-right">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            {{-- <a href="{{route('administrador.niveles_create')}}" class="btn btn-primary">Create New User</a> --}}
+    <div class="row mt-5 p-5">
+        <div class="col-12 p-5">
+            <button class="btn btn-primary" onclick="crearNivel()">Create New Level</button>
         </div>
     </div>
     
@@ -196,6 +196,38 @@
             
             Swal.fire({
                 title: 'Active Level',
+                html: html,
+                type: 'success',
+                showConfirmButton: false,
+                focusConfirm: false,
+                showCloseButton: true,
+                showCancelButton: false,
+                cancelButtonText: 'Cancel',
+                allowOutsideClick: false,
+            });
+        }
+        
+        // ===========================================
+
+        function crearNivel() {
+            html = ``;
+            html += `{!! Form::open(['method' => 'POST', 'route' => ['crear_nivel'], 'class'=>['form-horizontal form-bordered'], 'id'=>'form_crear_nivel']) !!}`;
+            html += `@csrf`;
+            html +=     `<label class="">This option creates a new level</label>`;
+            html +=     `<div class="div-level-name">
+                            <input type="text" name="crear_nivel" id="crear_nivel" class="level-name" required />
+                        </div>
+            `;
+            html +=     `<div class="div-level-name">
+                            <input type="submit" value="Create Level" class="btn btn-primary" id="btn_crear_nivel">
+                        </div>
+            `;
+            html += `{!! Form::close() !!}`;
+
+            // =========================================
+            
+            Swal.fire({
+                title: 'Create Level',
                 html: html,
                 type: 'success',
                 showConfirmButton: false,

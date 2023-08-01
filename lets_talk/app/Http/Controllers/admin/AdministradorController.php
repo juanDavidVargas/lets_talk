@@ -645,4 +645,33 @@ class AdministradorController extends Controller
             return response()->json(-1);
         }
     }
+    
+    // ======================================================
+
+    public function crearNivel(Request $request)
+    {
+        $nuevoNivel = strtoupper($request->crear_nivel);
+
+        DB::connection('mysql')->beginTransaction();
+        
+        try {
+            $crearNivel = Nivel::create([
+                                'nivel_descripcion' => $nuevoNivel
+                            ]);
+
+            if($crearNivel) {
+                DB::connection('mysql')->commit();
+                alert()->success('Successful Process', 'New Level created');
+                return redirect()->to(route('administrador.niveles_index'));
+            } else {
+                DB::connection('mysql')->rollback();
+                alert()->error('Error', 'An error has occurred creating the new level, please contact support.');
+                return redirect()->to(route('administrador.niveles_index'));
+            }
+        } catch (Exception $e) {
+            dd($e);
+            DB::connection('mysql')->rollback();
+            return response()->json(-1);
+        }
+    }
 }
