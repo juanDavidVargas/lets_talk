@@ -14,6 +14,11 @@
             border-radius: 5px;
             width: 70%;
         }
+
+        .div-new-level{
+            margin-top: 5rem;
+            padding-right: 5rem !important;
+        }
     </style>
 @stop
 
@@ -26,9 +31,9 @@
         </div>
     </div>
 
-    <div class="row mt-5 p-5">
-        <div class="col-12 p-5">
-            <button class="btn btn-primary" onclick="crearNivel()">Create New Level</button>
+    <div class="row div-new-level">
+        <div class="col-12">
+            <button class="btn btn-primary float-right" onclick="crearNivel()">Create New Level</button>
         </div>
     </div>
     
