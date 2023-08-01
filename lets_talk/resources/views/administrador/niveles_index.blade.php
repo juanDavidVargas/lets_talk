@@ -3,6 +3,18 @@
 
 @section('css')
     <link href="{{asset('DataTables/datatables.min.css')}}"/>
+    <style>
+        .div-level-name{
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .level-name{
+            border: 2px solid lightgray;
+            border-radius: 5px;
+            width: 70%;
+        }
+    </style>
 @stop
 
 {{-- ==================================================================================== --}}
@@ -28,6 +40,7 @@
                         <tr class="header-table">
                             <th>ID</th>
                             <th>Level</th>
+                            <th>State</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -35,10 +48,28 @@
                         @foreach ($niveles as $nivel)
                             <tr>
                                 <td>{{$nivel->id_nivel}}</td>
+
+                                {{-- =========================== --}}
+
                                 <td>{{$nivel->nivel_descripcion}}</td>
+
+                                {{-- =========================== --}}
+
+                                @if ($nivel->deleted_at == null || $nivel->deleted_at == "")
+                                    <td>Active</td>
+                                @else
+                                    <td>Inactive</td>
+                                @endif
+
+                                {{-- =========================== --}}
+
                                 <td>
-                                    <a href="#" class="btn btn-info" id="level_update_{{$nivel->id_nivel}}" onclick="editarNivel({{$nivel->id_nivel}})">Edit Level</a>
-                                    <a href="#" class="btn btn-warning" id="level_inactive_{{$nivel->id_nivel}}" onclick="inactivarNivel({{$nivel->id_nivel}})">Inactive Level</a>
+                                    @if ($nivel->deleted_at == null || $nivel->deleted_at == "")
+                                        <a href="#" class="btn btn-info" id="level_update_{{$nivel->id_nivel}}" onclick="editarNivel({{$nivel->id_nivel}})">Edit Level</a>
+                                        <a href="#" class="btn btn-warning" id="level_inactive_{{$nivel->id_nivel}}" onclick="inactivarNivel({{$nivel->id_nivel}})">Inactive Level</a>
+                                    @else
+                                        <a href="#" class="btn btn-success" id="level_active_{{$nivel->id_nivel}}" onclick="activarNivel({{$nivel->id_nivel}})">Active Level</a>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
@@ -90,15 +121,17 @@
 
         // ===========================================
         
-
         function editarNivel(idNivel) {
-            
             html = ``;
             html += `{!! Form::open(['method' => 'POST', 'route' => ['editar_nivel'], 'class'=>['form-horizontal form-bordered'], 'id'=>'form_edit_nivel']) !!}`;
             html += `@csrf`;
-            html +=     `<input type="text" name="id_nivel" id="id_nivel" value="${idNivel}" required />`;
-            html +=     `<input type="text" name="descripcion_nivel" id="descripcion_nivel" placeholder="Level name" required />`;
-            html +=     `<input type="submit" value="Update" class="" id="btn_editar_nivel">`;
+            html +=     `<input type="hidden" name="id_nivel" id="id_nivel" value="${idNivel}" required />`;
+            html +=     `<label class="">Enter the new level name</label>`;
+            html +=     `<div class="div-level-name">
+                            <input type="text" name="descripcion_nivel" id="descripcion_nivel" class="level-name" required />
+                        </div>
+            `;
+            html +=     `<input type="submit" value="Update" class="btn btn-primary" id="btn_editar_nivel">`;
             html += `{!! Form::close() !!}`;
 
             // =========================================
@@ -107,9 +140,10 @@
                 title: 'Edit Level',
                 html: html,
                 type: 'info',
-                showCloseButton: true,
                 showConfirmButton: false,
-                showCancelButton: true,
+                focusConfirm: false,
+                showCloseButton: true,
+                showCancelButton: false,
                 cancelButtonText: 'Cancel',
                 allowOutsideClick: false,
             });
@@ -118,7 +152,59 @@
         // ===========================================
 
         function inactivarNivel(idNivel) {
-            alert(idNivel);
+            html = ``;
+            html += `{!! Form::open(['method' => 'POST', 'route' => ['inactivar_nivel'], 'class'=>['form-horizontal form-bordered'], 'id'=>'form_inactivar_nivel']) !!}`;
+            html += `@csrf`;
+            html +=     `<input type="hidden" name="id_nivel" id="id_nivel" value="${idNivel}" required />`;
+            html +=     `<label class="">This option inactive this level</label>`;
+            html +=     `<div class="div-level-name">
+                            <input type="submit" value="Inactive" class="btn btn-primary" id="btn_inactivar_nivel">
+                        </div>
+            `;
+            html += `{!! Form::close() !!}`;
+
+            // =========================================
+            
+            Swal.fire({
+                title: 'Inactive Level',
+                html: html,
+                type: 'warning',
+                showConfirmButton: false,
+                focusConfirm: false,
+                showCloseButton: true,
+                showCancelButton: false,
+                cancelButtonText: 'Cancel',
+                allowOutsideClick: false,
+            });
+        }
+        
+        // ===========================================
+
+        function activarNivel(idNivel) {
+            html = ``;
+            html += `{!! Form::open(['method' => 'POST', 'route' => ['activar_nivel'], 'class'=>['form-horizontal form-bordered'], 'id'=>'form_activar_nivel']) !!}`;
+            html += `@csrf`;
+            html +=     `<input type="hidden" name="id_nivel" id="id_nivel" value="${idNivel}" required />`;
+            html +=     `<label class="">This option active this level</label>`;
+            html +=     `<div class="div-level-name">
+                            <input type="submit" value="Active" class="btn btn-primary" id="btn_activar_nivel">
+                        </div>
+            `;
+            html += `{!! Form::close() !!}`;
+
+            // =========================================
+            
+            Swal.fire({
+                title: 'Active Level',
+                html: html,
+                type: 'success',
+                showConfirmButton: false,
+                focusConfirm: false,
+                showCloseButton: true,
+                showCancelButton: false,
+                cancelButtonText: 'Cancel',
+                allowOutsideClick: false,
+            });
         }
     </script>
 @endsection

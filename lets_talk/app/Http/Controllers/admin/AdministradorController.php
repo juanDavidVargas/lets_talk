@@ -543,7 +543,9 @@ class AdministradorController extends Controller
 
     public function nivelesIndex()
     {
-        $niveles = Nivel::select('id_nivel','nivel_descripcion')->orderBy('nivel_descripcion', 'asc')->get();
+        $niveles = Nivel::select('id_nivel','nivel_descripcion','deleted_at')
+                            ->orderBy('nivel_descripcion', 'asc')
+                            ->get();
         return view('administrador.niveles_index', compact('niveles'));
     }
 
@@ -553,10 +555,6 @@ class AdministradorController extends Controller
     {
         $idNivel = intval($request->id_nivel);
         $descripctionNivel = strtoupper($request->descripcion_nivel);
-        // $fileNivel = strtoupper($request->file_nivel);
-        // $idInstructor = request('id_instructor', null);
-
-        // dd($idNivel, $descripctionNivel);
 
         DB::connection('mysql')->beginTransaction();
         
@@ -574,6 +572,71 @@ class AdministradorController extends Controller
             } else {
                 DB::connection('mysql')->rollback();
                 alert()->error('Error', 'An error has occurred updating the level, please contact support.');
+                return redirect()->to(route('administrador.niveles_index'));
+            }
+        } catch (Exception $e) {
+            dd($e);
+            DB::connection('mysql')->rollback();
+            return response()->json(-1);
+        }
+    }
+    
+    // ======================================================
+
+    public function inactivarNivel(Request $request)
+    {
+        $idNivel = intval($request->id_nivel);
+        // $fechaActual = now()->timestamp;
+        $fechaActual = now();
+        // dd($fechaActual);
+
+        DB::connection('mysql')->beginTransaction();
+        
+        try {
+            $inactivarNivel = DB::table('niveles')
+                            ->where('id_nivel', $idNivel)
+                            ->update([
+                                'deleted_at' => $fechaActual
+                            ]);
+
+            if($inactivarNivel) {
+                DB::connection('mysql')->commit();
+                alert()->success('Successful Process', 'Level inactivated');
+                return redirect()->to(route('administrador.niveles_index'));
+            } else {
+                DB::connection('mysql')->rollback();
+                alert()->error('Error', 'An error has occurred inactivating the level, please contact support.');
+                return redirect()->to(route('administrador.niveles_index'));
+            }
+        } catch (Exception $e) {
+            dd($e);
+            DB::connection('mysql')->rollback();
+            return response()->json(-1);
+        }
+    }
+    
+    // ======================================================
+
+    public function activarNivel(Request $request)
+    {
+        $idNivel = intval($request->id_nivel);
+
+        DB::connection('mysql')->beginTransaction();
+        
+        try {
+            $inactivarNivel = DB::table('niveles')
+                            ->where('id_nivel', $idNivel)
+                            ->update([
+                                'deleted_at' => null
+                            ]);
+
+            if($inactivarNivel) {
+                DB::connection('mysql')->commit();
+                alert()->success('Successful Process', 'Level activated');
+                return redirect()->to(route('administrador.niveles_index'));
+            } else {
+                DB::connection('mysql')->rollback();
+                alert()->error('Error', 'An error has occurred activating the level, please contact support.');
                 return redirect()->to(route('administrador.niveles_index'));
             }
         } catch (Exception $e) {
