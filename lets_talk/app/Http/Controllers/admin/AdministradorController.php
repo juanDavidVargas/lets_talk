@@ -178,7 +178,7 @@ class AdministradorController extends Controller
         view()->share('tipo_documento', $this->tipos_documento());
         view()->share('municipios', $this->municipios());
         view()->share('roles', $this->roles());
-        view()->share('niveles', Nivel::orderBy('id_nivel','asc')->pluck('nivel_descripcion', 'id_nivel'));
+        view()->share('niveles', Nivel::orderBy('id_nivel','asc')->whereNull('deleted_at')->pluck('nivel_descripcion', 'id_nivel'));
         view()->share('disponibilidades', $this->traerDisponibilidades());
         view()->share('tipo_ingles', $this->tipoIngles());
         view()->share('tipo_contacto', TipoContacto::orderBy('tipo_contacto','asc')->pluck('tipo_contacto', 'id_tipo_contacto'));
@@ -534,7 +534,7 @@ class AdministradorController extends Controller
                     ->whereNull('municipios.deleted_at')
                     ->whereNull('residencia.deleted_at')
                     ->whereNull('roles.deleted_at')
-                    ->whereNull('niveles.deleted_at')
+                    // ->whereNull('niveles.deleted_at')
                     ->orderBy('usuarios.id_user', 'DESC')
                     ->first();
     }
