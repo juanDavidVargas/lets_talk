@@ -11,6 +11,7 @@ class Nivel extends Model
     protected $primaryKey = 'id_nivel';
     public $timestamps = true;
     protected $fillable = [
-       'nivel_descripcion'
+       'nivel_descripcion',
+       'ruta_pdf_nivel'
     ];
 }

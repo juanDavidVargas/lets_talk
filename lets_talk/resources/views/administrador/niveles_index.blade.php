@@ -45,6 +45,7 @@
                         <tr class="header-table">
                             <th>ID</th>
                             <th>Level</th>
+                            <th>File</th>
                             <th>State</th>
                             <th>Actions</th>
                         </tr>
@@ -57,6 +58,18 @@
                                 {{-- =========================== --}}
 
                                 <td>{{$nivel->nivel_descripcion}}</td>
+
+                                {{-- =========================== --}}
+                                
+                                @if ($nivel->ruta_pdf_nivel != null || $nivel->ruta_pdf_nivel != "")
+                                    <td>
+                                        {{-- <a href="{{$nivel->ruta_pdf_nivel}}" target="_blank">File1</a> --}}
+                                        <a href="{{url($nivel->ruta_pdf_nivel)}}" target="_blank">Level File</a>
+                                        {{-- <a href="{{'http://127.0.0.1:8000/'.$nivel->ruta_pdf_nivel}}" target="_blank">File3</a> --}}
+                                    </td>
+                                @else
+                                    <td></td>
+                                @endif
 
                                 {{-- =========================== --}}
 
@@ -216,11 +229,15 @@
 
         function crearNivel() {
             html = ``;
-            html += `{!! Form::open(['method' => 'POST', 'route' => ['crear_nivel'], 'class'=>['form-horizontal form-bordered'], 'id'=>'form_crear_nivel']) !!}`;
+            html += `{!! Form::open(['method' => 'POST', 'route' => ['crear_nivel'], 'class'=>['form-horizontal form-bordered'], 'id'=>'form_crear_nivel', 'enctype'=>'multipart/form-data']) !!}`;
             html += `@csrf`;
             html +=     `<label class="">This option creates a new level</label>`;
             html +=     `<div class="div-level-name">
                             <input type="text" name="crear_nivel" id="crear_nivel" class="level-name" required />
+                        </div>
+            `;
+            html +=     `<div class="div-level-name">
+                            <input type="file" name="file_crear_nivel" id="file_crear_nivel" class="" />
                         </div>
             `;
             html +=     `<div class="div-level-name">

@@ -14,9 +14,12 @@ use App\Models\usuarios\Nivel;
 use App\Models\usuarios\TipoContacto;
 use App\Models\entrenador\DisponibilidadEntrenadores;
 use Illuminate\Support\Facades\DB;
+use App\Traits\FileUploadTrait;
+use Illuminate\Support\Facades\Storage;
 
 class AdministradorController extends Controller
 {
+    use FileUploadTrait;
     /**
      * Display a listing of the resource.
      *
@@ -537,7 +540,7 @@ class AdministradorController extends Controller
 
     public function nivelesIndex()
     {
-        $niveles = Nivel::select('id_nivel','nivel_descripcion','deleted_at')
+        $niveles = Nivel::select('id_nivel','nivel_descripcion','ruta_pdf_nivel','deleted_at')
                             ->orderBy('nivel_descripcion', 'asc')
                             ->get();
         return view('administrador.niveles_index', compact('niveles'));
@@ -631,13 +634,28 @@ class AdministradorController extends Controller
 
     public function crearNivel(Request $request)
     {
-        $nuevoNivel = strtoupper($request->crear_nivel);
+        // dd($request);
+        $nuevoNivel = strtoupper(request('crear_nivel', null));
+
+        $baseFileName = "{$nuevoNivel}"; //nombre base para los archivos
+        $carpetaArchivos = '/upfiles/niveles';
+        // $carpetaArchivos = storage_path('app/public/upfiles/niveles/');
+        $archivoNivel= '';
 
         DB::connection('mysql')->beginTransaction();
 
         try {
+            if ($request->hasFile('file_crear_nivel')) {
+                $archivoNivel = $this->upfileWithName($baseFileName, $carpetaArchivos, $request, 'file_crear_nivel', 'file_crear_nivel');
+            } else {
+                $archivoNivel = null;
+            }
+
+            // dd($request,$archivoNivel);
+
             $crearNivel = Nivel::create([
-                                'nivel_descripcion' => $nuevoNivel
+                                'nivel_descripcion' => $nuevoNivel,
+                                'ruta_pdf_nivel' => $archivoNivel
                             ]);
 
             if($crearNivel) {
