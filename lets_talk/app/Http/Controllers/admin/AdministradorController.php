@@ -654,7 +654,6 @@ class AdministradorController extends Controller
     public function crearNivel(Request $request)
     {
         // dd($request);
-        // $nuevoNivel = strtoupper($request->crear_nivel);
         $nuevoNivel = strtoupper(request('crear_nivel', null));
 
         $baseFileName = "{$nuevoNivel}"; //nombre base para los archivos
