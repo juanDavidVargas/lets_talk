@@ -555,7 +555,6 @@ function cargarEventosPorEntrenador()
         }
     });
 }
-
 </script>
 </body>
 </html>
