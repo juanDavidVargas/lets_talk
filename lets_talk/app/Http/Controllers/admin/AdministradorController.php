@@ -14,9 +14,11 @@ use App\Models\usuarios\Nivel;
 use App\Models\usuarios\TipoContacto;
 use App\Models\entrenador\DisponibilidadEntrenadores;
 use Illuminate\Support\Facades\DB;
+use App\Traits\FileUploadTrait;
 
 class AdministradorController extends Controller
 {
+    use FileUploadTrait;
     /**
      * Display a listing of the resource.
      *
@@ -543,7 +545,7 @@ class AdministradorController extends Controller
 
     public function nivelesIndex()
     {
-        $niveles = Nivel::select('id_nivel','nivel_descripcion','deleted_at')
+        $niveles = Nivel::select('id_nivel','nivel_descripcion','ruta_pdf_nivel','deleted_at')
                             ->orderBy('nivel_descripcion', 'asc')
                             ->get();
         return view('administrador.niveles_index', compact('niveles'));
@@ -652,11 +654,23 @@ class AdministradorController extends Controller
     {
         $nuevoNivel = strtoupper($request->crear_nivel);
 
+        $baseFileName = "{$nuevoNivel}"; //nombre base para los archivos
+        $carpetaArchivos = 'upfiles/niveles';
+        $archivoNivel= '';
+
+        //guarda los archivos adjuntos en la carpeta, con el nombre base y tipo de documento
+        if ($request->hasFile('ruta_pdf_nivel')) {
+            $archivoNivel = $this->upfileWithName($baseFileName, $carpetaArchivos, $request, 'archivo_nivel', 'archivo_nivel');
+            // dd($archivoNivel);
+        }
+
+        // dd($archivoNivel);
         DB::connection('mysql')->beginTransaction();
         
         try {
             $crearNivel = Nivel::create([
-                                'nivel_descripcion' => $nuevoNivel
+                                'nivel_descripcion' => $nuevoNivel,
+                                'ruta_pdf_nivel' => $archivoNivel
                             ]);
 
             if($crearNivel) {

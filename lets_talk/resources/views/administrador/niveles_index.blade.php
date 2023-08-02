@@ -45,6 +45,7 @@
                         <tr class="header-table">
                             <th>ID</th>
                             <th>Level</th>
+                            <th>File</th>
                             <th>State</th>
                             <th>Actions</th>
                         </tr>
@@ -57,6 +58,10 @@
                                 {{-- =========================== --}}
 
                                 <td>{{$nivel->nivel_descripcion}}</td>
+
+                                {{-- =========================== --}}
+                                
+                                <td>{{$nivel->ruta_pdf_nivel}}</td>
 
                                 {{-- =========================== --}}
 
@@ -221,6 +226,10 @@
             html +=     `<label class="">This option creates a new level</label>`;
             html +=     `<div class="div-level-name">
                             <input type="text" name="crear_nivel" id="crear_nivel" class="level-name" required />
+                        </div>
+            `;
+            html +=     `<div class="div-level-name">
+                            <input type="file" name="file_crear_nivel" id="file_crear_nivel" class="" required />
                         </div>
             `;
             html +=     `<div class="div-level-name">
