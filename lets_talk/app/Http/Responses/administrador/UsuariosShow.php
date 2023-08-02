@@ -71,7 +71,7 @@ class UsuariosShow implements Responsable
                                      'contactos.opcional_celular',
                                      'contactos.opcional_correo',
                                      'contactos.opcional_skype',
-                                     'contactos.opcional_zoom',
+                                     'contactos.opcional_zoom'
                                     )
                             ->whereNull('usuarios.deleted_at')
                             ->whereNull('tipo_documento.deleted_at')

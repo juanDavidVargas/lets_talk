@@ -16,16 +16,13 @@
     </div>
 </div>
 <hr>
-{!! Form::model($usuario, ['method' => 'PUT', 'route' => ['administrador.update', $usuario->id_user], 'class' => 'login100-form', 'id' => 'form_edit_user', 'autocomplete' => 'off']) !!}
+{!! Form::model($usuario, ['method' => 'PUT', 'route' => ['administrador.update', $usuario->id_user], 'class' => 'login100-form validate-form', 'id' => 'form_edit_user', 'autocomplete' => 'off']) !!}
 
     @include('administrador.fields')
 
 {!! Form::close() !!}
 
 @stop
-
-{{-- =========================================================================== --}}
-{{-- =========================================================================== --}}
 
 @section('scripts')
     <script src="{{asset('validate/cdnjs.cloudflare.com_ajax_libs_jquery_3.4.0_jquery.min.js')}}"></script>
@@ -42,6 +39,10 @@
         $("#id_municipio_nacimiento").trigger('focus');
         $("#fecha_nacimiento").trigger('focus');
         $("#estado").trigger('focus');
+        $("#correo").trigger('focus');
+        $("#celular").trigger('focus');
+        $("#zoom").trigger('focus');
+        $("#zoom_clave").trigger('focus');
         $("#direccion_residencia").trigger('focus');
         $("#genero").trigger('focus');
         $("#id_municipio_residencia").trigger('focus');
@@ -72,46 +73,9 @@
             $("#id_tipo_ingles").trigger('focus');
         }
 
-        // =============================================================================
-
-        form_edit_user = $('#form_edit_user');
-
-        form_edit_user.validate({
-            rules: {
-                // PRIMER CONTACTO
-                primer_telefono : {required: true},
-                primer_celular: {required: true},
-                primer_correo: {required: true},
-                primer_skype: {required: true},
-                primer_zoom: {required: true},
-
-                // =========================
-
-                // SEGUNDO CONTACTO
-                segundo_telefono : {required: true},
-                segundo_celular: {required: true},
-                segundo_correo: {required: true},
-                segundo_skype: {required: true},
-                segundo_zoom: {required: true},
-
-                // =========================
-                
-                // OPCIONAL CONTACTO
-                opcional_telefono : {required: true},
-                opcional_celular: {required: true},
-                opcional_correo: {required: true},
-                opcional_skype: {required: true},
-                opcional_zoom: {required: true}
-            } // FIN Rules
-        }); // FIN Validate
-
         let primer_contacto_tipo_editado = @json($usuario->primer_contacto_tipo);
         let segundo_contacto_tipo_editado = @json($usuario->segundo_contacto_tipo);
         let opcional_contacto_tipo_editado = @json($usuario->opcional_contacto_tipo);
-
-        console.log(primer_contacto_tipo_editado);
-        console.log(segundo_contacto_tipo_editado);
-        console.log(opcional_contacto_tipo_editado);
 
         if (primer_contacto_tipo_editado != null) {
             $("#id_primer_contacto").val(primer_contacto_tipo_editado);
@@ -186,10 +150,8 @@
             }
         }
 
-        // =============================================================================
-
         if (segundo_contacto_tipo_editado != null) {
-        
+
             $("#id_segundo_contacto").val(segundo_contacto_tipo_editado);
 
             if (segundo_contacto_tipo_editado == 1) // Phone
@@ -265,8 +227,6 @@
                 $("#div_segundo_zoom").hide('slow');
             }
         }
-
-        // =============================================================================
 
         if (opcional_contacto_tipo_editado != null) {
 
@@ -346,11 +306,6 @@
             }
         }
     });
-
-    // =============================================================================
-    // =============================================================================
-    // =============================================================================
-    // =============================================================================
 
     $("#numero_documento").blur(function() {
 
@@ -476,8 +431,6 @@
         }
     });
 
-    // =============================================================================
-
     $("#id_primer_contacto").change(function() {
         let primer_contacto_valor_edit = $("#id_primer_contacto").val();
         console.log(primer_contacto_valor_edit);
@@ -495,7 +448,7 @@
             $("#div_primer_skype").hide('slow');
             $("#div_primer_zoom").addClass('ocultar');
             $("#div_primer_zoom").hide('slow');
-            
+
         } else if (primer_contacto_valor_edit == 2) // Whatsapp - Celular
         {
             $("#div_primer_celular_whatsapp").removeClass('ocultar');
@@ -561,8 +514,6 @@
             $("#div_primer_zoom").hide('slow');
         }
     });
-
-    // =============================================================================
 
     $("#id_segundo_contacto").change(function() {
         let segundo_contacto_valor = $("#id_segundo_contacto").val();
@@ -645,8 +596,6 @@
             $("#div_segundo_zoom").hide('slow');
         }
     });
-
-    // =============================================================================
 
     $("#id_opcional_contacto").change(function() {
         let opcional_contacto_valor = $("#id_opcional_contacto").val();

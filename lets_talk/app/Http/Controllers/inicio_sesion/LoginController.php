@@ -154,7 +154,7 @@ class LoginController extends Controller
             alert()->info('Info','The recovery password information has been sent to your email.');
             return view('inicio_sesion.login');
         } else {
-            alert()->error('Error','Please, verify your email and Document Id, one of them does not exist.');
+            alert()->error('Error','No records were found in our database with the information entered.');
             return back();
         }
     }
@@ -195,9 +195,8 @@ class LoginController extends Controller
                     return back();
                 }
             } catch (Exception $e) {
-                dd($e);
                 DB::connection('mysql')->rollback();
-                alert()->error('Error', 'An error occurred updating the user, try again, if the problem persists contact support.');
+                alert()->error('Error', 'An error occurred updating the password, try again, if the problem persists contact support.');
                 return back();
             }
         }

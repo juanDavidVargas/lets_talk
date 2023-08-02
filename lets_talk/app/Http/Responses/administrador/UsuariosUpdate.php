@@ -50,7 +50,7 @@ class UsuariosUpdate implements Responsable
         // ==========================================================================
 
         $idPrimerContacto = request('id_primer_contacto', null);
-        
+
         if (isset($idPrimerContacto) && $idPrimerContacto != "-1") {
             $idPrimerContacto = request('id_primer_contacto', null);
 
@@ -96,7 +96,7 @@ class UsuariosUpdate implements Responsable
         }
 
         // =====================================
-        
+
         $idSegundoContacto = request('id_segundo_contacto', null);
 
         if (isset($idSegundoContacto) && $idSegundoContacto != "-1") {
@@ -401,7 +401,7 @@ class UsuariosUpdate implements Responsable
                                 'contactos.opcional_celular',
                                 'contactos.opcional_correo',
                                 'contactos.opcional_skype',
-                                'contactos.opcional_zoom',
+                                'contactos.opcional_zoom'
                             )
                     ->where('usuarios.id_user', $idUser)
                     ->whereNull('usuarios.deleted_at')

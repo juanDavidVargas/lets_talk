@@ -411,8 +411,6 @@ class AdministradorController extends Controller
     public function vistaAdminDisponibilidad()
     {
         $todasDisponibilidades = DisponibilidadEntrenadores::select('id_horario', 'horario')->orderBy('horario', 'asc')->get()->toArray();
-        // dd($todasDisponibilidades);
-
         return view('administrador.disponibilidad_admin', compact('todasDisponibilidades'));
     }
 
@@ -467,8 +465,6 @@ class AdministradorController extends Controller
             return back();
         }
     }
-
-    // ======================================================
 
     public function consultarUserEdit($idUser)
     {
@@ -529,7 +525,7 @@ class AdministradorController extends Controller
                                 'contactos.opcional_celular',
                                 'contactos.opcional_correo',
                                 'contactos.opcional_skype',
-                                'contactos.opcional_zoom',
+                                'contactos.opcional_zoom'
                             )
                     ->where('usuarios.id_user', $idUser)
                     ->whereNull('usuarios.deleted_at')
@@ -542,8 +538,6 @@ class AdministradorController extends Controller
                     ->first();
     }
 
-    // ======================================================
-
     public function nivelesIndex()
     {
         $niveles = Nivel::select('id_nivel','nivel_descripcion','ruta_pdf_nivel','deleted_at')
@@ -552,15 +546,13 @@ class AdministradorController extends Controller
         return view('administrador.niveles_index', compact('niveles'));
     }
 
-    // ======================================================
-
     public function editarNivel(Request $request)
     {
         $idNivel = intval($request->id_nivel);
         $descripctionNivel = strtoupper($request->descripcion_nivel);
 
         DB::connection('mysql')->beginTransaction();
-        
+
         try {
             $editarNivel = DB::table('niveles')
                             ->where('id_nivel', $idNivel)
@@ -578,23 +570,18 @@ class AdministradorController extends Controller
                 return redirect()->to(route('administrador.niveles_index'));
             }
         } catch (Exception $e) {
-            dd($e);
             DB::connection('mysql')->rollback();
             return response()->json(-1);
         }
     }
-    
-    // ======================================================
 
     public function inactivarNivel(Request $request)
     {
         $idNivel = intval($request->id_nivel);
-        // $fechaActual = now()->timestamp;
         $fechaActual = now();
-        // dd($fechaActual);
 
         DB::connection('mysql')->beginTransaction();
-        
+
         try {
             $inactivarNivel = DB::table('niveles')
                             ->where('id_nivel', $idNivel)
@@ -612,20 +599,17 @@ class AdministradorController extends Controller
                 return redirect()->to(route('administrador.niveles_index'));
             }
         } catch (Exception $e) {
-            dd($e);
             DB::connection('mysql')->rollback();
             return response()->json(-1);
         }
     }
-    
-    // ======================================================
 
     public function activarNivel(Request $request)
     {
         $idNivel = intval($request->id_nivel);
 
         DB::connection('mysql')->beginTransaction();
-        
+
         try {
             $inactivarNivel = DB::table('niveles')
                             ->where('id_nivel', $idNivel)
@@ -643,13 +627,10 @@ class AdministradorController extends Controller
                 return redirect()->to(route('administrador.niveles_index'));
             }
         } catch (Exception $e) {
-            dd($e);
             DB::connection('mysql')->rollback();
             return response()->json(-1);
         }
     }
-    
-    // ======================================================
 
     public function crearNivel(Request $request)
     {
@@ -662,7 +643,7 @@ class AdministradorController extends Controller
         $archivoNivel= '';
 
         DB::connection('mysql')->beginTransaction();
-        
+
         try {
             if ($request->hasFile('file_crear_nivel')) {
                 $archivoNivel = $this->upfileWithName($baseFileName, $carpetaArchivos, $request, 'file_crear_nivel', 'file_crear_nivel');
@@ -687,7 +668,6 @@ class AdministradorController extends Controller
                 return redirect()->to(route('administrador.niveles_index'));
             }
         } catch (Exception $e) {
-            dd($e);
             DB::connection('mysql')->rollback();
             return response()->json(-1);
         }

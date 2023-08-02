@@ -19,8 +19,7 @@ class AgendaEntrenadorStore implements Responsable
     {
         $disponibilidad = request('hrs_disponibilidad', null);
         $fecha_disponibilidad = request('fecha_evento', null);
-
-        $array_otro = [];
+        $entrenador_id = request('trainer_id', null);
 
         if(isset($disponibilidad) && !is_null($disponibilidad) && !empty($disponibilidad))
         {
@@ -47,16 +46,30 @@ class AgendaEntrenadorStore implements Responsable
                 $hora_inicio = substr($horas_disp->horario, 0, 5);
                 $hora_fin = substr($horas_disp->horario, 6);
 
+                if(isset($entrenador_id) && !is_null($entrenador_id) && !empty($entrenador_id) && $entrenador_id != "-1") {
+
+                   $user = $this->traerNombreUsuario($entrenador_id);
+                   $usuario = $user->usuario;
+                   $state = 1; // Aprobado
+                   $user_id = $entrenador_id;
+
+                } else {
+
+                    $usuario = session('username');
+                    $state = 2;
+                    $user_id = session('usuario_id');
+                }
+
                 $insert_evento = EventoAgendaEntrenador::create([
-                    'title' => 'Disponibilidad ' . session('username'),
-                    'description' => 'Horas de disponibilidad ' . session('username'),
+                    'title' => 'Disp. ' . $usuario,
+                    'description' => 'Hrs de disp. ' . $usuario,
                     'start_date' => $fecha_disponibilidad,
                     'start_time' => trim($hora_inicio),
                     'end_date' => $fecha_disponibilidad,
                     'end_time' => trim($hora_fin),
                     'color' => '#157347',
-                    'state' => 2,// Pendiente Aprobación
-                    'id_usuario' => session('usuario_id'),
+                    'state' => $state,// Pendiente Aprobación
+                    'id_usuario' => $user_id,
                     'id_horario' => $disp
                 ]);
             }
@@ -65,7 +78,10 @@ class AgendaEntrenadorStore implements Responsable
             {
                 DB::connection('mysql')->commit();
 
-                $this->enviarCorreoAdminAprobacion(session('usuario_id'));
+                if(isset($state) && !is_null($state) && !empty($state) &&  $state == 2) {
+
+                    $this->enviarCorreoAdminAprobacion(session('usuario_id'));
+                }
 
                 return response()->json("success_evento");
             } else {
@@ -75,9 +91,20 @@ class AgendaEntrenadorStore implements Responsable
 
         } catch (Exception $e)
         {
-            dd($e);
             DB::connection('mysql')->rollback();
+            Logger("Error creando el evento: {$e}");
             return response()->json('exception_evento');
+        }
+    }
+    private function traerNombreUsuario($entrenador_id)
+    {
+        try {
+
+            return User::select('usuario')->where('id_user', $entrenador_id)->whereNull('deleted_at')->first();
+
+        } catch (Exception $e) {
+            Logger("Error consultando el usuario: {$e}");
+            return response()->json('error_evento');
         }
     }
 
@@ -94,6 +121,7 @@ class AgendaEntrenadorStore implements Responsable
 
         } catch (Exception $e)
         {
+            Logger("Error eliminando el evento: {$e}");
             return response()->json("error_exception");
         }
     }
@@ -128,8 +156,8 @@ class AgendaEntrenadorStore implements Responsable
 
         } catch (Exception $e)
         {
-            return "error_datos_usuario";
             Logger("Error consultando los datos del usuario: {$e}");
+            return "error_datos_usuario";
         }
     }
 
@@ -141,8 +169,8 @@ class AgendaEntrenadorStore implements Responsable
 
         } catch (Exception $e)
         {
-            return "error_datos_admin";
             Logger("Error consultando los datos del usuario administrador: {$e}");
+            return "error_datos_admin";
         }
     }
 
@@ -154,8 +182,8 @@ class AgendaEntrenadorStore implements Responsable
 
         } catch (Exception $e)
         {
-            return "error_datos_disp";
             Logger("Error consultando los datos del usuario administrador: {$e}");
+            return "error_datos_disp";
         }
     }
 }

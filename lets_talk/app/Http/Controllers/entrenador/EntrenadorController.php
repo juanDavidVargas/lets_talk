@@ -63,7 +63,10 @@ class EntrenadorController extends Controller
 
             $array_horarios = DisponibilidadEntrenadores::select('id_horario', 'horario')->pluck('horario', 'id_horario');
 
+            $entrenadores = User::select('id_user', DB::raw("CONCAT(nombres, ' ', apellidos, ' - ', usuario) AS usuario"))->whereIn('id_rol', [1,3])->where('estado', 1)->whereNull('deleted_at')->pluck('usuario', 'id_user');
+
             view()->share('horarios', $array_horarios);
+            view()->share('trainers', $entrenadores);
             return view('entrenador.create');
         }
     }
@@ -264,7 +267,7 @@ class EntrenadorController extends Controller
                         'contactos.opcional_celular',
                         'contactos.opcional_correo',
                         'contactos.opcional_skype',
-                        'contactos.opcional_zoom',
+                        'contactos.opcional_zoom'
                     )
                     ->where('usuarios.id_user', $idUser)
                     ->where('usuarios.estado', 1)
@@ -279,12 +282,9 @@ class EntrenadorController extends Controller
 
     public function evaluacionInternaEntrenador(Request $request)
     {
-        // dd($request);
         $evaluacionInterna = request('evaluacion_interna', null);
         $idEstudiante = request('id_estudiante', null);
         $idInstructor = request('id_instructor', null);
-        
-        // dd($idEstudiante, $idInstructor, $evaluacionInterna);
 
         DB::connection('mysql')->beginTransaction();
 
@@ -304,7 +304,7 @@ class EntrenadorController extends Controller
                 alert()->error('Error', 'An error has occurred creating the user, please contact support.');
                 return redirect()->to(route('entrenador.index'));
             }
-            
+
         } catch (Exception $e) {
             DB::connection('mysql')->rollback();
             alert()->error('Error', 'An error has occurred creating the user, try again, if the problem persists contact support.');
@@ -328,7 +328,7 @@ class EntrenadorController extends Controller
                         DB::raw("CONCAT(estudiante.nombres, ' ', estudiante.apellidos) AS nombre_estudiante"),
                         'evaluacion_interna.evaluacion_interna',
                         DB::raw("CONCAT(instructor.nombres, ' ', instructor.apellidos) AS nombre_instructor"),
-                        'evaluacion_interna.created_at',
+                        'evaluacion_interna.created_at'
                     )
                     ->orderBy('evaluacion_interna.created_at','DESC')
                     ->get();
@@ -343,7 +343,7 @@ class EntrenadorController extends Controller
         $idEvento = explode(",", $idEvento);
 
         DB::connection('mysql')->beginTransaction();
-        
+
         try {
             $eventoAprobado = EventoAgendaEntrenador::whereIn('id', $idEvento)
                     ->update(
@@ -376,7 +376,7 @@ class EntrenadorController extends Controller
         $idEvento = explode(",", $idEvento);
 
         DB::connection('mysql')->beginTransaction();
-        
+
         try {
             $eventoAprobado = EventoAgendaEntrenador::whereIn('id', $idEvento)
                     ->update(
@@ -409,7 +409,7 @@ class EntrenadorController extends Controller
         $idEvento = explode(",", $idEvento);
 
         DB::connection('mysql')->beginTransaction();
-        
+
         try {
             $eventoAprobado = EventoAgendaEntrenador::whereIn('id', $idEvento)
                     ->update(
