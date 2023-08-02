@@ -9,6 +9,13 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Let's Talk - Trainer's Agenda</title>
 
+    <!-- Google Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=PT+Sans:300,400,700,900' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,400italic,700,700italic' rel='stylesheet'
+         type='text/css'>
+
+    <link rel="stylesheet" href="{{ asset('css/animations.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/404.css') }}">
 
@@ -28,8 +35,6 @@
 
     <script src="{{ asset('js/modernizr.custom.js') }}"></script>
     <script src="{{ asset('js/jquery-2.1.3.min.js') }}"></script>
-
-
 </head>
 <body>
 <div class="container">
@@ -40,95 +45,15 @@
             </div>
         </div>
 
-        @if(Request::path() == '/' || Request::path() == "login" ||
-            Request::path() == "login_estudiante")
-
+        @if(Request()->path() == '/' || Request()->path() == "login" ||
+            Request()->path() == "login_estudiante")
             <div class="col-xs-6 col-sm-6 col-md-6">
                 <div class="sign-out">
                     &nbsp;
                 </div>
             </div>
         @else
-
-        {{-- Inicio Menu --}}
-        <div class="col-xs-6 col-sm-6 col-md-6">
-            <div class="sign-out">
-                {{-- Rol Entrenador --}}
-                @if(!is_null(session('rol')) && (session('rol') == 1 || session('rol') == "1"))
-                    <ul class="nav nav-tabs">
-                        @if(Request::path() == "trainer")
-                            <li class="nav-item">
-                                <a href="{{route('trainer.create')}}" class="nav-link active" aria-current="page">Trainer's Agenda</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{route('trainer.index')}}" class="nav-link" aria-current="page">Trainer's Sessions</a>
-                            </li>
-                        @else
-                            <li class="nav-item">
-                                <a href="{{route('trainer.create')}}" class="nav-link" aria-current="page">Trainer's Agenda</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{route('trainer.index')}}" class="nav-link" aria-current="page">Trainer's Sessions</a>
-                            </li>
-                        @endif
-                        <li>
-                            <a href="{{route('logout')}}" title="Cerrar Sesión">
-                                <i class="fa fa-sign-out fa-3x" aria-hidden="true"></i>
-                            </a>
-                        </li>
-                    </ul>
-                {{-- Rol Estudiante --}}
-                @elseif(!is_null(session('rol')) && (session('rol') == 3 || session('rol') == "3"))
-                    <ul class="nav nav-tabs">
-                        @if(Request::path == "student")
-                            <li class="nav-item">
-                                <a href="#" class="nav-link" aria-current="page">Diponibilidad Entrenadores</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link" aria-current="page">Reservas</a>
-                            </li>
-                        @else
-                            <li class="nav-item">
-                                <a href="#" class="nav-link" aria-current="page">Diponibilidad Entrenadores</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link" aria-current="page">Reservas</a>
-                            </li>
-                        @endif
-                        <li>
-                            <a href="{{route('logout')}}" title="Cerrar Sesión">
-                                <i class="fa fa-sign-out fa-3x" aria-hidden="true"></i>
-                            </a>
-                        </li>
-                    </ul>
-                    {{-- Rol Administrador --}}
-                @else
-                    <ul class="nav nav-tabs">
-                        <li class="nav-item">
-                            <a class="pointer" href="{{route('administrador.index')}}" class="nav-link" aria-current="page">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{route('trainer.create')}}" class="nav-link active" aria-current="page">Trainer's Agenda</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{route('trainer.index')}}" class="nav-link" aria-current="page">Trainer's Sessions</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link" aria-current="page">Availability Trainer's</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link" aria-current="page">Reservations</a>
-                        </li>
-                        <li>
-                            <a href="{{route('logout')}}" title="Cerrar Sesión">
-                                <i class="fa fa-sign-out fa-3x" aria-hidden="true"></i>
-                            </a>
-                        </li>
-                    </ul>
-                @endif
-            </div>
-        </div>
-        {{-- Fin Menu --}}
+            @include('layouts.menu')
         @endif
     </div>
 
@@ -168,6 +93,17 @@
                                              </div>
                                         </div>
                                     @endfor
+
+                                    @if(!is_null(session('rol')) && (session('rol') == 2 || session('rol') == "2"))
+                                        <div class="row">
+                                            <div class="cl-xs-12 col-sm-12 cl-md-12 col-lg-12">
+                                                <div class="wrap-input100">
+                                                    {!! Form::select('trainers', $trainers, null, ['class' => 'input100', 'id' => 'trainers']) !!}
+                                                    <span class="focus-input100" data-placeholder=""></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
 
                                     <div class="row">
                                         <div class="col-md-12">
@@ -300,7 +236,10 @@
 
     $( document ).ready(function()
     {
+        window.$("#trainers").trigger('focus');
+        window.$("#trainers").prepend(new Option("Select User...", "-1"));
         cargarEventosPorEntrenador();
+        window.$("#trainers").val("-1");
     });
 
     let calendarEl = document.getElementById('calendar');
@@ -397,6 +336,7 @@ document.addEventListener('DOMContentLoaded', function ()
                 },
                 success: function (response)
                 {
+
                     if(response == "error_exception")
                     {
                         Swal.fire(
@@ -437,6 +377,7 @@ document.addEventListener('DOMContentLoaded', function ()
         e.preventDefault();
         let horas = $("#horarios").val();
         let fecha_evento = $("#fecha_evento").val();
+        let user_id = $("#trainers").val();
 
         if ((horas == '' || horas == null || horas == undefined) ||
             (fecha_evento == '' || fecha_evento == null || fecha_evento == undefined))
@@ -460,7 +401,8 @@ document.addEventListener('DOMContentLoaded', function ()
                 data: {
                     "_token": "{{ csrf_token() }}",
                     'hrs_disponibilidad': horas,
-                    'fecha_evento': fecha_evento
+                    'fecha_evento': fecha_evento,
+                    'trainer_id': user_id
                 },
                 beforeSend: function()
                 {
@@ -596,13 +538,17 @@ function cargarEventosPorEntrenador()
 
             $.each(response.agenda, function(index, element)
             {
+
                 myData.push(
                     {
                         id: element.id_horario,
-                        start: `${element.start_date}`,
+                        allDay: false,
+                        editable: false,
+                        start: `${element.start_date}T${element.start_time}:00`,
+                        end: `${element.end_date}T${element.end_time}:00`,
                         title: element.title,
                         color: element.color,
-                        textColor: '#FFFFFF'
+                        textColor: '#FFFFFF',
                     }
                 );
             });

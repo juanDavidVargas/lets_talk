@@ -39,6 +39,7 @@ class AgendaEntrenadorShow implements Responsable
                                     'end_time',
                                     'color',
                                     'state',
+                                    'id_usuario',
                                     'id_horario')
                         ->whereNull('deleted_at')
                         ->where('state', 1)
@@ -73,6 +74,7 @@ class AgendaEntrenadorShow implements Responsable
                                     'end_time',
                                     'color',
                                     'state',
+                                    'id_usuario',
                                     'id_horario')
                         ->whereNull('deleted_at')
                         ->where('state', 1)

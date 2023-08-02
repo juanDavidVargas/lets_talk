@@ -3106,6 +3106,14 @@ a:focus {
 }
 .nav-tabs>li>a {
 	font-weight:700;
+    margin-right: 2px;
+    line-height: 1.42857143;
+    border: 1px solid transparent;
+    border-radius: 4px 4px 0 0;
+}
+.nav-tabs>li {
+    float: left;
+    margin-bottom: -1px;
 }
 .well {
 	border-radius:0;
@@ -3202,6 +3210,15 @@ a:focus {
 .nav {
     margin-bottom: 10vw !important;
 }
+.nav>li>a {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+}
+.nav>li {
+    position: relative;
+    display: block;
+}
 .border_div {
     border: 2px solid #C6C6C6 !important;
     padding: 3vw !important;
@@ -3269,6 +3286,8 @@ div label input {margin-right: 100px;}
 /* Fin estilos botones disponibilidad */
 
 /* Inicio estilos badge */
+
+/* Inicio estilos menu trainer agenda*/
 .badge-warning {
     background-color: #FFC107 !important;
 }
@@ -3296,8 +3315,73 @@ div label input {margin-right: 100px;}
 .badge-light {
     background-color: #F8F9FA !important;
 }
-
 .badge-dark {
     background-color: #343A40 !important;
 }
 /* Fin estilos badge */
+.nav>li>a{
+	position:relative;
+	display:block;
+	padding:10px 15px;
+}
+.nav>li>a:focus,.nav>li>a:hover{
+	text-decoration:none;
+	background-color:#eee;
+}
+.nav>li.disabled>a{
+	color:#777;
+}
+.nav>li.disabled>a:focus,.nav>li.disabled>a:hover{
+	color:#777;
+	text-decoration:none;
+	cursor:not-allowed;
+	background-color:transparent;
+}
+.nav .open>a,.nav .open>a:focus,.nav .open>a:hover{
+	background-color:#eee;
+	border-color:#337ab7;
+}
+.nav .nav-divider{
+	height:1px;
+	margin:9px 0;
+	overflow:hidden;
+	background-color:#e5e5e5;
+}
+.nav>li>a>img{
+	max-width:none;
+}
+.nav-tabs{
+	border-bottom:1px solid #ddd;
+}
+.nav-tabs>li{
+	float:left;
+	margin-bottom:-1px;
+}
+.nav-tabs>li>a{
+	margin-right:2px;
+	line-height:1.42857143;
+	border:1px solid transparent;
+	border-radius:4px 4px 0 0;
+}
+.nav-tabs>li>a:hover{
+	border-color:#eee #eee #ddd;
+}
+.nav-tabs>li.active>a,.nav-tabs>li.active>a:focus,.nav-tabs>li.active>a:hover{
+	color:#555;
+	cursor:default;
+	background-color:#fff;
+	border:1px solid #ddd;
+	border-bottom-color:transparent;
+}
+.nav-tabs.nav-justified{
+	width:100%;
+	border-bottom:0;
+}
+.nav-tabs.nav-justified>li{
+	float:none;
+}
+.nav-tabs.nav-justified>li>a{
+	margin-bottom:5px;
+	text-align:center;
+}
+/* Fin estilos menu trainer agenda*/

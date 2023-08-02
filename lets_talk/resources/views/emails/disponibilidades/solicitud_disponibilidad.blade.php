@@ -49,7 +49,7 @@
     @endforeach
 
     <p>
-        <a href="#" class="btn btn_disponibilidad">Ver Solicitud</a>
+        <a href="{{route('administrador.disponibilidad_entrenadores')}}" class="btn btn_disponibilidad">Ver Solicitud</a>
     </p>
 
     <p>Este mensaje es automático, por favor, no responder.</p>
