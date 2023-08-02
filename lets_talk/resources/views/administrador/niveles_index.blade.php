@@ -61,7 +61,13 @@
 
                                 {{-- =========================== --}}
                                 
-                                <td>{{$nivel->ruta_pdf_nivel}}</td>
+                                @if ($nivel->ruta_pdf_nivel != null || $nivel->ruta_pdf_nivel != "")
+                                    <td>
+                                        <a href="{{url($nivel->ruta_pdf_nivel)}}" target="_blank">File</a>
+                                    </td>
+                                @else
+                                    <td></td>
+                                @endif
 
                                 {{-- =========================== --}}
 

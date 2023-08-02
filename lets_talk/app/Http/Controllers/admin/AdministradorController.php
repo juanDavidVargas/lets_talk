@@ -15,6 +15,7 @@ use App\Models\usuarios\TipoContacto;
 use App\Models\entrenador\DisponibilidadEntrenadores;
 use Illuminate\Support\Facades\DB;
 use App\Traits\FileUploadTrait;
+use Illuminate\Support\Facades\Storage;
 
 class AdministradorController extends Controller
 {
@@ -657,7 +658,8 @@ class AdministradorController extends Controller
         $nuevoNivel = strtoupper(request('crear_nivel', null));
 
         $baseFileName = "{$nuevoNivel}"; //nombre base para los archivos
-        $carpetaArchivos = 'storage/app/public/upfiles/niveles';
+        $carpetaArchivos = '/upfiles/niveles';
+        // $carpetaArchivos = storage_path('app/public/upfiles/niveles/');
         $archivoNivel= '';
 
         DB::connection('mysql')->beginTransaction();
