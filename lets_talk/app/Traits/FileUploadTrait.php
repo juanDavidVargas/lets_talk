@@ -72,7 +72,7 @@ trait FileUploadTrait
     }
 
     /**
-     * 
+     *
      */
     public function uploadFiles($request, $name, $folder) {
         $name_files = array();
@@ -99,14 +99,14 @@ trait FileUploadTrait
      * @param [type] $prefix
      * @return void
      */
-    public function upfileWithName($baseFileName, $folder, $request, $nameField, $prefix)
+    public function upfileWithName($base_file_name, $folder, $request, $name_field, $prefix)
     {
-        $fileName = null;
-        if ($request->hasFile($nameField)) {
-            $extension = $request->file($nameField)->getClientOriginalExtension();
-            $nameFile = "{$baseFileName}_{$prefix}.{$extension}";
-            $fileName = $request->file($nameField)->storeAs( $folder,  $nameFile, 'public' );
+        $filename = null;
+        if ($request->hasFile($name_field)) {
+            $extension = $request->file($name_field)->getClientOriginalExtension();
+            $name_file = "{$base_file_name}_{$prefix}.{$extension}";
+            $filename = $request->file($name_field)->storeAs( $folder,  $name_file, 'public' );
         }
-        return $fileName;
+        return $filename;
     }
 }
