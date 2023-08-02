@@ -63,9 +63,7 @@
                                 
                                 @if ($nivel->ruta_pdf_nivel != null || $nivel->ruta_pdf_nivel != "")
                                     <td>
-                                        {{-- <a href="{{$nivel->ruta_pdf_nivel}}" target="_blank">File1</a> --}}
-                                        <a href="{{url($nivel->ruta_pdf_nivel)}}" target="_blank">Level File</a>
-                                        {{-- <a href="{{'http://127.0.0.1:8000/'.$nivel->ruta_pdf_nivel}}" target="_blank">File3</a> --}}
+                                        <a href="/storage/{{$nivel->ruta_pdf_nivel}}" target="_blank">Level File</a>
                                     </td>
                                 @else
                                     <td></td>
