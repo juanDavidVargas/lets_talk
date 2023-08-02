@@ -221,7 +221,7 @@
 
         function crearNivel() {
             html = ``;
-            html += `{!! Form::open(['method' => 'POST', 'route' => ['crear_nivel'], 'class'=>['form-horizontal form-bordered'], 'id'=>'form_crear_nivel']) !!}`;
+            html += `{!! Form::open(['method' => 'POST', 'route' => ['crear_nivel'], 'class'=>['form-horizontal form-bordered'], 'id'=>'form_crear_nivel', 'enctype'=>'multipart/form-data']) !!}`;
             html += `@csrf`;
             html +=     `<label class="">This option creates a new level</label>`;
             html +=     `<div class="div-level-name">
@@ -229,7 +229,7 @@
                         </div>
             `;
             html +=     `<div class="div-level-name">
-                            <input type="file" name="file_crear_nivel" id="file_crear_nivel" class="" required />
+                            <input type="file" name="file_crear_nivel" id="file_crear_nivel" class="" />
                         </div>
             `;
             html +=     `<div class="div-level-name">

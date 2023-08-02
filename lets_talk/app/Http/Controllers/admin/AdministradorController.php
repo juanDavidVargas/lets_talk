@@ -652,22 +652,25 @@ class AdministradorController extends Controller
 
     public function crearNivel(Request $request)
     {
-        $nuevoNivel = strtoupper($request->crear_nivel);
+        // dd($request);
+        // $nuevoNivel = strtoupper($request->crear_nivel);
+        $nuevoNivel = strtoupper(request('crear_nivel', null));
 
         $baseFileName = "{$nuevoNivel}"; //nombre base para los archivos
-        $carpetaArchivos = 'upfiles/niveles';
+        $carpetaArchivos = 'storage/app/public/upfiles/niveles';
         $archivoNivel= '';
 
-        //guarda los archivos adjuntos en la carpeta, con el nombre base y tipo de documento
-        if ($request->hasFile('ruta_pdf_nivel')) {
-            $archivoNivel = $this->upfileWithName($baseFileName, $carpetaArchivos, $request, 'archivo_nivel', 'archivo_nivel');
-            // dd($archivoNivel);
-        }
-
-        // dd($archivoNivel);
         DB::connection('mysql')->beginTransaction();
         
         try {
+            if ($request->hasFile('file_crear_nivel')) {
+                $archivoNivel = $this->upfileWithName($baseFileName, $carpetaArchivos, $request, 'file_crear_nivel', 'file_crear_nivel');
+            } else {
+                $archivoNivel = null;
+            }
+
+            // dd($request,$archivoNivel);
+
             $crearNivel = Nivel::create([
                                 'nivel_descripcion' => $nuevoNivel,
                                 'ruta_pdf_nivel' => $archivoNivel
