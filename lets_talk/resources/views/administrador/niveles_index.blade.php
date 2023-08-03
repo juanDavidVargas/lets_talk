@@ -136,15 +136,55 @@
         });
 
         // ===========================================
+
+        function crearNivel() {
+            html = ``;
+            html += `{!! Form::open(['method' => 'POST', 'route' => ['crear_nivel'], 'class'=>['form-horizontal form-bordered'], 'id'=>'form_crear_nivel', 'enctype'=>'multipart/form-data']) !!}`;
+            html += `@csrf`;
+            html +=     `<label class="">This option creates a new level</label>`;
+            html +=     `<div class="div-level-name">
+                            <input type="text" name="crear_nivel" id="crear_nivel" class="level-name" required />
+                        </div>
+            `;
+            html +=     `<div class="div-level-name">
+                            <input type="file" name="file_crear_nivel" id="file_crear_nivel" class="" />
+                        </div>
+            `;
+            html +=     `<div class="div-level-name">
+                            <input type="submit" value="Create Level" class="btn btn-primary" id="btn_crear_nivel">
+                        </div>
+            `;
+            html += `{!! Form::close() !!}`;
+
+            // =========================================
+            
+            Swal.fire({
+                title: 'Create Level',
+                html: html,
+                type: 'success',
+                showConfirmButton: false,
+                focusConfirm: false,
+                showCloseButton: true,
+                showCancelButton: false,
+                cancelButtonText: 'Cancel',
+                allowOutsideClick: false,
+            });
+        }
+
+        // ===========================================
         
         function editarNivel(idNivel) {
             html = ``;
-            html += `{!! Form::open(['method' => 'POST', 'route' => ['editar_nivel'], 'class'=>['form-horizontal form-bordered'], 'id'=>'form_edit_nivel']) !!}`;
+            html += `{!! Form::open(['method' => 'POST', 'route' => ['editar_nivel'], 'class'=>['form-horizontal form-bordered'], 'id'=>'form_edit_nivel', 'enctype'=>'multipart/form-data']) !!}`;
             html += `@csrf`;
             html +=     `<input type="hidden" name="id_nivel" id="id_nivel" value="${idNivel}" required />`;
             html +=     `<label class="">Enter the new level name</label>`;
             html +=     `<div class="div-level-name">
-                            <input type="text" name="descripcion_nivel" id="descripcion_nivel" class="level-name" required />
+                            <input type="text" name="editar_nivel" id="editar_nivel" class="level-name" required />
+                        </div>
+            `;
+            html +=     `<div class="div-level-name">
+                            <input type="file" name="file_editar_nivel" id="file_editar_nivel" class="" />
                         </div>
             `;
             html +=     `<input type="submit" value="Update" class="btn btn-primary" id="btn_editar_nivel">`;
@@ -212,42 +252,6 @@
             
             Swal.fire({
                 title: 'Active Level',
-                html: html,
-                type: 'success',
-                showConfirmButton: false,
-                focusConfirm: false,
-                showCloseButton: true,
-                showCancelButton: false,
-                cancelButtonText: 'Cancel',
-                allowOutsideClick: false,
-            });
-        }
-        
-        // ===========================================
-
-        function crearNivel() {
-            html = ``;
-            html += `{!! Form::open(['method' => 'POST', 'route' => ['crear_nivel'], 'class'=>['form-horizontal form-bordered'], 'id'=>'form_crear_nivel', 'enctype'=>'multipart/form-data']) !!}`;
-            html += `@csrf`;
-            html +=     `<label class="">This option creates a new level</label>`;
-            html +=     `<div class="div-level-name">
-                            <input type="text" name="crear_nivel" id="crear_nivel" class="level-name" required />
-                        </div>
-            `;
-            html +=     `<div class="div-level-name">
-                            <input type="file" name="file_crear_nivel" id="file_crear_nivel" class="" />
-                        </div>
-            `;
-            html +=     `<div class="div-level-name">
-                            <input type="submit" value="Create Level" class="btn btn-primary" id="btn_crear_nivel">
-                        </div>
-            `;
-            html += `{!! Form::close() !!}`;
-
-            // =========================================
-            
-            Swal.fire({
-                title: 'Create Level',
                 html: html,
                 type: 'success',
                 showConfirmButton: false,

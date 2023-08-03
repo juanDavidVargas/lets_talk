@@ -538,6 +538,8 @@ class AdministradorController extends Controller
                     ->first();
     }
 
+    // ===================================================
+
     public function nivelesIndex()
     {
         $niveles = Nivel::select('id_nivel','nivel_descripcion','ruta_pdf_nivel','deleted_at')
@@ -546,18 +548,34 @@ class AdministradorController extends Controller
         return view('administrador.niveles_index', compact('niveles'));
     }
 
+    // ===================================================
+
     public function editarNivel(Request $request)
     {
-        $idNivel = intval($request->id_nivel);
-        $descripctionNivel = strtoupper($request->descripcion_nivel);
+        // dd($request);
+        $idNivel = intval(request('id_nivel', null));
+        $editarNivel = strtoupper(request('editar_nivel', null));
+
+        $baseFileNameEdit = "{$editarNivel}"; //nombre base para los archivos
+        $carpetaArchivos = '/upfiles/niveles';
+        $archivoNivelEditar= '';
 
         DB::connection('mysql')->beginTransaction();
 
         try {
+            if ($request->hasFile('file_editar_nivel')) {
+                $archivoNivelEditar = $this->upfileWithName($baseFileNameEdit, $carpetaArchivos, $request, 'file_editar_nivel', 'file_editar_nivel');
+            } else {
+                $archivoNivelEditar = null;
+            }
+
+            // dd($idNivel,$editarNivel,$archivoNivelEditar);
+
             $editarNivel = DB::table('niveles')
                             ->where('id_nivel', $idNivel)
                             ->update([
-                                'nivel_descripcion' => $descripctionNivel
+                                'nivel_descripcion' => $editarNivel,
+                                'ruta_pdf_nivel' => $archivoNivelEditar
                             ]);
 
             if($editarNivel) {
@@ -574,6 +592,8 @@ class AdministradorController extends Controller
             return response()->json(-1);
         }
     }
+
+    // ===================================================
 
     public function inactivarNivel(Request $request)
     {
@@ -604,6 +624,8 @@ class AdministradorController extends Controller
         }
     }
 
+    // ===================================================
+
     public function activarNivel(Request $request)
     {
         $idNivel = intval($request->id_nivel);
@@ -632,14 +654,14 @@ class AdministradorController extends Controller
         }
     }
 
+    // ===================================================
+
     public function crearNivel(Request $request)
     {
-        // dd($request);
         $nuevoNivel = strtoupper(request('crear_nivel', null));
 
         $baseFileName = "{$nuevoNivel}"; //nombre base para los archivos
         $carpetaArchivos = '/upfiles/niveles';
-        // $carpetaArchivos = storage_path('app/public/upfiles/niveles/');
         $archivoNivel= '';
 
         DB::connection('mysql')->beginTransaction();
@@ -650,8 +672,6 @@ class AdministradorController extends Controller
             } else {
                 $archivoNivel = null;
             }
-
-            // dd($request,$archivoNivel);
 
             $crearNivel = Nivel::create([
                                 'nivel_descripcion' => $nuevoNivel,
