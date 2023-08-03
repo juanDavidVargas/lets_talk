@@ -174,35 +174,75 @@
         // ===========================================
         
         function editarNivel(idNivel) {
-            html = ``;
-            html += `{!! Form::open(['method' => 'POST', 'route' => ['editar_nivel'], 'class'=>['form-horizontal form-bordered'], 'id'=>'form_edit_nivel', 'enctype'=>'multipart/form-data']) !!}`;
-            html += `@csrf`;
-            html +=     `<input type="hidden" name="id_nivel" id="id_nivel" value="${idNivel}" required />`;
-            html +=     `<label class="">Enter the new level name</label>`;
-            html +=     `<div class="div-level-name">
-                            <input type="text" name="editar_nivel" id="editar_nivel" class="level-name" required />
-                        </div>
-            `;
-            html +=     `<div class="div-level-name">
-                            <input type="file" name="file_editar_nivel" id="file_editar_nivel" class="" />
-                        </div>
-            `;
-            html +=     `<input type="submit" value="Update" class="btn btn-primary" id="btn_editar_nivel">`;
-            html += `{!! Form::close() !!}`;
+            $.ajax({
+                url:"{{route('consultar_nivel')}}",
+                type:"POST",
+                dataType: "JSON",
+                data: {'id_nivel': idNivel},
+                success: function (respuesta) {
+                    // console.log(respuesta.nivel_descripcion);
+                    nivel = respuesta.nivel_descripcion;
 
-            // =========================================
-            
-            Swal.fire({
-                title: 'Edit Level',
-                html: html,
-                type: 'info',
-                showConfirmButton: false,
-                focusConfirm: false,
-                showCloseButton: true,
-                showCancelButton: false,
-                cancelButtonText: 'Cancel',
-                allowOutsideClick: false,
+                    html = ``;
+                    html += `{!! Form::open(['method' => 'POST', 'route' => ['editar_nivel'], 'class'=>['form-horizontal form-bordered'], 'id'=>'form_edit_nivel', 'enctype'=>'multipart/form-data']) !!}`;
+                    html += `@csrf`;
+                    html +=     `<input type="hidden" name="id_nivel" id="id_nivel" value="${idNivel}" required />`;
+                    html +=     `<label class="">Enter the new level name</label>`;
+                    html +=     `<div class="div-level-name">
+                                    <input type="text" name="editar_nivel" id="editar_nivel" class="level-name" value="${nivel}" required />
+                                </div>
+                    `;
+                    html +=     `<div class="div-level-name">
+                                    <input type="file" name="file_editar_nivel" id="file_editar_nivel" class="" />
+                                </div>
+                    `;
+                    html +=     `<input type="submit" value="Update" class="btn btn-primary" id="btn_editar_nivel">`;
+                    html += `{!! Form::close() !!}`;
+
+                    // =========================================
+                    
+                    Swal.fire({
+                        title: 'Edit Level',
+                        html: html,
+                        type: 'info',
+                        showConfirmButton: false,
+                        focusConfirm: false,
+                        showCloseButton: true,
+                        showCancelButton: false,
+                        cancelButtonText: 'Cancel',
+                        allowOutsideClick: false,
+                    });
+                }
             });
+            // html = ``;
+            // html += `{!! Form::open(['method' => 'POST', 'route' => ['editar_nivel'], 'class'=>['form-horizontal form-bordered'], 'id'=>'form_edit_nivel', 'enctype'=>'multipart/form-data']) !!}`;
+            // html += `@csrf`;
+            // html +=     `<input type="hidden" name="id_nivel" id="id_nivel" value="${idNivel}" required />`;
+            // html +=     `<label class="">Enter the new level name</label>`;
+            // html +=     `<div class="div-level-name">
+            //                 <input type="text" name="editar_nivel" id="editar_nivel" class="level-name" required />
+            //             </div>
+            // `;
+            // html +=     `<div class="div-level-name">
+            //                 <input type="file" name="file_editar_nivel" id="file_editar_nivel" class="" />
+            //             </div>
+            // `;
+            // html +=     `<input type="submit" value="Update" class="btn btn-primary" id="btn_editar_nivel">`;
+            // html += `{!! Form::close() !!}`;
+
+            // // =========================================
+            
+            // Swal.fire({
+            //     title: 'Edit Level',
+            //     html: html,
+            //     type: 'info',
+            //     showConfirmButton: false,
+            //     focusConfirm: false,
+            //     showCloseButton: true,
+            //     showCancelButton: false,
+            //     cancelButtonText: 'Cancel',
+            //     allowOutsideClick: false,
+            // });
         }
 
         // ===========================================

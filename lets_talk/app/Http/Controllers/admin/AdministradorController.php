@@ -692,4 +692,26 @@ class AdministradorController extends Controller
             return response()->json(-1);
         }
     }
+    
+    // ===================================================
+
+    public function consultarNivel(Request $request)
+    {
+        $idNivel = intval($request->id_nivel);
+
+        try {
+            $consultarNivel = Nivel::select('nivel_descripcion')->where('id_nivel', $idNivel)->first();
+            // dd($consultarNivel->nivel_descripcion);
+            
+            if ($consultarNivel) {
+                // return response()->json('consultado');
+                return $consultarNivel;
+            } else {
+                return response()->json('no_consultado');
+            }
+        } catch (Exception $e) {
+            alert()->error('Error', 'An error has occurred consulting the level, try again, if the problem persists contact support.');
+            return back();
+        }
+    }
 }
