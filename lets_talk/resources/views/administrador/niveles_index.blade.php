@@ -88,8 +88,12 @@
 
                                 <td>
                                     @if ($nivel->deleted_at == null || $nivel->deleted_at == "")
-                                        <a href="#" class="btn btn-info" id="level_update_{{$nivel->id_nivel}}" onclick="editarNivel({{$nivel->id_nivel}})">Edit Level</a>
-                                        <a href="#" class="btn btn-warning" id="level_inactive_{{$nivel->id_nivel}}" onclick="inactivarNivel({{$nivel->id_nivel}})">Inactive Level</a>
+                                        @if ($nivel->id_nivel == 0)
+                                            <a href="#" class="btn btn-primary" id="">No Edition Allwed</a>
+                                        @else
+                                            <a href="#" class="btn btn-info" id="level_update_{{$nivel->id_nivel}}" onclick="editarNivel({{$nivel->id_nivel}})">Edit Level</a>
+                                            <a href="#" class="btn btn-warning" id="level_inactive_{{$nivel->id_nivel}}" onclick="inactivarNivel({{$nivel->id_nivel}})">Inactive Level</a>
+                                        @endif
                                     @else
                                         <a href="#" class="btn btn-success" id="level_active_{{$nivel->id_nivel}}" onclick="activarNivel({{$nivel->id_nivel}})">Active Level</a>
                                     @endif
@@ -168,6 +172,7 @@
             Swal.fire({
                 title: 'Create Level',
                 html: html,
+                icon: 'success',
                 type: 'success',
                 showConfirmButton: false,
                 focusConfirm: false,
@@ -211,6 +216,7 @@
                     Swal.fire({
                         title: 'Edit Level',
                         html: html,
+                        icon: 'info',
                         type: 'info',
                         showConfirmButton: false,
                         focusConfirm: false,
@@ -242,6 +248,7 @@
             Swal.fire({
                 title: 'Inactive Level',
                 html: html,
+                icon: 'warning',
                 type: 'warning',
                 showConfirmButton: false,
                 focusConfirm: false,
@@ -271,6 +278,7 @@
             Swal.fire({
                 title: 'Active Level',
                 html: html,
+                icon: 'success',
                 type: 'success',
                 showConfirmButton: false,
                 focusConfirm: false,

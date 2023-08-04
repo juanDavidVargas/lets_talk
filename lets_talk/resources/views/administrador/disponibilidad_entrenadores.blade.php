@@ -107,6 +107,7 @@
                             position: 'center'
                             , title: 'Error!'
                             , html: 'An error occurred, try again, if the problem persists contact support.'
+                            , icon: 'info'
                             , type: 'info'
                             , showCancelButton: false
                             , showConfirmButton: false
@@ -125,6 +126,7 @@
                             position: 'center'
                             , title: 'Error!'
                             , html: 'An error occurred, try again, if the problem persists contact support.'
+                            , icon: 'info'
                             , type: 'info'
                             , showCancelButton: false
                             , showConfirmButton: false
@@ -143,6 +145,7 @@
                             position: 'center'
                             , title: 'Success!'
                             , html: "The state has been successfully updated"
+                            , icon: 'success'
                             , type: 'success'
                             , showCancelButton: false
                             , showConfirmButton: false
@@ -240,6 +243,7 @@
                     if (response == 'exito') {
                         Swal.fire({
                             text: "Event updated succesfully!",
+                            icon: 'success',
                             type: 'success',
                             showCancelButton: false,
                             confirmButtonText: 'Ok',

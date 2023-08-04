@@ -92,6 +92,7 @@
                 position: 'center'
                 , title: 'Info!'
                 , html: form_store_shedule
+                , icon: 'info'
                 , type: 'info'
                 , showCancelButton: true
                 , showConfirmButton: false
@@ -109,6 +110,7 @@
             position: 'center'
             , title: 'Are you sure you want to delete this schedule?'
             , text: 'You will not be able to revert this!'
+            , icon: 'warning'
             , type: 'warning'
             , showCancelButton: true
             , showConfirmButton: true
@@ -134,6 +136,7 @@
                                 position: 'center'
                                 , title: 'Info!'
                                 , html: 'The Schedule has been deleted!'
+                                , icon: 'info'
                                 , type: 'info'
                                 , showCancelButton: false
                                 , showConfirmButton: false
@@ -150,6 +153,7 @@
                                 position: 'center'
                                 , title: 'Error!'
                                 , html: 'There was a problem deleting the Schedule!'
+                                , icon: 'error'
                                 , type: 'error'
                                 , showCancelButton: false
                                 , showConfirmButton: false
@@ -166,6 +170,7 @@
                     position: 'center'
                     , title: 'Info!'
                     , html: 'No changes were made!'
+                    , icon: 'info'
                     , type: 'info'
                     , showCancelButton: false
                     , showConfirmButton: false
