@@ -34,10 +34,11 @@ Route::get('disponibilidad_admin', 'admin\AdministradorController@vistaAdminDisp
 Route::post('disponibilidad_admin_store', 'admin\AdministradorController@storeAdminDisponibilidad')->name('administrador.disponibilidad_admin_store');
 Route::post('disponibilidad_admin_delete', 'admin\AdministradorController@deleteAdminDisponibilidad')->name('administrador.disponibilidad_admin_delete');
 Route::get('niveles_index', 'admin\AdministradorController@nivelesIndex')->name('administrador.niveles_index');
+Route::post('crear_nivel', 'admin\AdministradorController@crearNivel')->name('crear_nivel');
 Route::post('editar_nivel', 'admin\AdministradorController@editarNivel')->name('editar_nivel');
 Route::post('inactivar_nivel', 'admin\AdministradorController@inactivarNivel')->name('inactivar_nivel');
 Route::post('activar_nivel', 'admin\AdministradorController@activarNivel')->name('activar_nivel');
-Route::post('crear_nivel', 'admin\AdministradorController@crearNivel')->name('crear_nivel');
+Route::post('consultar_nivel', 'admin\AdministradorController@consultarNivel')->name('consultar_nivel');
 
 // =======================================================================================================
 
