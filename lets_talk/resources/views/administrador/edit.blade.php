@@ -329,6 +329,7 @@
                         position: 'center'
                         , title: 'Info!'
                         , html: 'There is already a record with the document number entered!'
+                        , icon: 'info'
                         , type: 'info'
                         , showCancelButton: false
                         , showConfirmButton: false
@@ -345,6 +346,7 @@
                         position: 'center'
                         , title: 'Error!'
                         , html: 'An error occurred, contact support!'
+                        , icon: 'error'
                         , type: 'error'
                         , showCancelButton: false
                         , showConfirmButton: false
@@ -381,6 +383,7 @@
                         position: 'center'
                         , title: 'Info!'
                         , html: 'A similar email already exists in our database!'
+                        , icon: 'info'
                         , type: 'info'
                         , showCancelButton: false
                         , showConfirmButton: false
@@ -397,6 +400,7 @@
                         position: 'center'
                         , title: 'Error!'
                         , html: 'An error occurred, contact support!'
+                        , icon: 'error'
                         , type: 'error'
                         , showCancelButton: false
                         , showConfirmButton: false

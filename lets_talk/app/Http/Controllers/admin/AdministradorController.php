@@ -533,7 +533,7 @@ class AdministradorController extends Controller
                     ->whereNull('municipios.deleted_at')
                     ->whereNull('residencia.deleted_at')
                     ->whereNull('roles.deleted_at')
-                    // ->whereNull('niveles.deleted_at')
+                    ->whereNull('niveles.deleted_at')
                     ->orderBy('usuarios.id_user', 'DESC')
                     ->first();
     }
@@ -611,6 +611,26 @@ class AdministradorController extends Controller
 
             if($inactivarNivel) {
                 DB::connection('mysql')->commit();
+
+                // NUEVA CONSULTA
+                $queryUsuariosNivel = DB::table('usuarios')
+                                    ->join('niveles', 'niveles.id_nivel', '=', 'usuarios.id_nivel')
+                                    ->select('usuarios.id_user')
+                                    ->whereNotNull('niveles.deleted_at')
+                                    ->get()
+                                    ->toArray();
+                
+                foreach ($queryUsuariosNivel as $idNivel) {
+                    $idUser = $idNivel->id_user;
+                    // dd($idUser);
+                    
+                    DB::table('usuarios')
+                            ->where('id_user', $idUser)
+                            ->update([
+                                'id_nivel' => 0
+                            ]);
+                }
+
                 alert()->success('Successful Process', 'Level inactivated');
                 return redirect()->to(route('administrador.niveles_index'));
             } else {

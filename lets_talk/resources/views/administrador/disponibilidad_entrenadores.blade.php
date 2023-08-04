@@ -19,11 +19,6 @@
                 <h1 class="text-center text-uppercase">Availability Trainer's</h1>
 
                 <div class="mt-5">
-                    {{-- @foreach ($disponibilidades as $disponibilidad)
-                        @php
-                            $idDisponibilidad = $disponibilidad->id;
-                        @endphp
-                    @endforeach --}}
                     <a href="#" class="btn btn-sm btn-success" id="btn_aprove_all" onclick="actualizacionMasiva(1)">Approve All</a>
                     <a href="#" class="btn btn-sm btn-warning" id="btn_reject_all" onclick="actualizacionMasiva(3)">Reject All</a>
                     <a href="#" class="btn btn-sm btn-danger" id="btn_delete_all" onclick="actualizacionMasiva(4)">Delete All</a>
@@ -88,34 +83,6 @@
             $('#tbl_availability').DataTable({
                 'ordering': false
             });
-
-            // ========================================
-
-            // if ($('#select_pending').is(':not(:checked)')) {
-            //     $('#btn_aprove_all').on('click', function() {
-            //         Swal.fire(
-            //             'Info',
-            //             'Select all option must be checked',
-            //             'info'
-            //         )
-            //     });
-
-            //     $('#btn_reject_all').on('click', function() {
-            //         Swal.fire(
-            //             'Info',
-            //             'Select all option must be checked',
-            //             'info'
-            //         )
-            //     });
-
-            //     $('#btn_delete_all').on('click', function() {
-            //         Swal.fire(
-            //             'Info',
-            //             'Select all option must be checked',
-            //             'info'
-            //         )
-            //     });
-            // }
         });
 
         // ===========================================
@@ -140,6 +107,7 @@
                             position: 'center'
                             , title: 'Error!'
                             , html: 'An error occurred, try again, if the problem persists contact support.'
+                            , icon: 'info'
                             , type: 'info'
                             , showCancelButton: false
                             , showConfirmButton: false
@@ -158,6 +126,7 @@
                             position: 'center'
                             , title: 'Error!'
                             , html: 'An error occurred, try again, if the problem persists contact support.'
+                            , icon: 'info'
                             , type: 'info'
                             , showCancelButton: false
                             , showConfirmButton: false
@@ -176,6 +145,7 @@
                             position: 'center'
                             , title: 'Success!'
                             , html: "The state has been successfully updated"
+                            , icon: 'success'
                             , type: 'success'
                             , showCancelButton: false
                             , showConfirmButton: false
@@ -221,85 +191,6 @@
                 console.log(arrayIds);
                 actualizacionMasiva(estado);
 
-                // ===============================
-                // ===============================
-
-                // $('#btn_reject_all').on('click', function() {
-                //     $.ajax({
-                //         url: "{{route('rechazar_evento')}}",
-                //         type: "POST",
-                //         dataType: "JSON",
-                //         data: {'id_evento': JSON.stringify(arrayIds)},
-                //         // beforeSend: function() {
-                //         //     $("#loaderGif").show();
-                //         //     $("#loaderGif").removeClass('ocultar');
-                //         // },
-                //         success: function (response) {
-                //             console.log(response);
-                //             if (response == 'exito') {
-                //                 Swal.fire({
-                //                     text: "Event rejected succesfully!",
-                //                     type: 'success',
-                //                     showCancelButton: false,
-                //                     confirmButtonText: 'Ok',
-                //                 }).then((result) => {
-                //                     console.log(result);
-                //                     if (result.value == true) {
-                //                         window.location.reload();
-                //                     }
-                //                 })
-                //             } else {
-                //                 console.log('Update error');
-                //                 Swal.fire(
-                //                     'Info',
-                //                     'There was an error',
-                //                     'info'
-                //                 )
-                //             }
-                //         }
-                //     })
-                // });
-
-                // ===============================
-                // ===============================
-
-                // $('#btn_delete_all').on('click', function() {
-                //     // alert('solicitudes eliminadas');
-                //     $.ajax({
-                //         url: "{{route('eliminar_evento')}}",
-                //         type: "POST",
-                //         dataType: "JSON",
-                //         data: {'id_evento': JSON.stringify(arrayIds)},
-                //         // beforeSend: function() {
-                //         //     $("#loaderGif").show();
-                //         //     $("#loaderGif").removeClass('ocultar');
-                //         // },
-                //         success: function (response) {
-                //             console.log(response);
-                //             if (response == 'exito') {
-                //                 Swal.fire({
-                //                     text: "Event deleted succesfully!",
-                //                     type: 'success',
-                //                     showCancelButton: false,
-                //                     confirmButtonText: 'Ok',
-                //                 }).then((result) => {
-                //                     console.log(result);
-                //                     if (result.value == true) {
-                //                         window.location.reload();
-                //                     }
-                //                 })
-                //             } else {
-                //                 console.log('Update error');
-                //                 Swal.fire(
-                //                     'Info',
-                //                     'There was an error',
-                //                     'info'
-                //                 )
-                //             }
-                //         }
-                //     })
-                // });
-
             } else {
                 $("input:checkbox[id^='pending_']").attr('checked',false);
 
@@ -339,40 +230,39 @@
             }
         });
 
-    function actualizacionMasiva(estado) {
-        $.ajax({
-            url: "{{route('aprobar_evento')}}",
-            type: "POST",
-            dataType: "JSON",
-            data: {'id_evento': JSON.stringify(arrayIds), 'estado': estado},
-            // beforeSend: function() {
-            //     $("#loaderGif").show();
-            //     $("#loaderGif").removeClass('ocultar');
-            // },
-            success: function (response) {
-                console.log(response);
-                if (response == 'exito') {
-                    Swal.fire({
-                        text: "Event updated succesfully!",
-                        type: 'success',
-                        showCancelButton: false,
-                        confirmButtonText: 'Ok',
-                    }).then((result) => {
-                        console.log(result);
-                        if (result.value == true) {
-                            window.location.reload();
-                        }
-                    })
-                } else {
-                    console.log('Update error');
-                    Swal.fire(
-                        'Info',
-                        'There was an error',
-                        'info'
-                    )
+        // =================================================================
+
+        function actualizacionMasiva(estado) {
+            $.ajax({
+                url: "{{route('aprobar_evento')}}",
+                type: "POST",
+                dataType: "JSON",
+                data: {'id_evento': JSON.stringify(arrayIds), 'estado': estado},
+                success: function (response) {
+                    console.log(response);
+                    if (response == 'exito') {
+                        Swal.fire({
+                            text: "Event updated succesfully!",
+                            icon: 'success',
+                            type: 'success',
+                            showCancelButton: false,
+                            confirmButtonText: 'Ok',
+                        }).then((result) => {
+                            console.log(result);
+                            if (result.value == true) {
+                                window.location.reload();
+                            }
+                        })
+                    } else {
+                        console.log('Update error');
+                        Swal.fire(
+                            'Info',
+                            'There was an error',
+                            'info'
+                        )
+                    }
                 }
-            }
-        });
-    }
-</script>
+            });
+        }
+    </script>
 @endsection
