@@ -50,7 +50,7 @@ Route::post('cargar_info_evento', 'entrenador\EntrenadorController@cargarInfoEve
 Route::post('detalle_sesion_entrenador', 'entrenador\EntrenadorController@cargaDetalleSesion')->name('detalle_sesion_entrenador');
 Route::post('evaluacion_interna_entrenador', 'entrenador\EntrenadorController@evaluacionInternaEntrenador')->name('evaluacion_interna_entrenador');
 Route::post('consulta_evaluacion_interna', 'entrenador\EntrenadorController@consultaEvaluacionInterna')->name('consulta_evaluacion_interna');
-Route::post('aprobar_evento', 'entrenador\EntrenadorController@aprobarEvento')->name('aprobar_evento');
+Route::post('aprobar_evento', 'entrenador\EntrenadorController@actualizacionMasivaDiponibilidades')->name('aprobar_evento');
 Route::post('rechazar_evento', 'entrenador\EntrenadorController@rechazarEvento')->name('rechazar_evento');
 Route::post('eliminar_evento', 'entrenador\EntrenadorController@eliminarEvento')->name('eliminar_evento');
 

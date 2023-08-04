@@ -336,8 +336,9 @@ class EntrenadorController extends Controller
 
     // ==================================================
 
-    public function aprobarEvento(Request $request)
+    public function actualizacionMasivaDiponibilidades(Request $request)
     {
+        $estado = request("estado", null);
         $idEvento = $request['id_evento'];
         $idEvento = str_replace('"','',$idEvento);
         $idEvento = explode(",", $idEvento);
@@ -350,7 +351,7 @@ class EntrenadorController extends Controller
             $eventoAprobado = EventoAgendaEntrenador::whereIn('id', $idEvento)
                     ->update(
                         [
-                            'state' => 1,
+                            'state' => $estado,
                         ]
                     );
 
