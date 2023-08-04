@@ -63,7 +63,11 @@ class EntrenadorController extends Controller
 
             $array_horarios = DisponibilidadEntrenadores::select('id_horario', 'horario')->pluck('horario', 'id_horario');
 
-            $entrenadores = User::select('id_user', DB::raw("CONCAT(nombres, ' ', apellidos, ' - ', usuario) AS usuario"))->whereIn('id_rol', [1,3])->where('estado', 1)->whereNull('deleted_at')->pluck('usuario', 'id_user');
+            $entrenadores = User::select('id_user', DB::raw("CONCAT(nombres, ' ', apellidos, ' - ', usuario) AS usuario"))
+                            ->whereIn('id_rol', [1])
+                            ->where('estado', 1)
+                            ->whereNull('deleted_at')
+                            ->pluck('usuario', 'id_user');
 
             view()->share('horarios', $array_horarios);
             view()->share('trainers', $entrenadores);

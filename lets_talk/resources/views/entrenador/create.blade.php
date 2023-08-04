@@ -429,6 +429,30 @@ document.addEventListener('DOMContentLoaded', function ()
                         return;
                     }
 
+                    if(response == "ya_existe")
+                    {
+                        $("#loaderGif").hide();
+                        $("#loaderGif").addClass('ocultar');
+                        myModal.hide();
+                        $("#loaderGif").hide();
+                        Swal.fire({
+                            position: 'center'
+                            , icon: 'error'
+                            , title: 'Error!'
+                            , html: 'You already have availabilities pending approval, it is not possible to create the availability.'
+                            , type: 'error'
+                            , showCancelButton: false
+                            , showConfirmButton: false
+                            , allowOutsideClick: false
+                            , allowEscapeKey: false
+                            , timer: 5000
+                        });
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 5200);
+                        return;
+                    }
+
                     if(response == "error_evento")
                     {
                         $("#loaderGif").hide();
@@ -501,7 +525,6 @@ $("#btnClose").click(function(info){
         $(`#${element.id}`).removeAttr('checked', false);
         $(`#${element.id}`).css('background-color', "#21277B");
     });
-
 });
 
 function cargarEventosPorEntrenador()

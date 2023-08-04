@@ -41,7 +41,9 @@ class AgendaEntrenadorStore implements Responsable
             foreach ($array_disponibilidad as $disp)
             {
 
-                $horas_disp= DisponibilidadEntrenadores::select('horario')->where('id_horario', $disp)->first();
+                $horas_disp= DisponibilidadEntrenadores::select('horario')
+                                                        ->where('id_horario', $disp)
+                                                        ->first();
 
                 $hora_inicio = substr($horas_disp->horario, 0, 5);
                 $hora_fin = substr($horas_disp->horario, 6);
@@ -58,6 +60,16 @@ class AgendaEntrenadorStore implements Responsable
                     $usuario = session('username');
                     $state = 2;
                     $user_id = session('usuario_id');
+                }
+
+                $consultaDisponibilidades = $this->disponibilidadUsuario(session('usuario_id'));
+
+                if (isset($consultaDisponibilidades) &&
+                    !is_null($consultaDisponibilidades) &&
+                    !empty($consultaDisponibilidades) &&
+                    $consultaDisponibilidades != 'error_datos_disp') {
+
+                    return response()->json("ya_existe");
                 }
 
                 $insert_evento = EventoAgendaEntrenador::create([
@@ -178,7 +190,9 @@ class AgendaEntrenadorStore implements Responsable
     {
         try
         {
-            return EventoAgendaEntrenador::where('id_usuario', $usuario_id)->get();
+            return EventoAgendaEntrenador::where('id_usuario', $usuario_id)
+                                            ->where('state', 2)
+                                            ->get();
 
         } catch (Exception $e)
         {
