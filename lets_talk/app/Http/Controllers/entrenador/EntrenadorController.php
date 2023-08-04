@@ -341,6 +341,8 @@ class EntrenadorController extends Controller
         $idEvento = $request['id_evento'];
         $idEvento = str_replace('"','',$idEvento);
         $idEvento = explode(",", $idEvento);
+        $idEvento = str_replace('[','',$idEvento);
+        $idEvento = str_replace(']','',$idEvento);
 
         DB::connection('mysql')->beginTransaction();
 
@@ -361,13 +363,10 @@ class EntrenadorController extends Controller
             }
 
         } catch (Exception $e) {
-            dd($e);
             DB::connection('mysql')->rollback();
             return back();
         }
     }
-
-    // ==================================================
 
     public function rechazarEvento(Request $request)
     {
