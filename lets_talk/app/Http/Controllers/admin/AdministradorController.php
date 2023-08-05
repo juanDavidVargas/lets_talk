@@ -560,6 +560,8 @@ class AdministradorController extends Controller
         $carpetaArchivos = '/upfiles/niveles';
         $baseFileNameEdit = "{$newNameNivel}_".time(); //nombre base para los archivos
 
+        // =============================================
+
         try {
             $archivoNivelEditar = "";
 

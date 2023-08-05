@@ -496,7 +496,7 @@
         {
             $("#div_primer_zoom").removeClass('ocultar');
             $("#primer_zoom").trigger('focus');
-            $("#primer_zoom").att('required');
+            $("#primer_zoom").attr('required');
             $("#div_primer_telefono").addClass('ocultar');
             $("#div_primer_telefono").hide('slow');
             $("#div_primer_celular_whatsapp").addClass('ocultar');
