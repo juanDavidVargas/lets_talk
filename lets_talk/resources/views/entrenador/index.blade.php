@@ -159,14 +159,16 @@
     <script src="{{asset('js/jquery.dataTables.min.js') }}"></script>
     <script src="{{asset('js/dataTables.bootstrap.min.js')}}"></script>
     <script src="{{asset('js/dataTables.fixedHeader.min.js')}}"></script>
-    {{-- <script src="{{asset('js/sweetalert2.min.js')}}"></script> --}}
-    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
 
     <script type="text/javascript">
         $(document ).ready(function() {
             $('#tbl_trainer_sessions').DataTable({
                 'ordering': false
             });
+            
+            // $('#tbl_old_evaluation').DataTable({
+            //     'ordering': true
+            // });
         });
 
         // ===================================================
@@ -375,7 +377,7 @@
                     html += `   {!! Form::open(['method' => 'POST', 'route' => ['evaluacion_interna_entrenador'],'class'=>['form-horizontal form-bordered']]) !!}`;
                     html += `   @csrf`;
                     html += `       <input type="hidden" name="id_estudiante" id="id_estudiante" value="${response[0].id_user}"/>`;
-                    html += `       <textarea name="evaluacion_interna" class="w100" rows="10"></textarea>`;
+                    html += `       <textarea name="evaluacion_interna" class="w100" rows="10" required></textarea>`;
                     html += `       <div class="margin-top flex flex-end">
                                         <button type="submit" class="btn-evaluation">SAVE EVALUATION</button>
                                     </div>
@@ -405,7 +407,10 @@
 
                     // ==============================================
 
+                   
+                        
                     $('#old_valuation').on('click', function () {
+                        
                         let idUserVal = $('#id_estudiante').val();
 
                         $.ajax({
@@ -417,22 +422,22 @@
                             },
                             success: function(response) {
                                 html = ``;
-                                html += `<table border=1 style="border-collapse:separate !important" cellspacing="10">`;
+                                html += `<table border=1 style="border-collapse:separate !important" cellspacing="10" id="tbl_old_evaluation" >`;
                                 html +=     `<thead>`;
                                 html +=         `<tr style="background-color: #21277B">`;
-                                html +=             `<th style="text-align:center;width:15%;color:white;">STUDENT</th>`;
-                                html +=             `<th style="text-align:center;width:55%;color:white;">NOTES</th>`;
-                                html +=             `<th style="text-align:center;width:15%;color:white;">INSTRUCTOR</th>`;
-                                html +=             `<th style="text-align:center;width:15%;color:white;">DATE</th>`;
+                                html +=             `<th style="text-align:center;width:15%;color:white;font-size:18px;">STUDENT</th>`;
+                                html +=             `<th style="text-align:center;width:55%;color:white;font-size:18px;">NOTES</th>`;
+                                html +=             `<th style="text-align:center;width:15%;color:white;font-size:18px;">INSTRUCTOR</th>`;
+                                html +=             `<th style="text-align:center;width:15%;color:white;font-size:18px;">DATE</th>`;
                                 html +=         `</tr>`;
                                 html +=     `</thead>`;
                                 html +=     `<body>`;
                                                 response.forEach(element => {
                                                     html += `<tr>`;
-                                                    html +=     `<td style="width:15%;">${element.nombre_estudiante}</td>`;
-                                                    html +=     `<td style="width:55%;" class="valuation">${element.evaluacion_interna}</td>`;
-                                                    html +=     `<td style="width:15%;">${element.nombre_instructor}</td>`;
-                                                    html +=     `<td style="width:15%;">${element.created_at}</td>`;
+                                                    html +=     `<td style="width:15%;font-size:12px;">${element.nombre_estudiante}</td>`;
+                                                    html +=     `<td style="width:55%;font-size:12px;" class="valuation">${element.evaluacion_interna}</td>`;
+                                                    html +=     `<td style="width:15%;font-size:12px;">${element.nombre_instructor}</td>`;
+                                                    html +=     `<td style="width:15%;font-size:12px;">${element.created_at}</td>`;
                                                     html += `</tr>`;
                                                 });
                                 html +=     `</body>`;
@@ -453,6 +458,14 @@
                                     buttons:{
                                         cancelButton: {customClass:'swal2-cancel'}
                                     }
+                                });
+
+                                $('#tbl_old_evaluation').DataTable({
+                                    'paging'      : true,
+                                    'lengthChange': true,
+                                    'searching'   : true,
+                                    'ordering'    : false,
+                                    'responsive'  : true,
                                 });
                             }
                         });
