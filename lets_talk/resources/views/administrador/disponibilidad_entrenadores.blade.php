@@ -169,7 +169,7 @@
         // =================================================================
         // =================================================================
 
-        $("#select_pending").on('change', function (){
+        $("#select_pending").on('change', function () {
             checked = $('#select_pending').is(':checked');
 
             if (checked == true) {
@@ -204,7 +204,6 @@
                         'Select all option must be checked',
                         'info'
                     );
-
                     return;
                 });
 
@@ -214,7 +213,6 @@
                         'Select all option must be checked',
                         'info'
                     );
-
                     return;
                 });
 
@@ -224,7 +222,6 @@
                         'Select all option must be checked',
                         'info'
                     );
-
                     return;
                 });
             }
@@ -234,7 +231,7 @@
 
         function actualizacionMasiva(estado) {
             $.ajax({
-                url: "{{route('aprobar_evento')}}",
+                url: "{{route('actualizacion_masiva_diponibilidades')}}",
                 type: "POST",
                 dataType: "JSON",
                 data: {'id_evento': JSON.stringify(arrayIds), 'estado': estado},
@@ -253,13 +250,6 @@
                                 window.location.reload();
                             }
                         })
-                    } else {
-                        console.log('Update error');
-                        Swal.fire(
-                            'Info',
-                            'There was an error',
-                            'info'
-                        )
                     }
                 }
             });

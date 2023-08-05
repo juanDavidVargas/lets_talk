@@ -352,14 +352,14 @@ class EntrenadorController extends Controller
         DB::connection('mysql')->beginTransaction();
 
         try {
-            $eventoAprobado = EventoAgendaEntrenador::whereIn('id', $idEvento)
+            $actualizacionMasivaDiponibilidades = EventoAgendaEntrenador::whereIn('id', $idEvento)
                     ->update(
                         [
                             'state' => $estado,
                         ]
                     );
 
-            if($eventoAprobado) {
+            if($actualizacionMasivaDiponibilidades) {
                 DB::connection('mysql')->commit();
                 return response()->json("exito");
             } else {
@@ -373,67 +373,67 @@ class EntrenadorController extends Controller
         }
     }
 
-    public function rechazarEvento(Request $request)
-    {
-        $idEvento = $request['id_evento'];
-        $idEvento = str_replace('"','',$idEvento);
-        $idEvento = explode(",", $idEvento);
+    // public function rechazarEvento(Request $request)
+    // {
+    //     $idEvento = $request['id_evento'];
+    //     $idEvento = str_replace('"','',$idEvento);
+    //     $idEvento = explode(",", $idEvento);
 
-        DB::connection('mysql')->beginTransaction();
+    //     DB::connection('mysql')->beginTransaction();
 
-        try {
-            $eventoAprobado = EventoAgendaEntrenador::whereIn('id', $idEvento)
-                    ->update(
-                        [
-                            'state' => 3,
-                        ]
-                    );
+    //     try {
+    //         $eventoAprobado = EventoAgendaEntrenador::whereIn('id', $idEvento)
+    //                 ->update(
+    //                     [
+    //                         'state' => 3,
+    //                     ]
+    //                 );
 
-            if($eventoAprobado) {
-                DB::connection('mysql')->commit();
-                return response()->json("exito");
-            } else {
-                DB::connection('mysql')->rollback();
-                return response()->json("error");
-            }
+    //         if($eventoAprobado) {
+    //             DB::connection('mysql')->commit();
+    //             return response()->json("exito");
+    //         } else {
+    //             DB::connection('mysql')->rollback();
+    //             return response()->json("error");
+    //         }
 
-        } catch (Exception $e) {
-            dd($e);
-            DB::connection('mysql')->rollback();
-            return back();
-        }
-    }
+    //     } catch (Exception $e) {
+    //         dd($e);
+    //         DB::connection('mysql')->rollback();
+    //         return back();
+    //     }
+    // }
 
     // ==================================================
 
-    public function eliminarEvento(Request $request)
-    {
-        $idEvento = $request['id_evento'];
-        $idEvento = str_replace('"','',$idEvento);
-        $idEvento = explode(",", $idEvento);
+    // public function eliminarEvento(Request $request)
+    // {
+    //     $idEvento = $request['id_evento'];
+    //     $idEvento = str_replace('"','',$idEvento);
+    //     $idEvento = explode(",", $idEvento);
 
-        DB::connection('mysql')->beginTransaction();
+    //     DB::connection('mysql')->beginTransaction();
 
-        try {
-            $eventoAprobado = EventoAgendaEntrenador::whereIn('id', $idEvento)
-                    ->update(
-                        [
-                            'state' => 4,
-                        ]
-                    );
+    //     try {
+    //         $eventoAprobado = EventoAgendaEntrenador::whereIn('id', $idEvento)
+    //                 ->update(
+    //                     [
+    //                         'state' => 4,
+    //                     ]
+    //                 );
 
-            if($eventoAprobado) {
-                DB::connection('mysql')->commit();
-                return response()->json("exito");
-            } else {
-                DB::connection('mysql')->rollback();
-                return response()->json("error");
-            }
+    //         if($eventoAprobado) {
+    //             DB::connection('mysql')->commit();
+    //             return response()->json("exito");
+    //         } else {
+    //             DB::connection('mysql')->rollback();
+    //             return response()->json("error");
+    //         }
 
-        } catch (Exception $e) {
-            dd($e);
-            DB::connection('mysql')->rollback();
-            return back();
-        }
-    }
+    //     } catch (Exception $e) {
+    //         dd($e);
+    //         DB::connection('mysql')->rollback();
+    //         return back();
+    //     }
+    // }
 }
