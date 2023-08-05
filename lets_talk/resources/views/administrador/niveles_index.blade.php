@@ -89,7 +89,7 @@
                                 <td>
                                     @if ($nivel->deleted_at == null || $nivel->deleted_at == "")
                                         @if ($nivel->id_nivel == 0)
-                                            <a href="#" class="btn btn-primary" id="">No Edition Allwed</a>
+                                            <a href="#" class="btn btn-primary" id="">No Edition Allowed</a>
                                         @else
                                             <a href="#" class="btn btn-info" id="level_update_{{$nivel->id_nivel}}" onclick="editarNivel({{$nivel->id_nivel}})">Edit Level</a>
                                             <a href="#" class="btn btn-warning" id="level_inactive_{{$nivel->id_nivel}}" onclick="inactivarNivel({{$nivel->id_nivel}})">Inactive Level</a>
