@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Models\usuarios\Nivel;
 use App\Models\usuarios\TipoContacto;
 use App\Models\entrenador\DisponibilidadEntrenadores;
+use App\Models\entrenador\EventoAgendaEntrenador;
 use Illuminate\Support\Facades\DB;
 use App\Traits\FileUploadTrait;
 use Illuminate\Support\Facades\Storage;
@@ -729,16 +730,45 @@ class AdministradorController extends Controller
 
         try {
             $consultarNivel = Nivel::select('nivel_descripcion')->where('id_nivel', $idNivel)->first();
-            // dd($consultarNivel->nivel_descripcion);
             
             if ($consultarNivel) {
-                // return response()->json('consultado');
                 return $consultarNivel;
             } else {
                 return response()->json('no_consultado');
             }
         } catch (Exception $e) {
             alert()->error('Error', 'An error has occurred consulting the level, try again, if the problem persists contact support.');
+            return back();
+        }
+    }
+    
+    // ===================================================
+
+    public function actualizarDisponibilidad(Request $request)
+    {
+        $disponibilidadId = intval(request("disponibilidad_id", null));
+        $estadoId = intval(request("estado_id", null));
+
+        DB::connection('mysql')->beginTransaction();
+
+        try {
+            $actualizacionIndividualDiponibilidades = EventoAgendaEntrenador::where('id', $disponibilidadId)
+                    ->update(
+                        [
+                            'state' => $estadoId,
+                        ]
+                    );
+
+            if($actualizacionIndividualDiponibilidades) {
+                DB::connection('mysql')->commit();
+                return response()->json("success");
+            } else {
+                DB::connection('mysql')->rollback();
+                return response()->json("error_update");
+            }
+
+        } catch (Exception $e) {
+            DB::connection('mysql')->rollback();
             return back();
         }
     }

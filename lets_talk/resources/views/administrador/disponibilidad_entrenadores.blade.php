@@ -87,78 +87,49 @@
 
         // ===========================================
 
-        function actualizarEstadoEvento(id_evento, id_disponibilidad) {
+        function actualizarEstadoEvento(id_estado, id_disponibilidad) {
             $.ajax({
-                async: true
-                , url: "{{route('actualizar_evento')}}"
-                , type: "POST"
-                , dataType: "JSON"
-                , data: {
+                async: true,
+                url: "{{route('actualizar_evento')}}",
+                type: "POST",
+                dataType: "JSON",
+                data: {
                     'disponibilidad_id': id_disponibilidad,
-                    'evento_id': id_evento
-                }
-                , beforeSend: function() {
-                    $("#loaderGif").show();
-                    $("#loaderGif").removeClass('ocultar');
-                }
-                , success: function(response) {
-                    if (response == "error_exception") {
+                    'estado_id': id_estado
+                },
+                success: function(response) {
+                    if (response == "success") {
                         Swal.fire({
-                            position: 'center'
-                            , title: 'Error!'
-                            , html: 'An error occurred, try again, if the problem persists contact support.'
-                            , icon: 'info'
-                            , type: 'info'
-                            , showCancelButton: false
-                            , showConfirmButton: false
-                            , allowOutsideClick: false
-                            , allowEscapeKey: false
-                            , timer: 5000
+                            position: 'center',
+                            title: 'Success!',
+                            html: "The state has been successfully updated",
+                            icon: 'success',
+                            type: 'success',
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            timer: 3000
                         });
-
-                        $("#loaderGif").hide();
-
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 3500);
                         return;
                     }
 
                     if (response == "error_update") {
                         Swal.fire({
-                            position: 'center'
-                            , title: 'Error!'
-                            , html: 'An error occurred, try again, if the problem persists contact support.'
-                            , icon: 'info'
-                            , type: 'info'
-                            , showCancelButton: false
-                            , showConfirmButton: false
-                            , allowOutsideClick: false
-                            , allowEscapeKey: false
-                            , timer: 5000
+                            position: 'center',
+                            title: 'Error!',
+                            html: 'An error occurred, try again, if the problem persists contact support.',
+                            icon: 'error',
+                            type: 'error',
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            timer: 5000
                         });
-
-                        $("#loaderGif").hide();
-
-                        return;
-                    }
-
-                    if (response == "success") {
-                        Swal.fire({
-                            position: 'center'
-                            , title: 'Success!'
-                            , html: "The state has been successfully updated"
-                            , icon: 'success'
-                            , type: 'success'
-                            , showCancelButton: false
-                            , showConfirmButton: false
-                            , allowOutsideClick: false
-                            , allowEscapeKey: false
-                            , timer: 3000
-                        });
-
-                        $("#loaderGif").hide();
-
-                        setTimeout(function() {
-                            window.location.reload();
-                        }, 3500);
                         return;
                     }
                 }
@@ -174,6 +145,8 @@
 
             if (checked == true) {
                 console.log(`checked ${checked}`);
+                $('.btn-pending').addClass('ocultar');
+                
                 $("input:checkbox[id^='pending_']").attr('checked',true);
 
                 var idEventos;
@@ -192,6 +165,8 @@
                 actualizacionMasiva(estado);
 
             } else {
+                $('.btn-pending').removeClass('ocultar');
+
                 $("input:checkbox[id^='pending_']").attr('checked',false);
 
                 arrayIds = [];

@@ -35,9 +35,9 @@
         @if($disponibilidad->state == 1 && session('rol') == 2)
             <a href="#" class="btn btn-sm btn-success ocultar rounded" title="Approve" id="btn_aprove" disabled onclick="actualizarEstadoEvento(1, {{$disponibilidad->id}})">Approve</a>
         @elseif($disponibilidad->state == 2 && session('rol') == 2)
-            <a href="#" class="btn btn-sm btn-success" title="Approve" id="btn_aprove" onclick="actualizarEstadoEvento(1, {{$disponibilidad->id}})">Approve</a>
-            <a href="#" class="btn btn-sm btn-warning" title="Reject" id="btn_reject" onclick="actualizarEstadoEvento(3, {{$disponibilidad->id}})">Reject</a>
-            <a href="#" class="btn btn-sm btn-danger" title="Delete" id="btn_delete" onclick="actualizarEstadoEvento(4, {{$disponibilidad->id}})">Delete</a>
+            <a href="#" class="btn btn-sm btn-success btn-pending" title="Approve" id="btn_aprove" onclick="actualizarEstadoEvento(1, {{$disponibilidad->id}})">Approve</a>
+            <a href="#" class="btn btn-sm btn-warning btn-pending" title="Reject" id="btn_reject" onclick="actualizarEstadoEvento(3, {{$disponibilidad->id}})">Reject</a>
+            <a href="#" class="btn btn-sm btn-danger btn-pending" title="Delete" id="btn_delete" onclick="actualizarEstadoEvento(4, {{$disponibilidad->id}})">Delete</a>
         @elseif($disponibilidad->state == 3 && session('rol') == 2)
             <a href="#" class="btn btn-sm btn-warning ocultar" title="Reject" id="btn_reject" disabled onclick="actualizarEstadoEvento(3, {{$disponibilidad->id}})">Reject</a>
             <a href="#" class="btn btn-sm btn-danger" title="Delete" id="btn_delete" onclick="actualizarEstadoEvento(4, {{$disponibilidad->id}})">Delete</a>
