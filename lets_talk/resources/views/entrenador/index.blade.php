@@ -10,6 +10,8 @@
     {{-- <link rel="stylesheet" type="text/css" href="{{asset('css/sweetalert2.min.css')}}"> --}}
     {{-- <link rel="stylesheet" type="text/css" href="{{asset('css/sweetalert2.css')}}"> --}}
 
+    <link href="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-1.13.6/b-2.4.1/b-colvis-2.4.1/b-html5-2.4.1/b-print-2.4.1/fc-4.3.0/fh-3.4.0/kt-2.10.0/r-2.5.0/sp-2.2.0/datatables.min.css" rel="stylesheet">
+
     <style>
         .left-align{
             text-align:left;
@@ -155,20 +157,42 @@
 {{-- ============================================================== --}}
 
 @section('scripts')
-    <script src="{{asset('js/jquery-3.5.1.js') }}"></script>
+    {{-- <script src="{{asset('js/jquery-3.5.1.js') }}"></script>
     <script src="{{asset('js/jquery.dataTables.min.js') }}"></script>
     <script src="{{asset('js/dataTables.bootstrap.min.js')}}"></script>
-    <script src="{{asset('js/dataTables.fixedHeader.min.js')}}"></script>
+    <script src="{{asset('js/dataTables.fixedHeader.min.js')}}"></script> --}}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-1.13.6/b-2.4.1/b-colvis-2.4.1/b-html5-2.4.1/b-print-2.4.1/fc-4.3.0/fh-3.4.0/kt-2.10.0/r-2.5.0/sp-2.2.0/datatables.min.js"></script>
 
     <script type="text/javascript">
         $(document ).ready(function() {
             $('#tbl_trainer_sessions').DataTable({
-                'ordering': false
+                'ordering': false,
+                "lengthMenu": [[25,50,100, -1], [25,50,100, 'ALL']],
+                dom: 'Blfrtip',
+                "info": "Showing page _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros",
+                "buttons": [
+                    {
+                        extend: 'copyHtml5',
+                        text: 'Copiar',
+                        className: 'waves-effect waves-light btn-rounded btn-sm btn-primary',
+                        init: function(api, node, config) {
+                            $(node).removeClass('dt-button')
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Excel',
+                        className: 'waves-effect waves-light btn-rounded btn-sm btn-primary',
+                        init: function(api, node, config) {
+                            $(node).removeClass('dt-button')
+                        }
+                    },
+                ]
             });
-            
-            // $('#tbl_old_evaluation').DataTable({
-            //     'ordering': true
-            // });
         });
 
         // ===================================================

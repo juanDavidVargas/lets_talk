@@ -1,7 +1,8 @@
 @extends('layouts.layout')
 @section('title', 'Index')
 @section('css')
-    <link href="{{asset('DataTables/datatables.min.css')}}"/>
+    {{-- <link href="{{asset('DataTables/datatables.min.css')}}"/> --}}
+    <link href="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-1.13.6/b-2.4.1/b-colvis-2.4.1/b-html5-2.4.1/b-print-2.4.1/fc-4.3.0/fh-3.4.0/kt-2.10.0/r-2.5.0/sp-2.2.0/datatables.min.css" rel="stylesheet">
 @stop
 @section('content')
 
@@ -108,233 +109,241 @@
 
 @stop
 @section('scripts')
-    <script src="{{asset('DataTables/datatables.min.js')}}"></script>
-    <script src="{{asset('DataTables/Buttons-2.3.4/js/buttons.html5.min.js')}}"></script>
+    {{-- <script src="{{asset('DataTables/datatables.min.js')}}"></script>
+    <script src="{{asset('DataTables/Buttons-2.3.4/js/buttons.html5.min.js')}}"></script> --}}
+    
+    {{-- <script src="{{asset('js/jquery-3.5.1.js') }}"></script>
+    <script src="{{asset('js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{asset('js/dataTables.bootstrap.min.js')}}"></script>
+    <script src="{{asset('js/dataTables.fixedHeader.min.js')}}"></script> --}}
 
-<script>
-
-    $( document ).ready(function() {
-
-        $('#tbl_users').DataTable({
-            'ordering': false,
-            "lengthMenu": [[25,50,100, -1], [25,50,100, 'ALL']],
-            dom: 'Blfrtip',
-            "info": "Showing page _PAGE_ de _PAGES_",
-            "infoEmpty": "No hay registros",
-            "buttons": [
-                {
-                    extend: 'copyHtml5',
-                    text: 'Copiar',
-                    className: 'waves-effect waves-light btn-rounded btn-sm btn-primary',
-                    init: function(api, node, config) {
-                        $(node).removeClass('dt-button')
-                    }
-                },
-                {
-                    extend: 'excelHtml5',
-                    text: 'Excel',
-                    className: 'waves-effect waves-light btn-rounded btn-sm btn-primary',
-                    init: function(api, node, config) {
-                        $(node).removeClass('dt-button')
-                    }
-                },
-            ]
-        });
-    });
-
-    $("#cambiar_estado").click(function(){
-
-        let id_user = $("#id_user").val();
-
-        Swal.fire({
-            title: 'You really want',
-            html: 'to change the status of this user?',
-            icon: 'info',
-            type: 'info',
-            showCancelButton: true,
-            confirmButtonText: 'Yes',
-            cancelButtonText: 'No'
-        }).then((result) => {
-            if (result.value) {
-
-                $.ajax({
-                    async: true,
-                    url: "{{route('cambiar_estado')}}",
-                    type: "POST",
-                    dataType: "JSON",
-                    data: {
-                        'id_user': id_user
-                    },
-                    beforeSend: function()
+    
+ 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-1.13.6/b-2.4.1/b-colvis-2.4.1/b-html5-2.4.1/b-print-2.4.1/fc-4.3.0/fh-3.4.0/kt-2.10.0/r-2.5.0/sp-2.2.0/datatables.min.js"></script>
+    
+    <script>
+        $( document ).ready(function() {
+            $('#tbl_users').DataTable({
+                'ordering': false,
+                "lengthMenu": [[25,50,100, -1], [25,50,100, 'ALL']],
+                dom: 'Blfrtip',
+                "info": "Showing page _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros",
+                "buttons": [
                     {
-                        $("#loaderGif").show();
-                        $("#loaderGif").removeClass('ocultar');
+                        extend: 'copyHtml5',
+                        text: 'Copiar',
+                        className: 'waves-effect waves-light btn-rounded btn-sm btn-primary',
+                        init: function(api, node, config) {
+                            $(node).removeClass('dt-button')
+                        }
                     },
-                    success: function(response)
                     {
-                        if(response == "-1")
-                        {
-                            Swal.fire({
-                                position: 'center',
-                                title: 'Error!',
-                                html:  'An error occurred, try again, if the problem persists contact support.',
-                                icon: 'info',
-                                type: 'info',
-                                showCancelButton: false,
-                                showConfirmButton: false,
-                                allowOutsideClick: false,
-                                allowEscapeKey:false,
-                                timer: 6000
-                            });
-
-                            $("#loaderGif").hide();
-                            return;
+                        extend: 'excelHtml5',
+                        text: 'Excel',
+                        className: 'waves-effect waves-light btn-rounded btn-sm btn-primary',
+                        init: function(api, node, config) {
+                            $(node).removeClass('dt-button')
                         }
-
-                        if(response == 0 || response == "0")
-                        {
-                            Swal.fire({
-                                position: 'center',
-                                title: 'Error!',
-                                html:  'An error occurred, try again, if the problem persists contact support.',
-                                icon: 'info',
-                                type: 'info',
-                                showCancelButton: false,
-                                showConfirmButton: false,
-                                allowOutsideClick: false,
-                                allowEscapeKey:false,
-                                timer: 6000
-                            });
-
-                            $("#loaderGif").hide();
-                            return;
-                        }
-
-                        if(response == "success")
-                        {
-                            Swal.fire({
-                                position: 'center',
-                                title: 'Success!',
-                                html:  "The user's status has been successfully updated",
-                                icon: 'success',
-                                type: 'success',
-                                showCancelButton: false,
-                                showConfirmButton: false,
-                                allowOutsideClick: false,
-                                allowEscapeKey:false,
-                                timer: 2000
-                            });
-
-                            $("#loaderGif").hide();
-
-                            setTimeout(function(){
-                                window.location.reload();
-                            }, 3000);
-                            return;
-                        }
-                    }
-                });
-            }
+                    },
+                ]
+            });
         });
-    });
 
-    function updatePassword(id_user)
-    {
-        // let id_user = $("#id_user").val();
+        $("#cambiar_estado").click(function(){
 
-        Swal.fire({
-            title: 'Update Password',
-            html: '<input class="form-control" placeholder="Entered the new password" type="password" name="change_clave" id="change_clave">',
-            icon: 'info',
-            type: 'info',
-            showCancelButton: true,
-            confirmButtonText: 'Update',
-            cancelButtonText: 'Cancel',
-            cancelButtonClassName: 'color-cancel-button'
-        }).then((result) =>
+            let id_user = $("#id_user").val();
+
+            Swal.fire({
+                title: 'You really want',
+                html: 'to change the status of this user?',
+                icon: 'info',
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.value) {
+
+                    $.ajax({
+                        async: true,
+                        url: "{{route('cambiar_estado')}}",
+                        type: "POST",
+                        dataType: "JSON",
+                        data: {
+                            'id_user': id_user
+                        },
+                        beforeSend: function()
+                        {
+                            $("#loaderGif").show();
+                            $("#loaderGif").removeClass('ocultar');
+                        },
+                        success: function(response)
+                        {
+                            if(response == "-1")
+                            {
+                                Swal.fire({
+                                    position: 'center',
+                                    title: 'Error!',
+                                    html:  'An error occurred, try again, if the problem persists contact support.',
+                                    icon: 'info',
+                                    type: 'info',
+                                    showCancelButton: false,
+                                    showConfirmButton: false,
+                                    allowOutsideClick: false,
+                                    allowEscapeKey:false,
+                                    timer: 6000
+                                });
+
+                                $("#loaderGif").hide();
+                                return;
+                            }
+
+                            if(response == 0 || response == "0")
+                            {
+                                Swal.fire({
+                                    position: 'center',
+                                    title: 'Error!',
+                                    html:  'An error occurred, try again, if the problem persists contact support.',
+                                    icon: 'info',
+                                    type: 'info',
+                                    showCancelButton: false,
+                                    showConfirmButton: false,
+                                    allowOutsideClick: false,
+                                    allowEscapeKey:false,
+                                    timer: 6000
+                                });
+
+                                $("#loaderGif").hide();
+                                return;
+                            }
+
+                            if(response == "success")
+                            {
+                                Swal.fire({
+                                    position: 'center',
+                                    title: 'Success!',
+                                    html:  "The user's status has been successfully updated",
+                                    icon: 'success',
+                                    type: 'success',
+                                    showCancelButton: false,
+                                    showConfirmButton: false,
+                                    allowOutsideClick: false,
+                                    allowEscapeKey:false,
+                                    timer: 2000
+                                });
+
+                                $("#loaderGif").hide();
+
+                                setTimeout(function(){
+                                    window.location.reload();
+                                }, 3000);
+                                return;
+                            }
+                        }
+                    });
+                }
+            });
+        });
+
+        function updatePassword(id_user)
         {
-            let new_clave = $("#change_clave").val();
+            // let id_user = $("#id_user").val();
 
-            if (result.value)
+            Swal.fire({
+                title: 'Update Password',
+                html: '<input class="form-control" placeholder="Entered the new password" type="password" name="change_clave" id="change_clave">',
+                icon: 'info',
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Update',
+                cancelButtonText: 'Cancel',
+                cancelButtonClassName: 'color-cancel-button'
+            }).then((result) =>
             {
-                $.ajax({
-                    async: true,
-                    url: "{{route('actualizar_clave')}}",
-                    type: "POST",
-                    dataType: "JSON",
-                    data: {
-                        'id_user': id_user,
-                        'clave': new_clave
-                    },
-                    beforeSend: function()
-                    {
-                        $("#loaderGif").show();
-                        $("#loaderGif").removeClass('ocultar');
-                    },
-                    success: function(response)
-                    {
-                        if(response == "-1")
+                let new_clave = $("#change_clave").val();
+
+                if (result.value)
+                {
+                    $.ajax({
+                        async: true,
+                        url: "{{route('actualizar_clave')}}",
+                        type: "POST",
+                        dataType: "JSON",
+                        data: {
+                            'id_user': id_user,
+                            'clave': new_clave
+                        },
+                        beforeSend: function()
                         {
-                            Swal.fire({
-                                position: 'center',
-                                title: 'Error!',
-                                html:  'The password is required',
-                                icon: 'error',
-                                type: 'error',
-                                showCancelButton: false,
-                                showConfirmButton: false,
-                                allowOutsideClick: false,
-                                allowEscapeKey:false,
-                                timer: 3000
-                            });
-
-                            $("#loaderGif").hide();
-                        }
-
-                        if(response == 0 || response == "0")
+                            $("#loaderGif").show();
+                            $("#loaderGif").removeClass('ocultar');
+                        },
+                        success: function(response)
                         {
-                            Swal.fire({
-                                position: 'center',
-                                title: 'Error!',
-                                html:  'An error occurred, try again, if the problem persists contact support.',
-                                icon: 'info',
-                                type: 'info',
-                                showCancelButton: false,
-                                showConfirmButton: false,
-                                allowOutsideClick: false,
-                                allowEscapeKey:false,
-                                timer: 5000
-                            });
+                            if(response == "-1")
+                            {
+                                Swal.fire({
+                                    position: 'center',
+                                    title: 'Error!',
+                                    html:  'The password is required',
+                                    icon: 'error',
+                                    type: 'error',
+                                    showCancelButton: false,
+                                    showConfirmButton: false,
+                                    allowOutsideClick: false,
+                                    allowEscapeKey:false,
+                                    timer: 3000
+                                });
 
-                            $("#loaderGif").hide();
+                                $("#loaderGif").hide();
+                            }
+
+                            if(response == 0 || response == "0")
+                            {
+                                Swal.fire({
+                                    position: 'center',
+                                    title: 'Error!',
+                                    html:  'An error occurred, try again, if the problem persists contact support.',
+                                    icon: 'info',
+                                    type: 'info',
+                                    showCancelButton: false,
+                                    showConfirmButton: false,
+                                    allowOutsideClick: false,
+                                    allowEscapeKey:false,
+                                    timer: 5000
+                                });
+
+                                $("#loaderGif").hide();
+                            }
+
+                            if(response == "success")
+                            {
+                                Swal.fire({
+                                    position: 'center',
+                                    title: 'Success!',
+                                    html:  "The user's password has been successfully updated",
+                                    icon: 'success',
+                                    type: 'success',
+                                    showCancelButton: false,
+                                    showConfirmButton: false,
+                                    allowOutsideClick: false,
+                                    allowEscapeKey:false,
+                                    timer: 2000
+                                });
+
+                                $("#loaderGif").hide();
+
+                                setTimeout(function(){
+                                    window.location.reload();
+                                }, 3000);
+                            }
                         }
-
-                        if(response == "success")
-                        {
-                            Swal.fire({
-                                position: 'center',
-                                title: 'Success!',
-                                html:  "The user's password has been successfully updated",
-                                icon: 'success',
-                                type: 'success',
-                                showCancelButton: false,
-                                showConfirmButton: false,
-                                allowOutsideClick: false,
-                                allowEscapeKey:false,
-                                timer: 2000
-                            });
-
-                            $("#loaderGif").hide();
-
-                            setTimeout(function(){
-                                window.location.reload();
-                            }, 3000);
-                        }
-                    }
-                });
-            }
-        });
-    }
-
-</script>
+                    });
+                }
+            });
+        }
+    </script>
 @endsection
