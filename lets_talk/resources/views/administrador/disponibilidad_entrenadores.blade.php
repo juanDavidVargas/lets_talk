@@ -4,10 +4,7 @@
 {{-- ===================================== --}}
 
 @section('css')
-    {{-- <link rel="stylesheet" type="text/css" href="{{asset('css/dataTables.bootstrap.min.css')}}"> --}}
-    {{-- <link rel="stylesheet" type="text/css" href="{{asset('css/fixedHeader.bootstrap.min.css')}}"> --}}
-
-    <link href="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-1.13.6/b-2.4.1/b-colvis-2.4.1/b-html5-2.4.1/b-print-2.4.1/fc-4.3.0/fh-3.4.0/kt-2.10.0/r-2.5.0/sp-2.2.0/datatables.min.css" rel="stylesheet">
+    <link href="{{asset('DataTable/datatables.min.css')}}" rel="stylesheet">
 @stop
 
 {{-- ===================================== --}}
@@ -75,14 +72,9 @@
 {{-- ===================================== --}}
 
 @section('scripts')
-    {{-- <script src="{{asset('js/jquery-3.5.1.js') }}"></script>
-    <script src="{{asset('js/jquery.dataTables.min.js') }}"></script>
-    <script src="{{asset('js/dataTables.bootstrap.min.js')}}"></script>
-    <script src="{{asset('js/dataTables.fixedHeader.min.js')}}"></script> --}}
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-1.13.6/b-2.4.1/b-colvis-2.4.1/b-html5-2.4.1/b-print-2.4.1/fc-4.3.0/fh-3.4.0/kt-2.10.0/r-2.5.0/sp-2.2.0/datatables.min.js"></script>
+    <script src="{{asset('DataTable/pdfmake.min.js')}}"></script>
+    <script src="{{asset('DataTable/vfs_fonts.js')}}"></script>
+    <script src="{{asset('DataTable/datatables.min.js')}}"></script>
 
     <script>
         $(document).ready(function() {
