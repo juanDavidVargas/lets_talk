@@ -529,5 +529,7 @@ iframe {
   display: inline-block;
 }
 
-
-
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover{
+  background-color: #337AB7 !important;
+  color: white !important;
+}

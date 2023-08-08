@@ -160,7 +160,7 @@
         $(document ).ready(function() {
             $('#tbl_trainer_sessions').DataTable({
                 'ordering': false,
-                "lengthMenu": [[25,50,100, -1], [25,50,100, 'ALL']],
+                "lengthMenu": [[10,25,50,100, -1], [10,25,50,100, 'ALL']],
                 dom: 'Blfrtip',
                 "info": "Showing page _PAGE_ de _PAGES_",
                 "infoEmpty": "No hay registros",
