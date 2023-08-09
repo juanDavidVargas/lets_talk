@@ -425,14 +425,14 @@ class AdministradorController extends Controller
         if ( isset($initialHour) && !is_null($initialHour) && !empty($initialHour) ) {
             $initialHour = request('initial_hour', null);
         } else {
-            alert()->info('Info', 'The Inicial Hour is required.');
+            alert()->error('Error', 'The Inicial Hour is required.');
             return back();
         }
 
         if ( isset($finalHour) && !is_null($finalHour) && !empty($finalHour) ) {
             $finalHour = request('final_hour', null);
         } else {
-            alert()->info('Info', 'The Final Hour is required.');
+            alert()->error('Error', 'The Final Hour is required.');
             return back();
         }
         
