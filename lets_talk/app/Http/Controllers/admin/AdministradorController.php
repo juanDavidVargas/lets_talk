@@ -419,8 +419,23 @@ class AdministradorController extends Controller
     {
         DB::connection('mysql')->beginTransaction();
 
-        $initialHour = $request->initial_hour;
-        $finalHour = $request->final_hour;
+        $initialHour = request('initial_hour', null);
+        $finalHour = request('final_hour', null);
+        
+        if ( isset($initialHour) && !is_null($initialHour) && !empty($initialHour) ) {
+            $initialHour = request('initial_hour', null);
+        } else {
+            alert()->info('Info', 'The Inicial Hour is required.');
+            return back();
+        }
+
+        if ( isset($finalHour) && !is_null($finalHour) && !empty($finalHour) ) {
+            $finalHour = request('final_hour', null);
+        } else {
+            alert()->info('Info', 'The Final Hour is required.');
+            return back();
+        }
+        
         $horario = $initialHour.'-'.$finalHour;
 
         $consultaHorario = DisponibilidadEntrenadores::select('horario')->where('horario', $horario)->first();

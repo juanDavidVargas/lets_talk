@@ -25,8 +25,8 @@
 @stop
 
 @section('scripts')
-    {{-- <script src="{{asset('validate/cdnjs.cloudflare.com_ajax_libs_jquery_3.4.0_jquery.min.js')}}"></script>
-    <script src="{{asset('validate/cdnjs.cloudflare.com_ajax_libs_jquery-validate_1.19.0_jquery.validate.min.js')}}"></script> --}}
+    {{-- <script src="{{asset('validate/jquery.min.js')}}"></script> --}}
+    {{-- <script src="{{asset('validate/validate.min.js')}}"></script> --}}
 
 <script>
     $(document).ready(function() {
