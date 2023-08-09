@@ -15,7 +15,7 @@
             @if(session('rol') == 3)
                 <h1 class="text-center text-uppercase">Disponibilidad Entrenadores</h1>
             @else
-                <h1 class="text-center text-uppercase">Availability Trainer's</h1>
+                <h1 class="text-center text-uppercase">Trainer's Availability</h1>
 
                 <div class="mt-5">
                     <a href="#" class="btn btn-sm btn-success" id="btn_aprove_all" onclick="actualizacionMasiva(1)">Approve All</a>

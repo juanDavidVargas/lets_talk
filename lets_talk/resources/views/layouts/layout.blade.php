@@ -5,7 +5,7 @@
     @include('layouts.header')
 </head>
 <body>
-    <div class="container" style="margin-bottom: 5em;">
+    <div class="container" style="margin-bottom: 5em; width:95%;">
         <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-6">
                 <div class="logo-box">
