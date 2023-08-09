@@ -32,8 +32,14 @@
 }
 
 body, html {
+  font-family: Poppins-Regular, sans-serif;
 	height: 100%;
-	font-family: Poppins-Regular, sans-serif;
+}
+
+body {
+	min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 /*---------------------------------------------*/
@@ -532,4 +538,8 @@ iframe {
 .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover{
   background-color: #337AB7 !important;
   color: white !important;
+}
+
+footer {
+  margin-top: auto;
 }
