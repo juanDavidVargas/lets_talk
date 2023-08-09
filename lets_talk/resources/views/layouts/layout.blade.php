@@ -3,9 +3,17 @@
 
 <head>
     @include('layouts.header')
+    <style>
+        .contenido-cuerpo {
+            width:95%;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 5em;
+        }
+    </style>
 </head>
 <body>
-    <div class="container" style="margin-bottom: 5em; width:95%;">
+    <div class="contenido-cuerpo">
         <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-6">
                 <div class="logo-box">
