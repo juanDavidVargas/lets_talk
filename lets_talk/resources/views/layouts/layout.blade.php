@@ -10,6 +10,9 @@
             margin-right: auto;
             margin-bottom: 5em;
         }
+        .contenido-row {
+            display: block;
+        }
     </style>
 </head>
 <body>

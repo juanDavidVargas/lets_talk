@@ -1,5 +1,5 @@
 {{-- Rol Administrador (id = 2) --}}
-<ul class="nav nav-tabs">
+<ul class="nav nav-tabs" style="margin-bottom: 0vw !important;">
     <li role="presentation">
         <a class="pointer" href="{{route('administrador.index')}}">Home</a>
     </li>

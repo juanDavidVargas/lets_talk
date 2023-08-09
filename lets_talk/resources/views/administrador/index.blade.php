@@ -7,7 +7,7 @@
 
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12">
-        <h1 class="text-center text-uppercase">List User's</h1>
+        <h1 class="text-center text-uppercase">User's List</h1>
     </div>
 </div>
 
