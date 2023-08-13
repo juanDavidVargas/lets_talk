@@ -6,14 +6,17 @@ use App\User;
 use Exception;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class LoginStore implements Responsable
 {
     public function toResponse($request)
     {
-        // dd($request);
         try
         {
+            DB::connection()->getPDO();
+	        DB::connection()->getDatabaseName();
+
             $username = request('username', null);
             $pass = request('pass', null);
 
@@ -85,7 +88,6 @@ class LoginStore implements Responsable
 
         } catch (Exception $e)
         {
-            dd($e);
             alert()->error('Error', 'An error has occurred, try again, if the problem persists contact support.');
             return back();
         }
@@ -103,7 +105,6 @@ class LoginStore implements Responsable
     private function consultarUsuario($username)
     {
         try {
-
             return User::where('usuario', $username)
                         ->whereNull('deleted_at')
                         ->first();

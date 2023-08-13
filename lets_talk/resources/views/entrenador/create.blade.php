@@ -561,7 +561,6 @@ function cargarEventosPorEntrenador()
 
             $.each(response.agenda, function(index, element)
             {
-
                 myData.push(
                     {
                         id: element.id_horario,

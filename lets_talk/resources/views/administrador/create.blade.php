@@ -215,6 +215,27 @@
             $("#div_primer_zoom").addClass('ocultar');
             $("#div_primer_zoom").hide('slow');
             $("#primer_telefono").trigger('focus');
+
+            // Telefono
+            $("#div_tel_1_cont").attr('data-validate', 'This Field is Required');
+            $("#div_tel_1_cont").addClass('validate-input');
+
+            // Correo
+            $("#div_email_1_cont").removeClass('validate-input');
+            $("#div_email_1_cont").removeAttr('data-validate');
+
+            // Whatsapp
+            $("#div_whats_1_cont").removeClass('validate-input');
+            $("#div_whats_1_cont").removeAttr('data-validate');
+
+            // Skype
+            $("#div_skype_1_cont").removeClass('validate-input');
+            $("#div_skype_1_cont").removeAttr('data-validate');
+
+            // Zoom
+            $("#div_zoom_1_cont").removeClass('validate-input');
+            $("#div_zoom_1_cont").removeAttr('data-validate');
+
         } else if (primer_contacto_valor_edit == 2) // Whatsapp - Celular
         {
             $("#div_primer_celular_whatsapp").removeClass('ocultar');
@@ -227,6 +248,27 @@
             $("#div_primer_zoom").addClass('ocultar');
             $("#div_primer_zoom").hide('slow');
             $("#primer_celular").trigger('focus');
+
+            // Whatsapp
+            $("#div_whats_1_cont").attr('data-validate', 'This Field is Required');
+            $("#div_whats_1_cont").addClass('validate-input');
+
+            // Correo
+            $("#div_email_1_cont").removeClass('validate-input');
+            $("#div_email_1_cont").removeAttr('data-validate');
+
+            // Telefono
+            $("#div_tel_1_cont").removeClass('validate-input');
+            $("#div_tel_1_cont").removeAttr('data-validate');
+
+            // Skype
+            $("#div_skype_1_cont").removeClass('validate-input');
+            $("#div_skype_1_cont").removeAttr('data-validate');
+
+            // Zoom
+            $("#div_zoom_1_cont").removeClass('validate-input');
+            $("#div_zoom_1_cont").removeAttr('data-validate');
+
         } else if (primer_contacto_valor_edit == 3) // Skype
         {
             $("#div_primer_skype").removeClass('ocultar');
@@ -239,6 +281,27 @@
             $("#div_primer_zoom").addClass('ocultar');
             $("#div_primer_zoom").hide('slow');
             $("#primer_skype").trigger('focus');
+
+            // Skype
+            $("#div_skype_1_cont").attr('data-validate', 'This Field is Required');
+            $("#div_skype_1_cont").addClass('validate-input');
+
+            // Correo
+            $("#div_email_1_cont").removeClass('validate-input');
+            $("#div_email_1_cont").removeAttr('data-validate');
+
+            // Telefono
+            $("#div_tel_1_cont").removeClass('validate-input');
+            $("#div_tel_1_cont").removeAttr('data-validate');
+
+            // Whatsapp
+            $("#div_whats_1_cont").removeClass('validate-input');
+            $("#div_whats_1_cont").removeAttr('data-validate');
+
+            // Zoom
+            $("#div_zoom_1_cont").removeClass('validate-input');
+            $("#div_zoom_1_cont").removeAttr('data-validate');
+
         } else if (primer_contacto_valor_edit == 4) // Email
         {
             $("#div_primer_correo").removeClass('ocultar');
@@ -251,6 +314,27 @@
             $("#div_primer_zoom").addClass('ocultar');
             $("#div_primer_zoom").hide('slow');
             $("#primer_correo").trigger('focus');
+
+            // Correo
+            $("#div_email_1_cont").addClass('validate-input');
+            $("#div_email_1_cont").attr('data-validate', 'This Field is Required');
+
+            // Telefono
+            $("#div_tel_1_cont").removeClass('validate-input');
+            $("#div_tel_1_cont").removeAttr('data-validate');
+
+            // Whatsapp
+            $("#div_whats_1_cont").removeClass('validate-input');
+            $("#div_whats_1_cont").removeAttr('data-validate');
+
+            // Skype
+            $("#div_skype_1_cont").removeClass('validate-input');
+            $("#div_skype_1_cont").removeAttr('data-validate');
+
+            // Zoom
+            $("#div_zoom_1_cont").removeClass('validate-input');
+            $("#div_zoom_1_cont").removeAttr('data-validate');
+
         } else if (primer_contacto_valor_edit == 5) // Zoom
         {
             $("#div_primer_zoom").removeClass('ocultar');
@@ -263,6 +347,27 @@
             $("#div_primer_correo").addClass('ocultar');
             $("#div_primer_correo").hide('slow');
             $("#primer_zoom").trigger('focus');
+
+            // Zoom
+            $("#div_zoom_1_cont").attr('data-validate', 'This Field is Required');
+            $("#div_zoom_1_cont").addClass('validate-input');
+
+            // Correo
+            $("#div_email_1_cont").removeClass('validate-input');
+            $("#div_email_1_cont").removeAttr('data-validate');
+
+            // Telefono
+            $("#div_tel_1_cont").removeClass('validate-input');
+            $("#div_tel_1_cont").removeAttr('data-validate');
+
+            // Whatsapp
+            $("#div_whats_1_cont").removeClass('validate-input');
+            $("#div_whats_1_cont").removeAttr('data-validate');
+
+            // Skype
+            $("#div_skype_1_cont").removeClass('validate-input');
+            $("#div_skype_1_cont").removeAttr('data-validate');
+
         } else {
             $("#div_primer_telefono").addClass('ocultar');
             $("#div_primer_telefono").hide('slow');
@@ -274,9 +379,32 @@
             $("#div_primer_correo").hide('slow');
             $("#div_primer_zoom").addClass('ocultar');
             $("#div_primer_zoom").hide('slow');
+
+            // Primer Contacto
+            $("#1_cont").attr('data-validate', 'This Field is Required');
+            $("#1_cont").addClass('validate-input');
+
+            // Zoom
+            $("#div_zoom_1_cont").removeClass('validate-input');
+            $("#div_zoom_1_cont").removeAttr('data-validate');
+
+            // Correo
+            $("#div_email_1_cont").removeClass('validate-input');
+            $("#div_email_1_cont").removeAttr('data-validate');
+
+            // Telefono
+            $("#div_tel_1_cont").removeClass('validate-input');
+            $("#div_tel_1_cont").removeAttr('data-validate');
+
+            // Whatsapp
+            $("#div_whats_1_cont").removeClass('validate-input');
+            $("#div_whats_1_cont").removeAttr('data-validate');
+
+            // Skype
+            $("#div_skype_1_cont").removeClass('validate-input');
+            $("#div_skype_1_cont").removeAttr('data-validate');
         }
     });
-
 
     $("#id_segundo_contacto").change(function() {
         let segundo_contacto_valor = $("#id_segundo_contacto").val();

@@ -166,7 +166,7 @@
             if (checked == true) {
                 console.log(`checked ${checked}`);
                 $('.btn-pending').addClass('ocultar');
-                
+
                 $("input:checkbox[id^='pending_']").attr('checked',true);
 
                 var idEventos;
@@ -181,8 +181,7 @@
                     arrayIds.push(eventoId);
                 });
 
-                console.log(arrayIds);
-                actualizacionMasiva(estado);
+                actualizacionMasiva(estado, arrayIds);
 
             } else {
                 $('.btn-pending').removeClass('ocultar');
@@ -190,8 +189,6 @@
                 $("input:checkbox[id^='pending_']").attr('checked',false);
 
                 arrayIds = [];
-
-                console.log(`checked ${checked}`);
 
                 $('#btn_aprove_all').on('click', function() {
                     Swal.fire(
@@ -224,30 +221,42 @@
 
         // =================================================================
 
-        function actualizacionMasiva(estado) {
-            $.ajax({
-                url: "{{route('actualizacion_masiva_diponibilidades')}}",
-                type: "POST",
-                dataType: "JSON",
-                data: {'id_evento': JSON.stringify(arrayIds), 'estado': estado},
-                success: function (response) {
-                    console.log(response);
-                    if (response == 'exito') {
-                        Swal.fire({
-                            text: "Event updated succesfully!",
-                            icon: 'success',
-                            type: 'success',
-                            showCancelButton: false,
-                            confirmButtonText: 'Ok',
-                        }).then((result) => {
-                            console.log(result);
-                            if (result.value == true) {
-                                window.location.reload();
-                            }
-                        })
-                    }
+    function actualizacionMasiva(estado, arrayIds) {
+        $.ajax({
+            url: "{{route('actualizacion_masiva_diponibilidades')}}",
+            type: "POST",
+            dataType: "JSON",
+            data: {'id_evento': JSON.stringify(arrayIds), 'estado': estado},
+            success: function (response) {
+                if (response == 'exito') {
+                    Swal.fire({
+                        text: "Event updated succesfully!",
+                        icon: 'success',
+                        type: 'success',
+                        showCancelButton: false,
+                        confirmButtonText: 'Ok',
+                    }).then((result) => {
+                        if (result.value == true) {
+                            window.location.reload();
+                        }
+                    });
                 }
-            });
-        }
+
+                if (response == "error") {
+                    Swal.fire({
+                        text: "An error occurred, try again, if the problem persists contact support.",
+                        icon: 'error',
+                        type: 'error',
+                        showCancelButton: false,
+                        confirmButtonText: 'Ok',
+                    }).then((result) => {
+                        if (result.value == true) {
+                            window.location.reload();
+                        }
+                    });
+                }
+            }
+        });
+    }
     </script>
 @endsection

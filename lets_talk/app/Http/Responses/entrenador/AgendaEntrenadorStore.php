@@ -62,12 +62,9 @@ class AgendaEntrenadorStore implements Responsable
                     $user_id = session('usuario_id');
                 }
 
-                $consultaDisponibilidades = $this->disponibilidadUsuario(session('usuario_id'));
+                $consultaDisponibilidades = $this->validarDisponibilidadUsuario(session('usuario_id'));
 
-                if (isset($consultaDisponibilidades) &&
-                    !is_null($consultaDisponibilidades) &&
-                    !empty($consultaDisponibilidades) &&
-                    $consultaDisponibilidades != 'error_datos_disp') {
+                if ($consultaDisponibilidades > 0 && $consultaDisponibilidades != 'error_datos_disp') {
 
                     return response()->json("ya_existe");
                 }
@@ -151,8 +148,7 @@ class AgendaEntrenadorStore implements Responsable
            && $datos_admin != "error_datos_admin")
         {
 
-            if(isset($traer_disponibilidad) && !empty($traer_disponibilidad) && !is_null($traer_disponibilidad)
-               && $traer_disponibilidad != "error_datos_disp")
+            if(isset($traer_disponibilidad) && $traer_disponibilidad != "error_datos_disp")
             {
                 //Envio del correo
                 Mail::to($datos_admin->correo)->send(new MailAprobacionDisponibilidad($datos_usuario,  $datos_admin, $traer_disponibilidad));
@@ -186,6 +182,21 @@ class AgendaEntrenadorStore implements Responsable
         }
     }
 
+    public function validarDisponibilidadUsuario($usuario_id)
+    {
+        try
+        {
+            return EventoAgendaEntrenador::where('id_usuario', $usuario_id)
+                                            ->where('state', 2)
+                                            ->get()
+                                            ->count();
+        } catch (Exception $e)
+        {
+            Logger("Error consultando los datos del usuario administrador: {$e}");
+            return "error_datos_disp";
+        }
+    }
+
     public function disponibilidadUsuario($usuario_id)
     {
         try
@@ -193,11 +204,11 @@ class AgendaEntrenadorStore implements Responsable
             return EventoAgendaEntrenador::where('id_usuario', $usuario_id)
                                             ->where('state', 2)
                                             ->get();
-
         } catch (Exception $e)
         {
             Logger("Error consultando los datos del usuario administrador: {$e}");
             return "error_datos_disp";
         }
     }
+
 }

@@ -369,7 +369,7 @@ class EntrenadorController extends Controller
 
         } catch (Exception $e) {
             DB::connection('mysql')->rollback();
-            return back();
+            return response()->json("error");
         }
     }
 }
