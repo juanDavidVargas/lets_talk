@@ -17,6 +17,12 @@ use App\Models\entrenador\EventoAgendaEntrenador;
 use Illuminate\Support\Facades\DB;
 use App\Traits\FileUploadTrait;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Responses\niveles\NivelesStore;
+use App\Http\Responses\niveles\NivelesUpdate;
+use App\Http\Responses\niveles\NivelesInactivar;
+use App\Http\Responses\niveles\NivelesActivar;
+
+// ==========================================================
 
 class AdministradorController extends Controller
 {
@@ -566,55 +572,35 @@ class AdministradorController extends Controller
 
     // ===================================================
 
+    public function crearNivel(Request $request)
+    {
+        $sesion = $this->validarVariablesSesion();
+
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            return new NivelesStore();
+        }
+    }
+
+    // ===================================================
+
     public function editarNivel(Request $request)
     {
-        DB::connection('mysql')->beginTransaction();
+        $sesion = $this->validarVariablesSesion();
 
-        $idNivel = intval(request('id_nivel', null));
-        $newNameNivel = strtoupper(request('editar_nivel', null));
-
-        $carpetaArchivos = '/upfiles/niveles';
-        $baseFileNameEdit = "{$newNameNivel}_".time(); //nombre base para los archivos
-
-        // =============================================
-
-        try {
-            $archivoNivelEditar = "";
-
-            if ($request->hasFile('file_editar_nivel')) {
-                $archivoNivelEditar = $this->upfileWithName($baseFileNameEdit, $carpetaArchivos, $request, 'file_editar_nivel', 'file_editar_nivel');
-            }
-
-            // =============================================
-
-            if (isset($archivoNivelEditar) && !is_null($archivoNivelEditar) && !empty($archivoNivelEditar)) {
-                $editarNivel = Nivel::where('id_nivel', $idNivel)
-                            ->update([
-                                'nivel_descripcion' => $newNameNivel,
-                                'ruta_pdf_nivel' => $archivoNivelEditar,
-                            ]);
-            } else {
-                $editarNivel = Nivel::where('id_nivel', $idNivel)
-                            ->update([
-                                'nivel_descripcion' => $newNameNivel
-                            ]);
-            }
-
-            // =============================================
-            
-            if ($editarNivel) {
-                DB::connection('mysql')->commit();
-                alert()->success('Successful Process', 'Level updated');
-                return redirect()->to(route('administrador.niveles_index'));
-            } else {
-                DB::connection('mysql')->rollback();
-                alert()->error('Error', 'An error has occurred updating the level, please contact support.');
-                return redirect()->to(route('administrador.niveles_index'));
-            }
-        } catch (Exception $e) {
-            dd($e);
-            DB::connection('mysql')->rollback();
-            return response()->json(-1);
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            return new NivelesUpdate();
         }
     }
 
@@ -622,49 +608,16 @@ class AdministradorController extends Controller
 
     public function inactivarNivel(Request $request)
     {
-        $idNivel = intval($request->id_nivel);
-        $fechaActual = now();
+        $sesion = $this->validarVariablesSesion();
 
-        DB::connection('mysql')->beginTransaction();
-
-        try {
-            $inactivarNivel = DB::table('niveles')
-                            ->where('id_nivel', $idNivel)
-                            ->update([
-                                'deleted_at' => $fechaActual
-                            ]);
-
-            if($inactivarNivel) {
-                DB::connection('mysql')->commit();
-
-                // NUEVA CONSULTA
-                $queryUsuariosNivel = DB::table('usuarios')
-                                    ->join('niveles', 'niveles.id_nivel', '=', 'usuarios.id_nivel')
-                                    ->select('usuarios.id_user')
-                                    ->whereNotNull('niveles.deleted_at')
-                                    ->get()
-                                    ->toArray();
-                
-                foreach ($queryUsuariosNivel as $idNivel) {
-                    $idUser = $idNivel->id_user;
-
-                    DB::table('usuarios')
-                            ->where('id_user', $idUser)
-                            ->update([
-                                'id_nivel' => 0
-                            ]);
-                }
-
-                alert()->success('Successful Process', 'Level inactivated');
-                return redirect()->to(route('administrador.niveles_index'));
-            } else {
-                DB::connection('mysql')->rollback();
-                alert()->error('Error', 'An error has occurred inactivating the level, please contact support.');
-                return redirect()->to(route('administrador.niveles_index'));
-            }
-        } catch (Exception $e) {
-            DB::connection('mysql')->rollback();
-            return response()->json(-1);
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            return new NivelesInactivar();
         }
     }
 
@@ -672,71 +625,19 @@ class AdministradorController extends Controller
 
     public function activarNivel(Request $request)
     {
-        $idNivel = intval($request->id_nivel);
+        $sesion = $this->validarVariablesSesion();
 
-        DB::connection('mysql')->beginTransaction();
-
-        try {
-            $inactivarNivel = DB::table('niveles')
-                            ->where('id_nivel', $idNivel)
-                            ->update([
-                                'deleted_at' => null
-                            ]);
-
-            if($inactivarNivel) {
-                DB::connection('mysql')->commit();
-                alert()->success('Successful Process', 'Level activated');
-                return redirect()->to(route('administrador.niveles_index'));
-            } else {
-                DB::connection('mysql')->rollback();
-                alert()->error('Error', 'An error has occurred activating the level, please contact support.');
-                return redirect()->to(route('administrador.niveles_index'));
-            }
-        } catch (Exception $e) {
-            DB::connection('mysql')->rollback();
-            return response()->json(-1);
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            return new NivelesActivar();
         }
     }
 
-    // ===================================================
-
-    public function crearNivel(Request $request)
-    {
-        $nuevoNivel = strtoupper(request('crear_nivel', null));
-
-        $baseFileName = "{$nuevoNivel}"; //nombre base para los archivos
-        $carpetaArchivos = '/upfiles/niveles';
-        
-        DB::connection('mysql')->beginTransaction();
-        
-        try {
-            $archivoNivel= '';
-            if ($request->hasFile('file_crear_nivel')) {
-                $archivoNivel = $this->upfileWithName($baseFileName, $carpetaArchivos, $request, 'file_crear_nivel', 'file_crear_nivel');
-            } else {
-                $archivoNivel = null;
-            }
-
-            $crearNivel = Nivel::create([
-                                'nivel_descripcion' => $nuevoNivel,
-                                'ruta_pdf_nivel' => $archivoNivel
-                            ]);
-
-            if($crearNivel) {
-                DB::connection('mysql')->commit();
-                alert()->success('Successful Process', 'New Level created');
-                return redirect()->to(route('administrador.niveles_index'));
-            } else {
-                DB::connection('mysql')->rollback();
-                alert()->error('Error', 'An error has occurred creating the new level, please contact support.');
-                return redirect()->to(route('administrador.niveles_index'));
-            }
-        } catch (Exception $e) {
-            DB::connection('mysql')->rollback();
-            return response()->json(-1);
-        }
-    }
-    
     // ===================================================
 
     public function consultarNivel(Request $request)
