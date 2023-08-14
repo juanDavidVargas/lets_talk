@@ -21,6 +21,9 @@ use App\Http\Responses\niveles\NivelesStore;
 use App\Http\Responses\niveles\NivelesUpdate;
 use App\Http\Responses\niveles\NivelesInactivar;
 use App\Http\Responses\niveles\NivelesActivar;
+use App\Http\Responses\administrador\HorarioStore;
+use App\Http\Responses\administrador\HorarioDelete;
+use App\Http\Responses\administrador\DisponibilidadUpdate;
 
 // ==========================================================
 
@@ -423,68 +426,31 @@ class AdministradorController extends Controller
 
     public function storeAdminDisponibilidad(Request $request)
     {
-        DB::connection('mysql')->beginTransaction();
+        $sesion = $this->validarVariablesSesion();
 
-        $initialHour = request('initial_hour', null);
-        $finalHour = request('final_hour', null);
-        
-        if ( isset($initialHour) && !is_null($initialHour) && !empty($initialHour) ) {
-            $initialHour = request('initial_hour', null);
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
         } else {
-            alert()->error('Error', 'The Inicial Hour is required.');
-            return back();
-        }
-
-        if ( isset($finalHour) && !is_null($finalHour) && !empty($finalHour) ) {
-            $finalHour = request('final_hour', null);
-        } else {
-            alert()->error('Error', 'The Final Hour is required.');
-            return back();
-        }
-        
-        $horario = $initialHour.'-'.$finalHour;
-
-        $consultaHorario = DisponibilidadEntrenadores::select('horario')->where('horario', $horario)->first();
-
-        if (isset($consultaHorario) && !is_null($consultaHorario) && !empty($consultaHorario)) {
-            alert()->error('Error', 'The Schedule already exists, chose another one please');
-            return redirect()->to(route('administrador.disponibilidad_admin'));
-        } else {
-            try {
-                $nuevoHorario = DisponibilidadEntrenadores::create([
-                    'horario' => $horario,
-                ]);
-
-                if ($nuevoHorario) {
-                    DB::connection('mysql')->commit();
-                    alert()->success('Successful Process', 'Schedule successfully created');
-                    return redirect()->to(route('administrador.disponibilidad_admin'));
-                }
-
-            } catch (Exception $e) {
-                DB::connection('mysql')->rollback();
-                alert()->error('Error', 'An error has occurred creating the Schedule, try again, if the problem persists contact support.');
-                return back();
-            }
+            return new HorarioStore();
         }
     }
 
     public function deleteAdminDisponibilidad(Request $request)
     {
-        try {
-            $idHorario = $request->id_horario;
+        $sesion = $this->validarVariablesSesion();
 
-            $consultaIdHorario = DisponibilidadEntrenadores::where('id_horario', $idHorario)->first();
-
-            if ($consultaIdHorario) {
-                $consultaIdHorario->delete();
-                return response()->json('deleted');
-            } else {
-                return response()->json('no_deleted');
-            }
-        } catch (Exception $e) {
-            alert()->error('Error', 'An error has occurred deleting the Schedule, try again, if the problem persists contact support.');
-            return back();
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            return new HorarioDelete();
         }
     }
 
@@ -662,30 +628,16 @@ class AdministradorController extends Controller
 
     public function actualizarDisponibilidad(Request $request)
     {
-        $disponibilidadId = intval(request("disponibilidad_id", null));
-        $estadoId = intval(request("estado_id", null));
+        $sesion = $this->validarVariablesSesion();
 
-        DB::connection('mysql')->beginTransaction();
-
-        try {
-            $actualizacionIndividualDiponibilidades = EventoAgendaEntrenador::where('id', $disponibilidadId)
-                    ->update(
-                        [
-                            'state' => $estadoId,
-                        ]
-                    );
-
-            if($actualizacionIndividualDiponibilidades) {
-                DB::connection('mysql')->commit();
-                return response()->json("success");
-            } else {
-                DB::connection('mysql')->rollback();
-                return response()->json("error_update");
-            }
-
-        } catch (Exception $e) {
-            DB::connection('mysql')->rollback();
-            return back();
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            return new DisponibilidadUpdate();
         }
     }
 }

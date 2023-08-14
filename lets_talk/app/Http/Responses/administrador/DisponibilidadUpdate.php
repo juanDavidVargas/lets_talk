@@ -12,38 +12,42 @@ class DisponibilidadUpdate implements Responsable
 {
     public function toResponse($request)
     {
-        $id_disponibilidad = request('disponibilidad_id', null);
-        $id_evento = request('evento_id', null);
+        $disponibilidadId = intval(request("disponibilidad_id", null));
+        $estadoId = intval(request("estado_id", null));
+
         DB::connection('mysql')->beginTransaction();
 
-        try
-        {
-            $disponibilidad_update = EventoAgendaEntrenador::find($id_disponibilidad);
+        try {
+            if($estadoId == 4 || $estadoId == "4") {
+                $hoy = Carbon::parse(now())->format('Y-m-d H:i:s');
 
-            if($id_evento == 4 || $id_evento == "4")
-            {
-                $disponibilidad_update->deleted_at = Carbon::parse(now())->format('Y-m-d H:i:s');
+                $actualizacionIndividualDiponibilidades = EventoAgendaEntrenador::where('id', $disponibilidadId)
+                    ->update(
+                        [
+                            'state' => $estadoId,
+                            'deleted_at' => $hoy
+                        ]
+                    );
 
-            } else
-            {
-                $disponibilidad_update->deleted_at = null;
+            } else {
+                $actualizacionIndividualDiponibilidades = EventoAgendaEntrenador::where('id', $disponibilidadId)
+                    ->update(
+                        [
+                            'state' => $estadoId,
+                            'deleted_at' => null
+                        ]
+                    );
             }
 
-            $disponibilidad_update->state = $id_evento;
-            $disponibilidad_update->save();
-
-            if($disponibilidad_update)
-            {
+            if($actualizacionIndividualDiponibilidades) {
                 DB::connection('mysql')->commit();
                 return response()->json("success");
-            } else
-            {
-                DB::connection('mysql')->commit();
+            } else {
+                DB::connection('mysql')->rollback();
                 return response()->json("error_update");
             }
 
-        } catch (Exception $e)
-        {
+        } catch (Exception $e) {
             DB::connection('mysql')->rollback();
             return response()->json("error_exception");
         }
