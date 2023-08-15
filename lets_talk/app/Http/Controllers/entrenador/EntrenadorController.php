@@ -17,6 +17,7 @@ use App\Models\usuarios\Contacto;
 use App\Models\entrenador\EvaluacionInterna;
 use App\Models\entrenador\EventoAgendaEntrenador;
 use App\Http\Responses\entrenador\EvaluacionInternaStore;
+use App\Http\Responses\entrenador\DiponibilidadesMasivaUpdate;
 
 class EntrenadorController extends Controller
 {
@@ -328,34 +329,18 @@ class EntrenadorController extends Controller
 
     public function actualizacionMasivaDiponibilidades(Request $request)
     {
-        $estado = request("estado", null);
-        $idEvento = $request['id_evento'];
-        $idEvento = str_replace('"','',$idEvento);
-        $idEvento = explode(",", $idEvento);
-        $idEvento = str_replace('[','',$idEvento);
-        $idEvento = str_replace(']','',$idEvento);
+        $adminCtrl = new AdministradorController();
+        $sesion = $adminCtrl->validarVariablesSesion();
 
-        DB::connection('mysql')->beginTransaction();
-
-        try {
-            $actualizacionMasivaDiponibilidades = EventoAgendaEntrenador::whereIn('id', $idEvento)
-                    ->update(
-                        [
-                            'state' => $estado,
-                        ]
-                    );
-
-            if($actualizacionMasivaDiponibilidades) {
-                DB::connection('mysql')->commit();
-                return response()->json("exito");
-            } else {
-                DB::connection('mysql')->rollback();
-                return response()->json("error");
-            }
-
-        } catch (Exception $e) {
-            DB::connection('mysql')->rollback();
-            return back();
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           empty($sesion[3]) || is_null($sesion[3]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            return new DiponibilidadesMasivaUpdate();
         }
     }
 }
