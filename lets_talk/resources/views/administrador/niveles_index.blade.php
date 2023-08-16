@@ -190,22 +190,6 @@
                     $('#btn_crear_nivel').attr('disabled',true);
                 }, 300);
             })
-            
-            // return;
-
-            // =========================================
-
-            // $('#btn_crear_nivel').on('click', function () {
-            //     // let nombre_nivel = $('#crear_nivel').val();
-
-            //     // if (nombre_nivel != "") {
-                    
-            //     // } else {
-                    
-            //     // }
-            //     $('#file_crear_nivel').attr('disabled',true);
-            //     $('#btn_crear_nivel').attr('disabled',true);
-            // })
         }
 
         // ===========================================
@@ -217,7 +201,6 @@
                 dataType: "JSON",
                 data: {'id_nivel': idNivel},
                 success: function (respuesta) {
-                    // console.log(respuesta.nivel_descripcion);
                     nivel = respuesta.nivel_descripcion;
 
                     html = ``;
