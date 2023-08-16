@@ -18,22 +18,8 @@ class HorarioStore implements Responsable
 
         $initialHour = request('initial_hour', null);
         $finalHour = request('final_hour', null);
-        
-        // if ( isset($initialHour) && !is_null($initialHour) && !empty($initialHour) ) {
-        //     $initialHour = request('initial_hour', null);
-        // } else {
-        //     alert()->error('Error', 'The Inicial Hour is required.');
-        //     return back();
-        // }
-
-        // if ( isset($finalHour) && !is_null($finalHour) && !empty($finalHour) ) {
-        //     $finalHour = request('final_hour', null);
-        // } else {
-        //     alert()->error('Error', 'The Final Hour is required.');
-        //     return back();
-        // }
-        
         $horario = $initialHour.'-'.$finalHour;
+        // dd($initialHour, $finalHour, $horario);
 
         $consultaHorario = DisponibilidadEntrenadores::select('horario')->where('horario', $horario)->first();
 
