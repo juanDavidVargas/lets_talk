@@ -624,6 +624,8 @@ class AdministradorController extends Controller
         }
     }
     
+    
+    
     // ===================================================
 
     public function actualizarDisponibilidad(Request $request)
