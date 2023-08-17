@@ -93,12 +93,12 @@
             form_shedule += `
                     <div style="margin-top:2rem;">
                         <label class="lb-time">Initial Hour</label>
-                        <input type="time" min="08:00" max="20:30" name="initial_hour" id="initial_hour" class="hour">
+                        <input type="time" min="08:00" max="20:30" name="initial_hour" id="initial_hour" step="1800" class="hour">
                     </div>
 
                     <div>
                         <label class="lb-time">Final Hour</label>
-                        <input type="time" min="08:00" max="20:00" name="final_hour" id="final_hour" class="hour">
+                        <input type="time" min="08:00" max="20:00" name="final_hour" id="final_hour" step="1800" class="hour">
                     </div>
             `;
 
@@ -126,6 +126,13 @@
                 });
 
                 // ===========================================
+
+                // $(this).validate({
+                //     rules: {
+                //         "created[0][value][time]": {step: false}
+                //     }
+                // });
+                // Step attribute on input type time is not supported.
 
                 form_store_shedule = $("#form_store_shedule");
 
