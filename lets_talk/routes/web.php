@@ -1,11 +1,19 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+// use App\Http\Controllers\DatabaseConnectionController;
 
 Route::get('/', function ()
  {
     return view('inicio_sesion.login');
 })->name('home');
+
+// RUTA COMPROBAR CONEXIÓN
+Route::get('check_database_connection', 'inicio_sesion\LoginController@checkDatabaseConnection')->name('check_database_connection');
+// Route::get('/check_database_connection', [DatabaseConnectionController::class, 'checkDatabaseConnection']);
+// Route::resource('check_database_connection', 'DatabaseConnectionController');
+
+// =======================================================================================================
 
 // Rutas Login
 Route::resource('login', 'inicio_sesion\LoginController');

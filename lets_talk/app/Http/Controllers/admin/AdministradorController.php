@@ -24,6 +24,7 @@ use App\Http\Responses\niveles\NivelesActivar;
 use App\Http\Responses\administrador\HorarioStore;
 use App\Http\Responses\administrador\HorarioDelete;
 use App\Http\Responses\administrador\DisponibilidadUpdate;
+use App\Http\Controllers\DatabaseConnectionController;
 
 // ==========================================================
 
