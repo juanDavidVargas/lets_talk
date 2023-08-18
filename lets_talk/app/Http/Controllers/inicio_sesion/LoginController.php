@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 use App\Http\Responses\inicio_sesion\RecoveryPasswordEmail;
 use App\Http\Responses\inicio_sesion\RecoveryPasswordPost;
+// use Illuminate\View\View;
 
 class LoginController extends Controller
 {
@@ -25,11 +26,9 @@ class LoginController extends Controller
      */
     public function index()
     {
-        // $vista = 'inicio_sesion.login_entrenador';
-        // $checkConnection = $this->checkDatabaseConnection();
-        // dd($checkConnection);
-        // return view($checkConnection);
-        return view('inicio_sesion.login_entrenador');
+        $vista = 'inicio_sesion.login_entrenador';
+        $checkConnection = $this->checkDatabaseConnection($vista);
+        return view($checkConnection->getName());
     }
 
     // ==============================================================
@@ -54,7 +53,6 @@ class LoginController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
         return new LoginStore();
     }
 
@@ -144,7 +142,6 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         try {
-
             Session::forget('usuario_id');
             Session::forget('username');
             Session::forget('sesion_iniciada');
@@ -186,23 +183,13 @@ class LoginController extends Controller
 
     // ==============================================================
 
-    // public function checkDatabaseConnection($rutaPerfil)
-    public function checkDatabaseConnection()
+    public function checkDatabaseConnection($rutaPerfil)
     {
         try {
             DB::connection()->getPdo();
-            $message = "Conexión exitosa a la Base de Datos.";
-            return View::make('database_connection', ['message' => $message]);
-            // return redirect()->to(route('administrador.index'));
-
-            // return view('administrador.index');
-            // return view($rutaPerfil);
-            // return view('database_connection');
-            // return redirect()->to(route($rutaPerfil));
+            return view($rutaPerfil);
         } catch (\Exception $e) {
-            // $message = "No se pudo conectar a la base de datos. Error: " . $e->getMessage();
-            $message = "No se pudo conectar a la base de datos.";
-            return View::make('database_connection', ['message' => $message]);
+            return View::make('database_connection');
         }
     }
 }
