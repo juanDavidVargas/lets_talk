@@ -127,7 +127,9 @@ class LoginController extends Controller
 
     public function loginEstudiante()
     {
-        return view('inicio_sesion.login_estudiante');
+        $vista = 'inicio_sesion.login_estudiante';
+        $checkConnection = $this->checkDatabaseConnection($vista);
+        return view($checkConnection->getName());
     }
 
     // ==============================================================
