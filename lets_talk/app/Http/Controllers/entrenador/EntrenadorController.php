@@ -16,6 +16,8 @@ use App\Models\usuarios\Nivel;
 use App\Models\usuarios\Contacto;
 use App\Models\entrenador\EvaluacionInterna;
 use App\Models\entrenador\EventoAgendaEntrenador;
+use App\Http\Responses\entrenador\EvaluacionInternaStore;
+use App\Http\Responses\entrenador\DiponibilidadesMasivaUpdate;
 
 class EntrenadorController extends Controller
 {
@@ -286,33 +288,18 @@ class EntrenadorController extends Controller
 
     public function evaluacionInternaEntrenador(Request $request)
     {
-        $evaluacionInterna = request('evaluacion_interna', null);
-        $idEstudiante = request('id_estudiante', null);
-        $idInstructor = request('id_instructor', null);
+        $adminCtrl = new AdministradorController();
+        $sesion = $adminCtrl->validarVariablesSesion();
 
-        DB::connection('mysql')->beginTransaction();
-
-        try {
-            $evaluacionInternaCreate = EvaluacionInterna::create([
-                'evaluacion_interna' => $evaluacionInterna,
-                'id_estudiante' => $idEstudiante,
-                'id_instructor' => 7,
-            ]);
-
-            if ($evaluacionInternaCreate) {
-                DB::connection('mysql')->commit();
-                alert()->success('Successful Process', 'Internal valuation created');
-                return redirect()->to(route('trainer.index'));
-            } else {
-                DB::connection('mysql')->rollback();
-                alert()->error('Error', 'An error has occurred creating the user, please contact support.');
-                return redirect()->to(route('entrenador.index'));
-            }
-
-        } catch (Exception $e) {
-            DB::connection('mysql')->rollback();
-            alert()->error('Error', 'An error has occurred creating the user, try again, if the problem persists contact support.');
-            return back();
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           empty($sesion[3]) || is_null($sesion[3]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            return new EvaluacionInternaStore();
         }
     }
 
@@ -321,7 +308,7 @@ class EntrenadorController extends Controller
     public function consultaEvaluacionInterna(Request $request)
     {
         $idEstudiante = intval($request->id_estudiante);
-        // $idInstructor = intval($request->id_instructor);
+        // $idInstructor = intval($request->id_instructor); // Se habilita al estar listo el módulo de estudiante
 
         return DB::table('evaluacion_interna')
                     ->leftjoin('usuarios as estudiante', 'estudiante.id_user', '=', 'evaluacion_interna.id_estudiante')
@@ -342,34 +329,18 @@ class EntrenadorController extends Controller
 
     public function actualizacionMasivaDiponibilidades(Request $request)
     {
-        $estado = request("estado", null);
-        $idEvento = $request['id_evento'];
-        $idEvento = str_replace('"','',$idEvento);
-        $idEvento = explode(",", $idEvento);
-        $idEvento = str_replace('[','',$idEvento);
-        $idEvento = str_replace(']','',$idEvento);
+        $adminCtrl = new AdministradorController();
+        $sesion = $adminCtrl->validarVariablesSesion();
 
-        DB::connection('mysql')->beginTransaction();
-
-        try {
-            $actualizacionMasivaDiponibilidades = EventoAgendaEntrenador::whereIn('id', $idEvento)
-                    ->update(
-                        [
-                            'state' => $estado,
-                        ]
-                    );
-
-            if($actualizacionMasivaDiponibilidades) {
-                DB::connection('mysql')->commit();
-                return response()->json("exito");
-            } else {
-                DB::connection('mysql')->rollback();
-                return response()->json("error");
-            }
-
-        } catch (Exception $e) {
-            DB::connection('mysql')->rollback();
-            return response()->json("error");
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           empty($sesion[3]) || is_null($sesion[3]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            return new DiponibilidadesMasivaUpdate();
         }
     }
 }

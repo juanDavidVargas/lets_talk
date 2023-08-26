@@ -152,6 +152,22 @@
                         });
                         return;
                     }
+
+                    if (response == "error_exception") {
+                        Swal.fire({
+                            position: 'center',
+                            title: 'Error!',
+                            html: 'An error_exception occurred, try again, if the problem persists contact support.',
+                            icon: 'error',
+                            type: 'error',
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            timer: 5000
+                        });
+                        return;
+                    }
                 }
             });
         }

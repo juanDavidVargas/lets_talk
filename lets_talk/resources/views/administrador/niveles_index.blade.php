@@ -15,6 +15,7 @@
             width: 70%;
             text-align:center;
             text-transform: uppercase;
+            font-size: 14px;
         }
         .div-new-level{
             margin-top: 5rem;
@@ -26,6 +27,10 @@
             margin-bottom: 2rem;
             margin-left: auto;
             margin-right: auto;
+        }
+
+        .font14{
+            font-size: 14px;
         }
     </style>
 @stop
@@ -154,7 +159,7 @@
             html = ``;
             html += `{!! Form::open(['method' => 'POST', 'route' => ['crear_nivel'], 'class'=>['form-horizontal form-bordered'], 'id'=>'form_crear_nivel', 'enctype'=>'multipart/form-data']) !!}`;
             html += `@csrf`;
-            html +=     `<label class="">This option creates a new level</label>`;
+            html +=     `<label class="font14">This option creates a new level</label>`;
             html +=     `<div class="div-level-name">
                             <input type="text" name="crear_nivel" id="crear_nivel" class="level-name" required />
                         </div>
@@ -183,6 +188,13 @@
                 cancelButtonText: 'Cancel',
                 allowOutsideClick: false,
             });
+
+            $('#btn_crear_nivel').on('click', function () {
+                setTimeout(function() {
+                    $('#file_crear_nivel').attr('disabled',true);
+                    $('#btn_crear_nivel').attr('disabled',true);
+                }, 300);
+            })
         }
 
         // ===========================================
@@ -194,14 +206,13 @@
                 dataType: "JSON",
                 data: {'id_nivel': idNivel},
                 success: function (respuesta) {
-                    // console.log(respuesta.nivel_descripcion);
                     nivel = respuesta.nivel_descripcion;
 
                     html = ``;
                     html += `{!! Form::open(['method' => 'POST', 'route' => ['editar_nivel'], 'class'=>['form-horizontal form-bordered'], 'id'=>'form_edit_nivel', 'enctype'=>'multipart/form-data']) !!}`;
                     html += `@csrf`;
                     html +=     `<input type="hidden" name="id_nivel" id="id_nivel" value="${idNivel}" required />`;
-                    html +=     `<label class="">Enter the new level name</label>`;
+                    html +=     `<label class="font14">Enter the new level name</label>`;
                     html +=     `<div class="div-level-name">
                                     <input type="text" name="editar_nivel" id="editar_nivel" class="level-name" value="${nivel}" required />
                                 </div>
@@ -238,7 +249,7 @@
             html += `{!! Form::open(['method' => 'POST', 'route' => ['inactivar_nivel'], 'class'=>['form-horizontal form-bordered'], 'id'=>'form_inactivar_nivel']) !!}`;
             html += `@csrf`;
             html +=     `<input type="hidden" name="id_nivel" id="id_nivel" value="${idNivel}" required />`;
-            html +=     `<label class="">This option inactive this level</label>`;
+            html +=     `<label class="font14">This option inactive this level</label>`;
             html +=     `<div class="div-level-name">
                             <input type="submit" value="Inactive" class="btn btn-primary" id="btn_inactivar_nivel">
                         </div>
@@ -268,7 +279,7 @@
             html += `{!! Form::open(['method' => 'POST', 'route' => ['activar_nivel'], 'class'=>['form-horizontal form-bordered'], 'id'=>'form_activar_nivel']) !!}`;
             html += `@csrf`;
             html +=     `<input type="hidden" name="id_nivel" id="id_nivel" value="${idNivel}" required />`;
-            html +=     `<label class="">This option active this level</label>`;
+            html +=     `<label class="font14">This option active this level</label>`;
             html +=     `<div class="div-level-name">
                             <input type="submit" value="Active" class="btn btn-primary" id="btn_activar_nivel">
                         </div>

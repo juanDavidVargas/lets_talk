@@ -86,19 +86,19 @@
             let form_shedule = ''
 
             form_shedule += `
-                {!! Form::open(['method' => 'POST', 'route' => ['administrador.disponibilidad_admin_store'], 'id' => 'form_store_shedule', 'class' => 'login100-form validate-form', 'autocomplete' => 'off']) !!}
+                {!! Form::open(['method' => 'POST', 'route' => ['administrador.disponibilidad_admin_store'], 'id' => 'form_store_shedule', 'class' => 'login100-form', 'autocomplete' => 'off']) !!}
                 @csrf
             `;
 
             form_shedule += `
-                    <div style="margin-top:2rem;" class="validate-input" data-validate="This Field is Required">
+                    <div style="margin-top:2rem;">
                         <label class="lb-time">Initial Hour</label>
-                        <input type="text" minlength="5" maxlength="5" name="initial_hour" placeholder="09:00" class="hour">
+                        <input type="time" min="08:00" max="20:30" name="initial_hour" id="initial_hour" step="1800" class="hour">
                     </div>
 
-                    <div class="validate-input" data-validate="This Field is Required">
+                    <div>
                         <label class="lb-time">Final Hour</label>
-                        <input type="text" minlength="5" maxlength="5" name="final_hour" placeholder="10:00" class="hour">
+                        <input type="time" min="08:00" max="20:00" name="final_hour" id="final_hour" step="1800" class="hour">
                     </div>
             `;
 
@@ -124,27 +124,62 @@
                     allowOutsideClick: false,
                     allowEscapeKey: false,
                 });
+
+                // ===========================================
+
+                // $(this).validate({
+                //     rules: {
+                //         "created[0][value][time]": {step: false}
+                //     }
+                // });
+                // Step attribute on input type time is not supported.
+
+                form_store_shedule = $("#form_store_shedule");
+
+                form_store_shedule.validate({
+                    rules:{
+                        initial_hour:{required:true},
+                        final_hour:{required:true}
+                    },
+                    messages: {
+                        initial_hour: {required:"Initial Hour is Required"},
+                        final_hour: {required:"Final Hour is Required"},
+                    },
+                    submitHandler: function(form) {
+                        form.submit();
+                    }
+                });
+
+                // ===========================================
+
+                $('#final_hour').blur(function () {
+                    let initial_hour = $('#initial_hour').val();
+                    let final_hour = $('#final_hour').val();
+
+                    initial_hour = initial_hour.replace(':', '');
+                    final_hour = final_hour.replace(':', '');
+
+                    inicial_hora = initial_hour.substr(0, 2);
+                    inicial_minutos = initial_hour.substr(2, 2);
+
+                    final_hora = final_hour.substr(0, 2);
+                    final_minutos = final_hour.substr(2, 2);
+
+                    horaInicialCompleta = (parseInt(inicial_hora*60)) + (parseInt(inicial_minutos));
+                    horaFinalCompleta = (parseInt(final_hora*60)) + (parseInt(final_minutos));
+
+                    let diferencia = horaFinalCompleta - horaInicialCompleta;
+
+                    if (diferencia > 30) {
+                        console.log("no pueder superar la media hora");
+                        Swal.fire(
+                            'Error!',
+                            'May not exceed half an hour!',
+                            'error'
+                        )
+                    }
+                })
             });
-
-            // ================================================
-
-            // $("#form_store_shedule").validate();
-
-            // form_store_shedule = $("#form_store_shedule");
-
-            // form_store_shedule.validate({
-            //     rules:{
-            //         initial_hour:{required:true},
-            //         final_hour:{required:true}
-            //     },
-            //     messages: {
-            //         initial_hour: {required:"Initial Hour is Required"},
-            //         final_hour: {required:"Final Hour is Required"},
-            //     },
-            //     submitHandler: function(form) {
-            //         form.submit();
-            //     }
-            // });
         }); // FIN ready
 
         // ================================================
