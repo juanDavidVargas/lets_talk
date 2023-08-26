@@ -189,13 +189,26 @@
                 allowOutsideClick: false,
             });
 
-            $('#btn_crear_nivel').on('click', function () {
-                setTimeout(function() {
-                    $('#file_crear_nivel').attr('disabled',true);
-                    $('#btn_crear_nivel').attr('disabled',true);
-                }, 300);
-            })
+            // $('#btn_crear_nivel').on('click', function () {
+            //     $('#file_crear_nivel').attr('disabled',true);
+            //     $('#btn_crear_nivel').attr('disabled',true);
+
+            //     // setTimeout(function() {
+            //     //     $('#file_crear_nivel').attr('disabled',true);
+            //     //     $('#btn_crear_nivel').attr('disabled',true);
+            //     // }, 300);
+            // })
         }
+
+        $('#btn_crear_nivel').on('click', function () {
+                $('#file_crear_nivel').attr('disabled',true);
+                $('#btn_crear_nivel').attr('disabled',true);
+
+                // setTimeout(function() {
+                //     $('#file_crear_nivel').attr('disabled',true);
+                //     $('#btn_crear_nivel').attr('disabled',true);
+                // }, 300);
+        });
 
         // ===========================================
         

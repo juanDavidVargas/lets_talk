@@ -25,11 +25,13 @@ use App\Http\Responses\administrador\HorarioStore;
 use App\Http\Responses\administrador\HorarioDelete;
 use App\Http\Responses\administrador\DisponibilidadUpdate;
 use App\Http\Controllers\DatabaseConnectionController;
+use App\Traits\MetodosTrait;
 
 // ==========================================================
 
 class AdministradorController extends Controller
 {
+    use MetodosTrait;
     use FileUploadTrait;
     /**
      * Display a listing of the resource.
@@ -48,8 +50,19 @@ class AdministradorController extends Controller
         {
             return redirect()->to(route('home'));
         } else {
-            $this->share_data();
-            return view('administrador.index');
+            
+            $vista = 'administrador.index';
+            $checkConnection = $this->checkDatabaseConnection($vista);
+
+            if( $checkConnection->getName() == "database_connection")
+            {
+                return view('database_connection');
+            } else {
+
+                $this->share_data();
+                return view($vista);
+            }
+
         }
     }
 

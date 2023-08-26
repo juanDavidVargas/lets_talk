@@ -15,10 +15,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 use App\Http\Responses\inicio_sesion\RecoveryPasswordEmail;
 use App\Http\Responses\inicio_sesion\RecoveryPasswordPost;
-// use Illuminate\View\View;
+use App\Traits\MetodosTrait;
 
 class LoginController extends Controller
 {
+    use MetodosTrait;
     /**
      * Display a listing of the resource.
      *
@@ -185,13 +186,5 @@ class LoginController extends Controller
 
     // ==============================================================
 
-    public function checkDatabaseConnection($rutaPerfil)
-    {
-        try {
-            DB::connection()->getPdo();
-            return view($rutaPerfil);
-        } catch (\Exception $e) {
-            return View::make('database_connection');
-        }
-    }
+    
 }
