@@ -15,11 +15,14 @@
             @if(session('rol') == 3)
                 <h1 class="text-center text-uppercase">Disponibilidad Entrenadores</h1>
             @else
+
                 <h1 class="text-center text-uppercase">Trainer's Availability</h1>
 
                 <div class="mt-5">
                     <a href="#" class="btn btn-sm btn-success" id="btn_aprove_all" onclick="actualizacionMasiva(1)">Approve All</a>
+
                     <a href="#" class="btn btn-sm btn-warning" id="btn_reject_all" onclick="actualizacionMasiva(3)">Reject All</a>
+
                     <a href="#" class="btn btn-sm btn-danger" id="btn_delete_all" onclick="actualizacionMasiva(4)">Delete All</a>
                 </div>
             @endif
@@ -51,7 +54,7 @@
                             <th>Trainer</th>
                             <th>State</th>
                             <th>Select all
-                                <input type="checkbox" name="select_pending" id="select_pending" class="ml-3" style="margin-left:2rem;">
+                                <input type="checkbox" name="select_pending" id="select_pending" class="ml-3 form-check-input" style="margin-left:2rem;" onchange="seleccionarTodos()">
                             </th>
                             <th>Actions</th>
                         </tr>
@@ -77,6 +80,7 @@
     <script src="{{asset('DataTable/datatables.min.js')}}"></script>
 
     <script>
+
         $(document).ready(function() {
             $('#tbl_availability').DataTable({
                 'ordering': false,
@@ -104,6 +108,19 @@
                 ]
             });
         });
+
+    function seleccionarTodos ()
+    {
+        if ($("#select_pending").is(':checked')) {
+
+            $('.checke').prop('checked', true);
+            $('.btn-pending').hide();
+
+        } else {
+            $('.checke').prop('checked', false);
+            $('.btn-pending').show();
+        }
+    }
 
         // ===========================================
 
@@ -173,76 +190,20 @@
         }
 
         // =================================================================
-        // =================================================================
-        // =================================================================
 
-        $("#select_pending").on('change', function () {
-            checked = $('#select_pending').is(':checked');
+    function actualizacionMasiva(estado) {
 
-            if (checked == true) {
-                console.log(`checked ${checked}`);
-                $('.btn-pending').addClass('ocultar');
+        let valoresChecks = $('[name="availability_pending[]"]:checked').map(function(){
+                                return this.value;
+                            }).get();
 
-                $("input:checkbox[id^='pending_']").attr('checked',true);
+        let arrayIds = valoresChecks.join(',');
 
-                var idEventos;
-                idEventos = $("input:checkbox[id^='pending_']:checked").map(function() {
-                    return $(this).attr('id');
-                }).get();
-
-                arrayIds = [];
-
-                idEventos.forEach(id => {
-                    eventoId = id.substr(8);
-                    arrayIds.push(eventoId);
-                });
-
-                actualizacionMasiva(estado, arrayIds);
-
-            } else {
-                $('.btn-pending').removeClass('ocultar');
-
-                $("input:checkbox[id^='pending_']").attr('checked',false);
-
-                arrayIds = [];
-
-                $('#btn_aprove_all').on('click', function() {
-                    Swal.fire(
-                        'Info',
-                        'Select all option must be checked',
-                        'info'
-                    );
-                    return;
-                });
-
-                $('#btn_reject_all').on('click', function() {
-                    Swal.fire(
-                        'Info',
-                        'Select all option must be checked',
-                        'info'
-                    );
-                    return;
-                });
-
-                $('#btn_delete_all').on('click', function() {
-                    Swal.fire(
-                        'Info',
-                        'Select all option must be checked',
-                        'info'
-                    );
-                    return;
-                });
-            }
-        });
-
-        // =================================================================
-
-    function actualizacionMasiva(estado, arrayIds) {
         $.ajax({
             url: "{{route('actualizacion_masiva_diponibilidades')}}",
             type: "POST",
             dataType: "JSON",
-            data: {'id_evento': JSON.stringify(arrayIds), 'estado': estado},
+            data: {'id_evento':arrayIds, 'estado': estado},
             success: function (response) {
                 if (response == 'exito') {
                     Swal.fire({

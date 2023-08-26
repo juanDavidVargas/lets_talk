@@ -18,8 +18,6 @@ class DiponibilidadesMasivaUpdate implements Responsable
         $idEvento = $request['id_evento'];
         $idEvento = str_replace('"','',$idEvento);
         $idEvento = explode(",", $idEvento);
-        $idEvento = str_replace('[','',$idEvento);
-        $idEvento = str_replace(']','',$idEvento);
 
         DB::connection('mysql')->beginTransaction();
 
