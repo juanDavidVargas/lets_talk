@@ -50,19 +50,15 @@ class AdministradorController extends Controller
         {
             return redirect()->to(route('home'));
         } else {
-            
             $vista = 'administrador.index';
             $checkConnection = $this->checkDatabaseConnection($vista);
 
-            if( $checkConnection->getName() == "database_connection")
-            {
+            if($checkConnection->getName() == "database_connection") {
                 return view('database_connection');
             } else {
-
                 $this->share_data();
                 return view($vista);
             }
-
         }
     }
 
@@ -82,8 +78,15 @@ class AdministradorController extends Controller
         {
             return redirect()->to(route('home'));
         } else {
-            $this->share_data();
-            return view('administrador.create');
+            $vista = 'administrador.create';
+            $checkConnection = $this->checkDatabaseConnection($vista);
+
+            if($checkConnection->getName() == "database_connection") {
+                return view('database_connection');
+            } else {
+                $this->share_data();
+                return view($vista);
+            }
         }
     }
 
@@ -125,10 +128,17 @@ class AdministradorController extends Controller
         {
             return redirect()->to(route('home'));
         } else {
-            $usuario = $this->consultarUserEdit($id);
-            view()->share('usuario', $usuario);
-            $this->share_data();
-            return view('administrador.show');
+            $vista = 'administrador.show';
+            $checkConnection = $this->checkDatabaseConnection($vista);
+
+            if($checkConnection->getName() == "database_connection") {
+                return view('database_connection');
+            } else {
+                $usuario = $this->consultarUserEdit($id);
+                view()->share('usuario', $usuario);
+                $this->share_data();
+                return view($vista);
+            }
         }
     }
 
@@ -149,10 +159,17 @@ class AdministradorController extends Controller
         {
             return redirect()->to(route('home'));
         } else {
-            $usuario = $this->consultarUserEdit($id);
-            view()->share('usuario', $usuario);
-            $this->share_data();
-            return view('administrador.edit');
+            $vista = 'administrador.edit';
+            $checkConnection = $this->checkDatabaseConnection($vista);
+
+            if($checkConnection->getName() == "database_connection") {
+                return view('database_connection');
+            } else {
+                $usuario = $this->consultarUserEdit($id);
+                view()->share('usuario', $usuario);
+                $this->share_data();
+                return view($vista);
+            }
         }
     }
 
@@ -194,8 +211,6 @@ class AdministradorController extends Controller
            $sesion[2] != true)
         {
             return redirect()->to(route('home'));
-        } else {
-
         }
     }
 
@@ -413,8 +428,15 @@ class AdministradorController extends Controller
             return redirect()->to(route('home'));
         } else
         {
-            $this->share_data();
-            return view('administrador.disponibilidad_entrenadores');
+            $vista = 'administrador.disponibilidad_entrenadores';
+            $checkConnection = $this->checkDatabaseConnection($vista);
+
+            if($checkConnection->getName() == "database_connection") {
+                return view('database_connection');
+            } else {
+                $this->share_data();
+                return view($vista);
+            }
         }
     }
 
@@ -427,8 +449,15 @@ class AdministradorController extends Controller
 
         } catch (Exception $e)
         {
-            alert()->error("Ha ocurrido un error!");
-            return redirect()->to(route('administrador.index'));
+            $vista = 'administrador.index';
+            $checkConnection = $this->checkDatabaseConnection($vista);
+
+            if($checkConnection->getName() == "database_connection") {
+                return view('database_connection');
+            } else {
+                alert()->error("Ha ocurrido un error!");
+                return redirect()->to(route($vista));
+            }
         }
     }
 

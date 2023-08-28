@@ -29,7 +29,12 @@ class LoginController extends Controller
     {
         $vista = 'inicio_sesion.login_entrenador';
         $checkConnection = $this->checkDatabaseConnection($vista);
-        return view($checkConnection->getName());
+
+        if($checkConnection->getName() == "database_connection") {
+            return view('database_connection');
+        } else {
+            return view($vista);
+        }
     }
 
     // ==============================================================
@@ -114,14 +119,28 @@ class LoginController extends Controller
 
     public function resetPassword()
     {
-        return view('inicio_sesion.resetear_password');
+        $vista = 'inicio_sesion.resetear_password';
+        $checkConnection = $this->checkDatabaseConnection($vista);
+
+        if($checkConnection->getName() == "database_connection") {
+            return view('database_connection');
+        } else {
+            return view($vista);
+        }
     }
 
     // ==============================================================
 
     public function resetPasswordStudent()
     {
-        return view('inicio_sesion.resetear_password_estudiante');
+        $vista = 'inicio_sesion.resetear_password_estudiante';
+        $checkConnection = $this->checkDatabaseConnection($vista);
+
+        if($checkConnection->getName() == "database_connection") {
+            return view('database_connection');
+        } else {
+            return view($vista);
+        }
     }
 
     // ==============================================================
@@ -130,14 +149,26 @@ class LoginController extends Controller
     {
         $vista = 'inicio_sesion.login_estudiante';
         $checkConnection = $this->checkDatabaseConnection($vista);
-        return view($checkConnection->getName());
+
+        if($checkConnection->getName() == "database_connection") {
+            return view('database_connection');
+        } else {
+            return view($vista);
+        }
     }
 
     // ==============================================================
 
     public function recoveryPassword(Request $request)
     {
-        return view('inicio_sesion.recovery_password');
+        $vista = 'inicio_sesion.recovery_password';
+        $checkConnection = $this->checkDatabaseConnection($vista);
+
+        if($checkConnection->getName() == "database_connection") {
+            return view('database_connection');
+        } else {
+            return view($vista);
+        }
     }
 
     // ==============================================================
@@ -174,7 +205,14 @@ class LoginController extends Controller
 
     public function recoveryPasswordLink($id)
     {
-        return view('inicio_sesion.recovery_password_link', compact('id'));
+        $vista = 'inicio_sesion.recovery_password_link';
+        $checkConnection = $this->checkDatabaseConnection($vista);
+
+        if($checkConnection->getName() == "database_connection") {
+            return view('database_connection');
+        } else {
+            return view($vista, compact('id'));
+        }
     }
 
     // ==============================================================
@@ -183,8 +221,4 @@ class LoginController extends Controller
     {
         return new RecoveryPasswordPost();
     }
-
-    // ==============================================================
-
-    
 }

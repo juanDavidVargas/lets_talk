@@ -18,9 +18,11 @@ use App\Models\entrenador\EvaluacionInterna;
 use App\Models\entrenador\EventoAgendaEntrenador;
 use App\Http\Responses\entrenador\EvaluacionInternaStore;
 use App\Http\Responses\entrenador\DiponibilidadesMasivaUpdate;
+use App\Traits\MetodosTrait;
 
 class EntrenadorController extends Controller
 {
+    use MetodosTrait;
     /**
      * Display a listing of the resource.
      *
@@ -39,8 +41,15 @@ class EntrenadorController extends Controller
         {
             return redirect()->to(route('home'));
         } else {
-            view()->share('students', $this->cargarTrainerSession());
-            return view('entrenador.index');
+            $vista = 'entrenador.index';
+            $checkConnection = $this->checkDatabaseConnection($vista);
+
+            if($checkConnection->getName() == "database_connection") {
+                return view('database_connection');
+            } else {
+                view()->share('students', $this->cargarTrainerSession());
+                return view($vista);
+            }
         }
     }
 
@@ -71,9 +80,16 @@ class EntrenadorController extends Controller
                             ->whereNull('deleted_at')
                             ->pluck('usuario', 'id_user');
 
-            view()->share('horarios', $array_horarios);
-            view()->share('trainers', $entrenadores);
-            return view('entrenador.create');
+            $vista = 'entrenador.create';
+            $checkConnection = $this->checkDatabaseConnection($vista);
+
+            if($checkConnection->getName() == "database_connection") {
+                return view('database_connection');
+            } else {
+                view()->share('horarios', $array_horarios);
+                view()->share('trainers', $entrenadores);
+                return view($vista);
+            }
         }
     }
 

@@ -5,9 +5,11 @@ namespace App\Http\Controllers\estudiante;
 use App\Http\Controllers\admin\AdministradorController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Traits\MetodosTrait;
 
 class EstudianteController extends Controller
 {
+    use MetodosTrait;
     /**
      * Display a listing of the resource.
      *
@@ -26,8 +28,14 @@ class EstudianteController extends Controller
         {
             return redirect()->to(route('home'));
         } else {
+            $vista = 'estudiante.index';
+            $checkConnection = $this->checkDatabaseConnection($vista);
 
-            return view('estudiante.index');
+            if($checkConnection->getName() == "database_connection") {
+                return view('database_connection');
+            } else {
+                return view($vista);
+            }
         }
     }
 
@@ -110,8 +118,14 @@ class EstudianteController extends Controller
         {
             return redirect()->to(route('home'));
         } else {
+            $vista = 'estudiante.disponibilidad';
+            $checkConnection = $this->checkDatabaseConnection($vista);
 
-            return view('estudiante.disponibilidad');
+            if($checkConnection->getName() == "database_connection") {
+                return view('database_connection');
+            } else {
+                return view($vista);
+            }
         }
     }
 }
