@@ -71,21 +71,20 @@ class EntrenadorController extends Controller
         {
             return redirect()->to(route('home'));
         } else {
-
-            $array_horarios = DisponibilidadEntrenadores::select('id_horario', 'horario')->pluck('horario', 'id_horario');
-
-            $entrenadores = User::select('id_user', DB::raw("CONCAT(nombres, ' ', apellidos, ' - ', usuario) AS usuario"))
-                            ->whereIn('id_rol', [1])
-                            ->where('estado', 1)
-                            ->whereNull('deleted_at')
-                            ->pluck('usuario', 'id_user');
-
             $vista = 'entrenador.create';
             $checkConnection = $this->checkDatabaseConnection($vista);
 
             if($checkConnection->getName() == "database_connection") {
                 return view('database_connection');
             } else {
+                $array_horarios = DisponibilidadEntrenadores::select('id_horario', 'horario')->pluck('horario', 'id_horario');
+
+                $entrenadores = User::select('id_user', DB::raw("CONCAT(nombres, ' ', apellidos, ' - ', usuario) AS usuario"))
+                            ->whereIn('id_rol', [1])
+                            ->where('estado', 1)
+                            ->whereNull('deleted_at')
+                            ->pluck('usuario', 'id_user');
+
                 view()->share('horarios', $array_horarios);
                 view()->share('trainers', $entrenadores);
                 return view($vista);

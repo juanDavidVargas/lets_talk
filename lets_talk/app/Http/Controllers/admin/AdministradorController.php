@@ -463,8 +463,18 @@ class AdministradorController extends Controller
 
     public function vistaAdminDisponibilidad()
     {
-        $todasDisponibilidades = DisponibilidadEntrenadores::select('id_horario', 'horario')->orderBy('horario', 'asc')->get()->toArray();
-        return view('administrador.disponibilidad_admin', compact('todasDisponibilidades'));
+        $vista = 'administrador.disponibilidad_admin';
+        $checkConnection = $this->checkDatabaseConnection($vista);
+
+        if($checkConnection->getName() == "database_connection") {
+            return view('database_connection');
+        } else {
+            $todasDisponibilidades = DisponibilidadEntrenadores::select('id_horario', 'horario')
+                                                                ->orderBy('horario', 'asc')
+                                                                ->get()
+                                                                ->toArray();
+            return view($vista, compact('todasDisponibilidades'));
+        }
     }
 
     public function storeAdminDisponibilidad(Request $request)
@@ -573,10 +583,18 @@ class AdministradorController extends Controller
 
     public function nivelesIndex()
     {
-        $niveles = Nivel::select('id_nivel','nivel_descripcion','ruta_pdf_nivel','deleted_at')
-                            ->orderBy('nivel_descripcion', 'asc')
-                            ->get();
-        return view('administrador.niveles_index', compact('niveles'));
+        $vista = 'administrador.niveles_index';
+        $checkConnection = $this->checkDatabaseConnection($vista);
+
+        if($checkConnection->getName() == "database_connection") {
+            return view('database_connection');
+        } else {
+            $niveles = Nivel::select('id_nivel','nivel_descripcion','ruta_pdf_nivel','deleted_at')
+                                    ->orderBy('nivel_descripcion', 'asc')
+                                    ->get();
+            
+            return view($vista, compact('niveles'));
+        }
     }
 
     // ===================================================
@@ -666,8 +684,6 @@ class AdministradorController extends Controller
             return back();
         }
     }
-    
-    
     
     // ===================================================
 
