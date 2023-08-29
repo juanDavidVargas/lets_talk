@@ -159,7 +159,7 @@
                                 <td>{{$estudiante->correo}}</td>
                                 <td>{{$estudiante->fecha_ingreso_sistema}}</td>
                                 <td>
-                                    <button type="button" class="text-white" onclick="verEstudiante({{$estudiante->id_user}})">
+                                    <button type="button" class="btn btn-primary" onclick="verEstudiante({{$estudiante->id_user}})">
                                         See Student
                                     </button>
                                 </td>
@@ -239,25 +239,25 @@
                                     if (respuesta.nivel_descripcion == "LOW") {
                                         html += `<div class="d-flex flex-row" style="padding:0; width:50%;">
                                                     <p class="gral-font w50">Level:</p>
-                                                    <p class="color-low center-align w-100">${respuesta.nivel_descripcion}</p>
+                                                    <p class="color-low gral-font center-align w-100">${respuesta.nivel_descripcion}</p>
                                                  </div>
                                         `;
                                     } else if (respuesta.nivel_descripcion == "MID") {
                                         html += `<div class="d-flex flex-row" style="padding:0; width:50%;">
                                                     <p class="gral-font w50">Level:</p>
-                                                    <p class="color-mid center-align w-100">${respuesta.nivel_descripcion}</p>
+                                                    <p class="color-mid gral-font center-align w-100">${respuesta.nivel_descripcion}</p>
                                                  </div>
                                         `;
                                     } else if (respuesta.nivel_descripcion == "HI") {
                                         html += `<div class="d-flex flex-row" style="padding:0; width:50%;">
                                                     <p class="gral-font w50">Level:</p>
-                                                    <p class="color-hi center-align w-100">${respuesta.nivel_descripcion}</p>
+                                                    <p class="color-hi gral-font center-align w-100">${respuesta.nivel_descripcion}</p>
                                                  </div>
                                         `;
                                     } else {
                                         html += `<div class="d-flex flex-row" style="padding:0; width:50%;">
                                                 <p class="gral-font w50">Level:</p>
-                                                <p class="center-align w-100">${respuesta.nivel_descripcion}</p>
+                                                <p class="center-align gral-font w-100">${respuesta.nivel_descripcion}</p>
                                             </div>
                                         `;
                                     }
