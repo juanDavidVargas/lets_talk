@@ -109,6 +109,10 @@
 {{-- ============================================================== --}}
 
 @section('content')
+    @php
+        use Carbon\Carbon;
+    @endphp
+
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <h1 class="text-center text-uppercase">Student Resume</h1>
@@ -126,27 +130,38 @@
                 <table class="table table-striped table-bordered table-hover w-100" id="tbl_student_resume" aria-describedby="Student Resume">
                     <thead>
                         <tr class="header-table">
-                            <th>nombre</th>
-                            <th>whatsapp</th>
-                            <th>rol</th>
-                            <th>tipo documento</th>
-                            <th>numero documento</th>
-                            <th>correo</th>
-                            <th>fecha ingreso sistema</th>
+                            <th>Names</th>
+                            <th>User</th>
+                            <th>Whatsapp</th>
+                            <th>Rol</th>
+                            <th>Document Type</th>
+                            <th>Document Number</th>
+                            <th>Email</th>
+                            <th>System Entry Date</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- @foreach ($students as $student) --}}
+                        @foreach ($estudiantes as $estudiante)
+                            @php
+                                $estudiante->fecha_ingreso_sistema = Carbon::createFromTimestamp($estudiante->fecha_ingreso_sistema)->format('d/m/Y');
+                            @endphp
                             <tr>
-                                <td>nombre</td>
-                                <td>whatsapp</td>
-                                <td>rol</td>
-                                <td>tipo documento</td>
-                                <td>numero documento</td>
-                                <td>correo</td>
-                                <td>fecha ingreso sistema</td>
+                                <td>{{$estudiante->nombre_completo}}</td>
+                                <td>{{$estudiante->usuario}}</td>
+                                <td>{{$estudiante->celular}}</td>
+                                <td>{{$estudiante->rol}}</td>
+                                <td>{{$estudiante->tipo_documento}}</td>
+                                <td>{{$estudiante->numero_documento}}</td>
+                                <td>{{$estudiante->correo}}</td>
+                                <td>{{$estudiante->fecha_ingreso_sistema}}</td>
+                                <td>
+                                    <button type="button" class="text-white" onclick="verEstudiante({{$estudiante->id_user}})">
+                                        See Student
+                                    </button>
+                                </td>
                             </tr>
-                        {{-- @endforeach --}}
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -195,7 +210,8 @@
         // ===================================================
 
         function verEstudiante(idStudent) {
-            
+            console.log(idStudent);
+            alert(idStudent);
         }
     </script>
 @endsection

@@ -19,6 +19,7 @@ use App\Models\entrenador\EventoAgendaEntrenador;
 use App\Http\Responses\entrenador\EvaluacionInternaStore;
 use App\Http\Responses\entrenador\DiponibilidadesMasivaUpdate;
 use App\Traits\MetodosTrait;
+use Carbon\Carbon;
 
 class EntrenadorController extends Controller
 {
@@ -380,7 +381,26 @@ class EntrenadorController extends Controller
             if($checkConnection->getName() == "database_connection") {
                 return view('database_connection');
             } else {
-                return view($vista);
+                $estudiantes = DB::table('usuarios')
+                            ->leftjoin('roles', 'roles.id_rol', '=', 'usuarios.id_rol')
+                            ->leftjoin('tipo_documento', 'tipo_documento.id', '=', 'usuarios.id_tipo_documento')
+                            ->select('id_user',
+                                        DB::raw("CONCAT(nombres, ' ', apellidos) AS nombre_completo"),
+                                        'usuario',
+                                        'celular',
+                                        'roles.descripcion as rol',
+                                        'usuarios.id_tipo_documento',
+                                        'tipo_documento.descripcion as tipo_documento',
+                                        'numero_documento',
+                                        'correo',
+                                        'fecha_ingreso_sistema'
+                                    )
+                            ->where('usuarios.id_rol', 3)
+                            ->where('usuarios.estado', 1)
+                            ->whereNull('usuarios.deleted_at')
+                            ->get();
+
+                return view($vista, compact('estudiantes'));
             }
         }
     }
