@@ -57,6 +57,7 @@ Route::post('evaluacion_interna_entrenador', 'entrenador\EntrenadorController@ev
 Route::post('consulta_evaluacion_interna', 'entrenador\EntrenadorController@consultaEvaluacionInterna')->name('consulta_evaluacion_interna');
 Route::post('actualizacion_masiva_diponibilidades', 'entrenador\EntrenadorController@actualizacionMasivaDiponibilidades')->name('actualizacion_masiva_diponibilidades');
 Route::get('student_resume', 'entrenador\EntrenadorController@studentResume')->name('student_resume');
+Route::post('estudiante_hoja_vida', 'entrenador\EntrenadorController@estudianteHojaVida')->name('estudiante_hoja_vida');
 
 
 // =======================================================================================================

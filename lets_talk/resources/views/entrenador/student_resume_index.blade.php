@@ -31,6 +31,9 @@
         .color-hi{
             color:#FF0000;
         }
+        .color-sin{
+            color:black;
+        }
 
         .w50{
             width: 50%;
@@ -47,7 +50,7 @@
             text-align: left;
         }
         .margin-top{
-            margin-top: 3rem;
+            margin-top: 1rem;
         }
 
         .margin-bottom{
@@ -210,8 +213,263 @@
         // ===================================================
 
         function verEstudiante(idStudent) {
-            console.log(idStudent);
-            alert(idStudent);
+            $.ajax({
+                url: "{{route('estudiante_hoja_vida')}}",
+                type: "POST",
+                datatype: "JSON",
+                data: {'id_estudiante': idStudent},
+                success: function (respuesta) {
+                    let fechaNacimiento = respuesta.fecha_nacimiento;
+                    fechaNacimiento = new Date(fechaNacimiento * 1000).toLocaleDateString('es-ES');
+
+                    let fechaIngresoSistema = respuesta.fecha_ingreso_sistema;
+                    fechaIngresoSistema = new Date(fechaIngresoSistema * 1000).toLocaleDateString('es-ES');
+
+                    html = `<p class="gral-font center-align"><strong>STUDENT RESUME</strong></p>`;
+
+                    // ==============================================
+
+                    html += `
+                            <div class="d-flex flex-row margin-top" style="padding:0; width:100%;">
+                                <div style="width:50%">
+                                    <p class="gral-font" style="color:#33326C;">${respuesta.nombre_completo}</p>
+                                </div>
+                    `;
+                                if (respuesta.nivel_descripcion) {
+                                    if (respuesta.nivel_descripcion == "LOW") {
+                                        html += `<div class="d-flex flex-row" style="padding:0; width:50%;">
+                                                    <p class="gral-font w50">Level:</p>
+                                                    <p class="color-low center-align w-100">${respuesta.nivel_descripcion}</p>
+                                                 </div>
+                                        `;
+                                    } else if (respuesta.nivel_descripcion == "MID") {
+                                        html += `<div class="d-flex flex-row" style="padding:0; width:50%;">
+                                                    <p class="gral-font w50">Level:</p>
+                                                    <p class="color-mid center-align w-100">${respuesta.nivel_descripcion}</p>
+                                                 </div>
+                                        `;
+                                    } else if (respuesta.nivel_descripcion == "HI") {
+                                        html += `<div class="d-flex flex-row" style="padding:0; width:50%;">
+                                                    <p class="gral-font w50">Level:</p>
+                                                    <p class="color-hi center-align w-100">${respuesta.nivel_descripcion}</p>
+                                                 </div>
+                                        `;
+                                    } else {
+                                        html += `<div class="d-flex flex-row" style="padding:0; width:50%;">
+                                                <p class="gral-font w50">Level:</p>
+                                                <p class="center-align w-100">${respuesta.nivel_descripcion}</p>
+                                            </div>
+                                        `;
+                                    }
+                                } else {
+                                    html += `<div class="d-flex flex-row" style="padding:0; width:50%;">
+                                                <p class="gral-font w-100">LEVEL:</p>
+                                            </div>
+                                    `;
+                                }
+                    html += `
+                            </div>
+                    `;
+
+                    // ==============================================
+
+                    html += `
+                            <div class="d-flex flex-row margin-top" style="padding:0; width:100%;">
+                                <div style="width:50%">
+                                    <p class="gral-font" style="color:#33326C;">User</p>
+                                </div>
+                    `;
+                                if (respuesta.usuario) {
+                                    html += `   <div class="d-flex flex-row" style="padding:0; width:50%;">
+                                                    <p class="gral-font w-100">${respuesta.usuario}</p>
+                                                </div>
+                                    `;
+                                } else {
+                                    html += `   <div class="d-flex flex-row" style="padding:0; width:50%;">
+                                                    <p class="gral-font w-100"></p>
+                                                </div>
+                                    `;
+                                }
+                    html += `
+                            </div>
+                    `;
+
+                    // ==============================================
+
+                    html += `
+                            <div class="d-flex flex-row margin-top" style="padding:0; width:100%;">
+                                <div style="width:50%">
+                                    <p class="gral-font" style="color:#33326C;">Whatsapp</p>
+                                </div>
+                    `;
+                                if (respuesta.celular) {
+                                    html += `   <div class="d-flex flex-row" style="padding:0; width:50%;">
+                                                    <p class="gral-font w-100">${respuesta.celular}</p>
+                                                </div>
+                                    `;
+                                } else {
+                                    html += `   <div class="d-flex flex-row" style="padding:0; width:50%;">
+                                                    <p class="gral-font w-100"></p>
+                                                </div>
+                                    `;
+                                }
+                    html += `
+                            </div>
+                    `;
+                    
+                    // ==============================================
+
+                    html += `
+                            <div class="d-flex flex-row margin-top" style="padding:0; width:100%;">
+                                <div style="width:50%">
+                                    <p class="gral-font" style="color:#33326C;">Email</p>
+                                </div>
+                    `;
+                                if (respuesta.correo) {
+                                    html += `   <div class="d-flex flex-row" style="padding:0; width:50%;">
+                                                    <p class="gral-font w-100">${respuesta.correo}</p>
+                                                </div>
+                                    `;
+                                } else {
+                                    html += `   <div class="d-flex flex-row" style="padding:0; width:50%;">
+                                                    <p class="gral-font w-100"></p>
+                                                </div>
+                                    `;
+                                }
+                    html += `
+                            </div>
+                    `;
+
+                    // ==============================================
+                    
+                    html += `
+                            <div class="d-flex flex-row margin-top" style="padding:0; width:100%;">
+                                <div style="width:50%">
+                                    <p class="gral-font" style="color:#33326C;">Document type</p>
+                                </div>
+                    `;
+                                if (respuesta.tipo_documento) {
+                                    html += `   <div class="d-flex flex-row" style="padding:0; width:50%;">
+                                                    <p class="gral-font w-100">${respuesta.tipo_documento}</p>
+                                                </div>
+                                    `;
+                                } else {
+                                    html += `   <div class="d-flex flex-row" style="padding:0; width:50%;">
+                                                    <p class="gral-font w-100"></p>
+                                                </div>
+                                    `;
+                                }
+                    html += `
+                            </div>
+                    `;
+
+                    // ==============================================
+
+                    html += `
+                            <div class="d-flex flex-row margin-top" style="padding:0; width:100%;">
+                                <div style="width:50%">
+                                    <p class="gral-font" style="color:#33326C;">Document</p>
+                                </div>
+                    `;
+                                if (respuesta.numero_documento) {
+                                    html += `   <div class="d-flex flex-row" style="padding:0; width:50%;">
+                                                    <p class="gral-font w-100">${respuesta.numero_documento}</p>
+                                                </div>
+                                    `;
+                                } else {
+                                    html += `   <div class="d-flex flex-row" style="padding:0; width:50%;">
+                                                    <p class="gral-font w-100"></p>
+                                                </div>
+                                    `;
+                                }
+                    html += `
+                            </div>
+                    `;
+
+                    // ==============================================
+
+                    html += `
+                            <div class="d-flex flex-row margin-top" style="padding:0; width:100%;">
+                                <div style="width:50%">
+                                    <p class="gral-font" style="color:#33326C;">Roll</p>
+                                </div>
+                    `;
+                                if (respuesta.rol) {
+                                    html += `   <div class="d-flex flex-row" style="padding:0; width:50%;">
+                                                    <p class="gral-font w-100">${respuesta.rol}</p>
+                                                </div>
+                                    `;
+                                } else {
+                                    html += `   <div class="d-flex flex-row" style="padding:0; width:50%;">
+                                                    <p class="gral-font w-100"></p>
+                                                </div>
+                                    `;
+                                }
+                    html += `
+                            </div>
+                    `;
+
+                    // ==============================================
+
+                    html += `
+                            <div class="d-flex flex-row margin-top" style="padding:0; width:100%;">
+                                <div style="width:50%">
+                                    <p class="gral-font" style="color:#33326C;">Date of Birth</p>
+                                </div>
+                    `;
+                                if (respuesta.fecha_nacimiento) {
+                                    html += `   <div class="d-flex flex-row" style="padding:0; width:50%;">
+                                                    <p class="gral-font w-100">${fechaNacimiento}</p>
+                                                </div>
+                                    `;
+                                } else {
+                                    html += `   <div class="d-flex flex-row" style="padding:0; width:50%;">
+                                                    <p class="gral-font w-100"></p>
+                                                </div>
+                                    `;
+                                }
+                    html += `
+                            </div>
+                    `;
+
+                    // ==============================================
+
+                    html += `
+                            <div class="d-flex flex-row margin-top" style="padding:0; width:100%;">
+                                <div style="width:50%">
+                                    <p class="gral-font" style="color:#33326C;">System entry Date</p>
+                                </div>
+                    `;
+                                if (respuesta.fecha_ingreso_sistema) {
+                                    html += `   <div class="d-flex flex-row" style="padding:0; width:50%;">
+                                                    <p class="gral-font w-100">${fechaIngresoSistema}</p>
+                                                </div>
+                                    `;
+                                } else {
+                                    html += `   <div class="d-flex flex-row" style="padding:0; width:50%;">
+                                                    <p class="gral-font w-100"></p>
+                                                </div>
+                                    `;
+                                }
+                    html += `
+                            </div>
+                    `;
+
+                    // ==============================================
+
+                    Swal.fire({
+                        html: html,
+                        showCloseButton: true,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        focusConfirm: false,
+                        allowOutsideClick: false,
+                        width: 600,
+                        padding: '3em',
+                        background: '#fff',
+                    });
+                }
+            })
         }
     </script>
 @endsection
