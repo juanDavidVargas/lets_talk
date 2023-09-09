@@ -146,6 +146,8 @@
             </div>
         </div>
     </div>
+
+    @include('layouts.loader')
 @stop
 
 {{-- ============================================================== --}}
@@ -189,6 +191,7 @@
 
         function seeDetails(idSesion,idUser) {
             $.ajax({
+                async: true,
                 _token: "{{csrf_token()}}",
                 url: "{{route('detalle_sesion_entrenador')}}",
                 type: "POST",
@@ -196,9 +199,15 @@
                 data: {
                     'id_user': idUser
                 },
+                beforeSend: function() {
+                    $("#loaderGif").show();
+                    $("#loaderGif").removeClass('ocultar');
+                },
                 success: function(response) {
 
                     if(response[0].original == "error_exception") {
+                        $("#loaderGif").hide();
+                        $("#loaderGif").addClass('ocultar');
                         Swal.fire(
                             'Error',
                             'An error occurred, contact support.',
@@ -208,6 +217,8 @@
                     }
 
                     if(response == 404) {
+                        $("#loaderGif").hide();
+                        $("#loaderGif").addClass('ocultar');
                         Swal.fire(
                             'Error',
                             'You do not have the necessary permissions for this action',
@@ -439,15 +450,22 @@
                         let idUserVal = $('#id_estudiante').val();
 
                         $.ajax({
+                            async: true,
                             url: "{{route('consulta_evaluacion_interna')}}",
                             type: "POST",
                             dataType: "json",
                             data: {
                                 'id_estudiante': idUserVal
                             },
+                            beforeSend: function() {
+                                $("#loaderGif").show();
+                                $("#loaderGif").removeClass('ocultar');
+                            },
                             success: function(response) {
 
                                 if(response == 404) {
+                                    $("#loaderGif").hide();
+                                    $("#loaderGif").addClass('ocultar');
                                     Swal.fire(
                                         'Error',
                                         'You do not have the necessary permissions for this action',
@@ -457,6 +475,8 @@
                                 }
 
                                 if(response == "error_exception") {
+                                    $("#loaderGif").hide();
+                                    $("#loaderGif").addClass('ocultar');
                                     Swal.fire(
                                         'Error',
                                         'An error occurred, contact support.',

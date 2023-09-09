@@ -49,7 +49,7 @@
             <button class="btn btn-primary float-right" onclick="crearNivel()">Create New Level</button>
         </div>
     </div>
-    
+
     <div class="row p-t-30">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="table-responsive">
@@ -73,7 +73,7 @@
                                 <td>{{$nivel->nivel_descripcion}}</td>
 
                                 {{-- =========================== --}}
-                                
+
                                 @if ($nivel->ruta_pdf_nivel != null || $nivel->ruta_pdf_nivel != "")
                                     <td>
                                         <a href="/storage/{{$nivel->ruta_pdf_nivel}}" target="_blank">Level File</a>
@@ -112,9 +112,7 @@
         </div>
     </div>
 
-    <div id="loaderGif" class="ocultar">
-        <img src="{{asset('img/processing.gif')}}" alt="processing">
-    </div>
+    @include('layouts.loader')
 @stop
 
 {{-- ==================================================================================== --}}
@@ -162,6 +160,11 @@
                             <input type="text" name="crear_nivel" id="crear_nivel" class="level-name" required />
                         </div>
             `;
+            html += `
+                    <div class="alert alert-danger ocultar" role="alert" id="level_alert">
+                      This field is required
+                    </div>
+            `;
             html +=     `<div class="div-level-name div-file">
                             <input type="file" name="file_crear_nivel" id="file_crear_nivel" class="file" />
                         </div>
@@ -172,7 +175,7 @@
             `;
 
             // =========================================
-            
+
             Swal.fire({
                 title: 'Create Level',
                 html: html,
@@ -192,18 +195,18 @@
                 let nuevoNivel = $('#crear_nivel').val();
                 let fileCrearNivel = $('#file_crear_nivel').val();
 
-                console.log(nuevoNivel);
-                console.log(fileCrearNivel);
-                
                 if (nuevoNivel == "" || nuevoNivel == undefined) {
                     $('#crear_nivel').attr('required', true);
-                    // $('#crear_nivel').prop('required', true);
-                    console.log("campo requerido");
-                    // alert("campo requerido");
+                    $("#level_alert").show();
+                    $("#level_alert").removeClass('ocultar');
                 } else {
+
                     $('#btn_crear_nivel').attr('disabled',true);
+                    $("#level_alert").hide();
+                    $("#level_alert").addClass('ocultar');
 
                     $.ajax({
+                        async: true,
                         url: "{{route('crear_nivel')}}",
                         type: "POST",
                         dataType: "JSON",
@@ -211,25 +214,36 @@
                             'nuevo_crear_nivel': nuevoNivel,
                             'file_crear_nivel': fileCrearNivel,
                         },
+                        beforeSend: function() {
+                            $("#loaderGif").show();
+                            $("#loaderGif").removeClass('ocultar');
+                        },
                         success: function (respuesta) {
-                            console.log(respuesta);
                             if (respuesta == "nivel_creado") {
+                                $("#loaderGif").hide();
+                                $("#loaderGif").addClass('ocultar');
                                 Swal.fire(
                                     'Great!',
                                     'New level has been created successfuly!',
                                     'success'
-                                )
+                                );
+
+                                window.location.reload();
                             }
 
                             if (respuesta == "nivel_existe") {
+                                $("#loaderGif").hide();
+                                $("#loaderGif").addClass('ocultar');
                                 Swal.fire(
                                     'Warning!',
                                     'This level already exists!',
                                     'warning'
                                 )
                             }
-                            
+
                             if (respuesta == "error_exception") {
+                                $("#loaderGif").hide();
+                                $("#loaderGif").addClass('ocultar');
                                 Swal.fire(
                                     'Wrong!',
                                     'An error has ocurred, please contact support!',
@@ -240,17 +254,31 @@
                     })
                 }
             });
+
+            setTimeout(() => {
+                $("#level_alert").hide();
+                $("#level_alert").addClass('ocultar');
+            }, 5000);
         }
 
         // ===========================================
-        
+
         function editarNivel(idNivel) {
             $.ajax({
+                async: true,
                 url:"{{route('consultar_nivel')}}",
                 type:"POST",
                 dataType: "JSON",
                 data: {'id_nivel': idNivel},
+                beforeSend: function() {
+                    $("#loaderGif").show();
+                    $("#loaderGif").removeClass('ocultar');
+                },
                 success: function (respuesta) {
+
+                    $("#loaderGif").hide();
+                    $("#loaderGif").addClass('ocultar');
+
                     nivel = respuesta.nivel_descripcion;
 
                     html = ``;
@@ -270,7 +298,7 @@
                     html += `{!! Form::close() !!}`;
 
                     // =========================================
-                    
+
                     Swal.fire({
                         title: 'Edit Level',
                         html: html,
@@ -302,7 +330,7 @@
             html += `{!! Form::close() !!}`;
 
             // =========================================
-            
+
             Swal.fire({
                 title: 'Inactive Level',
                 html: html,
@@ -316,7 +344,7 @@
                 allowOutsideClick: false,
             });
         }
-        
+
         // ===========================================
 
         function activarNivel(idNivel) {
@@ -332,7 +360,7 @@
             html += `{!! Form::close() !!}`;
 
             // =========================================
-            
+
             Swal.fire({
                 title: 'Active Level',
                 html: html,

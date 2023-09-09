@@ -19,6 +19,7 @@
 <hr>
 
 @include('administrador.fields_show')
+@include('layouts.loader')
 
 @stop
 @section('scripts')
@@ -51,13 +52,8 @@
         let segundo_contacto_tipo_editado = @json($usuario->segundo_contacto_tipo);
         let opcional_contacto_tipo_editado = @json($usuario->opcional_contacto_tipo);
 
-        console.log(primer_contacto_tipo_editado);
-        console.log(segundo_contacto_tipo_editado);
-        console.log(opcional_contacto_tipo_editado);
-
         if (primer_contacto_tipo_editado != null) {
             $("#id_primer_contacto").val(primer_contacto_tipo_editado);
-            console.log(primer_contacto_tipo_editado);
 
             if (primer_contacto_tipo_editado == 1) {  // Phone
                 $("#div_primer_telefono").removeClass('ocultar');
@@ -134,7 +130,7 @@
         // =============================================================================
 
         if (segundo_contacto_tipo_editado != null) {
-        
+
             $("#id_segundo_contacto").val(segundo_contacto_tipo_editado);
 
             if (segundo_contacto_tipo_editado == 1) // Phone

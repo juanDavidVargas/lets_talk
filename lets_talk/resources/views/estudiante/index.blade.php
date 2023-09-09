@@ -42,6 +42,7 @@
     </div>
 </div>
 
+@include('layouts.loader')
 @stop
 @section('scripts')
 <script src="{{ asset('js/jquery-3.5.1.js') }}"></script>

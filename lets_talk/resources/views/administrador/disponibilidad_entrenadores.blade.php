@@ -70,6 +70,8 @@
             </div>
         </div>
     </div>
+
+    @include('layouts.loader')
 @stop
 
 {{-- ===================================== --}}
@@ -134,8 +136,14 @@
                     'disponibilidad_id': id_disponibilidad,
                     'estado_id': id_estado
                 },
+                beforeSend: function() {
+                    $("#loaderGif").show();
+                    $("#loaderGif").removeClass('ocultar');
+                },
                 success: function(response) {
                     if (response == "success") {
+                        $("#loaderGif").hide();
+                        $("#loaderGif").addClass('ocultar');
                         Swal.fire({
                             position: 'center',
                             title: 'Success!',
@@ -155,6 +163,8 @@
                     }
 
                     if (response == "error_update") {
+                        $("#loaderGif").hide();
+                        $("#loaderGif").addClass('ocultar');
                         Swal.fire({
                             position: 'center',
                             title: 'Error!',
@@ -171,6 +181,8 @@
                     }
 
                     if (response == "error_exception") {
+                        $("#loaderGif").hide();
+                        $("#loaderGif").addClass('ocultar');
                         Swal.fire({
                             position: 'center',
                             title: 'Error!',
@@ -217,12 +229,19 @@
        }
 
         $.ajax({
+            async: true,
             url: "{{route('actualizacion_masiva_diponibilidades')}}",
             type: "POST",
             dataType: "JSON",
             data: {'id_evento':arrayIds, 'estado': estado},
+            beforeSend: function() {
+                $("#loaderGif").show();
+                $("#loaderGif").removeClass('ocultar');
+            },
             success: function (response) {
                 if (response == 'exito') {
+                    $("#loaderGif").hide();
+                    $("#loaderGif").addClass('ocultar');
                     Swal.fire({
                         text: "Event updated succesfully!",
                         icon: 'success',
@@ -237,6 +256,8 @@
                 }
 
                 if (response == "error") {
+                    $("#loaderGif").hide();
+                    $("#loaderGif").addClass('ocultar');
                     Swal.fire({
                         text: "An error occurred, try again, if the problem persists contact support.",
                         icon: 'error',

@@ -17,10 +17,10 @@
 </div>
 <hr>
 {!! Form::model($usuario, ['method' => 'PUT', 'route' => ['administrador.update', $usuario->id_user], 'class' => 'login100-form validate-form', 'id' => 'form_edit_user', 'autocomplete' => 'off']) !!}
-
     @include('administrador.fields')
-
 {!! Form::close() !!}
+
+@include('layouts.loader')
 
 @stop
 
@@ -442,7 +442,7 @@
         let id_usuario = $("#id_usuario").val();
 
         $.ajax({
-            async: false
+            async: true
             , url: "{{route('validar_cedula_edicion')}}"
             , type: "POST"
             , dataType: "json"
@@ -450,8 +450,14 @@
                 'numero_documento': num_doc
                 , 'id_usuario': id_usuario
             }
+            , beforeSend: function() {
+                $("#loaderGif").show();
+                $("#loaderGif").removeClass('ocultar');
+            }
             , success: function(response) {
                 if (response == "existe_doc") {
+                    $("#loaderGif").hide();
+                    $("#loaderGif").addClass('ocultar');
                     $("#numero_documento").val('');
 
                     Swal.fire({
@@ -471,6 +477,8 @@
                 }
 
                 if (response == "error_exception") {
+                    $("#loaderGif").hide();
+                    $("#loaderGif").addClass('ocultar');
                     Swal.fire({
                         position: 'center'
                         , title: 'Error!'
@@ -496,7 +504,7 @@
         let id_usuario = $("#id_usuario").val();
 
         $.ajax({
-            async: false
+            async: true
             , url: "{{route('validar_correo_edicion')}}"
             , type: "POST"
             , dataType: "json"
@@ -504,8 +512,14 @@
                 'email': correo
                 , 'id_usuario': id_usuario
             }
+            , beforeSend: function() {
+                $("#loaderGif").show();
+                $("#loaderGif").removeClass('ocultar');
+            }
             , success: function(response) {
                 if (response == "existe_correo") {
+                    $("#loaderGif").hide();
+                    $("#loaderGif").addClass('ocultar');
                     $("#correo").val('');
 
                     Swal.fire({
@@ -525,6 +539,8 @@
                 }
 
                 if (response == "error_exception_correo") {
+                    $("#loaderGif").hide();
+                    $("#loaderGif").addClass('ocultar');
                     Swal.fire({
                         position: 'center'
                         , title: 'Error!'
@@ -566,7 +582,6 @@
 
     $("#id_primer_contacto").change(function() {
         let primer_contacto_valor_edit = $("#id_primer_contacto").val();
-        console.log(primer_contacto_valor_edit);
 
         if (primer_contacto_valor_edit == 1) // Phone
         {

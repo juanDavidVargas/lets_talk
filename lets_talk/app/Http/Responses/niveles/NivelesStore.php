@@ -14,22 +14,23 @@ use App\Traits\FileUploadTrait;
 class NivelesStore implements Responsable
 {
     use FileUploadTrait;
-    
+
     public function toResponse($request)
     {
         $nuevoNivel = strtoupper(request('nuevo_crear_nivel', null));
 
-        $validarNivel = Nivel::select('nivel_descripcion')->where('nivel_descripcion', $nuevoNivel)->first();
-        // dd($validarNivel);
+        $validarNivel = Nivel::select('nivel_descripcion')
+                                ->where('nivel_descripcion', $nuevoNivel)
+                                ->first();
 
         if ($validarNivel) {
             return response()->json("nivel_existe");
         } else {
             $baseFileName = "{$nuevoNivel}"; //nombre base para los archivos
             $carpetaArchivos = '/upfiles/niveles';
-            
+
             DB::connection('mysql')->beginTransaction();
-            
+
             try {
                 $archivoNivel= '';
                 if ($request->hasFile('file_crear_nivel')) {

@@ -22,11 +22,11 @@
     @csrf
         @include('administrador.fields')
     {!! Form::close() !!}
+
+    @include('layouts.loader')
 @stop
 
 @section('scripts')
-    {{-- <script src="{{asset('validate/jquery.min.js')}}"></script> --}}
-    {{-- <script src="{{asset('validate/validate.min.js')}}"></script> --}}
 
 <script>
     $(document).ready(function() {
@@ -79,15 +79,22 @@
         let num_doc = $("#numero_documento").val();
 
         $.ajax({
-            async: false
+            async: true
             , url: "{{route('validar_cedula')}}"
             , type: "POST"
             , dataType: "json"
             , data: {
                 'numero_documento': num_doc
             }
+            , beforeSend: function() {
+                $("#loaderGif").show();
+                $("#loaderGif").removeClass('ocultar');
+            }
             , success: function(response) {
                 if (response == "existe_doc") {
+
+                    $("#loaderGif").hide();
+                    $("#loaderGif").addClass('ocultar');
                     $("#numero_documento").val('');
 
                     Swal.fire({
@@ -107,6 +114,8 @@
                 }
 
                 if (response == "error_exception") {
+                    $("#loaderGif").hide();
+                    $("#loaderGif").addClass('ocultar');
                     Swal.fire({
                         position: 'center'
                         , title: 'Error!'
@@ -131,15 +140,21 @@
         let correo = $("#correo").val();
 
         $.ajax({
-            async: false
+            async: true
             , url: "{{route('validar_correo')}}"
             , type: "POST"
             , dataType: "json"
             , data: {
                 'email': correo
             }
+            , beforeSend: function() {
+                $("#loaderGif").show();
+                $("#loaderGif").removeClass('ocultar');
+            }
             , success: function(response) {
                 if (response == "existe_correo") {
+                    $("#loaderGif").hide();
+                    $("#loaderGif").addClass('ocultar');
                     $("#correo").val('');
 
                     Swal.fire({
@@ -159,6 +174,8 @@
                 }
 
                 if (response == "error_exception_correo") {
+                    $("#loaderGif").hide();
+                    $("#loaderGif").addClass('ocultar');
                     Swal.fire({
                         position: 'center'
                         , title: 'Error!'

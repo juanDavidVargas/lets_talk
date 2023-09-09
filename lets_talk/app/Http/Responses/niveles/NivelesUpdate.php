@@ -14,27 +14,32 @@ use App\Traits\FileUploadTrait;
 class NivelesUpdate implements Responsable
 {
     use FileUploadTrait;
-    
+
     public function toResponse($request)
     {
-        DB::connection('mysql')->beginTransaction();
-
         $idNivel = intval(request('id_nivel', null));
         $newNameNivel = strtoupper(request('editar_nivel', null));
-
         $carpetaArchivos = '/upfiles/niveles';
         $baseFileNameEdit = "{$newNameNivel}_".time(); //nombre base para los archivos
 
-        // =============================================
-
         try {
+            $existeNivel = Nivel::select('nivel_descripcion')
+            ->where('nivel_descripcion', $newNameNivel)
+            ->where('id_nivel', '!=', $idNivel)
+            ->first();
+
+            if(isset($existeNivel) && !is_null($existeNivel) && !empty($existeNivel))
+            {
+                alert()->error('Error', 'Level already exists');
+                return redirect()->to(route('administrador.niveles_index'));
+            }
+
             $archivoNivelEditar = "";
 
             if ($request->hasFile('file_editar_nivel')) {
                 $archivoNivelEditar = $this->upfileWithName($baseFileNameEdit, $carpetaArchivos, $request, 'file_editar_nivel', 'file_editar_nivel');
             }
-
-            // =============================================
+            DB::connection('mysql')->beginTransaction();
 
             if (isset($archivoNivelEditar) && !is_null($archivoNivelEditar) && !empty($archivoNivelEditar)) {
                 $editarNivel = Nivel::where('id_nivel', $idNivel)
@@ -49,8 +54,6 @@ class NivelesUpdate implements Responsable
                             ]);
             }
 
-            // =============================================
-            
             if ($editarNivel) {
                 DB::connection('mysql')->commit();
                 alert()->success('Successful Process', 'Level updated');
@@ -61,9 +64,9 @@ class NivelesUpdate implements Responsable
                 return redirect()->to(route('administrador.niveles_index'));
             }
         } catch (Exception $e) {
-            dd($e);
             DB::connection('mysql')->rollback();
-            return response()->json(-1);
+            alert()->error('Error', 'An error has occurred updating the level, please contact support.');
+            return redirect()->to(route('administrador.niveles_index'));
         }
     }
 }

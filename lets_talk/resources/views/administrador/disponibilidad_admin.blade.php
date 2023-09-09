@@ -62,6 +62,8 @@
             </div>
         </div>
     </div>
+
+    @include('layouts.loader')
 @stop
 
 {{-- ================================================ --}}
@@ -74,7 +76,7 @@
     <script src="{{asset('js/jquery.dataTables.min.js')}}"></script>
     <script src="{{asset('js/dataTables.bootstrap.min.js')}}"></script>
     <script src="{{asset('js/dataTables.fixedHeader.min.js')}}"></script>
-    
+
     <script>
         $(document).ready(function() {
             $('#tbl_trainer_sessions').DataTable({
@@ -124,15 +126,6 @@
                     allowOutsideClick: false,
                     allowEscapeKey: false,
                 });
-
-                // ===========================================
-
-                // $(this).validate({
-                //     rules: {
-                //         "created[0][value][time]": {step: false}
-                //     }
-                // });
-                // Step attribute on input type time is not supported.
 
                 form_store_shedule = $("#form_store_shedule");
 
@@ -206,21 +199,28 @@
             }).then((result) => {
                 if (result.value == true) {
                     $.ajax({
-                        async: false
+                        async: true
                         , url: "{{route('administrador.disponibilidad_admin_delete')}}"
                         , type: "POST"
                         , dataType: "json"
                         , data: {
                             'id_horario': idHorarioDelete
                         }
+                        ,
+                        beforeSend: function() {
+                            $("#loaderGif").show();
+                            $("#loaderGif").removeClass('ocultar');
+                        }
                         , success: function(response) {
                             if (response == "deleted") {
+                                $("#loaderGif").hide();
+                                $("#loaderGif").addClass('ocultar');
                                 Swal.fire({
                                     position: 'center'
-                                    , title: 'Info!'
+                                    , title: 'Successful Process!'
                                     , html: 'The Schedule has been deleted!'
                                     , icon: 'info'
-                                    , type: 'info'
+                                    , type: 'success'
                                     , showCancelButton: false
                                     , showConfirmButton: false
                                     , allowOutsideClick: false
@@ -232,6 +232,8 @@
                             }
 
                             if (response == "no_deleted") {
+                                $("#loaderGif").hide();
+                                $("#loaderGif").addClass('ocultar');
                                 Swal.fire({
                                     position: 'center'
                                     , title: 'Error!'
@@ -249,6 +251,8 @@
                         }
                     });
                 } else {
+                    $("#loaderGif").hide();
+                    $("#loaderGif").addClass('ocultar');
                     Swal.fire({
                         position: 'center'
                         , title: 'Info!'
@@ -265,8 +269,6 @@
                 }
             });
         }
-
-        // ================================================
 
         function refrescarSchedule() {
             setTimeout('window.location.reload()', 3000);

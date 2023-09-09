@@ -47,8 +47,6 @@
 @section('scripts')
     <script>
         $( document ).ready(function() {
-
-            // $("#username").trigger('focus');
         });
     </script>
 @endsection

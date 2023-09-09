@@ -131,6 +131,8 @@
         </div>
     </div>
 </div>
+
+@include('layouts.loader')
 </div>
 
 <!-- Footer -->
@@ -326,7 +328,7 @@ document.addEventListener('DOMContentLoaded', function ()
             let evento_id = info.event.id
 
             $.ajax({
-                async: false,
+                async: true,
                 url: "{{route('cargar_info_evento')}}",
                 type: 'POST',
                 dataType: 'json',
@@ -334,11 +336,17 @@ document.addEventListener('DOMContentLoaded', function ()
                     "_token": "{{ csrf_token() }}",
                     'id_evento': evento_id
                 },
+                beforeSend: function() {
+                    $("#loaderGif").show();
+                    $("#loaderGif").removeClass('ocultar');
+                },
                 success: function (response)
                 {
 
                     if(response == "error_exception")
                     {
+                        $("#loaderGif").hide();
+                        $("#loaderGif").addClass('ocultar');
                         Swal.fire(
                             'Error!',
                             'An error occurred, try again, if the problem persists contact support.!',
@@ -349,6 +357,8 @@ document.addEventListener('DOMContentLoaded', function ()
 
                     if(response == "error_query_eventos")
                     {
+                        $("#loaderGif").hide();
+                        $("#loaderGif").addClass('ocultar');
                         Swal.fire(
                             'Error!',
                             'An error occurred, try again, if the problem persists contact support.!',
@@ -412,15 +422,12 @@ document.addEventListener('DOMContentLoaded', function ()
                 },
                 success: function(response)
                 {
-                    $("#loaderGif").show();
-                    $("#loaderGif").removeClass('ocultar');
-
                     if(response == "exception_evento")
                     {
                         $("#loaderGif").hide();
                         $("#loaderGif").addClass('ocultar');
                         myModal.hide();
-                        $("#loaderGif").hide();
+
                         Swal.fire(
                             'Error',
                             'An error occurred, contact support.',
@@ -434,7 +441,7 @@ document.addEventListener('DOMContentLoaded', function ()
                         $("#loaderGif").hide();
                         $("#loaderGif").addClass('ocultar');
                         myModal.hide();
-                        $("#loaderGif").hide();
+
                         Swal.fire({
                             position: 'center'
                             , icon: 'error'
@@ -458,7 +465,7 @@ document.addEventListener('DOMContentLoaded', function ()
                         $("#loaderGif").hide();
                         $("#loaderGif").addClass('ocultar');
                         myModal.hide();
-                        $("#loaderGif").hide();
+
                         Swal.fire(
                             'Error',
                             'An error occurred, try again, if the problem persists contact support.',
@@ -530,17 +537,23 @@ $("#btnClose").click(function(info){
 function cargarEventosPorEntrenador()
 {
     $.ajax({
-        async: false,
+        async: true,
         url: "{{route('cargar_eventos_entrenador')}}",
         type: "POST",
         dataType: "json",
         data: {
             "_token": "{{ csrf_token() }}"
         },
+        beforeSend: function(){
+            $("#loaderGif").show();
+            $("#loaderGif").removeClass('ocultar');
+        },
         success: function(response)
         {
             if(response == "error_exception")
             {
+                $("#loaderGif").hide();
+                $("#loaderGif").addClass('ocultar');
                 Swal.fire(
                     'Error!',
                     'An error occurred, contact support.!',
@@ -551,6 +564,8 @@ function cargarEventosPorEntrenador()
 
             if(response == "error_query_eventos")
             {
+                $("#loaderGif").hide();
+                $("#loaderGif").addClass('ocultar');
                 Swal.fire(
                     'Error!',
                     'An error occurred, contact support.!',

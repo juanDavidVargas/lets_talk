@@ -170,6 +170,8 @@
             </div>
         </div>
     </div>
+
+    @include('layouts.loader')
 @stop
 
 {{-- ============================================================== --}}
@@ -213,13 +215,20 @@
 
         function verEstudiante(idStudent) {
             $.ajax({
+                async: true,
                 url: "{{route('estudiante_hoja_vida')}}",
                 type: "POST",
                 datatype: "JSON",
                 data: {'id_estudiante': idStudent},
+                beforeSend: function() {
+                    $("#loaderGif").show();
+                    $("#loaderGif").removeClass('ocultar');
+                },
                 success: function (respuesta) {
 
                     if(respuesta == "error_exception") {
+                        $("#loaderGif").hide();
+                        $("#loaderGif").addClass('ocultar');
                         Swal.fire(
                             'Error',
                             'An error occurred, contact support.',

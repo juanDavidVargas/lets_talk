@@ -102,16 +102,14 @@
 
 @include('administrador.modal')
 
-<div id="loaderGif" class="ocultar">
-    <img src="{{asset('img/processing.gif')}}" alt="processing">
-</div>
+@include('layouts.loader')
 
 @stop
 @section('scripts')
     <script src="{{asset('DataTable/pdfmake.min.js')}}"></script>
     <script src="{{asset('DataTable/vfs_fonts.js')}}"></script>
     <script src="{{asset('DataTable/datatables.min.js')}}"></script>
-    
+
     <script>
         $( document ).ready(function() {
             $('#tbl_users').DataTable({
@@ -173,6 +171,8 @@
                         {
                             if(response == "-1")
                             {
+                                $("#loaderGif").hide();
+                                $("#loaderGif").addClass('ocultar');
                                 Swal.fire({
                                     position: 'center',
                                     title: 'Error!',
@@ -185,13 +185,13 @@
                                     allowEscapeKey:false,
                                     timer: 6000
                                 });
-
-                                $("#loaderGif").hide();
                                 return;
                             }
 
                             if(response == 0 || response == "0")
                             {
+                                $("#loaderGif").hide();
+                                $("#loaderGif").addClass('ocultar');
                                 Swal.fire({
                                     position: 'center',
                                     title: 'Error!',
@@ -204,13 +204,13 @@
                                     allowEscapeKey:false,
                                     timer: 6000
                                 });
-
-                                $("#loaderGif").hide();
                                 return;
                             }
 
                             if(response == "success")
                             {
+                                $("#loaderGif").hide();
+                                $("#loaderGif").addClass('ocultar');
                                 Swal.fire({
                                     position: 'center',
                                     title: 'Success!',
@@ -223,8 +223,6 @@
                                     allowEscapeKey:false,
                                     timer: 2000
                                 });
-
-                                $("#loaderGif").hide();
 
                                 setTimeout(function(){
                                     window.location.reload();
@@ -274,6 +272,8 @@
                         {
                             if(response == "-1")
                             {
+                                $("#loaderGif").hide();
+                                $("#loaderGif").addClass('ocultar');
                                 Swal.fire({
                                     position: 'center',
                                     title: 'Error!',
@@ -286,12 +286,13 @@
                                     allowEscapeKey:false,
                                     timer: 3000
                                 });
-
-                                $("#loaderGif").hide();
+                                return;
                             }
 
                             if(response == 0 || response == "0")
                             {
+                                $("#loaderGif").hide();
+                                $("#loaderGif").addClass('ocultar');
                                 Swal.fire({
                                     position: 'center',
                                     title: 'Error!',
@@ -304,12 +305,13 @@
                                     allowEscapeKey:false,
                                     timer: 5000
                                 });
-
-                                $("#loaderGif").hide();
+                                return;
                             }
 
                             if(response == "success")
                             {
+                                $("#loaderGif").hide();
+                                $("#loaderGif").addClass('ocultar');
                                 Swal.fire({
                                     position: 'center',
                                     title: 'Success!',
@@ -323,11 +325,11 @@
                                     timer: 2000
                                 });
 
-                                $("#loaderGif").hide();
-
                                 setTimeout(function(){
                                     window.location.reload();
                                 }, 3000);
+
+                                return;
                             }
                         }
                     });
