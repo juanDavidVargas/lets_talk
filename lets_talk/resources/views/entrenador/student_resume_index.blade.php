@@ -210,7 +210,6 @@
         });
 
         // ===================================================
-        // ===================================================
 
         function verEstudiante(idStudent) {
             $.ajax({
@@ -219,6 +218,16 @@
                 datatype: "JSON",
                 data: {'id_estudiante': idStudent},
                 success: function (respuesta) {
+
+                    if(respuesta == "error_exception") {
+                        Swal.fire(
+                            'Error',
+                            'An error occurred, contact support.',
+                            'error'
+                        );
+                        return;
+                    }
+
                     let fechaNacimiento = respuesta.fecha_nacimiento;
                     fechaNacimiento = new Date(fechaNacimiento * 1000).toLocaleDateString('es-ES');
 
@@ -316,7 +325,7 @@
                     html += `
                             </div>
                     `;
-                    
+
                     // ==============================================
 
                     html += `
@@ -341,7 +350,7 @@
                     `;
 
                     // ==============================================
-                    
+
                     html += `
                             <div class="d-flex flex-row margin-top" style="padding:0; width:100%;">
                                 <div style="width:50%">

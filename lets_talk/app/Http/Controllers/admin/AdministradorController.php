@@ -466,13 +466,6 @@ class AdministradorController extends Controller
 
     public function vistaAdminDisponibilidad()
     {
-<<<<<<< HEAD
-        $todasDisponibilidades = DisponibilidadEntrenadores::select('id_horario', 'horario')
-                                                        ->orderBy('horario', 'asc')
-                                                        ->get()
-                                                        ->toArray();
-        return view('administrador.disponibilidad_admin', compact('todasDisponibilidades'));
-=======
         $vista = 'administrador.disponibilidad_admin';
         $checkConnection = $this->checkDatabaseConnection($vista);
 
@@ -485,7 +478,6 @@ class AdministradorController extends Controller
                                                                 ->toArray();
             return view($vista, compact('todasDisponibilidades'));
         }
->>>>>>> 985d0b2986c021ff1c6004010b6a7826b8790653
     }
 
     public function storeAdminDisponibilidad(Request $request)
@@ -538,21 +530,6 @@ class AdministradorController extends Controller
 
     public function nivelesIndex()
     {
-<<<<<<< HEAD
-        $sesion = $this->validarVariablesSesion();
-
-        if(empty($sesion[0]) || is_null($sesion[0]) &&
-           empty($sesion[1]) || is_null($sesion[1]) &&
-           empty($sesion[2]) || is_null($sesion[2]) &&
-           $sesion[2] != true)
-        {
-            return redirect()->to(route('home'));
-        } else {
-            $niveles = Nivel::select('id_nivel','nivel_descripcion','ruta_pdf_nivel','deleted_at')
-                                ->orderBy('nivel_descripcion', 'asc')
-                                ->get();
-            return view('administrador.niveles_index', compact('niveles'));
-=======
         $vista = 'administrador.niveles_index';
         $checkConnection = $this->checkDatabaseConnection($vista);
 
@@ -564,7 +541,6 @@ class AdministradorController extends Controller
                                     ->get();
 
             return view($vista, compact('niveles'));
->>>>>>> 985d0b2986c021ff1c6004010b6a7826b8790653
         }
     }
 

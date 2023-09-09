@@ -207,6 +207,15 @@
                         return;
                     }
 
+                    if(response == 404) {
+                        Swal.fire(
+                            'Error',
+                            'You do not have the necessary permissions for this action',
+                            'error'
+                        );
+                        return;
+                    }
+
                     html = `<p class="gral-font center-align"><strong>SESSION DETAILS</strong></p>`;
 
                     html += `
@@ -437,6 +446,25 @@
                                 'id_estudiante': idUserVal
                             },
                             success: function(response) {
+
+                                if(response == 404) {
+                                    Swal.fire(
+                                        'Error',
+                                        'You do not have the necessary permissions for this action',
+                                        'error'
+                                    );
+                                    return;
+                                }
+
+                                if(response == "error_exception") {
+                                    Swal.fire(
+                                        'Error',
+                                        'An error occurred, contact support.',
+                                        'error'
+                                    );
+                                    return;
+                                }
+
                                 html = ``;
                                 html += `<table border=1 style="border-collapse:separate !important" cellspacing="10" id="tbl_old_evaluation" >`;
                                 html +=     `<thead>`;

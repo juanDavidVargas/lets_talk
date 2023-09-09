@@ -166,4 +166,27 @@ class AgendaEntrenadorShow implements Responsable
             return response()->json("error_exception");
         }
     }
+
+    public function traerDatosEvalInterna($idEstudiante)
+    {
+        try {
+
+            return DB::table('evaluacion_interna')
+                    ->leftjoin('usuarios as estudiante', 'estudiante.id_user', '=', 'evaluacion_interna.id_estudiante')
+                    ->leftjoin('usuarios as instructor', 'instructor.id_user', '=', 'evaluacion_interna.id_instructor')
+                    ->where('evaluacion_interna.id_estudiante', $idEstudiante)
+                    ->where('evaluacion_interna.id_instructor', 7)
+                    ->select(
+                        DB::raw("CONCAT(estudiante.nombres, ' ', estudiante.apellidos) AS nombre_estudiante"),
+                        'evaluacion_interna.evaluacion_interna',
+                        DB::raw("CONCAT(instructor.nombres, ' ', instructor.apellidos) AS nombre_instructor"),
+                        'evaluacion_interna.created_at'
+                    )
+                    ->orderBy('evaluacion_interna.created_at','DESC')
+                    ->get();
+
+        } catch (Exception $e) {
+            return response()->json("error_exception");
+        }
+    }
 }

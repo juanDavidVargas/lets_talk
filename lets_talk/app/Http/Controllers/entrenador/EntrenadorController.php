@@ -18,6 +18,7 @@ use App\Models\entrenador\EvaluacionInterna;
 use App\Models\entrenador\EventoAgendaEntrenador;
 use App\Http\Responses\entrenador\EvaluacionInternaStore;
 use App\Http\Responses\entrenador\DiponibilidadesMasivaUpdate;
+use App\Http\Responses\estudiante\EstudianteShow;
 use App\Traits\MetodosTrait;
 use Carbon\Carbon;
 
@@ -262,7 +263,7 @@ class EntrenadorController extends Controller
            empty($sesion[3]) || is_null($sesion[3]) &&
            $sesion[2] != true)
         {
-            return redirect()->to(route('home'));
+            return response()->json([404]);
         } else {
             $idUser = $request->id_user;
             $trainerShow = new AgendaEntrenadorShow();
@@ -294,22 +295,22 @@ class EntrenadorController extends Controller
 
     public function consultaEvaluacionInterna(Request $request)
     {
-        $idEstudiante = intval($request->id_estudiante);
-        // $idInstructor = intval($request->id_instructor); // Se habilita al estar listo el módulo de estudiante
+        $adminCtrl = new AdministradorController();
+        $sesion = $adminCtrl->validarVariablesSesion();
 
-        return DB::table('evaluacion_interna')
-                    ->leftjoin('usuarios as estudiante', 'estudiante.id_user', '=', 'evaluacion_interna.id_estudiante')
-                    ->leftjoin('usuarios as instructor', 'instructor.id_user', '=', 'evaluacion_interna.id_instructor')
-                    ->where('evaluacion_interna.id_estudiante', $idEstudiante)
-                    ->where('evaluacion_interna.id_instructor', 7)
-                    ->select(
-                        DB::raw("CONCAT(estudiante.nombres, ' ', estudiante.apellidos) AS nombre_estudiante"),
-                        'evaluacion_interna.evaluacion_interna',
-                        DB::raw("CONCAT(instructor.nombres, ' ', instructor.apellidos) AS nombre_instructor"),
-                        'evaluacion_interna.created_at'
-                    )
-                    ->orderBy('evaluacion_interna.created_at','DESC')
-                    ->get();
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           empty($sesion[3]) || is_null($sesion[3]) &&
+           $sesion[2] != true)
+        {
+            return response()->json([404]);
+        } else {
+            $idEstudiante = intval($request->id_estudiante);
+            // $idInstructor = intval($request->id_instructor); // Se habilita al estar listo el módulo de estudiante
+            $trainerShow = new AgendaEntrenadorShow();
+            return $trainerShow->traerDatosEvalInterna($idEstudiante);
+        }
     }
 
     // ==================================================
@@ -352,62 +353,28 @@ class EntrenadorController extends Controller
             if($checkConnection->getName() == "database_connection") {
                 return view('database_connection');
             } else {
-                $estudiantes = DB::table('usuarios')
-                            ->leftjoin('roles', 'roles.id_rol', '=', 'usuarios.id_rol')
-                            ->leftjoin('tipo_documento', 'tipo_documento.id', '=', 'usuarios.id_tipo_documento')
-                            ->select('id_user',
-                                        DB::raw("CONCAT(nombres, ' ', apellidos) AS nombre_completo"),
-                                        'usuario',
-                                        'celular',
-                                        'roles.descripcion as rol',
-                                        'usuarios.id_tipo_documento',
-                                        'tipo_documento.descripcion as tipo_documento',
-                                        'numero_documento',
-                                        'correo',
-                                        'fecha_ingreso_sistema'
-                                    )
-                            ->where('usuarios.id_rol', 3)
-                            ->where('usuarios.estado', 1)
-                            ->whereNull('usuarios.deleted_at')
-                            ->get();
-
+                $estudianteShow = new EstudianteShow();
+                $estudiantes = $estudianteShow->resumenEstudiante();
                 return view($vista, compact('estudiantes'));
             }
         }
     }
-    
-    // ==================================================
 
     public function estudianteHojaVida(Request $request)
     {
-        $idEstudiante = request('id_estudiante', null);
-        // dd($idEstudiante);
+        $adminCtrl = new AdministradorController();
+        $sesion = $adminCtrl->validarVariablesSesion();
 
-        $queryEstudiante = DB::table('usuarios')
-                        ->leftjoin('roles', 'roles.id_rol', '=', 'usuarios.id_rol')
-                        ->leftjoin('tipo_documento', 'tipo_documento.id', '=', 'usuarios.id_tipo_documento')
-                        ->leftjoin('niveles', 'niveles.id_nivel', '=', 'usuarios.id_nivel')
-                        ->select('id_user',
-                                    DB::raw("CONCAT(nombres, ' ', apellidos) AS nombre_completo"),
-                                    'usuario',
-                                    'celular',
-                                    'roles.descripcion as rol',
-                                    'usuarios.id_tipo_documento',
-                                    'tipo_documento.descripcion as tipo_documento',
-                                    'numero_documento',
-                                    'correo',
-                                    'fecha_ingreso_sistema',
-                                    'nivel_descripcion',
-                                    'telefono',
-                                    'fecha_nacimiento',
-                                    'genero'
-                                )
-                        ->where('usuarios.id_user', $idEstudiante)
-                        ->where('usuarios.id_rol', 3)
-                        ->where('usuarios.estado', 1)
-                        ->whereNull('usuarios.deleted_at')
-                        ->first();
-        // dd($queryEstudiante);
-        return response()->json($queryEstudiante);
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           empty($sesion[3]) || is_null($sesion[3]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            $estudianteShow = new EstudianteShow();
+            return $estudianteShow->toResponse($request);
+        }
     }
 }
