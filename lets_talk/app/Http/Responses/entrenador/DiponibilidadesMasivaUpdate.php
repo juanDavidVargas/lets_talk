@@ -39,7 +39,7 @@ class DiponibilidadesMasivaUpdate implements Responsable
 
         } catch (Exception $e) {
             DB::connection('mysql')->rollback();
-            return back();
+            return response()->json("error");
         }
     }
 }

@@ -199,6 +199,23 @@
 
         let arrayIds = valoresChecks.join(',');
 
+       if(arrayIds == [] || arrayIds.length == 0 || arrayIds == undefined) {
+
+            Swal.fire({
+                text: "An error occurred, one checkbox must be selected at least.",
+                icon: 'error',
+                type: 'error',
+                showCancelButton: false,
+                confirmButtonText: 'Ok',
+            }).then((result) => {
+                if (result.value == true) {
+                    window.location.reload();
+                }
+            });
+
+            return;
+       }
+
         $.ajax({
             url: "{{route('actualizacion_masiva_diponibilidades')}}",
             type: "POST",

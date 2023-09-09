@@ -186,10 +186,10 @@
         });
 
         // ===================================================
-        // ===================================================
 
         function seeDetails(idSesion,idUser) {
             $.ajax({
+                _token: "{{csrf_token()}}",
                 url: "{{route('detalle_sesion_entrenador')}}",
                 type: "POST",
                 dataType: "json",
@@ -197,9 +197,17 @@
                     'id_user': idUser
                 },
                 success: function(response) {
-                    html = `<p class="gral-font center-align"><strong>SESSION DETAILS</strong></p>`;
 
-                    // ==============================================
+                    if(response[0].original == "error_exception") {
+                        Swal.fire(
+                            'Error',
+                            'An error occurred, contact support.',
+                            'error'
+                        );
+                        return;
+                    }
+
+                    html = `<p class="gral-font center-align"><strong>SESSION DETAILS</strong></p>`;
 
                     html += `
                             <div class="d-flex flex-row margin-top" style="padding:0; width:100%;">
@@ -271,12 +279,12 @@
                     html += `
                             </div>
                     `;
-                    
+
                     // ==============================================
 
                     html += `<p class="gral-font center-align margin-y">SESSION INFO</p>`;
 
-                    
+
                     if (response[0].id_primer_contacto == 1) { // Phone
                         html += `   <div class="d-flex flex-row w100" style="">
                                         <p class="gral-font w50">1ST CONTACT:</p>
@@ -386,7 +394,7 @@
                     }
 
                     // ==============================================
-                    
+
                     html += `   <p class="gral-font margin-y">INTERNAL EVALUATION (NOTES)</p>`;
                     html += `   {!! Form::open(['method' => 'POST', 'route' => ['evaluacion_interna_entrenador'],'class'=>['form-horizontal form-bordered']]) !!}`;
                     html += `   @csrf`;
@@ -404,8 +412,6 @@
                                     <button class="btn-evaluation" id="old_valuation">OLD EVALUATION</button>
                                 </div>
                     `;
-                                    
-                    // ==============================================
 
                     Swal.fire({
                         html: html,
@@ -419,12 +425,8 @@
                         background: '#fff',
                     });
 
-                    // ==============================================
-
-                   
-                        
                     $('#old_valuation').on('click', function () {
-                        
+
                         let idUserVal = $('#id_estudiante').val();
 
                         $.ajax({
@@ -484,8 +486,6 @@
                             }
                         });
                     })
-
-                    // ==============================================
 
                 }
             });

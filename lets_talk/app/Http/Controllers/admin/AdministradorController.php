@@ -192,10 +192,13 @@ class AdministradorController extends Controller
         view()->share('tipo_documento', $this->tipos_documento());
         view()->share('municipios', $this->municipios());
         view()->share('roles', $this->roles());
-        view()->share('niveles', Nivel::orderBy('id_nivel','asc')->whereNull('deleted_at')->pluck('nivel_descripcion', 'id_nivel'));
+        view()->share('niveles', Nivel::orderBy('id_nivel','asc')
+                                        ->whereNull('deleted_at')
+                                        ->pluck('nivel_descripcion', 'id_nivel'));
         view()->share('disponibilidades', $this->traerDisponibilidades());
         view()->share('tipo_ingles', $this->tipoIngles());
-        view()->share('tipo_contacto', TipoContacto::orderBy('tipo_contacto','asc')->pluck('tipo_contacto', 'id_tipo_contacto'));
+        view()->share('tipo_contacto', TipoContacto::orderBy('tipo_contacto','asc')
+                                                    ->pluck('tipo_contacto', 'id_tipo_contacto'));
     }
 
     public function tipoIngles()
@@ -421,7 +424,10 @@ class AdministradorController extends Controller
 
     public function vistaAdminDisponibilidad()
     {
-        $todasDisponibilidades = DisponibilidadEntrenadores::select('id_horario', 'horario')->orderBy('horario', 'asc')->get()->toArray();
+        $todasDisponibilidades = DisponibilidadEntrenadores::select('id_horario', 'horario')
+                                                        ->orderBy('horario', 'asc')
+                                                        ->get()
+                                                        ->toArray();
         return view('administrador.disponibilidad_admin', compact('todasDisponibilidades'));
     }
 
@@ -457,84 +463,38 @@ class AdministradorController extends Controller
 
     public function consultarUserEdit($idUser)
     {
-        return DB::table('usuarios')
-                    ->join('tipo_documento', 'tipo_documento.id', '=', 'usuarios.id_tipo_documento')
-                    ->join('municipios', 'municipios.id_municipio', '=', 'usuarios.id_municipio_nacimiento')
-                    ->join('municipios as residencia', 'residencia.id_municipio', '=', 'usuarios.id_municipio_residencia')
-                    ->join('roles', 'roles.id_rol', '=', 'usuarios.id_rol')
-                    ->leftJoin('niveles', 'niveles.id_nivel', '=', 'usuarios.id_nivel')
-                    ->leftJoin('tipo_ingles', 'tipo_ingles.id', '=', 'usuarios.id_tipo_ingles')
-                    ->leftJoin('contactos', 'contactos.id_user', '=', 'usuarios.id_user')
-                    ->leftJoin('tipo_contacto as tipo_primer_contacto', 'tipo_primer_contacto.id_tipo_contacto', '=', 'contactos.id_primer_contacto')
-                    ->leftJoin('tipo_contacto as tipo_segundo_contacto', 'tipo_segundo_contacto.id_tipo_contacto', '=', 'contactos.id_segundo_contacto')
-                    ->leftJoin('tipo_contacto as tipo_opcional_contacto', 'tipo_opcional_contacto.id_tipo_contacto', '=', 'contactos.id_opcional_contacto')
-                    ->select('usuarios.id_user',
-                                'usuarios.usuario',
-                                'usuarios.nombres',
-                                'usuarios.apellidos',
-                                'usuarios.id_tipo_documento',
-                                'usuarios.numero_documento',
-                                'usuarios.id_municipio_nacimiento',
-                                'usuarios.fecha_nacimiento',
-                                'usuarios.genero',
-                                'usuarios.estado',
-                                'usuarios.telefono',
-                                'usuarios.celular',
-                                'usuarios.correo',
-                                'usuarios.id_municipio_residencia',
-                                'usuarios.direccion_residencia',
-                                'usuarios.skype',
-                                'usuarios.zoom',
-                                'usuarios.zoom_clave',
-                                'usuarios.fecha_ingreso_sistema AS fecha_ingreso',
-                                'usuarios.id_tipo_ingles',
-                                'tipo_documento.descripcion AS tipo_documento',
-                                'municipios.descripcion AS ciudad_nacimiento',
-                                'residencia.descripcion AS ciudad_residencia',
-                                'roles.descripcion AS nombre_rol',
-                                'roles.id_rol',
-                                'niveles.nivel_descripcion AS niveles',
-                                'niveles.id_nivel',
-                                'tipo_ingles.id AS id_tip_ing',
-                                'tipo_ingles.descripcion AS desc_tip_ing',
-                                'tipo_primer_contacto.id_tipo_contacto AS primer_contacto_tipo',
-                                'contactos.primer_telefono',
-                                'contactos.primer_celular',
-                                'contactos.primer_correo',
-                                'contactos.primer_skype',
-                                'contactos.primer_zoom',
-                                'tipo_segundo_contacto.id_tipo_contacto AS segundo_contacto_tipo',
-                                'contactos.segundo_telefono',
-                                'contactos.segundo_celular',
-                                'contactos.segundo_correo',
-                                'contactos.segundo_skype',
-                                'contactos.segundo_zoom',
-                                'tipo_opcional_contacto.id_tipo_contacto AS opcional_contacto_tipo',
-                                'contactos.opcional_telefono',
-                                'contactos.opcional_celular',
-                                'contactos.opcional_correo',
-                                'contactos.opcional_skype',
-                                'contactos.opcional_zoom'
-                            )
-                    ->where('usuarios.id_user', $idUser)
-                    ->whereNull('usuarios.deleted_at')
-                    ->whereNull('tipo_documento.deleted_at')
-                    ->whereNull('municipios.deleted_at')
-                    ->whereNull('residencia.deleted_at')
-                    ->whereNull('roles.deleted_at')
-                    ->whereNull('niveles.deleted_at')
-                    ->orderBy('usuarios.id_user', 'DESC')
-                    ->first();
+        $sesion = $this->validarVariablesSesion();
+
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            $usuariosShow = new UsuariosShow();
+            return $usuariosShow->datosEdicionUsuario($idUser);
+        }
     }
 
     // ===================================================
 
     public function nivelesIndex()
     {
-        $niveles = Nivel::select('id_nivel','nivel_descripcion','ruta_pdf_nivel','deleted_at')
-                            ->orderBy('nivel_descripcion', 'asc')
-                            ->get();
-        return view('administrador.niveles_index', compact('niveles'));
+        $sesion = $this->validarVariablesSesion();
+
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            $niveles = Nivel::select('id_nivel','nivel_descripcion','ruta_pdf_nivel','deleted_at')
+                                ->orderBy('nivel_descripcion', 'asc')
+                                ->get();
+            return view('administrador.niveles_index', compact('niveles'));
+        }
     }
 
     // ===================================================
@@ -613,7 +573,7 @@ class AdministradorController extends Controller
 
         try {
             $consultarNivel = Nivel::select('nivel_descripcion')->where('id_nivel', $idNivel)->first();
-            
+
             if ($consultarNivel) {
                 return $consultarNivel;
             } else {
@@ -624,9 +584,9 @@ class AdministradorController extends Controller
             return back();
         }
     }
-    
-    
-    
+
+
+
     // ===================================================
 
     public function actualizarDisponibilidad(Request $request)

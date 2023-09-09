@@ -217,71 +217,42 @@ class EntrenadorController extends Controller
 
     public function cargarTrainerSession()
     {
-        return DB::table('usuarios')
-                    ->leftjoin('evento_agenda_entrenador', 'evento_agenda_entrenador.id_usuario', '=', 'usuarios.id_user')
-                    ->leftjoin('estados', 'estados.id_estado', '=', 'evento_agenda_entrenador.state')
-                    ->select(
-                        'usuarios.id_user',
-                        'evento_agenda_entrenador.id AS id_sesion',
-                        'evento_agenda_entrenador.start_date',
-                        'evento_agenda_entrenador.start_time',
-                        'evento_agenda_entrenador.state',
-                        DB::raw("CONCAT(usuarios.nombres, ' ', usuarios.apellidos) AS nombre_completo"),
-                        'estados.descripcion_estado'
-                    )
-                    ->where('usuarios.estado', 1)
-                    ->where('usuarios.id_rol', 3)
-                    ->whereNull('usuarios.deleted_at')
-                    ->whereNull('evento_agenda_entrenador.deleted_at')
-                    ->whereIn('evento_agenda_entrenador.state', [1])
-                    ->orderBy('evento_agenda_entrenador.id', 'DESC')
-                    ->get();
+        $adminCtrl = new AdministradorController();
+        $sesion = $adminCtrl->validarVariablesSesion();
+
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           empty($sesion[3]) || is_null($sesion[3]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            $agendaEntrenadorShow = new AgendaEntrenadorShow();
+            return $agendaEntrenadorShow->traerSesionesEntrenadores();
+        }
     }
 
     // ==================================================
 
     public function cargaDetalleSesion(Request $request)
     {
-        $idUser = $request->id_user;
+        $adminCtrl = new AdministradorController();
+        $sesion = $adminCtrl->validarVariablesSesion();
 
-        $query = DB::table('usuarios')
-                    ->leftjoin('niveles', 'niveles.id_nivel', '=', 'usuarios.id_nivel')
-                    ->leftjoin('contactos', 'contactos.id_user', '=', 'usuarios.id_user')
-                    ->select(
-                        DB::raw("CONCAT(usuarios.nombres, ' ', usuarios.apellidos) AS nombre_completo"),
-                        'usuarios.id_user',
-                        'usuarios.celular',
-                        'usuarios.correo',
-                        'usuarios.zoom',
-                        'usuarios.zoom_clave',
-                        'usuarios.id_nivel',
-                        'niveles.nivel_descripcion',
-                        'contactos.id_primer_contacto',
-                        'contactos.primer_telefono',
-                        'contactos.primer_celular',
-                        'contactos.primer_correo',
-                        'contactos.primer_skype',
-                        'contactos.primer_zoom',
-                        'contactos.id_segundo_contacto',
-                        'contactos.segundo_telefono',
-                        'contactos.segundo_celular',
-                        'contactos.segundo_correo',
-                        'contactos.segundo_skype',
-                        'contactos.segundo_zoom',
-                        'contactos.id_opcional_contacto',
-                        'contactos.opcional_telefono',
-                        'contactos.opcional_celular',
-                        'contactos.opcional_correo',
-                        'contactos.opcional_skype',
-                        'contactos.opcional_zoom'
-                    )
-                    ->where('usuarios.id_user', $idUser)
-                    ->where('usuarios.estado', 1)
-                    ->where('usuarios.id_rol', 3)
-                    ->whereNull('usuarios.deleted_at')
-                    ->first();
-
-        return response()->json([$query]);
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           empty($sesion[3]) || is_null($sesion[3]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            $idUser = $request->id_user;
+            $trainerShow = new AgendaEntrenadorShow();
+            $query = $trainerShow->detalles($idUser);
+            return response()->json([$query]);
+        }
     }
 
     // ==================================================

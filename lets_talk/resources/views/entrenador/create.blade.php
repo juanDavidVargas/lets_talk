@@ -84,7 +84,7 @@
                         @csrf
                             <div class="modal-body">
                                 <div class="row">
-                                    @for($i = 1; $i <= 24; $i++)
+                                    @for($i = 1; $i <= (24 - 1); $i++)
                                         <div class="col-md-4 form-floating mb-3">
                                             <div class="cat action">
                                                 <label>

@@ -41,7 +41,7 @@ class DisponibilidadShow implements Responsable
 
         } catch (Exception $e)
         {
-            alert()->error("Ha ocurrido un error!");
+            alert()->error("Error', 'An error has occurred, try again, if the problem persists contact support.!");
             return redirect()->to(route('administrador.index'));
         }
 
