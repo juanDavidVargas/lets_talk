@@ -18,9 +18,12 @@ use App\Models\entrenador\EvaluacionInterna;
 use App\Models\entrenador\EventoAgendaEntrenador;
 use App\Http\Responses\entrenador\EvaluacionInternaStore;
 use App\Http\Responses\entrenador\DiponibilidadesMasivaUpdate;
+use App\Traits\MetodosTrait;
+use Carbon\Carbon;
 
 class EntrenadorController extends Controller
 {
+    use MetodosTrait;
     /**
      * Display a listing of the resource.
      *
@@ -39,8 +42,15 @@ class EntrenadorController extends Controller
         {
             return redirect()->to(route('home'));
         } else {
-            view()->share('students', $this->cargarTrainerSession());
-            return view('entrenador.index');
+            $vista = 'entrenador.index';
+            $checkConnection = $this->checkDatabaseConnection($vista);
+
+            if($checkConnection->getName() == "database_connection") {
+                return view('database_connection');
+            } else {
+                view()->share('students', $this->cargarTrainerSession());
+                return view($vista);
+            }
         }
     }
 
@@ -62,18 +72,24 @@ class EntrenadorController extends Controller
         {
             return redirect()->to(route('home'));
         } else {
+            $vista = 'entrenador.create';
+            $checkConnection = $this->checkDatabaseConnection($vista);
 
-            $array_horarios = DisponibilidadEntrenadores::select('id_horario', 'horario')->pluck('horario', 'id_horario');
+            if($checkConnection->getName() == "database_connection") {
+                return view('database_connection');
+            } else {
+                $array_horarios = DisponibilidadEntrenadores::select('id_horario', 'horario')->pluck('horario', 'id_horario');
 
-            $entrenadores = User::select('id_user', DB::raw("CONCAT(nombres, ' ', apellidos, ' - ', usuario) AS usuario"))
+                $entrenadores = User::select('id_user', DB::raw("CONCAT(nombres, ' ', apellidos, ' - ', usuario) AS usuario"))
                             ->whereIn('id_rol', [1])
                             ->where('estado', 1)
                             ->whereNull('deleted_at')
                             ->pluck('usuario', 'id_user');
 
-            view()->share('horarios', $array_horarios);
-            view()->share('trainers', $entrenadores);
-            return view('entrenador.create');
+                view()->share('horarios', $array_horarios);
+                view()->share('trainers', $entrenadores);
+                return view($vista);
+            }
         }
     }
 
@@ -313,5 +329,85 @@ class EntrenadorController extends Controller
         } else {
             return new DiponibilidadesMasivaUpdate();
         }
+    }
+
+    // ==================================================
+
+    public function studentResume(Request $request)
+    {
+        $adminCtrl = new AdministradorController();
+        $sesion = $adminCtrl->validarVariablesSesion();
+
+        if(empty($sesion[0]) || is_null($sesion[0]) &&
+           empty($sesion[1]) || is_null($sesion[1]) &&
+           empty($sesion[2]) || is_null($sesion[2]) &&
+           empty($sesion[3]) || is_null($sesion[3]) &&
+           $sesion[2] != true)
+        {
+            return redirect()->to(route('home'));
+        } else {
+            $vista = 'entrenador.student_resume_index';
+            $checkConnection = $this->checkDatabaseConnection($vista);
+
+            if($checkConnection->getName() == "database_connection") {
+                return view('database_connection');
+            } else {
+                $estudiantes = DB::table('usuarios')
+                            ->leftjoin('roles', 'roles.id_rol', '=', 'usuarios.id_rol')
+                            ->leftjoin('tipo_documento', 'tipo_documento.id', '=', 'usuarios.id_tipo_documento')
+                            ->select('id_user',
+                                        DB::raw("CONCAT(nombres, ' ', apellidos) AS nombre_completo"),
+                                        'usuario',
+                                        'celular',
+                                        'roles.descripcion as rol',
+                                        'usuarios.id_tipo_documento',
+                                        'tipo_documento.descripcion as tipo_documento',
+                                        'numero_documento',
+                                        'correo',
+                                        'fecha_ingreso_sistema'
+                                    )
+                            ->where('usuarios.id_rol', 3)
+                            ->where('usuarios.estado', 1)
+                            ->whereNull('usuarios.deleted_at')
+                            ->get();
+
+                return view($vista, compact('estudiantes'));
+            }
+        }
+    }
+    
+    // ==================================================
+
+    public function estudianteHojaVida(Request $request)
+    {
+        $idEstudiante = request('id_estudiante', null);
+        // dd($idEstudiante);
+
+        $queryEstudiante = DB::table('usuarios')
+                        ->leftjoin('roles', 'roles.id_rol', '=', 'usuarios.id_rol')
+                        ->leftjoin('tipo_documento', 'tipo_documento.id', '=', 'usuarios.id_tipo_documento')
+                        ->leftjoin('niveles', 'niveles.id_nivel', '=', 'usuarios.id_nivel')
+                        ->select('id_user',
+                                    DB::raw("CONCAT(nombres, ' ', apellidos) AS nombre_completo"),
+                                    'usuario',
+                                    'celular',
+                                    'roles.descripcion as rol',
+                                    'usuarios.id_tipo_documento',
+                                    'tipo_documento.descripcion as tipo_documento',
+                                    'numero_documento',
+                                    'correo',
+                                    'fecha_ingreso_sistema',
+                                    'nivel_descripcion',
+                                    'telefono',
+                                    'fecha_nacimiento',
+                                    'genero'
+                                )
+                        ->where('usuarios.id_user', $idEstudiante)
+                        ->where('usuarios.id_rol', 3)
+                        ->where('usuarios.estado', 1)
+                        ->whereNull('usuarios.deleted_at')
+                        ->first();
+        // dd($queryEstudiante);
+        return response()->json($queryEstudiante);
     }
 }

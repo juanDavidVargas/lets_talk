@@ -17,13 +17,13 @@ class NivelesStore implements Responsable
     
     public function toResponse($request)
     {
-        $nuevoNivel = strtoupper(request('crear_nivel', null));
+        $nuevoNivel = strtoupper(request('nuevo_crear_nivel', null));
 
         $validarNivel = Nivel::select('nivel_descripcion')->where('nivel_descripcion', $nuevoNivel)->first();
+        // dd($validarNivel);
 
         if ($validarNivel) {
-            alert()->error('Error', 'Level already exists');
-            return redirect()->to(route('administrador.niveles_index'));
+            return response()->json("nivel_existe");
         } else {
             $baseFileName = "{$nuevoNivel}"; //nombre base para los archivos
             $carpetaArchivos = '/upfiles/niveles';
@@ -45,16 +45,14 @@ class NivelesStore implements Responsable
 
                 if($crearNivel) {
                     DB::connection('mysql')->commit();
-                    alert()->success('Successful Process', 'New Level created');
-                    return redirect()->to(route('administrador.niveles_index'));
+                    return response()->json("nivel_creado");
                 } else {
                     DB::connection('mysql')->rollback();
-                    alert()->error('Error', 'An error has occurred creating the new level, please contact support.');
-                    return redirect()->to(route('administrador.niveles_index'));
+                    return response()->json("nivel_no_creado");
                 }
             } catch (Exception $e) {
                 DB::connection('mysql')->rollback();
-                return response()->json(-1);
+                return response()->json("error_exception");
             }
         }
     }

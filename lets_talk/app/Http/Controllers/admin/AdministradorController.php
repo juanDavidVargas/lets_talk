@@ -25,11 +25,13 @@ use App\Http\Responses\administrador\HorarioStore;
 use App\Http\Responses\administrador\HorarioDelete;
 use App\Http\Responses\administrador\DisponibilidadUpdate;
 use App\Http\Controllers\DatabaseConnectionController;
+use App\Traits\MetodosTrait;
 
 // ==========================================================
 
 class AdministradorController extends Controller
 {
+    use MetodosTrait;
     use FileUploadTrait;
     /**
      * Display a listing of the resource.
@@ -48,8 +50,15 @@ class AdministradorController extends Controller
         {
             return redirect()->to(route('home'));
         } else {
-            $this->share_data();
-            return view('administrador.index');
+            $vista = 'administrador.index';
+            $checkConnection = $this->checkDatabaseConnection($vista);
+
+            if($checkConnection->getName() == "database_connection") {
+                return view('database_connection');
+            } else {
+                $this->share_data();
+                return view($vista);
+            }
         }
     }
 
@@ -69,8 +78,15 @@ class AdministradorController extends Controller
         {
             return redirect()->to(route('home'));
         } else {
-            $this->share_data();
-            return view('administrador.create');
+            $vista = 'administrador.create';
+            $checkConnection = $this->checkDatabaseConnection($vista);
+
+            if($checkConnection->getName() == "database_connection") {
+                return view('database_connection');
+            } else {
+                $this->share_data();
+                return view($vista);
+            }
         }
     }
 
@@ -112,10 +128,17 @@ class AdministradorController extends Controller
         {
             return redirect()->to(route('home'));
         } else {
-            $usuario = $this->consultarUserEdit($id);
-            view()->share('usuario', $usuario);
-            $this->share_data();
-            return view('administrador.show');
+            $vista = 'administrador.show';
+            $checkConnection = $this->checkDatabaseConnection($vista);
+
+            if($checkConnection->getName() == "database_connection") {
+                return view('database_connection');
+            } else {
+                $usuario = $this->consultarUserEdit($id);
+                view()->share('usuario', $usuario);
+                $this->share_data();
+                return view($vista);
+            }
         }
     }
 
@@ -136,10 +159,17 @@ class AdministradorController extends Controller
         {
             return redirect()->to(route('home'));
         } else {
-            $usuario = $this->consultarUserEdit($id);
-            view()->share('usuario', $usuario);
-            $this->share_data();
-            return view('administrador.edit');
+            $vista = 'administrador.edit';
+            $checkConnection = $this->checkDatabaseConnection($vista);
+
+            if($checkConnection->getName() == "database_connection") {
+                return view('database_connection');
+            } else {
+                $usuario = $this->consultarUserEdit($id);
+                view()->share('usuario', $usuario);
+                $this->share_data();
+                return view($vista);
+            }
         }
     }
 
@@ -181,8 +211,6 @@ class AdministradorController extends Controller
            $sesion[2] != true)
         {
             return redirect()->to(route('home'));
-        } else {
-
         }
     }
 
@@ -403,8 +431,15 @@ class AdministradorController extends Controller
             return redirect()->to(route('home'));
         } else
         {
-            $this->share_data();
-            return view('administrador.disponibilidad_entrenadores');
+            $vista = 'administrador.disponibilidad_entrenadores';
+            $checkConnection = $this->checkDatabaseConnection($vista);
+
+            if($checkConnection->getName() == "database_connection") {
+                return view('database_connection');
+            } else {
+                $this->share_data();
+                return view($vista);
+            }
         }
     }
 
@@ -417,18 +452,40 @@ class AdministradorController extends Controller
 
         } catch (Exception $e)
         {
-            alert()->error("Ha ocurrido un error!");
-            return redirect()->to(route('administrador.index'));
+            $vista = 'administrador.index';
+            $checkConnection = $this->checkDatabaseConnection($vista);
+
+            if($checkConnection->getName() == "database_connection") {
+                return view('database_connection');
+            } else {
+                alert()->error("Ha ocurrido un error!");
+                return redirect()->to(route($vista));
+            }
         }
     }
 
     public function vistaAdminDisponibilidad()
     {
+<<<<<<< HEAD
         $todasDisponibilidades = DisponibilidadEntrenadores::select('id_horario', 'horario')
                                                         ->orderBy('horario', 'asc')
                                                         ->get()
                                                         ->toArray();
         return view('administrador.disponibilidad_admin', compact('todasDisponibilidades'));
+=======
+        $vista = 'administrador.disponibilidad_admin';
+        $checkConnection = $this->checkDatabaseConnection($vista);
+
+        if($checkConnection->getName() == "database_connection") {
+            return view('database_connection');
+        } else {
+            $todasDisponibilidades = DisponibilidadEntrenadores::select('id_horario', 'horario')
+                                                                ->orderBy('horario', 'asc')
+                                                                ->get()
+                                                                ->toArray();
+            return view($vista, compact('todasDisponibilidades'));
+        }
+>>>>>>> 985d0b2986c021ff1c6004010b6a7826b8790653
     }
 
     public function storeAdminDisponibilidad(Request $request)
@@ -481,6 +538,7 @@ class AdministradorController extends Controller
 
     public function nivelesIndex()
     {
+<<<<<<< HEAD
         $sesion = $this->validarVariablesSesion();
 
         if(empty($sesion[0]) || is_null($sesion[0]) &&
@@ -494,6 +552,19 @@ class AdministradorController extends Controller
                                 ->orderBy('nivel_descripcion', 'asc')
                                 ->get();
             return view('administrador.niveles_index', compact('niveles'));
+=======
+        $vista = 'administrador.niveles_index';
+        $checkConnection = $this->checkDatabaseConnection($vista);
+
+        if($checkConnection->getName() == "database_connection") {
+            return view('database_connection');
+        } else {
+            $niveles = Nivel::select('id_nivel','nivel_descripcion','ruta_pdf_nivel','deleted_at')
+                                    ->orderBy('nivel_descripcion', 'asc')
+                                    ->get();
+
+            return view($vista, compact('niveles'));
+>>>>>>> 985d0b2986c021ff1c6004010b6a7826b8790653
         }
     }
 
@@ -584,8 +655,6 @@ class AdministradorController extends Controller
             return back();
         }
     }
-
-
 
     // ===================================================
 

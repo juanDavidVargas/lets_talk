@@ -1,7 +1,6 @@
 Administrador
 username: jvargas
 Password: juvape
-pass: juvape1 -- NO ES
 
 Entrenador
 username: jvargas1

@@ -157,8 +157,6 @@
 
         function crearNivel() {
             html = ``;
-            html += `{!! Form::open(['method' => 'POST', 'route' => ['crear_nivel'], 'class'=>['form-horizontal form-bordered'], 'id'=>'form_crear_nivel', 'enctype'=>'multipart/form-data']) !!}`;
-            html += `@csrf`;
             html +=     `<label class="font14">This option creates a new level</label>`;
             html +=     `<div class="div-level-name">
                             <input type="text" name="crear_nivel" id="crear_nivel" class="level-name" required />
@@ -169,10 +167,9 @@
                         </div>
             `;
             html +=     `<div class="div-level-name">
-                            <input type="submit" value="Create Level" class="btn btn-primary" id="btn_crear_nivel">
+                            <input type="button" value="Create Level" class="btn btn-primary" id="btn_crear_nivel">
                         </div>
             `;
-            html += `{!! Form::close() !!}`;
 
             // =========================================
             
@@ -189,12 +186,60 @@
                 allowOutsideClick: false,
             });
 
+            // =========================================
+
             $('#btn_crear_nivel').on('click', function () {
-                setTimeout(function() {
-                    $('#file_crear_nivel').attr('disabled',true);
+                let nuevoNivel = $('#crear_nivel').val();
+                let fileCrearNivel = $('#file_crear_nivel').val();
+
+                console.log(nuevoNivel);
+                console.log(fileCrearNivel);
+                
+                if (nuevoNivel == "" || nuevoNivel == undefined) {
+                    $('#crear_nivel').attr('required', true);
+                    // $('#crear_nivel').prop('required', true);
+                    console.log("campo requerido");
+                    // alert("campo requerido");
+                } else {
                     $('#btn_crear_nivel').attr('disabled',true);
-                }, 300);
-            })
+
+                    $.ajax({
+                        url: "{{route('crear_nivel')}}",
+                        type: "POST",
+                        dataType: "JSON",
+                        data: {
+                            'nuevo_crear_nivel': nuevoNivel,
+                            'file_crear_nivel': fileCrearNivel,
+                        },
+                        success: function (respuesta) {
+                            console.log(respuesta);
+                            if (respuesta == "nivel_creado") {
+                                Swal.fire(
+                                    'Great!',
+                                    'New level has been created successfuly!',
+                                    'success'
+                                )
+                            }
+
+                            if (respuesta == "nivel_existe") {
+                                Swal.fire(
+                                    'Warning!',
+                                    'This level already exists!',
+                                    'warning'
+                                )
+                            }
+                            
+                            if (respuesta == "error_exception") {
+                                Swal.fire(
+                                    'Wrong!',
+                                    'An error has ocurred, please contact support!',
+                                    'error'
+                                )
+                            }
+                        }
+                    })
+                }
+            });
         }
 
         // ===========================================
