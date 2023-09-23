@@ -6,6 +6,7 @@ use App\Http\Controllers\admin\AdministradorController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Traits\MetodosTrait;
+use App\Models\entrenador\DisponibilidadEntrenadores;
 
 class EstudianteController extends Controller
 {
@@ -124,6 +125,19 @@ class EstudianteController extends Controller
             if($checkConnection->getName() == "database_connection") {
                 return view('database_connection');
             } else {
+                $arrayDias = array(
+                    1 => "LUNES",
+                    2 => "MARTES",
+                    3 => "MIÉRCOLES",
+                    4 => "JUEVES",
+                    5 => "VIERNES",
+                    6 => "SÁBADO",
+                    7 => "DOMINGO"
+                );
+                $arrayHorarios = DisponibilidadEntrenadores::select('id_horario', 'horario')
+                                    ->pluck('horario', 'id_horario');
+                view()->share('arrayDias', $arrayDias);
+                view()->share('horarios', $arrayHorarios);
                 return view($vista);
             }
         }

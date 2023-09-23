@@ -3385,3 +3385,28 @@ div label input {margin-right: 100px;}
 	text-align:center;
 }
 /* Fin estilos menu trainer agenda*/
+
+/* Inicio estilos disponibilidad entrenadores vista estudiantes*/
+.border {
+	border: 1px solid #CCCCCC;
+	padding: 5vh;
+	border-radius: 1vh;
+}
+
+.padding {
+	padding: 5vh !important;
+}
+
+.margin-bottom-10 {
+	margin-bottom: 10px !important;
+}
+
+.width-140 {
+	width: 140px !important;
+}
+
+.swal-class {
+	width: 460px !important;
+}
+
+/* Fin estilos disponibilidad entrenadores vista estudiantes*/
