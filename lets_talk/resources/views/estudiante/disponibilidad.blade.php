@@ -49,9 +49,9 @@
            horas.forEach((element, index) => {
                 cuerpo += `
                     <div class="col-md-4 form-floating mb-3">
-                        <div class="cat action">
+                        <div class="cat">
                             <label>
-                                <input type="checkbox" value="${index}" name="horas"><span>${element}</span>
+                                <input type="checkbox" value="${index}" name="disp_trainers" onclick="traerDisponibilidades(${index+1})"><span>${element}</span>
                             </label>
                             </div>
                     </div>
@@ -66,22 +66,86 @@
                 showConfirmButton: false,
                 cancelButtonText: 'Cerrar',
                 customClass: 'swal-class',
-        }).then((result) => {
+            });
+    }
 
-            if (result.value) {
+    function traerDisponibilidades(index)
+    {
+        $.ajax(
+            {
+                async: true,
+                url: "{{route('estudiante.traer_disponibilidades')}}",
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    'id_diponibilidad': index
+                },
+                beforeSend: function() {
+                    $("#loaderGif").show();
+                    $("#loaderGif").removeClass('ocultar');
+                },
+                success: function(response) 
+                {
+                    $("#loaderGif").hide();
+                    $("#loaderGif").addClass('ocultar');
 
-                $.ajax({
-                    url: "",
-                    data: {
-                    },
-                    type: 'POST',
-                    dataType: 'json',
-                    success: function(response){
+                    if(response == "error_exception") 
+                    {
+                        $("#loaderGif").hide();
+                        $("#loaderGif").addClass('ocultar');
+                        Swal.fire(
+                            'Error!',
+                            'Ha ocurrido un error, íntente de nuevo, si el problema persiste, comuniquese con el administrador!',
+                            'error'
+                        );
+                        return;
+                    } else if(response == "no_datos") 
+                    {
+                        $("#loaderGif").hide();
+                        $("#loaderGif").addClass('ocultar');
+                        Swal.fire(
+                            'Error!',
+                            'No se encontraron disponibilidades de entrenadores para el horario seleccionado',
+                            'error'
+                        );
+                        return;
+                    } else 
+                    {
+                        $("#loaderGif").hide();
+                        $("#loaderGif").addClass('ocultar');
+                        let cuerpo = "";
+
+                        $.each(response, (index, value) =>{
+                            cuerpo += `
+                                <div class="row">
+                                    <div class="cols-xs-12 col-sm-12 col-md-4">
+                                    <div class="card" style="width: 18rem;">
+                                    <div class="card-body">
+                                        <h4 class="card-title">${value.nombres} ${value.apellidos}</h4>
+                                        <h5>Ingles: ${value.descripcion}</h5>
+                                        <h6>Español: SI</h6>
+                                        <a href="https://www.pse.com.co/persona" class="btn btn-sm btn-primary">Reservar ya</a>
+                                    </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            `; 
+                        });
+
+                        Swal.fire({
+                            title: `Disponibilidad Entrenadores`,
+                            html: cuerpo,
+                            type: 'info',
+                            showCancelButton: true,
+                            showConfirmButton: false,
+                            cancelButtonText: 'Cerrar',
+                            customClass: 'swal-class',
+                        });
                     }
-                });
+                }
             }
-        })
-
+        );
     }
     </script>
 @endsection

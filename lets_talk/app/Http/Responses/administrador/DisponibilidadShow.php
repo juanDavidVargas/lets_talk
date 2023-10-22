@@ -44,6 +44,45 @@ class DisponibilidadShow implements Responsable
             alert()->error("Error', 'An error has occurred, try again, if the problem persists contact support.!");
             return redirect()->to(route('administrador.index'));
         }
+    }
 
+    public function disponibilidadPorID($request)
+    {
+        try {
+            $id = request('id_diponibilidad', null);
+
+            $queryDisponibilidades = $this->consultarDisponibilidades($id);
+
+            if(isset($queryDisponibilidades) &&
+               !empty($queryDisponibilidades) &&
+               !is_null($queryDisponibilidades) && count($queryDisponibilidades))
+            {
+                return response()->json($queryDisponibilidades);
+            } else {
+                return response()->json("no_datos");
+            }
+
+        } catch (Exception $e) {
+            return response()->json("error_exception");
+        }
+    }
+
+    private function consultarDisponibilidades($id)
+    {
+        return DB::table('evento_agenda_entrenador')
+                ->join('usuarios', 'usuarios.id_user', '=', 'evento_agenda_entrenador.id_usuario')
+                ->join('tipo_ingles', 'tipo_ingles.id', '=', 'usuarios.id_tipo_ingles')
+                ->select(
+                            'usuarios.nombres',
+                            'usuarios.apellidos',
+                            'tipo_ingles.descripcion'
+                        )
+                ->whereIn('usuarios.id_rol', [1,2])
+                ->where('usuarios.estado', 1)
+                ->whereNull('usuarios.deleted_at')
+                ->where('evento_agenda_entrenador.state', 1)
+                ->whereNull('evento_agenda_entrenador.deleted_at')
+                ->where('evento_agenda_entrenador.id_horario', $id)
+                ->get();
     }
 }
