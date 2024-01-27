@@ -51,7 +51,7 @@
                     <div class="col-md-4 form-floating mb-3">
                         <div class="cat">
                             <label>
-                                <input type="checkbox" value="${index}" name="disp_trainers" onclick="traerDisponibilidades(${index+1})"><span>${element}</span>
+                                <input type="checkbox" value="${index}" name="disp_trainers" onclick="traerDisponibilidades(${index+1}, ${id})"><span>${element}</span>
                             </label>
                             </div>
                     </div>
@@ -69,7 +69,7 @@
             });
     }
 
-    function traerDisponibilidades(index)
+    function traerDisponibilidades(index, id)
     {
         $.ajax(
             {
@@ -79,7 +79,8 @@
                 dataType: 'json',
                 data: {
                     "_token": "{{ csrf_token() }}",
-                    'id_diponibilidad': index
+                    'id_diponibilidad': index,
+                    'numero_dia': id
                 },
                 beforeSend: function() {
                     $("#loaderGif").show();
@@ -123,8 +124,17 @@
                                     <div class="card" style="width: 18rem;">
                                     <div class="card-body">
                                         <h4 class="card-title">${value.nombres} ${value.apellidos}</h4>
-                                        <h5>Ingles: ${value.descripcion}</h5>
-                                        <h6>Español: SI</h6>
+                                        <h5>Ingles: `;
+                                        if(value.descripcion == null || value.descripcion == undefined ||
+                                           value.descripcion == '')
+                                        {
+                                            cuerpo += `NO Especificado</h5>`;
+
+                                        } else {
+                                            cuerpo += `${value.descripcion}</h5>`;
+                                            
+                                        }
+                            cuerpo += ` <h6>Español: SI</h6>
                                         <a href="https://www.pse.com.co/persona" class="btn btn-sm btn-primary">Reservar ya</a>
                                     </div>
                                     </div>

@@ -9,13 +9,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Let's Talk - Trainer's Agenda</title>
 
-    <!-- Google Fonts -->
-    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=PT+Sans:300,400,700,900' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Lora:400,400italic,700,700italic' rel='stylesheet'
-         type='text/css'>
-
-    <link rel="stylesheet" href="{{ asset('css/animations.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/404.css') }}">
 
@@ -35,6 +28,8 @@
 
     <script src="{{ asset('js/modernizr.custom.js') }}"></script>
     <script src="{{ asset('js/jquery-2.1.3.min.js') }}"></script>
+
+
 </head>
 <body>
 <div class="container">
@@ -45,15 +40,95 @@
             </div>
         </div>
 
-        @if(Request()->path() == '/' || Request()->path() == "login" ||
-            Request()->path() == "login_estudiante")
+        @if(Request::path() == '/' || Request::path() == "login" ||
+            Request::path() == "login_estudiante")
+
             <div class="col-xs-6 col-sm-6 col-md-6">
                 <div class="sign-out">
                     &nbsp;
                 </div>
             </div>
         @else
-            @include('layouts.menu')
+
+        {{-- Inicio Menu --}}
+        <div class="col-xs-6 col-sm-6 col-md-6">
+            <div class="sign-out">
+                {{-- Rol Entrenador --}}
+                @if(!is_null(session('rol')) && (session('rol') == 1 || session('rol') == "1"))
+                    <ul class="nav nav-tabs">
+                        @if(Request::path() == "trainer")
+                            <li class="nav-item">
+                                <a href="{{route('trainer.create')}}" class="nav-link active" aria-current="page">Trainer's Agenda</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{route('trainer.index')}}" class="nav-link" aria-current="page">Trainer's Sessions</a>
+                            </li>
+                        @else
+                            <li class="nav-item">
+                                <a href="{{route('trainer.create')}}" class="nav-link" aria-current="page">Trainer's Agenda</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{route('trainer.index')}}" class="nav-link" aria-current="page">Trainer's Sessions</a>
+                            </li>
+                        @endif
+                        <li>
+                            <a href="{{route('logout')}}" title="Cerrar Sesión">
+                                <i class="fa fa-sign-out fa-3x" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                    </ul>
+                {{-- Rol Estudiante --}}
+                @elseif(!is_null(session('rol')) && (session('rol') == 3 || session('rol') == "3"))
+                    <ul class="nav nav-tabs">
+                        @if(Request::path == "student")
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" aria-current="page">Diponibilidad Entrenadores</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" aria-current="page">Reservas</a>
+                            </li>
+                        @else
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" aria-current="page">Diponibilidad Entrenadores</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" aria-current="page">Reservas</a>
+                            </li>
+                        @endif
+                        <li>
+                            <a href="{{route('logout')}}" title="Cerrar Sesión">
+                                <i class="fa fa-sign-out fa-3x" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    {{-- Rol Administrador --}}
+                @else
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="pointer" href="{{route('administrador.index')}}" class="nav-link" aria-current="page">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('trainer.create')}}" class="nav-link active" aria-current="page">Trainer's Agenda</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('trainer.index')}}" class="nav-link" aria-current="page">Trainer's Sessions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" aria-current="page">Availability Trainer's</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" aria-current="page">Reservations</a>
+                        </li>
+                        <li>
+                            <a href="{{route('logout')}}" title="Cerrar Sesión">
+                                <i class="fa fa-sign-out fa-3x" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                    </ul>
+                @endif
+            </div>
+        </div>
+        {{-- Fin Menu --}}
         @endif
     </div>
 
@@ -94,17 +169,6 @@
                                         </div>
                                     @endfor
 
-                                    @if(!is_null(session('rol')) && (session('rol') == 2 || session('rol') == "2"))
-                                        <div class="row">
-                                            <div class="cl-xs-12 col-sm-12 cl-md-12 col-lg-12">
-                                                <div class="wrap-input100">
-                                                    {!! Form::select('trainers', $trainers, null, ['class' => 'input100', 'id' => 'trainers']) !!}
-                                                    <span class="focus-input100" data-placeholder=""></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endif
-
                                     <div class="row">
                                         <div class="col-md-12">
                                             <input type="hidden" name="horarios" id="horarios" value="">
@@ -131,8 +195,6 @@
         </div>
     </div>
 </div>
-
-@include('layouts.loader')
 </div>
 
 <!-- Footer -->
@@ -238,10 +300,7 @@
 
     $( document ).ready(function()
     {
-        window.$("#trainers").trigger('focus');
-        window.$("#trainers").prepend(new Option("Select User...", "-1"));
         cargarEventosPorEntrenador();
-        window.$("#trainers").val("-1");
     });
 
     let calendarEl = document.getElementById('calendar');
@@ -251,6 +310,7 @@
     let max = '22:00:00';
     const url_store = "{{route('trainer.store')}}";
     let  myData = [];
+    let numDay = [];
 
 document.addEventListener('DOMContentLoaded', function ()
 {
@@ -261,7 +321,8 @@ document.addEventListener('DOMContentLoaded', function ()
         headerToolbar: {
             left: 'prev next today',
             center: 'title',
-            right: 'dayGridMonth listWeek'
+            // right: 'dayGridMonth listWeek'
+            right: 'dayGridMonth'
         },
         events: myData,
         displayEventTime: false,
@@ -277,6 +338,9 @@ document.addEventListener('DOMContentLoaded', function ()
             let daysArray = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
             let day = new Date(fechaEvento).getDay() + 1;
             let dayName = '';
+
+            numDay.shift();
+            numDay.push(day);
 
             let fecha = new Date();
             let dias = 14; // Número de días a agregar
@@ -328,7 +392,7 @@ document.addEventListener('DOMContentLoaded', function ()
             let evento_id = info.event.id
 
             $.ajax({
-                async: true,
+                async: false,
                 url: "{{route('cargar_info_evento')}}",
                 type: 'POST',
                 dataType: 'json',
@@ -336,19 +400,10 @@ document.addEventListener('DOMContentLoaded', function ()
                     "_token": "{{ csrf_token() }}",
                     'id_evento': evento_id
                 },
-                beforeSend: function() {
-                    $("#loaderGif").show();
-                    $("#loaderGif").removeClass('ocultar');
-                },
                 success: function (response)
                 {
-                    $("#loaderGif").hide();
-                    $("#loaderGif").addClass('ocultar');
-
                     if(response == "error_exception")
                     {
-                        $("#loaderGif").hide();
-                        $("#loaderGif").addClass('ocultar');
                         Swal.fire(
                             'Error!',
                             'An error occurred, try again, if the problem persists contact support.!',
@@ -359,8 +414,6 @@ document.addEventListener('DOMContentLoaded', function ()
 
                     if(response == "error_query_eventos")
                     {
-                        $("#loaderGif").hide();
-                        $("#loaderGif").addClass('ocultar');
                         Swal.fire(
                             'Error!',
                             'An error occurred, try again, if the problem persists contact support.!',
@@ -389,7 +442,6 @@ document.addEventListener('DOMContentLoaded', function ()
         e.preventDefault();
         let horas = $("#horarios").val();
         let fecha_evento = $("#fecha_evento").val();
-        let user_id = $("#trainers").val();
 
         if ((horas == '' || horas == null || horas == undefined) ||
             (fecha_evento == '' || fecha_evento == null || fecha_evento == undefined))
@@ -414,7 +466,7 @@ document.addEventListener('DOMContentLoaded', function ()
                     "_token": "{{ csrf_token() }}",
                     'hrs_disponibilidad': horas,
                     'fecha_evento': fecha_evento,
-                    'trainer_id': user_id
+                    'numero_dia': numDay
                 },
                 beforeSend: function()
                 {
@@ -424,12 +476,15 @@ document.addEventListener('DOMContentLoaded', function ()
                 },
                 success: function(response)
                 {
+                    $("#loaderGif").show();
+                    $("#loaderGif").removeClass('ocultar');
+
                     if(response == "exception_evento")
                     {
                         $("#loaderGif").hide();
                         $("#loaderGif").addClass('ocultar');
                         myModal.hide();
-
+                        $("#loaderGif").hide();
                         Swal.fire(
                             'Error',
                             'An error occurred, contact support.',
@@ -438,36 +493,12 @@ document.addEventListener('DOMContentLoaded', function ()
                         return;
                     }
 
-                    if(response == "ya_existe")
-                    {
-                        $("#loaderGif").hide();
-                        $("#loaderGif").addClass('ocultar');
-                        myModal.hide();
-
-                        Swal.fire({
-                            position: 'center'
-                            , icon: 'error'
-                            , title: 'Error!'
-                            , html: 'You already have availabilities pending approval, it is not possible to create the availability.'
-                            , type: 'error'
-                            , showCancelButton: false
-                            , showConfirmButton: false
-                            , allowOutsideClick: false
-                            , allowEscapeKey: false
-                            , timer: 5000
-                        });
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 5200);
-                        return;
-                    }
-
                     if(response == "error_evento")
                     {
                         $("#loaderGif").hide();
                         $("#loaderGif").addClass('ocultar');
                         myModal.hide();
-
+                        $("#loaderGif").hide();
                         Swal.fire(
                             'Error',
                             'An error occurred, try again, if the problem persists contact support.',
@@ -534,31 +565,23 @@ $("#btnClose").click(function(info){
         $(`#${element.id}`).removeAttr('checked', false);
         $(`#${element.id}`).css('background-color', "#21277B");
     });
+
 });
 
 function cargarEventosPorEntrenador()
 {
     $.ajax({
-        async: true,
+        async: false,
         url: "{{route('cargar_eventos_entrenador')}}",
         type: "POST",
         dataType: "json",
         data: {
             "_token": "{{ csrf_token() }}"
         },
-        beforeSend: function(){
-            $("#loaderGif").show();
-            $("#loaderGif").removeClass('ocultar');
-        },
         success: function(response)
         {
-            $("#loaderGif").hide();
-            $("#loaderGif").addClass('ocultar');
-            
             if(response == "error_exception")
             {
-                $("#loaderGif").hide();
-                $("#loaderGif").addClass('ocultar');
                 Swal.fire(
                     'Error!',
                     'An error occurred, contact support.!',
@@ -569,8 +592,6 @@ function cargarEventosPorEntrenador()
 
             if(response == "error_query_eventos")
             {
-                $("#loaderGif").hide();
-                $("#loaderGif").addClass('ocultar');
                 Swal.fire(
                     'Error!',
                     'An error occurred, contact support.!',
@@ -584,20 +605,17 @@ function cargarEventosPorEntrenador()
                 myData.push(
                     {
                         id: element.id_horario,
-                        allDay: false,
-                        editable: false,
-                        start: `${element.start_date}T${element.start_time}:00`,
-                        end: `${element.end_date}T${element.end_time}:00`,
+                        start: `${element.start_date}`,
                         title: element.title,
                         color: element.color,
-                        textColor: '#FFFFFF',
+                        textColor: '#FFFFFF'
                     }
                 );
             });
         }
     });
 }
+
 </script>
 </body>
 </html>
-

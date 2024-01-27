@@ -50,8 +50,9 @@ class DisponibilidadShow implements Responsable
     {
         try {
             $id = request('id_diponibilidad', null);
+            $numeroDia = request('numero_dia', null);
 
-            $queryDisponibilidades = $this->consultarDisponibilidades($id);
+            $queryDisponibilidades = $this->consultarDisponibilidades($id, $numeroDia);
 
             if(isset($queryDisponibilidades) &&
                !empty($queryDisponibilidades) &&
@@ -67,11 +68,11 @@ class DisponibilidadShow implements Responsable
         }
     }
 
-    private function consultarDisponibilidades($id)
+    private function consultarDisponibilidades($id, $numDia)
     {
         return DB::table('evento_agenda_entrenador')
                 ->join('usuarios', 'usuarios.id_user', '=', 'evento_agenda_entrenador.id_usuario')
-                ->join('tipo_ingles', 'tipo_ingles.id', '=', 'usuarios.id_tipo_ingles')
+                ->leftJoin('tipo_ingles', 'tipo_ingles.id', '=', 'usuarios.id_tipo_ingles')
                 ->select(
                             'usuarios.nombres',
                             'usuarios.apellidos',
@@ -83,6 +84,7 @@ class DisponibilidadShow implements Responsable
                 ->where('evento_agenda_entrenador.state', 1)
                 ->whereNull('evento_agenda_entrenador.deleted_at')
                 ->where('evento_agenda_entrenador.id_horario', $id)
+                ->where('evento_agenda_entrenador.num_dia', $numDia)
                 ->get();
     }
 }

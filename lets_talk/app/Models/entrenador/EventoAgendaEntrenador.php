@@ -20,6 +20,7 @@ class EventoAgendaEntrenador extends Model
        'state',
        'color',
        'id_usuario',
-       'id_horario'
+       'id_horario',
+       'num_dia'
     ];
 }

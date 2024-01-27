@@ -20,6 +20,8 @@ class AgendaEntrenadorStore implements Responsable
         $disponibilidad = request('hrs_disponibilidad', null);
         $fecha_disponibilidad = request('fecha_evento', null);
         $entrenador_id = request('trainer_id', null);
+        $numDia = request('numero_dia', null);
+        $dia = !is_null($numDia) ? implode("", $numDia) : null;
 
         if(isset($disponibilidad) && !is_null($disponibilidad) && !empty($disponibilidad))
         {
@@ -30,7 +32,6 @@ class AgendaEntrenadorStore implements Responsable
 
         if($array_disponibilidad == [] || count($array_disponibilidad) == 0 || empty($array_disponibilidad))
         {
-            DB::connection('mysql')->rollback();
             return response()->json("error_horas");
         }
 
@@ -40,7 +41,6 @@ class AgendaEntrenadorStore implements Responsable
         {
             foreach ($array_disponibilidad as $disp)
             {
-
                 $horas_disp= DisponibilidadEntrenadores::select('horario')
                                                         ->where('id_horario', $disp)
                                                         ->first();
@@ -79,7 +79,8 @@ class AgendaEntrenadorStore implements Responsable
                     'color' => '#157347',
                     'state' => $state,// Pendiente Aprobación
                     'id_usuario' => $user_id,
-                    'id_horario' => $disp
+                    'id_horario' => $disp,
+                    'num_dia' => intval($dia)
                 ]);
             }
 

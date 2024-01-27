@@ -40,10 +40,11 @@ class AgendaEntrenadorShow implements Responsable
                                     'color',
                                     'state',
                                     'id_usuario',
-                                    'id_horario')
+                                    'id_horario',
+                                    'num_dia'
+                                )
                         ->whereNull('deleted_at')
                         ->where('state', 1)
-                        // ->where('id_usuario', $usuario_id)
                         ->whereRaw($where)
                         ->get();
 
