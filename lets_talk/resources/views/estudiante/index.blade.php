@@ -8,13 +8,13 @@
 
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12">
-        <h1 class="text-center text-uppercase">Mis Reservas</h1>
+        <h1 class="text-center text-uppercase">Mis Sesiones</h1>
     </div>
 </div>
 
-<div class="row p-b-20 float-right">
+<div class="row p-b-20 float-left">
     <div class="col-xs-12 col-sm-12 col-md-12">
-        {{-- <a href="{{route('administrador.create')}}" class="btn btn-primary">Create New User</a> --}}
+        <a href="{{route('estudiante.disponibilidad')}}" class="btn btn-primary">Atrás Disponibilidad</a>
     </div>
 </div>
 <div class="row p-t-30">
@@ -23,18 +23,20 @@
             <table class="table table-striped table-bordered table-hover" id="tbl_reservas">
                 <thead>
                     <tr class="header-table">
-                        <th>Por Definir</th>
-                        <th>Por Definir</th>
-                        <th>Por Definir</th>
-                        <th>Por Definir</th>
+                        <th>Entrenador</th>
+                        <th>Fecha</th>
+                        <th>Horario</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>Nombre del Entrenador</td>
+                        <td>March, 6TH</td>
+                        <td>00:00 HRS</td>
+                        <td>
+                        <a href="" class="btn btn-sm btn-info" title="Details" id="btn_details"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                        </td>
                     </tr>
                 </tbody>
             </table>

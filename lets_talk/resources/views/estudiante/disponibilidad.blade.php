@@ -13,7 +13,7 @@
 
 <div class="row p-b-20 float-left">
     <div class="col-xs-12 col-sm-12 col-md-12">
-        <a href="#" class="btn btn-primary">Reservas</a>
+        <a href="{{route('estudiante.index')}}" class="btn btn-primary">Reservas</a>
     </div>
 </div>
 
@@ -119,25 +119,33 @@
 
                         $.each(response, (index, value) =>{
                             cuerpo += `
+                                <br/>
                                 <div class="row">
-                                    <div class="cols-xs-12 col-sm-12 col-md-4">
-                                    <div class="card" style="width: 18rem;">
-                                    <div class="card-body">
-                                        <h4 class="card-title">${value.nombres} ${value.apellidos}</h4>
-                                        <h5>Ingles: `;
-                                        if(value.descripcion == null || value.descripcion == undefined ||
-                                           value.descripcion == '')
-                                        {
-                                            cuerpo += `NO Especificado</h5>`;
+                                    <div class="cols-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <div class="card card-reservation">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="cols-xs-12 col-sm-12 col-md-3 col-lg-3">
+                                                        <img src="{{asset('img/profile.png')}}" class="profile" width="100" height="100" alt="profile" />
+                                                    </div>
+                                                    <div class="cols-xs-12 col-sm-12 col-md-9 col-lg-9">
+                                                        <h4 class="card-title">${value.nombres} ${value.apellidos}</h4>
+                                                        <h5>Ingles: `;
+                                                        if(value.descripcion == null || value.descripcion == undefined ||
+                                                        value.descripcion == '')
+                                                        {
+                                                            cuerpo += `NO Especificado</h5>`;
 
-                                        } else {
-                                            cuerpo += `${value.descripcion}</h5>`;
-                                            
-                                        }
-                            cuerpo += ` <h6>Español: SI</h6>
-                                        <a href="https://www.pse.com.co/persona" class="btn btn-sm btn-primary">Reservar ya</a>
-                                    </div>
-                                    </div>
+                                                        } else {
+                                                            cuerpo += `${value.descripcion}</h5>`;
+                                                            
+                                                        }
+                                            cuerpo += ` <h6>Español: SI</h6>
+                                                        <a href="https://www.pse.com.co/persona" class="btn btn-sm btn-primary align">Reservar ya</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             `; 

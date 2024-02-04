@@ -1,6 +1,6 @@
 <ul class="nav nav-tabs">
     <li role="presentation">
-        <a href="#">Reservas</a>
+        <a href="{{route('estudiante.index')}}">Reservas</a>
     </li>
 
     <li role="presentation">
