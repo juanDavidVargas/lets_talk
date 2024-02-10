@@ -29,7 +29,6 @@
     <script src="{{ asset('js/modernizr.custom.js') }}"></script>
     <script src="{{ asset('js/jquery-2.1.3.min.js') }}"></script>
 
-
 </head>
 <body>
 <div class="container">
@@ -155,7 +154,7 @@
                         <div class="modal-header bg-primary text-center">
                             <h5 class="modal-title" id="titulo">Event Registration</h5>
                         </div>
-                        {!! Form::open(['id' => 'formulario', 'autocomplete' => 'off']) !!}
+                        {!! Form::open(['id' => 'formulario', 'autocomplete' => 'off', 'class' => 'login100-form validate-form']) !!}
                         @csrf
                             <div class="modal-body">
                                 <div class="row">
@@ -179,6 +178,16 @@
                                         <div class="col-md-12">
                                             <input type="hidden" name="fecha_evento" id="fecha_evento" value="">
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        @if(session('rol') == 2 || session('rol') == "2")
+                                        <div class="wrap-input100 validate-input" data-validate="This Field is Required">
+                                            {!! Form::select('trainer_id', $trainers, null, ['class' => 'input100', 'id' => 'trainer_id']) !!}
+                                            <span class="focus-input100" data-placeholder=""></span>
+                                        </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -300,6 +309,9 @@
 
     $( document ).ready(function()
     {
+        window.$("#trainer_id").prepend(new Option("Select Trainer...", "-1"));
+        $("#trainer_id").trigger('focus');
+        $("#trainer_id").trigger('change');
         cargarEventosPorEntrenador();
     });
 
@@ -390,6 +402,9 @@ document.addEventListener('DOMContentLoaded', function ()
         eventClick: function (info)
         {
             let evento_id = info.event.id
+            $("#trainer_id").val('-1');
+            $(`#${evento_id}`).attr('checked', false);
+            $(`#${evento_id}`).prop('checked',false);
 
             $.ajax({
                 async: false,
@@ -402,6 +417,7 @@ document.addEventListener('DOMContentLoaded', function ()
                 },
                 success: function (response)
                 {
+                   
                     if(response == "error_exception")
                     {
                         Swal.fire(
@@ -432,8 +448,7 @@ document.addEventListener('DOMContentLoaded', function ()
                 }
             });
         },
-        eventDrop: function (info)
-        {}
+        eventDrop: function (info){}
     });
 
     calendar.render();
@@ -442,6 +457,7 @@ document.addEventListener('DOMContentLoaded', function ()
         e.preventDefault();
         let horas = $("#horarios").val();
         let fecha_evento = $("#fecha_evento").val();
+        let trainer = $("#trainer_id").val();
 
         if ((horas == '' || horas == null || horas == undefined) ||
             (fecha_evento == '' || fecha_evento == null || fecha_evento == undefined))
@@ -452,9 +468,17 @@ document.addEventListener('DOMContentLoaded', function ()
                  'error'
              );
              return;
+        } else if (trainer == '' || trainer == null || trainer == undefined ||
+                   trainer == '-1' || trainer == -1)
+        {
+            Swal.fire(
+                 'Error',
+                 'Please, selected a trainer',
+                 'error'
+             );
+             return;
         } else
         {
-
             $("#btnAccion").attr('disabled', 'disabled');
 
             $.ajax({
@@ -466,7 +490,8 @@ document.addEventListener('DOMContentLoaded', function ()
                     "_token": "{{ csrf_token() }}",
                     'hrs_disponibilidad': horas,
                     'fecha_evento': fecha_evento,
-                    'numero_dia': numDay
+                    'numero_dia': numDay,
+                    'trainer_id': trainer
                 },
                 beforeSend: function()
                 {

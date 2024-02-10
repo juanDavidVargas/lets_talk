@@ -10,13 +10,13 @@
     @if(session('rol') == 2)
     <td>
         @if($disponibilidad->state == 1 )
-            <span class="btn btn-success" style="border-radius: 15px;">{{$disponibilidad->descripcion_estado}}</span>
+            <span class="btn btn-sm btn-success" style="border-radius: 15px;">{{$disponibilidad->descripcion_estado}}</span>
         @elseif($disponibilidad->state == 2)
             <span class="btn" style="border-radius: 15px; background-color:yellow;">{{$disponibilidad->descripcion_estado}}</span>
         @elseif($disponibilidad->state == 3)
-            <span class="btn btn-warning" style="border-radius: 15px;">{{$disponibilidad->descripcion_estado}}</span>
+            <span class="btn btn-sm btn-warning" style="border-radius: 15px;">{{$disponibilidad->descripcion_estado}}</span>
         @else
-            <span class="btn btn-danger" style="border-radius: 15px;">{{$disponibilidad->descripcion_estado}}</span>
+            <span class="btn btn-sm btn-danger" style="border-radius: 15px;">{{$disponibilidad->descripcion_estado}}</span>
         @endif
     </td>
     @endif

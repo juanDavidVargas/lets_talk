@@ -48,7 +48,8 @@ class AgendaEntrenadorStore implements Responsable
                 $hora_inicio = substr($horas_disp->horario, 0, 5);
                 $hora_fin = substr($horas_disp->horario, 6);
 
-                if(isset($entrenador_id) && !is_null($entrenador_id) && !empty($entrenador_id) && $entrenador_id != "-1") {
+                if(isset($entrenador_id) && !is_null($entrenador_id) &&
+                   !empty($entrenador_id) && $entrenador_id != "-1") {
 
                    $user = $this->traerNombreUsuario($entrenador_id);
                    $usuario = $user->usuario;
@@ -62,9 +63,10 @@ class AgendaEntrenadorStore implements Responsable
                     $user_id = session('usuario_id');
                 }
 
-                $consultaDisponibilidades = $this->validarDisponibilidadUsuario(session('usuario_id'));
+                $consultaDisponibilidades = $this->validarDisponibilidadUsuario($user_id);
 
-                if ($consultaDisponibilidades > 0 && $consultaDisponibilidades != 'error_datos_disp') {
+                if ($consultaDisponibilidades > 0 && 
+                    $consultaDisponibilidades != 'error_datos_disp') {
 
                     return response()->json("ya_existe");
                 }
@@ -90,7 +92,7 @@ class AgendaEntrenadorStore implements Responsable
 
                 if(isset($state) && !is_null($state) && !empty($state) &&  $state == 2) {
 
-                    $this->enviarCorreoAdminAprobacion(session('usuario_id'));
+                    $this->enviarCorreoAdminAprobacion($user_id);
                 }
 
                 return response()->json("success_evento");
@@ -152,7 +154,8 @@ class AgendaEntrenadorStore implements Responsable
             if(isset($traer_disponibilidad) && $traer_disponibilidad != "error_datos_disp")
             {
                 //Envio del correo
-                Mail::to($datos_admin->correo)->send(new MailAprobacionDisponibilidad($datos_usuario,  $datos_admin, $traer_disponibilidad));
+                Mail::to($datos_admin->correo)
+                        ->send(new MailAprobacionDisponibilidad($datos_usuario,  $datos_admin, $traer_disponibilidad));
             }
         }
     }
