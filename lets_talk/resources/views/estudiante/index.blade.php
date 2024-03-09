@@ -35,7 +35,9 @@
                         <td>March, 6TH</td>
                         <td>00:00 HRS</td>
                         <td>
-                        <a href="" class="btn btn-sm btn-info" title="Details" id="btn_details"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                        <a href="" class="btn btn-sm btn-info" title="Details" id="btn_details">
+                            
+                        </a>
                         </td>
                     </tr>
                 </tbody>

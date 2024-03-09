@@ -9,7 +9,7 @@
                 <!-- Grid column -->
                 <div class="col-md-2 col-md-offset-2">
                     <h6 class="text-uppercase font-weight-bold">
-                        <a href="#!" class="text-white">About us</a>
+                        <a href="{{route('about_us')}}" class="text-white">About us</a>
                     </h6>
                 </div>
                 <!-- Grid column -->
@@ -17,7 +17,7 @@
                 <!-- Grid column -->
                 <div class="col-md-2">
                     <h6 class="text-uppercase font-weight-bold">
-                        <a href="#!" class="text-white">Services</a>
+                        <a href="{{route('services')}}" class="text-white">Services</a>
                     </h6>
                 </div>
                 <!-- Grid column -->
@@ -25,7 +25,7 @@
                 <!-- Grid column -->
                 <div class="col-md-2">
                     <h6 class="text-uppercase font-weight-bold">
-                        <a href="#!" class="text-white">Help</a>
+                        <a href="#" class="text-white">Help</a>
                     </h6>
                 </div>
                 <!-- Grid column -->
@@ -33,7 +33,7 @@
                 <!-- Grid column -->
                 <div class="col-md-2">
                     <h6 class="text-uppercase font-weight-bold">
-                        <a href="#!" class="text-white">Contact</a>
+                        <a href="mailto:letstalkmedellin@gmail.com" class="text-white" target="_blank">Contact</a>
                     </h6>
                 </div>
                 <!-- Grid column -->
@@ -44,38 +44,17 @@
 
         <hr class="my-5"/>
 
-        <!-- Section: Text -->
-        <section class="mb-4">
-            <div class="row d-flex justify-content-center">
-                <div class="col-lg-8 col-lg-offset-2">
-                    <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt
-                        distinctio earum repellat quaerat voluptatibus placeat nam,
-                        commodi optio pariatur est quia magnam eum harum corrupti
-                        dicta, aliquam sequi voluptate quas.
-                    </p>
-                </div>
-            </div>
-        </section>
-        <!-- Section: Text -->
-
         <!-- Section: Social -->
         <section class="text-center mb-4">
             <a href="" class="text-white fa-2x facebook">
                 <i class="fa fa-facebook-f"></i>
             </a>
-            <a href="" class="text-white fa-2x twitter">
-                <i class="fa fa-twitter"></i>
-            </a>
-            <a href="" class="text-white fa-2x google">
-                <i class="fa fa-google"></i>
-            </a>
             <a href="" class="text-white fa-2x insta">
                 <i class="fa fa-instagram"></i>
             </a>
-            <a href="" class="text-white fa-2x link">
+            <!-- <a href="" class="text-white fa-2x link">
                 <i class="fa fa-linkedin"></i>
-            </a>
+            </a> -->
         </section>
         <!-- Section: Social -->
     </div>

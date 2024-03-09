@@ -10,8 +10,6 @@ Route::get('/', function ()
 // RUTA COMPROBAR CONEXIÓN BASE DE DATOS
 Route::get('check_database_connection', 'inicio_sesion\LoginController@checkDatabaseConnection')->name('check_database_connection');
 
-// =======================================================================================================
-
 // Rutas Login
 Route::resource('login', 'inicio_sesion\LoginController');
 Route::get('login_estudiante', 'inicio_sesion\LoginController@loginEstudiante')->name('login_estudiante');
@@ -22,8 +20,6 @@ Route::post('recovery_password_email', 'inicio_sesion\LoginController@recoveryPa
 Route::get('recovery_password_link/{id}', 'inicio_sesion\LoginController@recoveryPasswordLink')->name('recovery_password_link');
 Route::post('recovery_password_post', 'inicio_sesion\LoginController@recoveryPasswordPost')->name('recovery_password_post');
 Route::get('logout', 'inicio_sesion\LoginController@logout')->name('logout');
-
-// =======================================================================================================
 
 // Rutas ADMINISTRADOR
 Route::resource('administrador', 'admin\AdministradorController');
@@ -45,7 +41,6 @@ Route::post('inactivar_nivel', 'admin\AdministradorController@inactivarNivel')->
 Route::post('activar_nivel', 'admin\AdministradorController@activarNivel')->name('activar_nivel');
 Route::post('consultar_nivel', 'admin\AdministradorController@consultarNivel')->name('consultar_nivel'); // Se consulta para la edición
 
-// =======================================================================================================
 
 // Rutas ENTRENADOR
 Route::resource('trainer', 'entrenador\EntrenadorController');
@@ -59,14 +54,13 @@ Route::post('actualizacion_masiva_diponibilidades', 'entrenador\EntrenadorContro
 Route::get('student_resume', 'entrenador\EntrenadorController@studentResume')->name('student_resume');
 Route::post('estudiante_hoja_vida', 'entrenador\EntrenadorController@estudianteHojaVida')->name('estudiante_hoja_vida');
 
-
-// =======================================================================================================
-
 // Rutas ESTUDIANTE
 Route::resource('estudiante', 'estudiante\EstudianteController');
 Route::get('disponibilidad', 'estudiante\EstudianteController@disponibilidad')->name('estudiante.disponibilidad');
 Route::post('traer_disponibilidades', 'estudiante\EstudianteController@traerDisponibilidades')->name('estudiante.traer_disponibilidades');
 
-
+// Rutas FOOTER
+Route::get('about_us', 'comunes\ComunController@aboutUs')->name('about_us');
+Route::get('services', 'comunes\ComunController@services')->name('services');
 
 

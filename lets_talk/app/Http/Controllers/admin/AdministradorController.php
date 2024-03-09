@@ -648,4 +648,14 @@ class AdministradorController extends Controller
             return new DisponibilidadUpdate();
         }
     }
+
+    public function aboutUs()
+    {
+        return view('layouts.about_us');
+    }
+
+    public function services()
+    {
+        return view('layouts.services');
+    }
 }

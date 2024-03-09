@@ -20,7 +20,9 @@
         <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-6">
                 <div class="logo-box">
-                    <img src="{{asset('img/logo.png')}}" alt="logo" class="logo logo-img">
+                    <a href="{{route('home')}}">
+                        <img src="{{asset('img/logo.png')}}" alt="logo" class="logo logo-img">
+                    </a>
                 </div>
             </div>
 
@@ -40,6 +42,6 @@
 
     </div>
 
-        @include('layouts.footer')
+    @include('layouts.footer')
 </body>
 </html>

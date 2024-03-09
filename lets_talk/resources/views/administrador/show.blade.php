@@ -24,7 +24,13 @@
 @stop
 @section('scripts')
 <script>
-    $(document).ready(function() {
+    $(document).ready(function() 
+    {
+        setTimeout(() => {
+            $("#loaderGif").hide();
+            $("#loaderGif").addClass('ocultar');
+        }, 1500);
+
         window.$(".select2").prepend(new Option("Select Contact...", "-1"));
         $("#nombres").trigger('focus');
         $("#apellidos").trigger('focus');

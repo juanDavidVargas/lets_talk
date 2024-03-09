@@ -124,6 +124,12 @@
 
     <script>
         $( document ).ready(function() {
+
+            setTimeout(() => {
+                $("#loaderGif").hide();
+                $("#loaderGif").addClass('ocultar');
+            }, 1500);
+
             $('#tbl_levels').DataTable({
                 'ordering': false,
                 "lengthMenu": [[10,25,50,100, -1], [10,25,50,100, 'ALL']],

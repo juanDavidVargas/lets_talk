@@ -23,8 +23,8 @@
                 <div class="row">
                     @foreach($arrayDias AS $key => $dias)
                         <div class="col-sm-3 col-xs-12 col-md-2 col-lg-2">
-                            <div class="card text-center" style="width: 18rem;">
-                                <button class="btn btn-info padding border margin-bottom-10 width-140" onclick="modalHoras({{$key}}, '{{$dias}}')">{{$dias}}</button>
+                            <div class="card text-center">
+                                <button class="btn btn-info padding border margin-bottom-5 width-200" onclick="modalHoras({{$key}}, '{{$dias}}')">{{$dias}}</button>
                             </div>
                         </div>
                     @endforeach

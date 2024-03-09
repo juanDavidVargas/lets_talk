@@ -128,13 +128,13 @@ class EstudianteController extends Controller
                 return view('database_connection');
             } else {
                 $arrayDias = array(
-                    1 => "LUNES",
-                    2 => "MARTES",
-                    3 => "MIÉRCOLES",
-                    4 => "JUEVES",
-                    5 => "VIERNES",
-                    6 => "SÁBADO",
-                    7 => "DOMINGO"
+                    1 => "MARTES",
+                    2 => "MIÉRCOLES",
+                    3 => "JUEVES",
+                    4 => "VIERNES",
+                    5 => "SÁBADO",
+                    6 => "DOMINGO",
+                    7 => "LUNES"
                 );
                 $arrayHorarios = DisponibilidadEntrenadores::select('id_horario', 'horario')
                                     ->pluck('horario', 'id_horario');

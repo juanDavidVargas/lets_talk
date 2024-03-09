@@ -88,6 +88,12 @@
 
 <script>
     $(document).ready(function() {
+
+        setTimeout(() => {
+            $("#loaderGif").hide();
+            $("#loaderGif").addClass('ocultar');
+        }, 1500);
+
         $('#tbl_availability').DataTable({
             'ordering': false
             , "lengthMenu": [
