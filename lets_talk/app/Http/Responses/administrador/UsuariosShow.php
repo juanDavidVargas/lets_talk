@@ -127,15 +127,18 @@ class UsuariosShow implements Responsable
 
     public function municipios()
     {
-        try {
-
+        try 
+        {
             $municipios = DB::table('municipios')
                         ->join('departamentos', 'departamentos.id_departamento', '=', 'municipios.id_departamento')
-                        ->select('municipios.id_municipio', DB::raw("CONCAT(municipios.descripcion, ' - ', departamentos.descripcion) AS nombre_ciudad"))
+                        ->select(
+                                    'municipios.id_municipio',
+                                    DB::raw("CONCAT(municipios.descripcion, ' - ', departamentos.descripcion) AS nombre_ciudad")
+                                )
                         ->whereNull('municipios.deleted_at')
                         ->where('municipios.estado', 1)
+                        ->whereNotNull('municipios.codigo_postal')
                         ->orderBy('municipios.descripcion', 'ASC')
-                        ->get()
                         ->pluck('nombre_ciudad', 'id_municipio');
 
             return $municipios;
@@ -169,22 +172,25 @@ class UsuariosShow implements Responsable
     public function validarDocumento($request)
     {
         $numero_documento = request('numero_documento', null);
+        $tipo_documento = request('tipo_documento', null);
+
         try
         {
             $documento = User::select('numero_documento')
                                 ->where('numero_documento', $numero_documento)
-                                ->get()
+                                ->where('id_tipo_documento', $tipo_documento)
                                 ->first();
 
             if(isset($documento) && !empty($documento) && !is_null($documento))
             {
                 return response()->json("existe_doc");
+            } else {
+                return response()->json("no_existe_doc");
             }
 
         } catch (Exception $e)
         {
             return response()->json("error_exception");
-            exit;
         }
     }
 
@@ -192,24 +198,26 @@ class UsuariosShow implements Responsable
     {
         $numero_documento = request('numero_documento', null);
         $usuario_id = request('id_usuario', session('usuario_id'));
+        $tipo_documento_id = request('tipo_documento', null);
 
         try {
 
             $documento = User::select('numero_documento')
                                 ->where('numero_documento', $numero_documento)
+                                ->where('id_tipo_documento', $tipo_documento_id)
                                 ->whereNotIn('id_user', array($usuario_id))
-                                ->get()
                                 ->first();
 
             if(isset($documento) && !empty($documento) && !is_null($documento))
             {
                 return response()->json("existe_doc");
+            } else {
+                return response()->json("no_existe_doc");
             }
 
         } catch (Exception $e)
         {
             return response()->json("error_exception");
-            exit;
         }
     }
 
@@ -217,16 +225,17 @@ class UsuariosShow implements Responsable
     {
         $correo = request('email', null);
 
-        try {
-
+        try
+        {
             $correo = User::select('correo')
                                 ->where('correo', $correo)
-                                ->get()
                                 ->first();
 
             if(isset($correo) && !empty($correo) && !is_null($correo))
             {
                 return response()->json("existe_correo");
+            } else {
+                return response()->json("no_existe_correo");
             }
 
         } catch (Exception $e)
@@ -244,29 +253,29 @@ class UsuariosShow implements Responsable
         try {
 
             $correo = User::select('correo')
-                                ->where('correo', $correo)
-                                ->whereNotIn('id_user', array($usuario_id))
-                                ->get()
-                                ->first();
+                            ->where('correo', $correo)
+                            ->whereNotIn('id_user', array($usuario_id))
+                            ->first();
 
             if(isset($correo) && !empty($correo) && !is_null($correo))
             {
                 return response()->json("existe_correo");
+            } else {
+                return response()->json("no_existe_correo");
             }
 
         } catch (Exception $e)
         {
             return response()->json("error_exception_correo");
-            exit;
         }
     }
 
-    public function consultarCedula($numero_documento)
+    public function consultarCedula($numero_documento, $id_tipo_documento)
     {
         try {
 
             $cedula = User::where('numero_documento', $numero_documento)
-                            ->get()
+                            ->where('id_tipo_documento', $id_tipo_documento)
                             ->first();
 
             if(isset($cedula) && !empty($cedula) && !is_null($cedula))

@@ -23,9 +23,11 @@ class NivelesStore implements Responsable
                                 ->where('nivel_descripcion', $nuevoNivel)
                                 ->first();
 
-        if ($validarNivel) {
+        if ($validarNivel)
+        {
             return response()->json("nivel_existe");
-        } else {
+        } else
+        {
             $baseFileName = "{$nuevoNivel}"; //nombre base para los archivos
             $carpetaArchivos = '/upfiles/niveles';
 
@@ -34,7 +36,8 @@ class NivelesStore implements Responsable
             try {
                 $archivoNivel= '';
                 if ($request->hasFile('file_crear_nivel')) {
-                    $archivoNivel = $this->upfileWithName($baseFileName, $carpetaArchivos, $request, 'file_crear_nivel', 'file_crear_nivel');
+                    $archivoNivel = $this->upfileWithName($baseFileName, $carpetaArchivos, $request,
+                                                            'file_crear_nivel', 'file_crear_nivel');
                 } else {
                     $archivoNivel = null;
                 }

@@ -100,10 +100,17 @@
         </div>
     </div>
 
-    <div class="col-xs-12 col-sm-12 col-md-3">
-        <div class="wrap-input100 validate-input" data-validate="Required">
+    <div class="col-xs-12 col-sm-12 col-md-3 ocultar" id="div_nivel">
+        <div class="wrap-input100 validate-input" data-validate="This Field is Required">
             {!! Form::select('id_nivel', $niveles, isset($usuario) ? $usuario->id_nivel : null, ['class' => 'input100', 'id' => 'id_nivel']) !!}
-            <span class="focus-input100" data-placeholder="Nivel"></span>
+            <span class="focus-input100" data-placeholder="Level"></span>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-12 col-md-3 ocultar" id="div_tipo_ing">
+        <div class="wrap-input100 validate-input" data-validate="This Field is Required">
+            {!! Form::select('id_tipo_ingles', $tipo_ingles, isset($usuario) ? $usuario->id_tipo_ingles : null, ['class' => 'input100', 'id' => 'id_tipo_ingles']) !!}
+            <span class="focus-input100" data-placeholder="English"></span>
         </div>
     </div>
 </div>

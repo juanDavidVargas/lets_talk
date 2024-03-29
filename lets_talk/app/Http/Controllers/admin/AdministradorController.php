@@ -526,8 +526,6 @@ class AdministradorController extends Controller
         }
     }
 
-    // ===================================================
-
     public function nivelesIndex()
     {
         $vista = 'administrador.niveles_index';
@@ -544,8 +542,6 @@ class AdministradorController extends Controller
         }
     }
 
-    // ===================================================
-
     public function crearNivel(Request $request)
     {
         $sesion = $this->validarVariablesSesion();
@@ -560,8 +556,6 @@ class AdministradorController extends Controller
             return new NivelesStore();
         }
     }
-
-    // ===================================================
 
     public function editarNivel(Request $request)
     {
@@ -578,8 +572,6 @@ class AdministradorController extends Controller
         }
     }
 
-    // ===================================================
-
     public function inactivarNivel(Request $request)
     {
         $sesion = $this->validarVariablesSesion();
@@ -594,8 +586,6 @@ class AdministradorController extends Controller
             return new NivelesInactivar();
         }
     }
-
-    // ===================================================
 
     public function activarNivel(Request $request)
     {
@@ -612,8 +602,6 @@ class AdministradorController extends Controller
         }
     }
 
-    // ===================================================
-
     public function consultarNivel(Request $request)
     {
         $idNivel = intval($request->id_nivel);
@@ -627,12 +615,11 @@ class AdministradorController extends Controller
                 return response()->json('no_consultado');
             }
         } catch (Exception $e) {
-            alert()->error('Error', 'An error has occurred consulting the level, try again, if the problem persists contact support.');
+            alert()->error('Error', 'An error has occurred consulting the level,
+                                    try again, if the problem persists contact support.');
             return back();
         }
     }
-
-    // ===================================================
 
     public function actualizarDisponibilidad(Request $request)
     {

@@ -282,7 +282,7 @@ class UsuariosUpdate implements Responsable
     public function cambiarEstado($request)
     {
         $id_usuario = request('id_user', null);
-        $estado = " (CASE WHEN estado = 1 THEN 0 ELSE 1 END) ";
+        $estado = " (CASE WHEN estado = 1 THEN 6 ELSE 1 END) ";
         DB::connection('mysql')->beginTransaction();
         try
         {
@@ -303,6 +303,7 @@ class UsuariosUpdate implements Responsable
             }
 
         } catch (Exception $e) {
+            dd($e);
             DB::connection('mysql')->rollback();
             return response()->json(-1);
         }

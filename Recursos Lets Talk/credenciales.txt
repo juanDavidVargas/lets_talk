@@ -6,12 +6,9 @@ Entrenador
 username: jvargas1
 password: juvape1
 
-username: dpenagos
-password: dpenagos
-
 Estudiante
-username: jvargas2
-password: juvape2
+username: jpenagos
+password: jpenagos
 
 GIT:
 https://github.com/juanDavidVargas/lets_talk

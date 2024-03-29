@@ -9,7 +9,6 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Responses\administrador\UsuariosShow;
-use App\Models\usuarios\Contacto;
 
 class UsuariosStore implements Responsable
 {
@@ -30,13 +29,8 @@ class UsuariosStore implements Responsable
         $direccion_residencia = request('direccion_residencia', null);
         $id_municipio_residencia = request('id_municipio_residencia', null);
         $id_rol = request('id_rol', null);
-        $skype = request('skype', null);
-        $zoom = request('zoom', null);
-        $zoomClave = request('zoom_clave', null);
         $id_nivel = request('id_nivel', null);
         $id_tipo_ingles = request('id_tipo_ingles', null);
-
-        // ==========================================================================
         
         if(isset($id_rol) && $id_rol == 3) {
             $nivel_ingles = $id_nivel;
@@ -45,20 +39,21 @@ class UsuariosStore implements Responsable
             $nivel_ingles = null;
             $tipo_ingles = $id_tipo_ingles;
         }
-        
-        // ==========================================================================
 
         // Consultamos si ya existe un usuario con la cedula ingresada
-        $consulta_cedula = $usuarioShow->consultarCedula($numero_documento);
+        $consulta_cedula = $usuarioShow->consultarCedula($numero_documento, $id_tipo_documento);
 
         if(isset($consulta_cedula) && !empty($consulta_cedula) &&
-           !is_null($consulta_cedula)) {
+           !is_null($consulta_cedula))
+        {
             alert()->info('Info', 'The document number already exists.');
             return back();
-        } else {
+        } else
+        {
             // Contruimos el nombre de usuario
             $separar_apellidos = explode(" ", $apellidos);
-            $usuario = substr($this->quitarCaracteresEspeciales(trim($nombres)), 0,1) . trim($this->quitarCaracteresEspeciales($separar_apellidos[0]));
+            $usuario = substr($this->quitarCaracteresEspeciales(trim($nombres)), 0,1) .
+                                trim($this->quitarCaracteresEspeciales($separar_apellidos[0]));
             $usuario = preg_replace("/(Ñ|ñ)/", "n", $usuario);
             $usuario = strtolower($usuario);
             $complemento = "";
@@ -92,9 +87,6 @@ class UsuariosStore implements Responsable
                     'id_municipio_residencia' => $id_municipio_residencia,
                     'fecha_ingreso_sistema' => $fecha_ingreso_sistema,
                     'id_rol' => $id_rol,
-                    'skype' => $skype,
-                    'zoom' => $zoom,
-                    'zoom_clave' => $zoomClave,
                     'id_nivel' => $nivel_ingles,
                     'id_tipo_ingles' => $tipo_ingles,
                     'clave_fallas' => 0
@@ -104,83 +96,8 @@ class UsuariosStore implements Responsable
                 {
                     DB::connection('mysql')->commit();
 
-                    // ==========================================================================
-                    // ==========================================================================
-
-                    $idPrimerContacto = request('id_primer_contacto', null);
-                    
-                    if (isset($idPrimerContacto) && $idPrimerContacto != "-1") {
-                        $idPrimerContacto = request('id_primer_contacto', null);
-                    } else {
-                        $idPrimerContacto = null;
-                    }
-                    $primerTelefono = request('primer_telefono', null);
-                    $primerCelular = request('primer_celular', null);
-                    $primerCorreo = request('primer_correo', null);
-                    $primerSkype = request('primer_skype', null);
-                    $primerZoom = request('primer_zoom', null);
-
-                    // =====================================
-                    
-                    $idSegundoContacto = request('id_segundo_contacto', null);
-
-                    if (isset($idSegundoContacto) && $idSegundoContacto != "-1") {
-                        $idSegundoContacto = request('id_segundo_contacto', null);
-                    } else {
-                        $idSegundoContacto = null;
-                    }
-                    $segundoTelefono = request('segundo_telefono', null);
-                    $segundoCelular = request('segundo_celular', null);
-                    $segundoCorreo = request('segundo_correo', null);
-                    $segundoSkype = request('segundo_skype', null);
-                    $segundoZoom = request('segundo_zoom', null);
-
-                    // =====================================
-
-                    $idOpcionalContacto = request('id_opcional_contacto', null);
-
-                    if (isset($idOpcionalContacto) && $idOpcionalContacto != "-1") {
-                        $idOpcionalContacto = request('id_opcional_contacto', null);
-                    } else {
-                        $idOpcionalContacto = null;
-                    }
-                    $opcionalTelefono = request('opcional_telefono', null);
-                    $opcionalCelular = request('opcional_celular', null);
-                    $opcionalCorreo = request('opcional_correo', null);
-                    $opcionalSkype = request('opcional_skype', null);
-                    $opcionalZoom = request('opcional_zoom', null);
-
-                    $idUser = User::select('id_user')->orderBy('id_user', 'DESC')->first();
-
-                    if (isset($idUser) && !is_null($idUser) && !empty($idUser)) {
-                        Contacto::create([
-                            'id_user' => $idUser->id_user,
-                            'id_primer_contacto' => $idPrimerContacto,
-                            'primer_telefono' => $primerTelefono,
-                            'primer_celular' => $primerCelular,
-                            'primer_correo' => $primerCorreo,
-                            'primer_skype' => $primerSkype,
-                            'primer_zoom' => $primerZoom,
-                            'id_segundo_contacto' => $idSegundoContacto,
-                            'segundo_telefono' => $segundoTelefono,
-                            'segundo_celular' => $segundoCelular,
-                            'segundo_correo' => $segundoCorreo,
-                            'segundo_skype' => $segundoSkype,
-                            'segundo_zoom' => $segundoZoom,
-                            'id_opcional_contacto' => $idOpcionalContacto,
-                            'opcional_telefono' => $opcionalTelefono,
-                            'opcional_celular' => $opcionalCelular,
-                            'opcional_correo' => $opcionalCorreo,
-                            'opcional_skype' => $opcionalSkype,
-                            'opcional_zoom' => $opcionalZoom
-                        ]);
-                    }
-                    DB::connection('mysql')->commit();
-
-                    // ==========================================================================
-                    // ==========================================================================
-
-                    alert()->success('Successful Process', 'User successfully created, the user name is: ' . $nuevo_usuario->usuario . ' and the password is you document ID');
+                    alert()->success('Successful Process', 'User successfully created, the user name is: '
+                                        . $nuevo_usuario->usuario . ' and the password is you document number');
                     return redirect()->to(route('administrador.index'));
 
                 } else {
@@ -192,7 +109,8 @@ class UsuariosStore implements Responsable
             } catch (Exception $e)
             {
                 DB::connection('mysql')->rollback();
-                alert()->error('Error', 'An error has occurred creating the user, try again, if the problem persists contact support.');
+                alert()->error('Error', 'An error has occurred creating the user, try again,
+                                        if the problem persists contact support.');
                 return back();
             }
         }
@@ -203,7 +121,6 @@ class UsuariosStore implements Responsable
         try {
 
             $usuario = User::where('usuario', $usuario)
-                            ->get()
                             ->first();
             return $usuario;
 
@@ -215,14 +132,14 @@ class UsuariosStore implements Responsable
 
     private function quitarCaracteresEspeciales($cadena)
     {
-        $no_permitidas = array("á", "é", "í", "ó", "ú", "Á", "É", "Í", "Ó", "Ú", "ñ", "À", "Ã", "Ì", "Ò", "Ù", "Ã™", "Ã ",
-                               "Ã¨", "Ã¬", "Ã²", "Ã¹", "ç", "Ç", "Ã¢", "ê", "Ã®", "Ã´", "Ã»", "Ã‚", "ÃŠ", "ÃŽ", "Ã”",
-                               "Ã›", "ü", "Ã¶", "Ã–", "Ã¯", "Ã¤", "«", "Ò", "Ã", "Ã„", "Ã‹", "ñ", "Ñ", "*");
+        $no_permitidas = array("á", "é", "í", "ó", "ú", "Á", "É", "Í", "Ó", "Ú", "ñ",
+        "À", "Ã", "Ì", "Ò", "Ù", "Ã™", "Ã ","Ã¨", "Ã¬", "Ã²", "Ã¹", "ç", "Ç", "Ã¢",
+        "ê", "Ã®", "Ã´", "Ã»", "Ã‚", "ÃŠ", "ÃŽ", "Ã”","Ã›", "ü", "Ã¶", "Ã–", "Ã¯",
+        "Ã¤", "«", "Ò", "Ã", "Ã„", "Ã‹", "ñ", "Ñ", "*");
 
         $permitidas = array("a", "e", "i", "o", "u", "A", "E", "I", "O", "U", "n", "N", "A", "E", "I", "O", "U",
                             "a", "e", "i", "o", "u", "c", "C", "a", "e", "i", "o", "u", "A", "E", "I", "O", "U",
                             "u", "o", "O", "i", "a", "e", "U", "I", "A", "E", "n", "N", "");
-        $texto = str_replace($no_permitidas, $permitidas, $cadena);
-        return $texto;
+        return str_replace($no_permitidas, $permitidas, $cadena);
     }
 }

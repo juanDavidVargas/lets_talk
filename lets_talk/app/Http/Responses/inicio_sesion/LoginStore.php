@@ -38,10 +38,11 @@ class LoginStore implements Responsable
                     $this->inactivarUsuario($user->id_user);
                 }
 
-                if($user->estado == 0 || $user->estado == false ||
-                    $user->estado == "false")
+                if($user->estado == 6 || $user->estado != 1)
                 {
-                    alert()->error('Error','Username ' . $username . ' is locked, please contact the administrator to unlock it');
+                    alert()->error('Error',
+                                    'Username ' . $username . ' is locked,
+                                    please contact the administrator to unlock it.');
                     return back();
                 }
 
@@ -55,14 +56,14 @@ class LoginStore implements Responsable
                         return redirect()->to(route('trainer.create'));
 
                        // Rol Estudiante
-                    } else if($user->id_rol == 3 || $user->id_rol == "3")
+                    } elseif($user->id_rol == 3 || $user->id_rol == "3")
                     {
                          // Creamos las variables de sesion
                          $this->crearVariablesSesion($user);
                          return redirect()->to(route('estudiante.index'));
 
                     } // Rol Administrador
-                    else if($user->id_rol == 2 || $user->id_rol == "2")
+                    elseif($user->id_rol == 2 || $user->id_rol == "2")
                     {
                         // Creamos las variables de sesion
                         $this->crearVariablesSesion($user);
@@ -88,7 +89,8 @@ class LoginStore implements Responsable
 
         } catch (Exception $e)
         {
-            alert()->error('Error', 'An error has occurred, try again, if the problem persists contact support.');
+            alert()->error('Error', 'An error has occurred,
+                            try again, if the problem persists contact support.');
             return back();
         }
     }
@@ -111,7 +113,8 @@ class LoginStore implements Responsable
 
         } catch (Exception $e)
         {
-            alert()->error('Error','An error has occurred, try again, if the problem persists contact support.');
+            alert()->error('Error','An error has occurred,
+                            try again, if the problem persists contact support.');
             return back();
         }
     }
@@ -121,7 +124,7 @@ class LoginStore implements Responsable
         try {
 
             $user = User::find($id_user);
-            $user->estado = 0;
+            $user->estado = 6;
             $user->save();
 
         } catch (Exception $e)

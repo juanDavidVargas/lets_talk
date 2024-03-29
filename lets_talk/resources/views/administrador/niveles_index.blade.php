@@ -35,8 +35,6 @@
     </style>
 @stop
 
-{{-- ==================================================================================== --}}
-
 @section('content')
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12">
@@ -53,7 +51,8 @@
     <div class="row p-t-30">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="table-responsive">
-                <table class="table table-striped table-bordered table-hover dt-button" id="tbl_levels" aria-describedby="tabla niveles">
+                <table class="table table-striped table-bordered table-hover dt-button"
+                        id="tbl_levels" aria-describedby="tabla niveles">
                     <thead>
                         <tr class="header-table">
                             <th>ID</th>
@@ -67,12 +66,7 @@
                         @foreach ($niveles as $nivel)
                             <tr>
                                 <td>{{$nivel->id_nivel}}</td>
-
-                                {{-- =========================== --}}
-
                                 <td>{{$nivel->nivel_descripcion}}</td>
-
-                                {{-- =========================== --}}
 
                                 @if ($nivel->ruta_pdf_nivel != null || $nivel->ruta_pdf_nivel != "")
                                     <td>
@@ -82,26 +76,26 @@
                                     <td></td>
                                 @endif
 
-                                {{-- =========================== --}}
-
                                 @if ($nivel->deleted_at == null || $nivel->deleted_at == "")
                                     <td>Active</td>
                                 @else
                                     <td>Inactive</td>
                                 @endif
 
-                                {{-- =========================== --}}
-
                                 <td>
                                     @if ($nivel->deleted_at == null || $nivel->deleted_at == "")
                                         @if ($nivel->id_nivel == 0)
-                                            <a href="#" class="btn btn-primary" id="">No Edition Allowed</a>
+                                            <span class="badge badge-primary">No Edition Allowed</span>
                                         @else
-                                            <a href="#" class="btn btn-info" id="level_update_{{$nivel->id_nivel}}" onclick="editarNivel({{$nivel->id_nivel}})">Edit Level</a>
-                                            <a href="#" class="btn btn-warning" id="level_inactive_{{$nivel->id_nivel}}" onclick="inactivarNivel({{$nivel->id_nivel}})">Inactive Level</a>
+                                            <a href="#" class="btn btn-info"
+                                                id="level_update_{{$nivel->id_nivel}}"
+                                                onclick="editarNivel({{$nivel->id_nivel}})">Edit Level</a>
+                                            <a href="#" class="btn btn-warning" id="level_inactive_{{$nivel->id_nivel}}"
+                                                onclick="inactivarNivel({{$nivel->id_nivel}})">Inactive Level</a>
                                         @endif
                                     @else
-                                        <a href="#" class="btn btn-success" id="level_active_{{$nivel->id_nivel}}" onclick="activarNivel({{$nivel->id_nivel}})">Active Level</a>
+                                        <a href="#" class="btn btn-success" id="level_active_{{$nivel->id_nivel}}"
+                                            onclick="activarNivel({{$nivel->id_nivel}})">Active Level</a>
                                     @endif
                                 </td>
                             </tr>
@@ -115,16 +109,14 @@
     @include('layouts.loader')
 @stop
 
-{{-- ==================================================================================== --}}
-
 @section('scripts')
     <script src="{{asset('DataTable/pdfmake.min.js')}}"></script>
     <script src="{{asset('DataTable/vfs_fonts.js')}}"></script>
     <script src="{{asset('DataTable/datatables.min.js')}}"></script>
 
     <script>
-        $( document ).ready(function() {
-
+        $( document ).ready(function()
+        {
             setTimeout(() => {
                 $("#loaderGif").hide();
                 $("#loaderGif").addClass('ocultar');
@@ -157,18 +149,17 @@
             });
         });
 
-        // ===========================================
-
         function crearNivel() {
             html = ``;
             html +=     `<label class="font14">This option creates a new level</label>`;
             html +=     `<div class="div-level-name">
+                            <label for="crear_nivel">Level Name</label>
                             <input type="text" name="crear_nivel" id="crear_nivel" class="level-name" required />
                         </div>
             `;
             html += `
                     <div class="alert alert-danger ocultar" role="alert" id="level_alert">
-                      This field is required
+                      The field Level Name is required
                     </div>
             `;
             html +=     `<div class="div-level-name div-file">
@@ -179,8 +170,6 @@
                             <input type="button" value="Create Level" class="btn btn-primary" id="btn_crear_nivel">
                         </div>
             `;
-
-            // =========================================
 
             Swal.fire({
                 title: 'Create Level',
@@ -194,8 +183,6 @@
                 cancelButtonText: 'Cancel',
                 allowOutsideClick: false,
             });
-
-            // =========================================
 
             $('#btn_crear_nivel').on('click', function () {
                 let nuevoNivel = $('#crear_nivel').val();
@@ -224,7 +211,8 @@
                             $("#loaderGif").show();
                             $("#loaderGif").removeClass('ocultar');
                         },
-                        success: function (respuesta) {
+                        success: function (respuesta)
+                        {
                             if (respuesta == "nivel_creado") {
                                 $("#loaderGif").hide();
                                 $("#loaderGif").addClass('ocultar');
@@ -267,9 +255,8 @@
             }, 5000);
         }
 
-        // ===========================================
-
-        function editarNivel(idNivel) {
+        function editarNivel(idNivel)
+        {
             $.ajax({
                 async: true,
                 url:"{{route('consultar_nivel')}}",
@@ -280,20 +267,23 @@
                     $("#loaderGif").show();
                     $("#loaderGif").removeClass('ocultar');
                 },
-                success: function (respuesta) {
-
+                success: function (respuesta)
+                {
                     $("#loaderGif").hide();
                     $("#loaderGif").addClass('ocultar');
 
                     nivel = respuesta.nivel_descripcion;
 
                     html = ``;
-                    html += `{!! Form::open(['method' => 'POST', 'route' => ['editar_nivel'], 'class'=>['form-horizontal form-bordered'], 'id'=>'form_edit_nivel', 'enctype'=>'multipart/form-data']) !!}`;
+                    html += `{!! Form::open(['method' => 'POST',
+                                'route' => ['editar_nivel'], 'class'=>['form-horizontal form-bordered'],
+                                'id'=>'form_edit_nivel', 'enctype'=>'multipart/form-data']) !!}`;
                     html += `@csrf`;
                     html +=     `<input type="hidden" name="id_nivel" id="id_nivel" value="${idNivel}" required />`;
                     html +=     `<label class="font14">Enter the new level name</label>`;
                     html +=     `<div class="div-level-name">
-                                    <input type="text" name="editar_nivel" id="editar_nivel" class="level-name" value="${nivel}" required />
+                                    <input type="text" name="editar_nivel" id="editar_nivel"
+                                            class="level-name" value="${nivel}" required />
                                 </div>
                     `;
                     html +=     `<div class="div-file">
@@ -302,8 +292,6 @@
                     `;
                     html +=     `<input type="submit" value="Update" class="btn btn-primary" id="btn_editar_nivel">`;
                     html += `{!! Form::close() !!}`;
-
-                    // =========================================
 
                     Swal.fire({
                         title: 'Edit Level',
@@ -321,11 +309,11 @@
             });
         }
 
-        // ===========================================
-
-        function inactivarNivel(idNivel) {
+        function inactivarNivel(idNivel)
+        {
             html = ``;
-            html += `{!! Form::open(['method' => 'POST', 'route' => ['inactivar_nivel'], 'class'=>['form-horizontal form-bordered'], 'id'=>'form_inactivar_nivel']) !!}`;
+            html += `{!! Form::open(['method' => 'POST', 'route' => ['inactivar_nivel'],
+                                'class'=>['form-horizontal form-bordered'], 'id'=>'form_inactivar_nivel']) !!}`;
             html += `@csrf`;
             html +=     `<input type="hidden" name="id_nivel" id="id_nivel" value="${idNivel}" required />`;
             html +=     `<label class="font14">This option inactive this level</label>`;
@@ -334,8 +322,6 @@
                         </div>
             `;
             html += `{!! Form::close() !!}`;
-
-            // =========================================
 
             Swal.fire({
                 title: 'Inactive Level',
@@ -351,11 +337,11 @@
             });
         }
 
-        // ===========================================
-
-        function activarNivel(idNivel) {
+        function activarNivel(idNivel)
+        {
             html = ``;
-            html += `{!! Form::open(['method' => 'POST', 'route' => ['activar_nivel'], 'class'=>['form-horizontal form-bordered'], 'id'=>'form_activar_nivel']) !!}`;
+            html += `{!! Form::open(['method' => 'POST', 'route' => ['activar_nivel'],
+                            'class'=>['form-horizontal form-bordered'], 'id'=>'form_activar_nivel']) !!}`;
             html += `@csrf`;
             html +=     `<input type="hidden" name="id_nivel" id="id_nivel" value="${idNivel}" required />`;
             html +=     `<label class="font14">This option active this level</label>`;
@@ -364,8 +350,6 @@
                         </div>
             `;
             html += `{!! Form::close() !!}`;
-
-            // =========================================
 
             Swal.fire({
                 title: 'Active Level',
