@@ -15,7 +15,6 @@ class NivelesActivar implements Responsable
     public function toResponse($request)
     {
         $idNivel = intval($request->id_nivel);
-
         DB::connection('mysql')->beginTransaction();
 
         try {
@@ -25,18 +24,22 @@ class NivelesActivar implements Responsable
                                 'deleted_at' => null
                             ]);
 
-            if($inactivarNivel) {
+            if($inactivarNivel)
+            {
                 DB::connection('mysql')->commit();
-                alert()->success('Successful Process', 'Level activated');
+                alert()->success('Successfull Process', 'Level activated');
                 return redirect()->to(route('administrador.niveles_index'));
-            } else {
+            } else
+            {
                 DB::connection('mysql')->rollback();
                 alert()->error('Error', 'An error has occurred activating the level, please contact support.');
                 return redirect()->to(route('administrador.niveles_index'));
             }
-        } catch (Exception $e) {
+        } catch (Exception $e)
+        {
             DB::connection('mysql')->rollback();
-            return response()->json(-1);
+            alert()->error('Error', 'An error has occurred activating the level, please contact support.');
+            return redirect()->to(route('administrador.niveles_index'));
         }
     }
 }

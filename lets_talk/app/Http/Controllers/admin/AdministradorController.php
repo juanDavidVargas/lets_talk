@@ -551,7 +551,7 @@ class AdministradorController extends Controller
            empty($sesion[2]) || is_null($sesion[2]) &&
            $sesion[2] != true)
         {
-            return redirect()->to(route('home'));
+            return response()->json("to_home");
         } else {
             return new NivelesStore();
         }
@@ -606,12 +606,17 @@ class AdministradorController extends Controller
     {
         $idNivel = intval($request->id_nivel);
 
-        try {
-            $consultarNivel = Nivel::select('nivel_descripcion')->where('id_nivel', $idNivel)->first();
+        try
+        {
+            $consultarNivel = Nivel::select('nivel_descripcion')
+                                    ->where('id_nivel', $idNivel)
+                                    ->first();
 
-            if ($consultarNivel) {
+            if ($consultarNivel)
+            {
                 return $consultarNivel;
-            } else {
+            } else
+            {
                 return response()->json('no_consultado');
             }
         } catch (Exception $e) {

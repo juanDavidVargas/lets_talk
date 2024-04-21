@@ -83,7 +83,8 @@
                                     class="btn btn-primary" title="Edit">
                                     <i class="fa fa-pencil" aria-hidden="true"></i>
                                 </a>
-                                <input type="hidden" name="id_user" id="id_user" value="{{$usuario->id_user}}">
+                                <input type="hidden" name="id_user"
+                                        id="id_user" value="{{$usuario->id_user}}">
                             </td>
                             <td>
                                 @if($usuario->id_rol == 2 || $usuario->id_rol == "2")
@@ -100,11 +101,10 @@
                                 @endif
                             </td>
                             <td>
-                                <button class="btn btn-info"
-                                        title="Update Password"
-                                        id="pass_update_{{$usuario->id_user}}">
-                                    <i class="fa fa-key" aria-hidden="true"
-                                        onclick="updatePassword({{$usuario->id_user}})"></i>
+                                <button class="btn btn-info" title="Update Password"
+                                        id="pass_update_{{$usuario->id_user}}"
+                                        onclick="updatePassword({{$usuario->id_user}})">
+                                    <i class="fa fa-key" aria-hidden="true"></i>
                                 </button>
                             </td>
                         </tr>

@@ -26,7 +26,8 @@ class NivelesInactivar implements Responsable
                                 'deleted_at' => $fechaActual
                             ]);
 
-            if($inactivarNivel) {
+            if($inactivarNivel)
+            {
                 DB::connection('mysql')->commit();
 
                 // NUEVA CONSULTA
@@ -34,10 +35,10 @@ class NivelesInactivar implements Responsable
                                     ->join('niveles', 'niveles.id_nivel', '=', 'usuarios.id_nivel')
                                     ->select('usuarios.id_user')
                                     ->whereNotNull('niveles.deleted_at')
-                                    ->get()
-                                    ->toArray();
+                                    ->get();
                 
-                foreach ($queryUsuariosNivel as $idNivel) {
+                foreach ($queryUsuariosNivel as $idNivel)
+                {
                     $idUser = $idNivel->id_user;
 
                     DB::table('usuarios')
@@ -47,16 +48,19 @@ class NivelesInactivar implements Responsable
                             ]);
                 }
 
-                alert()->success('Successful Process', 'Level inactivated');
+                alert()->success('Successfull Process', 'Level inactivated');
                 return redirect()->to(route('administrador.niveles_index'));
-            } else {
+            } else
+            {
                 DB::connection('mysql')->rollback();
                 alert()->error('Error', 'An error has occurred inactivating the level, please contact support.');
                 return redirect()->to(route('administrador.niveles_index'));
             }
-        } catch (Exception $e) {
+        } catch (Exception $e)
+        {
             DB::connection('mysql')->rollback();
-            return response()->json(-1);
+            alert()->error('Error', 'An error has occurred inactivating the level, please contact support.');
+            return redirect()->to(route('administrador.niveles_index'));
         }
     }
 }

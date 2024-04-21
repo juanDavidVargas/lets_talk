@@ -66,7 +66,12 @@
                         @foreach ($niveles as $nivel)
                             <tr>
                                 <td>{{$nivel->id_nivel}}</td>
-                                <td>{{$nivel->nivel_descripcion}}</td>
+                                <td>
+                                    {{$nivel->nivel_descripcion}}
+                                    <input type="hidden" value="{{$nivel->id_nivel}}" id="levelId{{$nivel->id_nivel}}" name="levelId{{$nivel->id_nivel}}">
+                                    <input type="hidden" value="{{$nivel->nivel_descripcion}}"
+                                            id="levelName{{$nivel->id_nivel}}" name="levelName{{$nivel->id_nivel}}">
+                                </td>
 
                                 @if ($nivel->ruta_pdf_nivel != null || $nivel->ruta_pdf_nivel != "")
                                     <td>
@@ -149,7 +154,8 @@
             });
         });
 
-        function crearNivel() {
+        function crearNivel()
+        {
             html = ``;
             html +=     `<label class="font14">This option creates a new level</label>`;
             html +=     `<div class="div-level-name">
@@ -166,10 +172,15 @@
                             <input type="file" name="file_crear_nivel" id="file_crear_nivel" class="file" />
                         </div>
             `;
-            html +=     `<div class="div-level-name">
+            html += `<img  class="ocultar" src="{{asset('img/loading.gif')}}"
+                            id="loading_ajax"
+                            alt="loading..." />
+                    `;
+
+            html += `<div class="div-level-name">
                             <input type="button" value="Create Level" class="btn btn-primary" id="btn_crear_nivel">
                         </div>
-            `;
+                    `;
 
             Swal.fire({
                 title: 'Create Level',
@@ -184,16 +195,18 @@
                 allowOutsideClick: false,
             });
 
-            $('#btn_crear_nivel').on('click', function () {
+            $('#btn_crear_nivel').on('click', function ()
+            {
                 let nuevoNivel = $('#crear_nivel').val();
                 let fileCrearNivel = $('#file_crear_nivel').val();
 
-                if (nuevoNivel == "" || nuevoNivel == undefined) {
+                if (nuevoNivel == "" || nuevoNivel == undefined)
+                {
                     $('#crear_nivel').attr('required', true);
                     $("#level_alert").show();
                     $("#level_alert").removeClass('ocultar');
-                } else {
-
+                } else
+                {
                     $('#btn_crear_nivel').attr('disabled',true);
                     $("#level_alert").hide();
                     $("#level_alert").addClass('ocultar');
@@ -207,42 +220,64 @@
                             'nuevo_crear_nivel': nuevoNivel,
                             'file_crear_nivel': fileCrearNivel,
                         },
-                        beforeSend: function() {
-                            $("#loaderGif").show();
-                            $("#loaderGif").removeClass('ocultar');
+                        beforeSend: function ()
+                        {
+                            $("#loading_ajax").show();
+                            $("#loading_ajax").removeClass('ocultar');
                         },
                         success: function (respuesta)
                         {
-                            if (respuesta == "nivel_creado") {
-                                $("#loaderGif").hide();
-                                $("#loaderGif").addClass('ocultar');
+                            $("#loading_ajax").hide();
+                            $("#loading_ajax").addClass('ocultar');
+
+                            if(respuesta == "to_home")
+                            {
+                                $("#loading_ajax").hide();
+                                $("#loading_ajax").addClass('ocultar');
+
+                                window.location.href = "http://localhost:8000";
+                                return;
+                            }
+                            
+                            if (respuesta == "nivel_creado")
+                            {
+                                $("#loading_ajax").hide();
+                                $("#loading_ajax").addClass('ocultar');
+
                                 Swal.fire(
                                     'Great!',
-                                    'New level has been created successfuly!',
+                                    'New level has been created successfully!',
                                     'success'
                                 );
 
                                 window.location.reload();
+                                return;
                             }
 
-                            if (respuesta == "nivel_existe") {
-                                $("#loaderGif").hide();
-                                $("#loaderGif").addClass('ocultar');
+                            if (respuesta == "nivel_existe")
+                            {
+                                $("#loading_ajax").hide();
+                                $("#loading_ajax").addClass('ocultar');
+
                                 Swal.fire(
                                     'Warning!',
                                     'This level already exists!',
                                     'warning'
-                                )
+                                );
+                                return;
                             }
 
-                            if (respuesta == "error_exception") {
-                                $("#loaderGif").hide();
-                                $("#loaderGif").addClass('ocultar');
+                            if (respuesta == "error_exception")
+                            {
+                                $("#loading_ajax").hide();
+                                $("#loading_ajax").addClass('ocultar');
+
                                 Swal.fire(
                                     'Wrong!',
                                     'An error has ocurred, please contact support!',
                                     'error'
-                                )
+                                );
+                                return;
                             }
                         }
                     })
@@ -252,59 +287,74 @@
             setTimeout(() => {
                 $("#level_alert").hide();
                 $("#level_alert").addClass('ocultar');
-            }, 5000);
+            }, 6000);
         }
 
         function editarNivel(idNivel)
         {
-            $.ajax({
-                async: true,
-                url:"{{route('consultar_nivel')}}",
-                type:"POST",
-                dataType: "JSON",
-                data: {'id_nivel': idNivel},
-                beforeSend: function() {
-                    $("#loaderGif").show();
-                    $("#loaderGif").removeClass('ocultar');
-                },
-                success: function (respuesta)
-                {
-                    $("#loaderGif").hide();
-                    $("#loaderGif").addClass('ocultar');
-
-                    nivel = respuesta.nivel_descripcion;
-
-                    html = ``;
-                    html += `{!! Form::open(['method' => 'POST',
-                                'route' => ['editar_nivel'], 'class'=>['form-horizontal form-bordered'],
-                                'id'=>'form_edit_nivel', 'enctype'=>'multipart/form-data']) !!}`;
-                    html += `@csrf`;
-                    html +=     `<input type="hidden" name="id_nivel" id="id_nivel" value="${idNivel}" required />`;
-                    html +=     `<label class="font14">Enter the new level name</label>`;
-                    html +=     `<div class="div-level-name">
-                                    <input type="text" name="editar_nivel" id="editar_nivel"
-                                            class="level-name" value="${nivel}" required />
-                                </div>
+            let nameLevel = $("#levelName"+idNivel).val();
+            let idLevel = $("#levelId"+idNivel).val();
+            
+            let html = "";
+            html += `{!! Form::open(['method' => 'POST', 'route' => ['editar_nivel'],
+                                'class'=>['form-horizontal form-bordered'], 'enctype' => 'multipart/form-data',
+                                'id'=>'form_edit_nivel', 'autocomplet'=>'off']) !!}`;
+            html += `@csrf`;
+            html +=     `<input type="hidden" name="id_nivel" id="id_nivel" value="${idNivel}" required />`;
+            html +=     `<label class="font14">Enter the new level name</label>`;
+            html +=     `<div class="div-level-name">
+                            <input type="text" name="editar_nivel" id="editar_nivel"
+                                    class="level-name" value="${nameLevel}" autocomplete="off" required />
+                        </div>
+            `;
+            html += `
+                        <div class="alert alert-danger ocultar" role="alert" id="alert_edit">
+                            The field Level Name is required
+                        </div>
                     `;
-                    html +=     `<div class="div-file">
-                                    <input type="file" name="file_editar_nivel" id="file_editar_nivel" class="file" />
-                                </div>
-                    `;
-                    html +=     `<input type="submit" value="Update" class="btn btn-primary" id="btn_editar_nivel">`;
-                    html += `{!! Form::close() !!}`;
 
-                    Swal.fire({
-                        title: 'Edit Level',
-                        html: html,
-                        icon: 'info',
-                        type: 'info',
-                        showConfirmButton: false,
-                        focusConfirm: false,
-                        showCloseButton: true,
-                        showCancelButton: false,
-                        cancelButtonText: 'Cancel',
-                        allowOutsideClick: false,
-                    });
+            html +=     `<div class="div-file">
+                            <input type="file" name="file_editar_nivel" id="file_editar_nivel" class="file" />
+                        </div>
+            `;
+            html += `<img  class="ocultar" src="{{asset('img/loading.gif')}}"
+                    id="loading_ajax"
+                    alt="loading..." />
+            `;
+            html += `{!! Form::close() !!}`;
+
+            Swal.fire({
+                title: 'Update Level',
+                html: html,
+                icon: 'info',
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Update',
+                cancelButtonText: 'Cancel',
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            }).then((result) =>
+            {
+                if(result.value) {
+                    
+                    let editarNivel = $('#editar_nivel').val();
+                    let formulario = $('#form_edit_nivel');
+    
+                    if (editarNivel == "" || editarNivel == undefined)
+                    {
+                        $('#editar_nivel').attr('required', true);
+                        
+                        Swal.fire(
+                            'Wrong!',
+                            'The field Level Name is required',
+                            'error'
+                        );
+                        return;
+    
+                    } else
+                    {
+                        formulario.submit();
+                    }
                 }
             });
         }
@@ -316,9 +366,10 @@
                                 'class'=>['form-horizontal form-bordered'], 'id'=>'form_inactivar_nivel']) !!}`;
             html += `@csrf`;
             html +=     `<input type="hidden" name="id_nivel" id="id_nivel" value="${idNivel}" required />`;
-            html +=     `<label class="font14">This option inactive this level</label>`;
+            html +=     `<label class="font14">This option inactive this level, ¿Are you sure?</label>`;
             html +=     `<div class="div-level-name">
-                            <input type="submit" value="Inactive" class="btn btn-primary" id="btn_inactivar_nivel">
+                            <input type="submit" value="Yes, inactivate"
+                                    class="btn btn-primary" id="btn_inactivar_nivel">
                         </div>
             `;
             html += `{!! Form::close() !!}`;
@@ -344,9 +395,9 @@
                             'class'=>['form-horizontal form-bordered'], 'id'=>'form_activar_nivel']) !!}`;
             html += `@csrf`;
             html +=     `<input type="hidden" name="id_nivel" id="id_nivel" value="${idNivel}" required />`;
-            html +=     `<label class="font14">This option active this level</label>`;
+            html +=     `<label class="font14">This option active this level, ¿Are you sure?</label>`;
             html +=     `<div class="div-level-name">
-                            <input type="submit" value="Active" class="btn btn-primary" id="btn_activar_nivel">
+                            <input type="submit" value="Yes, activate" class="btn btn-primary" id="btn_activar_nivel">
                         </div>
             `;
             html += `{!! Form::close() !!}`;
