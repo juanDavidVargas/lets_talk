@@ -141,14 +141,14 @@
                                                             
                                                         }
                                             cuerpo += ` <h6>Español: SI</h6>
-                                                        <a href="https://www.pse.com.co/persona" class="btn btn-sm btn-primary align">Reservar ya</a>
+                                                        <a href="https://www.pse.com.co/persona" target="_blank" class="btn btn-sm btn-primary align">Reservar ya</a>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            `; 
+                            `;
                         });
 
                         Swal.fire({
