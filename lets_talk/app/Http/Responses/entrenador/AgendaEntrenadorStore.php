@@ -79,8 +79,7 @@ class AgendaEntrenadorStore implements Responsable
                     'end_time' => trim($hora_fin),
                     'color' => '#157347',
                     'state' => $state,// Pendiente Aprobación
-                    'id_instructor' => $user_id,
-                    // 'id_usuario' => $user_id,
+                    'id_usuario' => $user_id,
                     'id_horario' => $disp,
                     'num_dia' => intval($dia)
                 ]);
@@ -190,7 +189,7 @@ class AgendaEntrenadorStore implements Responsable
     {
         try
         {
-            return EventoAgendaEntrenador::where('id_instructor', $usuario_id)
+            return EventoAgendaEntrenador::where('id_usuario', $usuario_id)
                                             ->where('state', 2)
                                             ->get()
                                             ->count();
