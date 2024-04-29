@@ -48,18 +48,32 @@ class AgendaEntrenadorStore implements Responsable
                 $hora_inicio = substr($horas_disp->horario, 0, 5);
                 $hora_fin = substr($horas_disp->horario, 6);
 
-                if(isset($entrenador_id) && !is_null($entrenador_id) &&
-                   !empty($entrenador_id) && $entrenador_id != "-1") {
+                // if(isset($entrenador_id) && !is_null($entrenador_id) && !empty($entrenador_id) && $entrenador_id != "-1") {
 
-                   $user = $this->traerNombreUsuario($entrenador_id);
-                   $usuario = $user->usuario;
-                   $state = 1; // Aprobado
-                   $user_id = $entrenador_id;
+                //    $user = $this->traerNombreUsuario($entrenador_id);
+                //    $usuario = $user->usuario;
+                //    $state = 1; // Aprobado
+                //    $user_id = $entrenador_id;
+
+                // } else {
+                //     $usuario = session('username');
+                //     $state = 2;
+                //     $user_id = session('usuario_id');
+                // }
+
+                if(isset($entrenador_id) && !is_null($entrenador_id) && !empty($entrenador_id) && $entrenador_id != "-1") {
+
+                    $user = $this->traerNombreUsuario($entrenador_id);
+                    $usuario = $user->usuario;
+                    $state = 1; // Aprobado
+                    $id_instructor = $entrenador_id;
+                    $user_id = session('usuario_id');
 
                 } else {
                     $usuario = session('username');
                     $state = 2;
                     $user_id = session('usuario_id');
+                    $id_instructor = null;
                 }
 
                 $consultaDisponibilidades = $this->validarDisponibilidadUsuario($user_id);
@@ -79,6 +93,7 @@ class AgendaEntrenadorStore implements Responsable
                     'end_time' => trim($hora_fin),
                     'color' => '#157347',
                     'state' => $state,// Pendiente Aprobación
+                    'id_instructor' => $id_instructor,
                     'id_usuario' => $user_id,
                     'id_horario' => $disp,
                     'num_dia' => intval($dia)
