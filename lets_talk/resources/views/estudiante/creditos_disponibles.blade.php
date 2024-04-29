@@ -34,11 +34,13 @@
 
     <div class="d-flexswal m-t-30 m-b-30">
         {{-- <button type="button" class="btn btn-primary text-uppercase" onclick="misCreditos()">10 créditos disponibles</button> --}}
-        <b href="{{route('estudiante.creditos_disponibles')}}" class="btn btn-primary text-uppercase">10 créditos disponibles</b>
+        <a href="{{route('estudiante.creditos_disponibles')}}" class="btn btn-primary text-uppercase">10 créditos disponibles</a>
     </div>
 
     <div class="d-flex justify-content-center">
-        <b href="https://www.pse.com.co/persona" target="_blank" class="btn btn-primary text-uppercase">comprar más créditos</b>
+        <a href="https://www.pse.com.co/persona" target="_blank" class="btn btn-primary text-uppercase">comprar más créditos</a>
+        {{-- <a href="https://www.pse.com.co/persona" target="_blank" class="btn btn-primary text-uppercase">comprar más créditos</a> --}}
+        <a href="https://www.pse.com.co/persona" class="btn btn-primary text-uppercase">comprar más créditos</a>
     </div>
 
     @include('layouts.loader')
