@@ -1,6 +1,14 @@
 @extends('layouts.layout')
 @section('title', 'Mis Créditos')
 @section('css')
+    <style>
+        .swal2-cancel {
+            background-color: #1D9BF0;
+            padding: 1rem !important;
+            color: #FFF !important;
+            box-shadow: 0px 4px 4px 0px #00000040;
+        }
+    </style>
 @stop
 
 @section('content')
@@ -37,7 +45,7 @@
     </div>
 
     <div class="d-flex justify-content-center">
-        <b href="https://www.pse.com.co/persona" target="_blank" class="btn btn-primary text-uppercase">comprar más créditos</b>
+        <a href="https://www.pse.com.co/persona" target="_blank" class="btn btn-primary text-uppercase">comprar más créditos</a>
     </div>
 
     @include('layouts.loader')
@@ -47,11 +55,41 @@
     <script>
 
     function misCreditos() {
-        Swal.fire(
-            'Info',
-            'mis creditos.',
-            'info'
-        );
+
+        html = ``;
+        html += `<table border=1 style="border-collapse:separate !important" cellspacing="10" id="tbl_old_evaluation" >`;
+        html +=     `<thead>`;
+        html +=         `<tr style="background-color: #21277B">`;
+        html +=             `<th style="text-align:center;width:55%;color:white;font-size:16px;">RESERVA CON</th>`;
+        html +=             `<th style="text-align:center;width:15%;color:white;font-size:16px;">CRÉDITOS</th>`;
+        html +=             `<th style="text-align:center;width:30%;color:white;font-size:16px;">FECHA</th>`;
+        html +=         `</tr>`;
+        html +=     `</thead>`;
+        html +=     `<body>`;
+                            html += `<tr>`;
+                            html +=     `<td style="width:55%;font-size:12px;">Sebastian Villamizar</td>`;
+                            html +=     `<td style="width:15%;font-size:12px;">1</td>`;
+                            html +=     `<td style="width:30%;font-size:12px;">Marzo 20, 2024</td>`;
+                            html += `</tr>`;
+        html +=     `</body>`;
+        html += `<table>`;
+
+        Swal.fire({
+            html: html,
+            showCloseButton: false,
+            showConfirmButton: false,
+            showCancelButton: true,
+            cancelButtonText: 'GET ME BACK',
+            focusConfirm: false,
+            allowOutsideClick: false,
+            width: 500,
+            padding: '3em',
+            background: '#fff',
+            buttonsStyling: false,
+            buttons:{
+                cancelButton: {customClass:'swal2-cancel'}
+            }
+        });
     }
 
 

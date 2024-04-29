@@ -38,9 +38,8 @@
     </div>
 
     <div class="d-flex justify-content-center">
-        <a href="https://www.pse.com.co/persona" target="_blank" class="btn btn-primary text-uppercase">comprar más créditos</a>
-        {{-- <a href="https://www.pse.com.co/persona" target="_blank" class="btn btn-primary text-uppercase">comprar más créditos</a> --}}
-        <a href="https://www.pse.com.co/persona" class="btn btn-primary text-uppercase">comprar más créditos</a>
+        <a href="https://www.pse.com.co/persona" target="_blank" class="btn btn-primary text-uppercase">comprar más créditos target</a>
+        <a href="https://www.pse.com.co/persona" class="btn btn-primary text-uppercase">comprar más créditos no target</a>
     </div>
 
     @include('layouts.loader')
