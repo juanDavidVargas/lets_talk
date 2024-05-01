@@ -123,6 +123,7 @@
                             $("#loaderGif").addClass('ocultar');
                             let cuerpo = "";
 
+<<<<<<< HEAD
                             $.each(response, (index, value) =>{
                                 cuerpo += `
                                     <br/>
@@ -149,13 +150,27 @@
                                                 cuerpo += ` <h6>Español: SI</h6>
                                                             <a href="https://www.pse.com.co/persona" class="btn btn-sm btn-primary align">Reservar ya</a>
                                                         </div>
+=======
+                                                        } else {
+                                                            cuerpo += `${value.descripcion}</h5>`;
+                                                            
+                                                        }
+                                            cuerpo += ` <h6>Español: SI</h6>
+                                                        <a href="https://www.pse.com.co/persona" target="_blank" class="btn btn-sm btn-primary align">Reservar ya</a>
+>>>>>>> 92cf3479223ae2cf91354e46c0548246d2e56960
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+<<<<<<< HEAD
                                 `; 
                             });
+=======
+                                </div>
+                            `;
+                        });
+>>>>>>> 92cf3479223ae2cf91354e46c0548246d2e56960
 
                             Swal.fire({
                                 title: `Disponibilidad Entrenadores`,
