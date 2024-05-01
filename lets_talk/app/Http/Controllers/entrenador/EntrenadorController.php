@@ -332,7 +332,7 @@ class EntrenadorController extends Controller
            empty($sesion[3]) || is_null($sesion[3]) &&
            $sesion[2] != true)
         {
-            return redirect()->to(route('home'));
+            return response()->json("redirect");
         } else {
             return new DiponibilidadesMasivaUpdate();
         }

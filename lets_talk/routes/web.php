@@ -41,7 +41,6 @@ Route::post('inactivar_nivel', 'admin\AdministradorController@inactivarNivel')->
 Route::post('activar_nivel', 'admin\AdministradorController@activarNivel')->name('activar_nivel');
 Route::post('consultar_nivel', 'admin\AdministradorController@consultarNivel')->name('consultar_nivel'); // Se consulta para la edición
 
-
 // Rutas ENTRENADOR
 Route::resource('trainer', 'entrenador\EntrenadorController');
 Route::post('cargar_eventos_entrenador', 'entrenador\EntrenadorController@cargarEventos')->name('cargar_eventos_entrenador');
