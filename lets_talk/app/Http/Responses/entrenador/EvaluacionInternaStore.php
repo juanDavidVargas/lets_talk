@@ -24,7 +24,7 @@ class EvaluacionInternaStore implements Responsable
             $evaluacionInternaCreate = EvaluacionInterna::create([
                 'evaluacion_interna' => $evaluacionInterna,
                 'id_estudiante' => $idEstudiante,
-                'id_instructor' => 7,
+                'id_instructor' => 13,
             ]);
 
             if ($evaluacionInternaCreate) {
