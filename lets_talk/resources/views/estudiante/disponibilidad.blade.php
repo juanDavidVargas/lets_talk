@@ -11,11 +11,17 @@
         </div>
     </div>
 
-<div class="row p-b-20 float-left">
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <a href="{{route('estudiante.index')}}" class="btn btn-primary">Reservas</a>
+    <div class="row p-b-20 float-left">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <a href="{{route('estudiante.index')}}" class="btn btn-primary">Reservas</a>
+        </div>
     </div>
-</div>
+
+    <div class="row p-b-20 float-left">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <a href="{{route('estudiante.mis_creditos')}}" class="btn btn-primary">Mis Créditos</a>
+        </div>
+    </div>
 
     <div class="row m-b-30 m-t-30">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -67,103 +73,103 @@
                 cancelButtonText: 'Cerrar',
                 customClass: 'swal-class',
             });
-    }
+        }
 
-    function traerDisponibilidades(index, id)
-    {
-        $.ajax(
-            {
-                async: true,
-                url: "{{route('estudiante.traer_disponibilidades')}}",
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    'id_diponibilidad': index,
-                    'numero_dia': id
-                },
-                beforeSend: function() {
-                    $("#loaderGif").show();
-                    $("#loaderGif").removeClass('ocultar');
-                },
-                success: function(response) 
+        function traerDisponibilidades(index, id)
+        {
+            $.ajax(
                 {
-                    $("#loaderGif").hide();
-                    $("#loaderGif").addClass('ocultar');
-
-                    if(response == "error_exception") 
+                    async: true,
+                    url: "{{route('estudiante.traer_disponibilidades')}}",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        'id_diponibilidad': index,
+                        'numero_dia': id
+                    },
+                    beforeSend: function() {
+                        $("#loaderGif").show();
+                        $("#loaderGif").removeClass('ocultar');
+                    },
+                    success: function(response) 
                     {
                         $("#loaderGif").hide();
                         $("#loaderGif").addClass('ocultar');
-                        Swal.fire(
-                            'Error!',
-                            'Ha ocurrido un error, íntente de nuevo, si el problema persiste, comuniquese con el administrador!',
-                            'error'
-                        );
-                        return;
-                    } else if(response == "no_datos") 
-                    {
-                        $("#loaderGif").hide();
-                        $("#loaderGif").addClass('ocultar');
-                        Swal.fire(
-                            'Error!',
-                            'No se encontraron disponibilidades de entrenadores para el horario seleccionado',
-                            'error'
-                        );
-                        return;
-                    } else 
-                    {
-                        $("#loaderGif").hide();
-                        $("#loaderGif").addClass('ocultar');
-                        let cuerpo = "";
 
-                        $.each(response, (index, value) =>{
-                            cuerpo += `
-                                <br/>
-                                <div class="row">
-                                    <div class="cols-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                        <div class="card card-reservation">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="cols-xs-12 col-sm-12 col-md-3 col-lg-3">
-                                                        <img src="{{asset('img/profile.png')}}" class="profile" width="100" height="100" alt="profile" />
-                                                    </div>
-                                                    <div class="cols-xs-12 col-sm-12 col-md-9 col-lg-9">
-                                                        <h4 class="card-title">${value.nombres} ${value.apellidos}</h4>
-                                                        <h5>Ingles: `;
-                                                        if(value.descripcion == null || value.descripcion == undefined ||
-                                                        value.descripcion == '')
-                                                        {
-                                                            cuerpo += `NO Especificado</h5>`;
+                        if(response == "error_exception") 
+                        {
+                            $("#loaderGif").hide();
+                            $("#loaderGif").addClass('ocultar');
+                            Swal.fire(
+                                'Error!',
+                                'Ha ocurrido un error, íntente de nuevo, si el problema persiste, comuniquese con el administrador!',
+                                'error'
+                            );
+                            return;
+                        } else if(response == "no_datos") 
+                        {
+                            $("#loaderGif").hide();
+                            $("#loaderGif").addClass('ocultar');
+                            Swal.fire(
+                                'Error!',
+                                'No se encontraron disponibilidades de entrenadores para el horario seleccionado',
+                                'error'
+                            );
+                            return;
+                        } else 
+                        {
+                            $("#loaderGif").hide();
+                            $("#loaderGif").addClass('ocultar');
+                            let cuerpo = "";
 
-                                                        } else {
-                                                            cuerpo += `${value.descripcion}</h5>`;
-                                                            
-                                                        }
-                                            cuerpo += ` <h6>Español: SI</h6>
-                                                        <a href="https://www.pse.com.co/persona" class="btn btn-sm btn-primary align">Reservar ya</a>
+                            $.each(response, (index, value) =>{
+                                cuerpo += `
+                                    <br/>
+                                    <div class="row">
+                                        <div class="cols-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                            <div class="card card-reservation">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="cols-xs-12 col-sm-12 col-md-3 col-lg-3">
+                                                            <img src="{{asset('img/profile.png')}}" class="profile" width="100" height="100" alt="profile" />
+                                                        </div>
+                                                        <div class="cols-xs-12 col-sm-12 col-md-9 col-lg-9">
+                                                            <h4 class="card-title">${value.nombres} ${value.apellidos}</h4>
+                                                            <h5>Ingles: `;
+                                                            if(value.descripcion == null || value.descripcion == undefined ||
+                                                            value.descripcion == '')
+                                                            {
+                                                                cuerpo += `NO Especificado</h5>`;
+
+                                                            } else {
+                                                                cuerpo += `${value.descripcion}</h5>`;
+                                                                
+                                                            }
+                                                cuerpo += ` <h6>Español: SI</h6>
+                                                            <a href="https://www.pse.com.co/persona" class="btn btn-sm btn-primary align">Reservar ya</a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            `; 
-                        });
+                                `; 
+                            });
 
-                        Swal.fire({
-                            title: `Disponibilidad Entrenadores`,
-                            html: cuerpo,
-                            type: 'info',
-                            showCancelButton: true,
-                            showConfirmButton: false,
-                            cancelButtonText: 'Cerrar',
-                            customClass: 'swal-class',
-                        });
+                            Swal.fire({
+                                title: `Disponibilidad Entrenadores`,
+                                html: cuerpo,
+                                type: 'info',
+                                showCancelButton: true,
+                                showConfirmButton: false,
+                                cancelButtonText: 'Cerrar',
+                                customClass: 'swal-class',
+                            });
+                        }
                     }
                 }
-            }
-        );
-    }
+            );
+        }
     </script>
 @endsection
