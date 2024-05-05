@@ -16,7 +16,7 @@ class EvaluacionInternaStore implements Responsable
     {
         $evaluacionInterna = request('evaluacion_interna', null);
         $idEstudiante = request('id_estudiante', null);
-        // $idInstructor = request('id_instructor', null); // Se habilita al estar listo el módulo de estudiante
+        $usuLogueado = session('usuario_id');
 
         DB::connection('mysql')->beginTransaction();
 
@@ -24,7 +24,7 @@ class EvaluacionInternaStore implements Responsable
             $evaluacionInternaCreate = EvaluacionInterna::create([
                 'evaluacion_interna' => $evaluacionInterna,
                 'id_estudiante' => $idEstudiante,
-                'id_instructor' => 7,
+                'id_instructor' => $usuLogueado,
             ]);
 
             if ($evaluacionInternaCreate) {

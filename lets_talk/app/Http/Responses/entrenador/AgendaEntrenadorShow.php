@@ -30,20 +30,21 @@ class AgendaEntrenadorShow implements Responsable
         try
         {
             $eventos = EventoAgendaEntrenador::select(
-                                    'id',
-                                    'title',
-                                    'description',
-                                    'start_date',
-                                    'start_time',
-                                    'end_date',
-                                    'end_time',
-                                    'color',
-                                    'state',
-                                    'id_usuario',
-                                    'id_horario',
-                                    'num_dia'
-                                )
-                        ->whereNull('deleted_at')
+                            'id',
+                            'title',
+                            'description',
+                            'start_date',
+                            'start_time',
+                            'end_date',
+                            'end_time',
+                            'color',
+                            'state',
+                            'id_usuario',
+                            'id_instructor',
+                            'id_horario',
+                            'num_dia'
+                        )
+                        ->whereNull('evento_agenda_entrenador.deleted_at')
                         ->where('state', 1)
                         ->whereRaw($where)
                         ->get();
@@ -176,7 +177,7 @@ class AgendaEntrenadorShow implements Responsable
                     ->leftjoin('usuarios as estudiante', 'estudiante.id_user', '=', 'evaluacion_interna.id_estudiante')
                     ->leftjoin('usuarios as instructor', 'instructor.id_user', '=', 'evaluacion_interna.id_instructor')
                     ->where('evaluacion_interna.id_estudiante', $idEstudiante)
-                    ->where('evaluacion_interna.id_instructor', 7)
+                    ->where('evaluacion_interna.id_instructor', 13)
                     ->select(
                         DB::raw("CONCAT(estudiante.nombres, ' ', estudiante.apellidos) AS nombre_estudiante"),
                         'evaluacion_interna.evaluacion_interna',

@@ -434,9 +434,20 @@ class AdministradorController extends Controller
             $vista = 'administrador.disponibilidad_entrenadores';
             $checkConnection = $this->checkDatabaseConnection($vista);
 
-            if($checkConnection->getName() == "database_connection") {
+            if($checkConnection->getName() == "database_connection")
+            {
                 return view('database_connection');
-            } else {
+            } else
+            {
+                $arrayEstados = [];
+                $disponibilidades = $this->traerDisponibilidades();
+
+                foreach($disponibilidades as $value)
+                {
+                    array_push($arrayEstados, $value->state);
+                }
+
+                view()->share('arrayEstados', $arrayEstados);
                 $this->share_data();
                 return view($vista);
             }

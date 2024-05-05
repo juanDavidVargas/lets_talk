@@ -19,6 +19,7 @@ class EventoAgendaEntrenador extends Model
        'end_time',
        'state',
        'color',
+       'id_instructor',
        'id_usuario',
        'id_horario',
        'num_dia'
