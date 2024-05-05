@@ -38,11 +38,13 @@
     <div class="row p-t-30">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="table-responsive">
-                <table class="table table-striped table-bordered table-hover" id="tbl_trainer_sessions" aria-describedby="tabla horarios entrenadores">
+                <table class="table table-striped table-bordered table-hover"
+                        id="tbl_trainer_sessions" aria-describedby="tabla horarios entrenadores">
                     <thead>
                         <tr class="header-table">
                             <th>ID</th>
                             <th>Schedule</th>
+                            <th>State</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -52,7 +54,22 @@
                             <td>{{$horario['id_horario']}}</td>
                             <td>{{$horario['horario']}}</td>
                             <td>
-                                <a href="#" class="btn btn-sm btn-danger" id="btn_delete_schedule_{{$horario['id_horario']}}" onclick="deleteSchedule('{{$horario['id_horario']}}')">Delete Schedule</a>
+                                @if($horario['id_estado'] == 1 )
+                                    <span class="badge badge-success">Active</span>
+                                @else
+                                    <span class="badge badge-danger">Inactive</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if($horario['id_estado'] == 1 )
+                                    <a href="#" class="btn btn-sm btn-warning"
+                                        id="btn_inactive_schedule_{{$horario['id_horario']}}"
+                                        onclick="changeStateSchedule('{{$horario['id_horario']}}')">Inactive Schedule</a>
+                                @else
+                                    <a href="#" class="btn btn-sm btn-success"
+                                        id="btn_inactive_schedule_{{$horario['id_horario']}}"
+                                        onclick="changeStateSchedule('{{$horario['id_horario']}}')">Active Schedule</a>
+                                @endif
                             </td>
                         </tr>
                         @endforeach
@@ -66,13 +83,9 @@
     @include('layouts.loader')
 @stop
 
-{{-- ================================================ --}}
-
 @section('scripts')
     <script src="{{asset('js/jquery-2.1.3.min.js')}}"></script>
-    {{-- ================================================ --}}
     <script src="{{asset('js/jquery.validate.min.js')}}"></script>
-    {{-- ================================================ --}}
     <script src="{{asset('js/jquery.dataTables.min.js')}}"></script>
     <script src="{{asset('js/dataTables.bootstrap.min.js')}}"></script>
     <script src="{{asset('js/dataTables.fixedHeader.min.js')}}"></script>
@@ -88,8 +101,6 @@
             $('#tbl_trainer_sessions').DataTable({
                 'ordering': false
             });
-
-            // ================================================
 
             let form_shedule = ''
 
@@ -118,9 +129,8 @@
                     {!! Form::close() !!}
             `;
 
-            // ================================================
-
-            $('#btn_create_schedule').click(function() {
+            $('#btn_create_schedule').click(function()
+            {
                 Swal.fire({
                     position: 'center',
                     title: 'Info!',
@@ -144,14 +154,17 @@
                         initial_hour: {required:"Initial Hour is Required"},
                         final_hour: {required:"Final Hour is Required"},
                     },
-                    submitHandler: function(form) {
+                    submitHandler: function(form)
+                    {
+                        $("#loaderGif").show();
+                        $("#loaderGif").removeClass('ocultar');
+                        $("#btn_store_shedule").attr('disabled', true);
                         form.submit();
                     }
                 });
 
-                // ===========================================
-
-                $('#final_hour').blur(function () {
+                $('#final_hour').blur(function ()
+                {
                     let initial_hour = $('#initial_hour').val();
                     let final_hour = $('#final_hour').val();
 
@@ -169,11 +182,11 @@
 
                     let diferencia = horaFinalCompleta - horaInicialCompleta;
 
-                    if (diferencia > 30) {
-                        console.log("no pueder superar la media hora");
+                    if (diferencia > 30)
+                    {
                         Swal.fire(
                             'Error!',
-                            'May not exceed half an hour!',
+                            'The schedule cannot exceed 30 minutes!',
                             'error'
                         )
                     }
@@ -181,16 +194,11 @@
             });
         }); // FIN ready
 
-        // ================================================
-        // ================================================
-
-        function deleteSchedule(idHorario) {
-
-            let idHorarioDelete = idHorario;
-
+        function changeStateSchedule(idHorario)
+        {
             Swal.fire({
                 position: 'center'
-                , title: 'Are you sure you want to delete this schedule?'
+                , title: 'Are you sure you want to change the state of this schedule?'
                 , text: 'You will not be able to revert this!'
                 , icon: 'warning'
                 , type: 'warning'
@@ -198,33 +206,37 @@
                 , showConfirmButton: true
                 , allowOutsideClick: false
                 , allowEscapeKey: false
-                , confirmButtonText: '<i class="fa fa-thumbs-up"></i> Yes, delete it!'
-                , cancelButtonText: '<i class="fa fa-thumbs-down"></i> Cancel'
-                , cancelButtonColor: '#d33'
-                , confirmButtonColor: '#3085d6'
-            }).then((result) => {
-                if (result.value == true) {
+                , confirmButtonText: '<i class="fa fa-thumbs-up"></i> Yes, Change!'
+                , cancelButtonText: '<i class="fa fa-thumbs-down"></i> No, Cancel'
+                , cancelButtonColor: '#CCC'
+                , confirmButtonColor: '#0bc64a'
+            }).then((result) =>
+            {
+                if (result.value == true)
+                {
                     $.ajax({
                         async: true
-                        , url: "{{route('administrador.disponibilidad_admin_delete')}}"
+                        , url: "{{route('disponibilidad_admin_state')}}"
                         , type: "POST"
                         , dataType: "json"
                         , data: {
-                            'id_horario': idHorarioDelete
+                            'id_horario': idHorario
                         }
                         ,
                         beforeSend: function() {
                             $("#loaderGif").show();
                             $("#loaderGif").removeClass('ocultar');
                         }
-                        , success: function(response) {
-                            if (response == "deleted") {
+                        , success: function(response)
+                        {
+                            if (response == "success")
+                            {
                                 $("#loaderGif").hide();
                                 $("#loaderGif").addClass('ocultar');
                                 Swal.fire({
                                     position: 'center'
                                     , title: 'Successful Process!'
-                                    , html: 'The Schedule has been deleted!'
+                                    , html: 'The state of schedule has been changed successfully!'
                                     , icon: 'info'
                                     , type: 'success'
                                     , showCancelButton: false
@@ -233,17 +245,39 @@
                                     , allowEscapeKey: false
                                     , timer: 3000
                                 });
-                                refrescarSchedule();
+                                setTimeout('window.location.reload()', 3500);
                                 return;
                             }
 
-                            if (response == "no_deleted") {
+                            if (response == "no_inactived")
+                            {
                                 $("#loaderGif").hide();
                                 $("#loaderGif").addClass('ocultar');
                                 Swal.fire({
                                     position: 'center'
                                     , title: 'Error!'
-                                    , html: 'There was a problem deleting the Schedule!'
+                                    , html: 'There was a problem change the state of the Schedule!'
+                                    , icon: 'error'
+                                    , type: 'error'
+                                    , showCancelButton: false
+                                    , showConfirmButton: false
+                                    , allowOutsideClick: false
+                                    , allowEscapeKey: false
+                                    , timer: 3000
+                                });
+                                return;
+
+                            }
+
+                            if (response == "error_exception")
+                            {
+                                $("#loaderGif").hide();
+                                $("#loaderGif").addClass('ocultar');
+
+                                Swal.fire({
+                                    position: 'center'
+                                    , title: 'Error!'
+                                    , html: 'There was a problem of database change the state of the Schedule!'
                                     , icon: 'error'
                                     , type: 'error'
                                     , showCancelButton: false
@@ -254,9 +288,18 @@
                                 });
                                 return;
                             }
+
+                            if(response == "home")
+                            {
+                                $("#loaderGif").hide();
+                                $("#loaderGif").addClass('ocultar');
+                                window.location.href = `${window.location.hostname}:${window.location.port}`;
+                                return;
+                            }
                         }
                     });
-                } else {
+                } else
+                {
                     $("#loaderGif").hide();
                     $("#loaderGif").addClass('ocultar');
                     Swal.fire({
@@ -274,10 +317,6 @@
                     return;
                 }
             });
-        }
-
-        function refrescarSchedule() {
-            setTimeout('window.location.reload()', 3000);
         }
     </script>
 @endsection
