@@ -235,7 +235,7 @@
                                 $("#loading_ajax").hide();
                                 $("#loading_ajax").addClass('ocultar');
 
-                                window.location.href = "http://localhost:8000";
+                                window.location.href = `${window.location.hostname}:${window.location.port}`;
                                 return;
                             }
                             

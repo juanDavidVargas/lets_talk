@@ -1,9 +1,5 @@
 @extends('layouts.layout')
 @section('title', 'Trainers Sessions')
-
-{{-- ============================================================== --}}
-{{-- ============================================================== --}}
-
 @section('css')
     <link href="{{asset('DataTable/datatables.min.css')}}" rel="stylesheet">
 

@@ -14,10 +14,8 @@ class DiponibilidadesMasivaUpdate implements Responsable
 {
     public function toResponse($request)
     {
-        $estado = request("estado", null);
-        $idEvento = $request['id_evento'];
-        $idEvento = str_replace('"','',$idEvento);
-        $idEvento = explode(",", $idEvento);
+        $estado = request("idEstado", null);
+        $idEvento = $request['idsDisponibilidades'];
 
         DB::connection('mysql')->beginTransaction();
 
@@ -29,17 +27,20 @@ class DiponibilidadesMasivaUpdate implements Responsable
                         ]
                     );
 
-            if($actualizacionMasivaDiponibilidades) {
+            if($actualizacionMasivaDiponibilidades)
+            {
                 DB::connection('mysql')->commit();
                 return response()->json("exito");
-            } else {
+            } else
+            {
                 DB::connection('mysql')->rollback();
                 return response()->json("error");
             }
 
-        } catch (Exception $e) {
+        } catch (Exception $e)
+        {
             DB::connection('mysql')->rollback();
-            return response()->json("error");
+            return response()->json("error_exception");
         }
     }
 }
