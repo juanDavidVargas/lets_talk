@@ -11,6 +11,7 @@ class DisponibilidadEntrenadores extends Model
     protected $primaryKey = 'id_horario';
     public $timestamps = true;
     protected $fillable = [
-       'horario'
+       'horario',
+       'id_estado'
     ];
 }

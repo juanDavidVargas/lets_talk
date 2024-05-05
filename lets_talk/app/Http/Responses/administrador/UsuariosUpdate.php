@@ -303,7 +303,6 @@ class UsuariosUpdate implements Responsable
             }
 
         } catch (Exception $e) {
-            dd($e);
             DB::connection('mysql')->rollback();
             return response()->json(-1);
         }
