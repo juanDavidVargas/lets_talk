@@ -59,6 +59,7 @@ Route::get('disponibilidad', 'estudiante\EstudianteController@disponibilidad')->
 Route::post('traer_disponibilidades', 'estudiante\EstudianteController@traerDisponibilidades')->name('estudiante.traer_disponibilidades');
 Route::get('mis_creditos', 'estudiante\EstudianteController@misCreditos')->name('estudiante.mis_creditos');
 Route::get('creditos_disponibles', 'estudiante\EstudianteController@creditosDisponibles')->name('estudiante.creditos_disponibles');
+Route::post('reservar_clase', 'estudiante\EstudianteController@reservarClase')->name('estudiante.reservar_clase');
 
 // Rutas FOOTER
 Route::get('about_us', 'comunes\ComunController@aboutUs')->name('about_us');
