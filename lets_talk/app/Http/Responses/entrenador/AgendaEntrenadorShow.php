@@ -96,12 +96,49 @@ class AgendaEntrenadorShow implements Responsable
         }
     }
 
+    // public function traerSesionesEntrenadores()
+    // {
+    //     try {
+    //         return DB::table('usuarios')
+    //                 ->leftjoin('evento_agenda_entrenador', 'evento_agenda_entrenador.id_usuario', '=', 'usuarios.id_user')
+    //                 ->leftjoin('disponibilidad_entrenadores', 'disponibilidad_entrenadores.id_horario', '=', 'evento_agenda_entrenador.id_horario')
+    //                 ->leftjoin('estados', 'estados.id_estado', '=', 'evento_agenda_entrenador.state')
+    //                 ->leftjoin('reservas as reserva_estudiante', 'reserva_estudiante.id_estudiante', '=', 'usuarios.id_user')
+    //                 ->leftjoin('reservas as reserva_instructor', 'reserva_instructor.id_instructor', '=', 'usuarios.id_user')
+    //                 ->select(
+    //                     'usuarios.id_user',
+    //                     'evento_agenda_entrenador.id AS id_sesion',
+    //                     'evento_agenda_entrenador.start_date',
+    //                     'evento_agenda_entrenador.start_time',
+    //                     'evento_agenda_entrenador.state',
+    //                     DB::raw("CONCAT(usuarios.nombres, ' ', usuarios.apellidos) AS nombre_completo"),
+    //                     'estados.descripcion_estado',
+    //                     'reserva_estudiante.id_estudiante as id_estudiante',
+    //                     'reserva_instructor.id_instructor as id_instructor',
+    //                 )
+    //                 ->where('usuarios.estado', 1)
+    //                 ->where('usuarios.id_rol', 3)
+    //                 ->whereNull('usuarios.deleted_at')
+    //                 ->whereNull('evento_agenda_entrenador.deleted_at')
+    //                 ->whereIn('evento_agenda_entrenador.state', [1])
+    //                 ->orderBy('evento_agenda_entrenador.id', 'DESC')
+    //                 ->get();
+    //                 // ->toSql();
+    //     } catch (Exception $e) {
+    //         alert()->error("Error', 'An error has occurred, try again, if the problem persists contact support.!");
+    //         return back();
+    //     }
+    // }
+
     public function traerSesionesEntrenadores()
     {
         try {
             return DB::table('usuarios')
                     ->leftjoin('evento_agenda_entrenador', 'evento_agenda_entrenador.id_usuario', '=', 'usuarios.id_user')
+                    ->leftjoin('disponibilidad_entrenadores', 'disponibilidad_entrenadores.id_horario', '=', 'evento_agenda_entrenador.id_horario')
                     ->leftjoin('estados', 'estados.id_estado', '=', 'evento_agenda_entrenador.state')
+                    ->leftjoin('reservas as reserva_estudiante', 'reserva_estudiante.id_estudiante', '=', 'usuarios.id_user')
+                    ->leftjoin('reservas as reserva_instructor', 'reserva_instructor.id_instructor', '=', 'usuarios.id_user')
                     ->select(
                         'usuarios.id_user',
                         'evento_agenda_entrenador.id AS id_sesion',
@@ -109,7 +146,9 @@ class AgendaEntrenadorShow implements Responsable
                         'evento_agenda_entrenador.start_time',
                         'evento_agenda_entrenador.state',
                         DB::raw("CONCAT(usuarios.nombres, ' ', usuarios.apellidos) AS nombre_completo"),
-                        'estados.descripcion_estado'
+                        'estados.descripcion_estado',
+                        'reserva_estudiante.id_estudiante as id_estudiante',
+                        'reserva_instructor.id_instructor as id_instructor',
                     )
                     ->where('usuarios.estado', 1)
                     ->where('usuarios.id_rol', 3)
@@ -118,6 +157,7 @@ class AgendaEntrenadorShow implements Responsable
                     ->whereIn('evento_agenda_entrenador.state', [1])
                     ->orderBy('evento_agenda_entrenador.id', 'DESC')
                     ->get();
+                    // ->toSql();
         } catch (Exception $e) {
             alert()->error("Error', 'An error has occurred, try again, if the problem persists contact support.!");
             return back();
@@ -130,6 +170,8 @@ class AgendaEntrenadorShow implements Responsable
             return DB::table('usuarios')
                     ->leftjoin('niveles', 'niveles.id_nivel', '=', 'usuarios.id_nivel')
                     ->leftjoin('contactos', 'contactos.id_user', '=', 'usuarios.id_user')
+                    ->leftjoin('reservas as reserva_estudiante', 'reserva_estudiante.id_estudiante', '=', 'usuarios.id_user')
+                    ->leftjoin('reservas as reserva_instructor', 'reserva_instructor.id_instructor', '=', 'usuarios.id_user')
                     ->select(
                         DB::raw("CONCAT(usuarios.nombres, ' ', usuarios.apellidos) AS nombre_completo"),
                         'usuarios.id_user',
@@ -156,7 +198,9 @@ class AgendaEntrenadorShow implements Responsable
                         'contactos.opcional_celular',
                         'contactos.opcional_correo',
                         'contactos.opcional_skype',
-                        'contactos.opcional_zoom'
+                        'contactos.opcional_zoom',
+                        'reserva_estudiante.id_estudiante as id_estudiante',
+                        'reserva_instructor.id_instructor as id_instructor',
                     )
                     ->where('usuarios.id_user', $idUser)
                     ->where('usuarios.estado', 1)
