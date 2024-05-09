@@ -33,7 +33,7 @@ Route::get('disponibilidad_entrenadores', 'admin\AdministradorController@disponi
 Route::post('actualizar_disponibilidad_entrenador', 'admin\AdministradorController@actualizarDisponibilidad')->name('actualizar_evento');
 Route::get('disponibilidad_admin', 'admin\AdministradorController@vistaAdminDisponibilidad')->name('administrador.disponibilidad_admin');
 Route::post('disponibilidad_admin_store', 'admin\AdministradorController@storeAdminDisponibilidad')->name('administrador.disponibilidad_admin_store');
-Route::post('disponibilidad_admin_delete', 'admin\AdministradorController@deleteAdminDisponibilidad')->name('administrador.disponibilidad_admin_delete');
+Route::post('disponibilidad_admin_state', 'admin\AdministradorController@changeStateAdminDisponibilidad')->name('disponibilidad_admin_state');
 Route::get('niveles_index', 'admin\AdministradorController@nivelesIndex')->name('administrador.niveles_index');
 Route::post('crear_nivel', 'admin\AdministradorController@crearNivel')->name('crear_nivel');
 Route::post('editar_nivel', 'admin\AdministradorController@editarNivel')->name('editar_nivel');
@@ -59,6 +59,7 @@ Route::get('disponibilidad', 'estudiante\EstudianteController@disponibilidad')->
 Route::post('traer_disponibilidades', 'estudiante\EstudianteController@traerDisponibilidades')->name('estudiante.traer_disponibilidades');
 Route::get('mis_creditos', 'estudiante\EstudianteController@misCreditos')->name('estudiante.mis_creditos');
 Route::get('creditos_disponibles', 'estudiante\EstudianteController@creditosDisponibles')->name('estudiante.creditos_disponibles');
+Route::post('reservar_clase', 'estudiante\EstudianteController@reservarClase')->name('estudiante.reservar_clase');
 
 // Rutas FOOTER
 Route::get('about_us', 'comunes\ComunController@aboutUs')->name('about_us');

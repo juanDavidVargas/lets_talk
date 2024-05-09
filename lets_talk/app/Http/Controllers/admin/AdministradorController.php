@@ -22,12 +22,10 @@ use App\Http\Responses\niveles\NivelesUpdate;
 use App\Http\Responses\niveles\NivelesInactivar;
 use App\Http\Responses\niveles\NivelesActivar;
 use App\Http\Responses\administrador\HorarioStore;
-use App\Http\Responses\administrador\HorarioDelete;
+use App\Http\Responses\administrador\HorarioState;
 use App\Http\Responses\administrador\DisponibilidadUpdate;
 use App\Http\Controllers\DatabaseConnectionController;
 use App\Traits\MetodosTrait;
-
-// ==========================================================
 
 class AdministradorController extends Controller
 {
@@ -483,10 +481,9 @@ class AdministradorController extends Controller
         if($checkConnection->getName() == "database_connection") {
             return view('database_connection');
         } else {
-            $todasDisponibilidades = DisponibilidadEntrenadores::select('id_horario', 'horario')
+            $todasDisponibilidades = DisponibilidadEntrenadores::select('id_horario', 'horario', 'id_estado')
                                                                 ->orderBy('horario', 'asc')
-                                                                ->get()
-                                                                ->toArray();
+                                                                ->get();
             return view($vista, compact('todasDisponibilidades'));
         }
     }
@@ -506,7 +503,7 @@ class AdministradorController extends Controller
         }
     }
 
-    public function deleteAdminDisponibilidad(Request $request)
+    public function changeStateAdminDisponibilidad(Request $request)
     {
         $sesion = $this->validarVariablesSesion();
 
@@ -515,9 +512,9 @@ class AdministradorController extends Controller
            empty($sesion[2]) || is_null($sesion[2]) &&
            $sesion[2] != true)
         {
-            return redirect()->to(route('home'));
+            return response()->json('home');
         } else {
-            return new HorarioDelete();
+            return new HorarioState();
         }
     }
 

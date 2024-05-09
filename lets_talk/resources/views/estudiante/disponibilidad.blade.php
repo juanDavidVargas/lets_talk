@@ -44,10 +44,9 @@
 
 @section('scripts')
     <script>
-
         let horarios = @json($horarios);
 
-        function modalHoras (id, dia) {
+        function modalHoras(id, dia) {
 
            let horas = Object.values(horarios);
            let cuerpo = "";
@@ -74,102 +73,171 @@
                 customClass: 'swal-class',
             });
         }
+        // FIN modalHoras()
+
+        // ==============================================
 
         function traerDisponibilidades(index, id)
         {
-            $.ajax(
+            $.ajax({
+                async: true,
+                url: "{{route('estudiante.traer_disponibilidades')}}",
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    'id_diponibilidad': index,
+                    'numero_dia': id
+                },
+                beforeSend: function() {
+                    $("#loaderGif").show();
+                    $("#loaderGif").removeClass('ocultar');
+                },
+                success: function(response)
                 {
-                    async: true,
-                    url: "{{route('estudiante.traer_disponibilidades')}}",
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        'id_diponibilidad': index,
-                        'numero_dia': id
-                    },
-                    beforeSend: function() {
-                        $("#loaderGif").show();
-                        $("#loaderGif").removeClass('ocultar');
-                    },
-                    success: function(response) 
+                    let idHorario = index;
+                    console.log(`ID Horario ${idHorario}`);
+
+                    $("#loaderGif").hide();
+                    $("#loaderGif").addClass('ocultar');
+
+                    if(response == "error_exception")
                     {
                         $("#loaderGif").hide();
                         $("#loaderGif").addClass('ocultar');
+                        Swal.fire(
+                            'Error!',
+                            'Ha ocurrido un error, íntente de nuevo, si el problema persiste, comuniquese con el administrador!',
+                            'error'
+                        );
+                        return;
+                    } else if(response == "no_datos")
+                    {
+                        $("#loaderGif").hide();
+                        $("#loaderGif").addClass('ocultar');
+                        Swal.fire(
+                            'Error!',
+                            'No se encontraron disponibilidades de entrenadores para el horario seleccionado',
+                            'error'
+                        );
+                        return;
+                    } else {
+                        $("#loaderGif").hide();
+                        $("#loaderGif").addClass('ocultar');
+                        let cuerpo = "";
 
-                        if(response == "error_exception") 
-                        {
-                            $("#loaderGif").hide();
-                            $("#loaderGif").addClass('ocultar');
-                            Swal.fire(
-                                'Error!',
-                                'Ha ocurrido un error, íntente de nuevo, si el problema persiste, comuniquese con el administrador!',
-                                'error'
-                            );
-                            return;
-                        } else if(response == "no_datos") 
-                        {
-                            $("#loaderGif").hide();
-                            $("#loaderGif").addClass('ocultar');
-                            Swal.fire(
-                                'Error!',
-                                'No se encontraron disponibilidades de entrenadores para el horario seleccionado',
-                                'error'
-                            );
-                            return;
-                        } else 
-                        {
-                            $("#loaderGif").hide();
-                            $("#loaderGif").addClass('ocultar');
-                            let cuerpo = "";
+                        $.each(response, (index, value) =>{
+                            let idInstructor = value.id_instructor;
+                            console.log(`ID Instructor ${idInstructor}`);
 
-                            $.each(response, (index, value) =>{
-                                cuerpo += `
-                                    <br/>
-                                    <div class="row">
-                                        <div class="cols-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                            <div class="card card-reservation">
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        <div class="cols-xs-12 col-sm-12 col-md-3 col-lg-3">
-                                                            <img src="{{asset('img/profile.png')}}" class="profile" width="100" height="100" alt="profile" />
-                                                        </div>
-                                                        <div class="cols-xs-12 col-sm-12 col-md-9 col-lg-9">
-                                                            <h4 class="card-title">${value.nombres} ${value.apellidos}</h4>
-                                                            <h5>Ingles: `;
-                                                            if(value.descripcion == null || value.descripcion == undefined ||
-                                                            value.descripcion == '')
-                                                            {
-                                                                cuerpo += `NO Especificado</h5>`;
-
-                                                            } else {
-                                                                cuerpo += `${value.descripcion}</h5>`;
-                                                                
-                                                            }
-                                                cuerpo += ` <h6>Español: SI</h6>
-                                                            <a href="https://www.pse.com.co/persona" class="btn btn-sm btn-primary align">Reservar ya</a>
-                                                        </div>
+                            cuerpo +=`
+                                <br/>
+                                <div class="row">
+                                    <div class="cols-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <div class="card card-reservation">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="cols-xs-12 col-sm-12 col-md-3 col-lg-3">
+                                                        <img src="{{asset('img/profile.png')}}" class="profile" width="100" height="100" alt="profile" />
+                                                    </div>
+                                                    <div class="cols-xs-12 col-sm-12 col-md-9 col-lg-9">
+                                                        <h4 class="card-title">${value.nombres} ${value.apellidos}</h4>
+                                                        <h5>Ingles:
+                            `;
+                                                        // =============================
+                                                        if(value.descripcion == null || value.descripcion == undefined || value.descripcion == '')
+                                                        {
+                                                            cuerpo +=`NO Especificado</h5>`;
+                                                        } else {
+                                                            cuerpo +=`${value.descripcion}</h5>`;
+                                                        }
+                                                        // =============================
+                            cuerpo +=`                  <h6>Español: SI</h6>
+                                                        <input type="button" value="Reservar ya" class="btn btn-sm btn-primary align" onclick="reservarClase(${idHorario}, ${idInstructor})">
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                `; 
-                            });
+                                </div>
+                            `;
+                        });
 
-                            Swal.fire({
-                                title: `Disponibilidad Entrenadores`,
-                                html: cuerpo,
-                                type: 'info',
-                                showCancelButton: true,
-                                showConfirmButton: false,
-                                cancelButtonText: 'Cerrar',
-                                customClass: 'swal-class',
-                            });
-                        }
+                        Swal.fire({
+                            title: `Disponibilidad Entrenadores`,
+                            html: cuerpo,
+                            type: 'info',
+                            showCancelButton: true,
+                            showConfirmButton: false,
+                            cancelButtonText: 'Cerrar',
+                            customClass: 'swal-class',
+                        });
                     }
                 }
-            );
+            });
+        }
+        // FIN traerDisponibilidades()
+
+        // ==============================================
+
+        function reservarClase(idHorario, idInstructor){
+            console.log(`ID Horario: ${idHorario}`);
+            console.log(`ID Instructor: ${idInstructor}`);
+
+            $.ajax({
+                async: true,
+                url: "{{route('estudiante.reservar_clase')}}",
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    'id_instructor': idInstructor,
+                    'id_horario': idHorario
+                },
+                beforeSend: function() {
+                    $("#loaderGif").show();
+                    $("#loaderGif").removeClass('ocultar');
+                },
+                success: function(response)
+                {
+                    $("#loaderGif").hide();
+                    $("#loaderGif").addClass('ocultar');
+
+                    if(response == "clase_reservada")
+                    {
+                        $("#loaderGif").hide();
+                        $("#loaderGif").addClass('ocultar');
+
+                        Swal.fire(
+                            'Info!',
+                            'Clase Reservada!',
+                            'success'
+                        );
+                        return;
+                    } else if (response == "clase_no_reservada") {
+                        $("#loaderGif").hide();
+                        $("#loaderGif").addClass('ocultar');
+
+                        Swal.fire(
+                            'Info!',
+                            'Clase No Reservada!',
+                            'error'
+                        );
+                        return;
+                    }
+                    else {
+                        $("#loaderGif").hide();
+                        $("#loaderGif").addClass('ocultar');
+
+                        Swal.fire(
+                            'Error!',
+                            'Ocurrio un error, íntente de nuevo, si el problema persiste, comuniquese con el administrador!',
+                            'error'
+                        );
+                        return;
+                    }
+                }
+            });
         }
     </script>
 @endsection

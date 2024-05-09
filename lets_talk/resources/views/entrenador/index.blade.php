@@ -129,6 +129,9 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @php
+                            // dd($students);
+                        @endphp
                         @foreach ($students as $student)
                             <tr>
                                 <td>{{$student->nombre_completo}}</td>
