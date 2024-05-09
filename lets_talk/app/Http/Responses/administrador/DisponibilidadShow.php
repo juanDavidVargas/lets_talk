@@ -12,7 +12,6 @@ class DisponibilidadShow implements Responsable
 
     public function traerDisponibilidades()
     {
-
         try
         {
             $disponibilidad = DB::table('evento_agenda_entrenador')
@@ -27,6 +26,7 @@ class DisponibilidadShow implements Responsable
                                         'evento_agenda_entrenador.end_date',
                                         'evento_agenda_entrenador.end_time',
                                         'evento_agenda_entrenador.state',
+                                        'evento_agenda_entrenador.id_instructor',
                                         'usuarios.nombres',
                                         'usuarios.apellidos',
                                         'estados.descripcion_estado'
@@ -68,12 +68,14 @@ class DisponibilidadShow implements Responsable
         }
     }
 
-    private function consultarDisponibilidades($id, $numDia)
+    private function consultarDisponibilidades($idHorario, $numDia)
     {
+        // dd($id, $numDia);
         return DB::table('evento_agenda_entrenador')
-                ->join('usuarios', 'usuarios.id_user', '=', 'evento_agenda_entrenador.id_usuario')
+                ->join('usuarios', 'usuarios.id_user', '=', 'evento_agenda_entrenador.id_instructor')
                 ->leftJoin('tipo_ingles', 'tipo_ingles.id', '=', 'usuarios.id_tipo_ingles')
                 ->select(
+                            'evento_agenda_entrenador.id_instructor',
                             'usuarios.nombres',
                             'usuarios.apellidos',
                             'tipo_ingles.descripcion'
@@ -83,7 +85,7 @@ class DisponibilidadShow implements Responsable
                 ->whereNull('usuarios.deleted_at')
                 ->where('evento_agenda_entrenador.state', 1)
                 ->whereNull('evento_agenda_entrenador.deleted_at')
-                ->where('evento_agenda_entrenador.id_horario', $id)
+                ->where('evento_agenda_entrenador.id_horario', $idHorario)
                 ->where('evento_agenda_entrenador.num_dia', $numDia)
                 ->get();
     }

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Traits\MetodosTrait;
 use App\Models\entrenador\DisponibilidadEntrenadores;
 use App\Http\Responses\administrador\DisponibilidadShow;
+use App\Http\Responses\estudiante\ReservarClase;
 Use Exception;
 
 class EstudianteController extends Controller
@@ -211,6 +212,31 @@ class EstudianteController extends Controller
             // {
                 // return redirect()->to(route('home'));
                 return view('estudiante.creditos_disponibles');
+            // } else {
+            
+            //     $disponibilidadShow = new DisponibilidadShow();
+            //     return $disponibilidadShow->disponibilidadPorID($request);
+            // }
+
+        } catch (Exception $e) {
+            return response()->json("error_exception");
+        }
+    }
+        
+    public function reservarClase(Request $request)
+    {
+        try {
+            // $adminCtrl = new AdministradorController();
+            // $sesion = $adminCtrl->validarVariablesSesion();
+    
+            // if(empty($sesion[0]) || is_null($sesion[0]) &&
+            //    empty($sesion[1]) || is_null($sesion[1]) &&
+            //    empty($sesion[2]) || is_null($sesion[2]) &&
+            //    empty($sesion[3]) || is_null($sesion[3]) &&
+            //    $sesion[2] != true)
+            // {
+                // return redirect()->to(route('home'));
+                return new ReservarClase();
             // } else {
             
             //     $disponibilidadShow = new DisponibilidadShow();
