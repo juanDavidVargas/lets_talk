@@ -17,6 +17,6 @@ class Reserva extends Model
     protected $fillable = [
        'id_estudiante',
        'id_instructor',
-       'id_horario',
+       'id_trainer_horario',
     ];
 }

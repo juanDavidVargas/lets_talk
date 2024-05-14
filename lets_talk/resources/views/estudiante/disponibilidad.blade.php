@@ -24,16 +24,35 @@
     </div>
 
     <div class="row m-b-30 m-t-30">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="col-12">
             <div class="border">
-                <div class="row">
-                    @foreach($arrayDias AS $key => $dias)
-                        <div class="col-sm-3 col-xs-12 col-md-2 col-lg-2">
-                            <div class="card text-center">
-                                <button class="btn btn-info padding border margin-bottom-5 width-200" onclick="modalHoras({{$key}}, '{{$dias}}')">{{$dias}}</button>
-                            </div>
-                        </div>
-                    @endforeach
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover" id="tbl_disponibilidades" aria-describedby="sesiones entrenadores">
+                        <thead>
+                            <tr class="header-table">
+                                <th>Entrenador</th>
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($disponibilidadEntrenadores as $disponibilidad)
+                                @php
+                                    $idEvento = $disponibilidad->id_evento;
+                                    $idInstructor = $disponibilidad->id_instructor;
+                                @endphp
+                                <tr>
+                                    <td>{{$disponibilidad->nombre_completo}}</td>
+                                    <td>{{$disponibilidad->start_date}}</td>
+                                    <td>{{$disponibilidad->start_time}}</td>
+                                    <td>
+                                        <button type="button" class="text-white p-5" onclick="reservarClase('{{$idEvento}}', '{{$idInstructor}}')" style="background-color: #434C6A; padding:0.5em">RESERVAR YA</button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -43,144 +62,41 @@
 @stop
 
 @section('scripts')
+    <script src="{{asset('DataTable/pdfmake.min.js')}}"></script>
+    <script src="{{asset('DataTable/vfs_fonts.js')}}"></script>
+    <script src="{{asset('DataTable/datatables.min.js')}}"></script>
+
     <script>
-        let horarios = @json($horarios);
-
-        function modalHoras(id, dia) {
-
-           let horas = Object.values(horarios);
-           let cuerpo = "";
-           
-           horas.forEach((element, index) => {
-                cuerpo += `
-                    <div class="col-md-4 form-floating mb-3">
-                        <div class="cat">
-                            <label>
-                                <input type="checkbox" value="${index}" name="disp_trainers" onclick="traerDisponibilidades(${index+1}, ${id})"><span>${element}</span>
-                            </label>
-                            </div>
-                    </div>
-                `;
-            });
-
-            Swal.fire({
-                title: `${dia}`,
-                html: cuerpo,
-                type: 'info',
-                showCancelButton: true,
-                showConfirmButton: false,
-                cancelButtonText: 'Cerrar',
-                customClass: 'swal-class',
-            });
-        }
-        // FIN modalHoras()
-
-        // ==============================================
-
-        function traerDisponibilidades(index, id)
-        {
-            $.ajax({
-                async: true,
-                url: "{{route('estudiante.traer_disponibilidades')}}",
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    'id_diponibilidad': index,
-                    'numero_dia': id
-                },
-                beforeSend: function() {
-                    $("#loaderGif").show();
-                    $("#loaderGif").removeClass('ocultar');
-                },
-                success: function(response)
-                {
-                    let idHorario = index;
-                    console.log(`ID Horario ${idHorario}`);
-
-                    $("#loaderGif").hide();
-                    $("#loaderGif").addClass('ocultar');
-
-                    if(response == "error_exception")
+        $( document ).ready(function() {
+            $('#tbl_disponibilidades').DataTable({
+                'ordering': false,
+                "lengthMenu": [[10,25,50,100, -1], [10,25,50,100, 'ALL']],
+                dom: 'Blfrtip',
+                "info": "Showing page _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros",
+                "buttons": [
                     {
-                        $("#loaderGif").hide();
-                        $("#loaderGif").addClass('ocultar');
-                        Swal.fire(
-                            'Error!',
-                            'Ha ocurrido un error, íntente de nuevo, si el problema persiste, comuniquese con el administrador!',
-                            'error'
-                        );
-                        return;
-                    } else if(response == "no_datos")
+                        extend: 'copyHtml5',
+                        text: 'Copiar',
+                        className: 'waves-effect waves-light btn-rounded btn-sm btn-primary',
+                        init: function(api, node, config) {
+                            $(node).removeClass('dt-button')
+                        }
+                    },
                     {
-                        $("#loaderGif").hide();
-                        $("#loaderGif").addClass('ocultar');
-                        Swal.fire(
-                            'Error!',
-                            'No se encontraron disponibilidades de entrenadores para el horario seleccionado',
-                            'error'
-                        );
-                        return;
-                    } else {
-                        $("#loaderGif").hide();
-                        $("#loaderGif").addClass('ocultar');
-                        let cuerpo = "";
-
-                        $.each(response, (index, value) =>{
-                            let idInstructor = value.id_instructor;
-                            console.log(`ID Instructor ${idInstructor}`);
-
-                            cuerpo +=`
-                                <br/>
-                                <div class="row">
-                                    <div class="cols-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                        <div class="card card-reservation">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="cols-xs-12 col-sm-12 col-md-3 col-lg-3">
-                                                        <img src="{{asset('img/profile.png')}}" class="profile" width="100" height="100" alt="profile" />
-                                                    </div>
-                                                    <div class="cols-xs-12 col-sm-12 col-md-9 col-lg-9">
-                                                        <h4 class="card-title">${value.nombres} ${value.apellidos}</h4>
-                                                        <h5>Ingles:
-                            `;
-                                                        // =============================
-                                                        if(value.descripcion == null || value.descripcion == undefined || value.descripcion == '')
-                                                        {
-                                                            cuerpo +=`NO Especificado</h5>`;
-                                                        } else {
-                                                            cuerpo +=`${value.descripcion}</h5>`;
-                                                        }
-                                                        // =============================
-                            cuerpo +=`                  <h6>Español: SI</h6>
-                                                        <input type="button" value="Reservar ya" class="btn btn-sm btn-primary align" onclick="reservarClase(${idHorario}, ${idInstructor})">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                        });
-
-                        Swal.fire({
-                            title: `Disponibilidad Entrenadores`,
-                            html: cuerpo,
-                            type: 'info',
-                            showCancelButton: true,
-                            showConfirmButton: false,
-                            cancelButtonText: 'Cerrar',
-                            customClass: 'swal-class',
-                        });
-                    }
-                }
+                        extend: 'excelHtml5',
+                        text: 'Excel',
+                        className: 'waves-effect waves-light btn-rounded btn-sm btn-primary',
+                        init: function(api, node, config) {
+                            $(node).removeClass('dt-button')
+                        }
+                    },
+                ]
             });
-        }
-        // FIN traerDisponibilidades()
-
-        // ==============================================
+        });
 
         function reservarClase(idHorario, idInstructor){
+
             console.log(`ID Horario: ${idHorario}`);
             console.log(`ID Instructor: ${idInstructor}`);
 
