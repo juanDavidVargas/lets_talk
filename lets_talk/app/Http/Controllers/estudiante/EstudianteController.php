@@ -7,9 +7,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Traits\MetodosTrait;
 use App\Models\entrenador\DisponibilidadEntrenadores;
+use App\Models\entrenador\EventoAgendaEntrenador;
 use App\Http\Responses\administrador\DisponibilidadShow;
 use App\Http\Responses\estudiante\ReservarClase;
-Use Exception;
+use Exception;
+use Illuminate\Support\Facades\DB;
 
 class EstudianteController extends Controller
 {
@@ -109,7 +111,12 @@ class EstudianteController extends Controller
         //
     }
 
-    public function disponibilidad()
+    // private function share_data()
+    // {
+    //     view()->share('disponibilidadEntrenadores', $this->disponibilidadEntrenadores());
+    // }
+    
+    public function disponibilidadEntrenadores()
     {
         $adminCtrl = new AdministradorController();
         $sesion = $adminCtrl->validarVariablesSesion();
@@ -128,48 +135,84 @@ class EstudianteController extends Controller
             if($checkConnection->getName() == "database_connection") {
                 return view('database_connection');
             } else {
-                $arrayDias = array(
-                    1 => "MARTES",
-                    2 => "MIÉRCOLES",
-                    3 => "JUEVES",
-                    4 => "VIERNES",
-                    5 => "SÁBADO",
-                    6 => "DOMINGO",
-                    7 => "LUNES"
-                );
-                $arrayHorarios = DisponibilidadEntrenadores::select('id_horario', 'horario')
-                                    ->pluck('horario', 'id_horario');
-                view()->share('arrayDias', $arrayDias);
-                view()->share('horarios', $arrayHorarios);
-                return view($vista);
+                
+                $disponibilidadEntrenadores = EventoAgendaEntrenador::leftjoin('usuarios','usuarios.id_user','=','evento_agenda_entrenador.id_instructor')
+                            ->select('evento_agenda_entrenador.id as id_evento',
+                                'evento_agenda_entrenador.id_instructor',
+                                'id_user',
+                                DB::raw("CONCAT(nombres, ' ', apellidos) AS nombre_completo"),
+                                'start_date',
+                                'start_time'
+                            )
+                            ->orderBy('evento_agenda_entrenador.id', 'desc')
+                            ->get();
+                return view($vista, compact('disponibilidadEntrenadores', $disponibilidadEntrenadores));
             }
         }
     }
 
-    public function traerDisponibilidades(Request $request)
-    {
-        try {
+
+    // public function disponibilidad()
+    // {
+    //     $adminCtrl = new AdministradorController();
+    //     $sesion = $adminCtrl->validarVariablesSesion();
+
+    //     if(empty($sesion[0]) || is_null($sesion[0]) &&
+    //        empty($sesion[1]) || is_null($sesion[1]) &&
+    //        empty($sesion[2]) || is_null($sesion[2]) &&
+    //        empty($sesion[3]) || is_null($sesion[3]) &&
+    //        $sesion[2] != true)
+    //     {
+    //         return redirect()->to(route('home'));
+    //     } else {
+    //         $vista = 'estudiante.disponibilidad';
+    //         $checkConnection = $this->checkDatabaseConnection($vista);
+
+    //         if($checkConnection->getName() == "database_connection") {
+    //             return view('database_connection');
+    //         } else {
+    //             $arrayDias = array(
+    //                 1 => "MARTES",
+    //                 2 => "MIÉRCOLES",
+    //                 3 => "JUEVES",
+    //                 4 => "VIERNES",
+    //                 5 => "SÁBADO",
+    //                 6 => "DOMINGO",
+    //                 7 => "LUNES"
+    //             );
+    //             $arrayHorarios = DisponibilidadEntrenadores::select('id_horario', 'horario')
+    //                                 ->pluck('horario', 'id_horario');
+    //             view()->share('arrayDias', $arrayDias);
+    //             view()->share('horarios', $arrayHorarios);
+    //             return view($vista);
+    //         }
+    //     }
+    // }
+
+    // public function traerDisponibilidades(Request $request)
+    // {
+    //     try {
             
-            $adminCtrl = new AdministradorController();
-            $sesion = $adminCtrl->validarVariablesSesion();
+    //         $adminCtrl = new AdministradorController();
+    //         $sesion = $adminCtrl->validarVariablesSesion();
     
-            if(empty($sesion[0]) || is_null($sesion[0]) &&
-               empty($sesion[1]) || is_null($sesion[1]) &&
-               empty($sesion[2]) || is_null($sesion[2]) &&
-               empty($sesion[3]) || is_null($sesion[3]) &&
-               $sesion[2] != true)
-            {
-                return redirect()->to(route('home'));
-            } else {
+    //         if(empty($sesion[0]) || is_null($sesion[0]) &&
+    //            empty($sesion[1]) || is_null($sesion[1]) &&
+    //            empty($sesion[2]) || is_null($sesion[2]) &&
+    //            empty($sesion[3]) || is_null($sesion[3]) &&
+    //            $sesion[2] != true)
+    //         {
+    //             return redirect()->to(route('home'));
+    //         } else {
             
-                $disponibilidadShow = new DisponibilidadShow();
-                return $disponibilidadShow->disponibilidadPorID($request);
-            }
+    //             $disponibilidadShow = new DisponibilidadShow();
+    //             return $disponibilidadShow->disponibilidadPorID($request);
+    //         }
 
-        } catch (Exception $e) {
-            return response()->json("error_exception");
-        }
-    }
+    //     } catch (Exception $e) {
+    //         return response()->json("error_exception");
+    //     }
+    // }
 
     public function misCreditos(Request $request)
     {

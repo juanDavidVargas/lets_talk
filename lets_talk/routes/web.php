@@ -55,7 +55,8 @@ Route::post('estudiante_hoja_vida', 'entrenador\EntrenadorController@estudianteH
 
 // Rutas ESTUDIANTE
 Route::resource('estudiante', 'estudiante\EstudianteController');
-Route::get('disponibilidad', 'estudiante\EstudianteController@disponibilidad')->name('estudiante.disponibilidad');
+// Route::get('disponibilidad', 'estudiante\EstudianteController@disponibilidad')->name('estudiante.disponibilidad');
+Route::get('disponibilidad', 'estudiante\EstudianteController@disponibilidadEntrenadores')->name('estudiante.disponibilidad');
 Route::post('traer_disponibilidades', 'estudiante\EstudianteController@traerDisponibilidades')->name('estudiante.traer_disponibilidades');
 Route::get('mis_creditos', 'estudiante\EstudianteController@misCreditos')->name('estudiante.mis_creditos');
 Route::get('creditos_disponibles', 'estudiante\EstudianteController@creditosDisponibles')->name('estudiante.creditos_disponibles');

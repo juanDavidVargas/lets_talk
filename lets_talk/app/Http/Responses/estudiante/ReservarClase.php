@@ -11,13 +11,9 @@ class ReservarClase implements Responsable
 {
     public function toResponse($request)
     {
-        // dd($request);
-
         $idEstudiante =  session('usuario_id');
-        $idInstructor = request('id_instructor', null);
-        $idHorario = request('id_horario', null);
-
-        // dd($idInstructor, $idHorario);
+        $idInstructor = intval(request('id_instructor', null));
+        $idHorario = intval(request('id_horario', null));
 
         DB::connection('mysql')->beginTransaction();
 
@@ -25,15 +21,13 @@ class ReservarClase implements Responsable
             $reservarClaseCreate = Reserva::create([
                 'id_estudiante' => $idEstudiante,
                 'id_instructor' => $idInstructor,
-                'id_horario' => $idHorario,
+                'id_trainer_horario' => $idHorario
             ]);
 
-            if($reservarClaseCreate)
-            {
+            if($reservarClaseCreate) {
                 DB::connection('mysql')->commit();
                 return response()->json("clase_reservada");
-            } else
-            {
+            } else {
                 DB::connection('mysql')->rollback();
                 return response()->json("clase_no_reservada");
             }
