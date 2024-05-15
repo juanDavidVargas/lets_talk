@@ -50,7 +50,7 @@
     </div>
 
     <div class="d-flexswal m-t-30 m-b-30">
-        <button type="button" class="btn btn-primary text-uppercase" onclick="misCreditos()">10 créditos disponibles</button>
+        <button type="button" class="btn btn-primary text-uppercase" onclick="misCreditos()"><span class="text-success">{!!$totalCantidad!!}</span> créditos disponibles</button>
     </div>
 
     <div class="d-flex justify-content-center">
