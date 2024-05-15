@@ -230,15 +230,6 @@ class EstudianteController extends Controller
             // {
                 // return redirect()->to(route('home'));
 
-                // $misCreditos = Credito::selectRaw(
-                //     'DATE(fecha_credito) as fecha_credito',
-                //     'paquete',
-                //     DB::raw('COUNT(*) as cantidad')
-                // )
-                // ->groupBy('paquete')
-                // // ->get();
-                // ->toSql();
-
                 $idEstudiante = session('usuario_id');
 
                 $misCreditos = Credito::select(
@@ -247,12 +238,13 @@ class EstudianteController extends Controller
                     DB::raw('COUNT(*) as cantidad')
                 )
                 ->where('id_estudiante', $idEstudiante)
-                ->groupBy(DB::raw('DATE_FORMAT(FROM_UNIXTIME(fecha_credito), "%d-%m-%Y")'),'paquete')
+                ->groupBy(DB::raw('DATE_FORMAT(FROM_UNIXTIME(fecha_credito), "%d-%m-%Y")'), 'paquete')
                 ->get();
 
-                return view('estudiante.mis_creditos', compact('misCreditos'));
+                $totalCantidad = $misCreditos->sum('cantidad');
+
+                return view('estudiante.mis_creditos', compact('misCreditos', 'totalCantidad'));
             // } else {
-            
             //     $disponibilidadShow = new DisponibilidadShow();
             //     return $disponibilidadShow->disponibilidadPorID($request);
             // }
