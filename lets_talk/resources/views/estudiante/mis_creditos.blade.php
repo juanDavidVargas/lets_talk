@@ -48,51 +48,94 @@
         <a href="https://www.pse.com.co/persona" target="_blank" class="btn btn-primary text-uppercase">comprar más créditos</a>
     </div>
 
+    <div class="m-t-30 m-b-30">
+        <button type="button" class="btn btn-primary text-uppercase" onclick="comprarCreditos()">comprar créditos</button>
+    </div>
+
     @include('layouts.loader')
 @stop
 
 @section('scripts')
     <script>
+        function misCreditos() {
+            html = ``;
+            html += `<table border=1 style="border-collapse:separate !important" cellspacing="10" id="tbl_old_evaluation" >`;
+            html +=     `<thead>`;
+            html +=         `<tr style="background-color: #21277B">`;
+            html +=             `<th style="text-align:center;width:55%;color:white;font-size:16px;">RESERVA CON</th>`;
+            html +=             `<th style="text-align:center;width:15%;color:white;font-size:16px;">CRÉDITOS</th>`;
+            html +=             `<th style="text-align:center;width:30%;color:white;font-size:16px;">FECHA</th>`;
+            html +=         `</tr>`;
+            html +=     `</thead>`;
+            html +=     `<body>`;
+                                html += `<tr>`;
+                                html +=     `<td style="width:55%;font-size:12px;">Sebastian Villamizar</td>`;
+                                html +=     `<td style="width:15%;font-size:12px;">1</td>`;
+                                html +=     `<td style="width:30%;font-size:12px;">Marzo 20, 2024</td>`;
+                                html += `</tr>`;
+            html +=     `</body>`;
+            html += `<table>`;
 
-    function misCreditos() {
+            Swal.fire({
+                html: html,
+                showCloseButton: false,
+                showConfirmButton: false,
+                showCancelButton: true,
+                cancelButtonText: 'GET ME BACK',
+                focusConfirm: false,
+                allowOutsideClick: false,
+                width: 500,
+                padding: '3em',
+                background: '#fff',
+                buttonsStyling: false,
+                buttons:{
+                    cancelButton: {customClass:'swal2-cancel'}
+                }
+            });
+        }
 
-        html = ``;
-        html += `<table border=1 style="border-collapse:separate !important" cellspacing="10" id="tbl_old_evaluation" >`;
-        html +=     `<thead>`;
-        html +=         `<tr style="background-color: #21277B">`;
-        html +=             `<th style="text-align:center;width:55%;color:white;font-size:16px;">RESERVA CON</th>`;
-        html +=             `<th style="text-align:center;width:15%;color:white;font-size:16px;">CRÉDITOS</th>`;
-        html +=             `<th style="text-align:center;width:30%;color:white;font-size:16px;">FECHA</th>`;
-        html +=         `</tr>`;
-        html +=     `</thead>`;
-        html +=     `<body>`;
-                            html += `<tr>`;
-                            html +=     `<td style="width:55%;font-size:12px;">Sebastian Villamizar</td>`;
-                            html +=     `<td style="width:15%;font-size:12px;">1</td>`;
-                            html +=     `<td style="width:30%;font-size:12px;">Marzo 20, 2024</td>`;
-                            html += `</tr>`;
-        html +=     `</body>`;
-        html += `<table>`;
+        // =====================================================
 
-        Swal.fire({
-            html: html,
-            showCloseButton: false,
-            showConfirmButton: false,
-            showCancelButton: true,
-            cancelButtonText: 'GET ME BACK',
-            focusConfirm: false,
-            allowOutsideClick: false,
-            width: 500,
-            padding: '3em',
-            background: '#fff',
-            buttonsStyling: false,
-            buttons:{
-                cancelButton: {customClass:'swal2-cancel'}
-            }
-        });
-    }
+        function comprarCreditos() {
+            html = '';
+            html += `   <h3 class="gral-font margin-y">Comprar Créditos</h3>`;
+            html += `   {!! Form::open(['method' => 'POST', 'route' => ['estudiante.comprar_creditos'],'class'=>['form-horizontal form-bordered']]) !!}`;
+            html += `   @csrf`;
+            html += `       <div class="col-12">
+                                <div class="form-group d-flex align-items-center">
+                                    <label for="cantidad_creditos" class="form-label text-uppercase fs-1 w-100">Cargo</label>
+                                    <select name="cantidad_creditos" class="form-control select2 w-100" id="cantidad_creditos">
+                                        <option value="">Seleccione Paquete...</option>
+                                        <option value="5">Paquete 5 Créditos</option>
+                                        <option value="10">Paquete 10 Créditos</option>
+                                        <option value="15">Paquete 15 Créditos</option>
+                                        <option value="20">Paquete 20 Créditos</option>
+                                    </select>
+                                </div>
+                            </div>
+            `;
+            html += `       <div class="p-3">
+                                <button type="submit" class="text-white">Comprar Créditos</button>
+                            </div>
+            `;
+            html += `   {!! Form::close() !!}`;
 
-
-        
+            Swal.fire({
+                html: html,
+                showCloseButton: false,
+                showConfirmButton: false,
+                showCancelButton: true,
+                cancelButtonText: 'Regresar',
+                focusConfirm: false,
+                allowOutsideClick: false,
+                width: 500,
+                padding: '3em',
+                background: '#fff',
+                buttonsStyling: false,
+                buttons:{
+                    cancelButton: {customClass:'swal2-cancel'}
+                }
+            });
+        }
     </script>
 @endsection
