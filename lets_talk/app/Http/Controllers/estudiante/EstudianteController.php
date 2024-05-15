@@ -238,6 +238,7 @@ class EstudianteController extends Controller
                     DB::raw('COUNT(*) as cantidad')
                 )
                 ->where('id_estudiante', $idEstudiante)
+                ->where('id_estado', 7)
                 ->groupBy(DB::raw('DATE_FORMAT(FROM_UNIXTIME(fecha_credito), "%d-%m-%Y")'), 'paquete')
                 ->get();
 
