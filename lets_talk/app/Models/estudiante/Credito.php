@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\usuarios;
+namespace App\Models\estudiante;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,6 +18,8 @@ class Credito extends Model
        'id_estado',
        'id_estudiante',
        'id_instructor',
+       'id_trainer_agenda',
+       'paquete',
        'fecha_credito',
        'fecha_consumo_credito',
     ];

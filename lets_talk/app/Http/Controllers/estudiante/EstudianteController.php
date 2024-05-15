@@ -10,6 +10,7 @@ use App\Models\entrenador\DisponibilidadEntrenadores;
 use App\Models\entrenador\EventoAgendaEntrenador;
 use App\Http\Responses\administrador\DisponibilidadShow;
 use App\Http\Responses\estudiante\ReservarClase;
+use App\Http\Responses\estudiante\ComprarCreditos;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -280,6 +281,31 @@ class EstudianteController extends Controller
             // {
                 // return redirect()->to(route('home'));
                 return new ReservarClase();
+            // } else {
+            
+            //     $disponibilidadShow = new DisponibilidadShow();
+            //     return $disponibilidadShow->disponibilidadPorID($request);
+            // }
+
+        } catch (Exception $e) {
+            return response()->json("error_exception");
+        }
+    }
+
+    public function comprarCreditos(Request $request)
+    {
+        try {
+            // $adminCtrl = new AdministradorController();
+            // $sesion = $adminCtrl->validarVariablesSesion();
+    
+            // if(empty($sesion[0]) || is_null($sesion[0]) &&
+            //    empty($sesion[1]) || is_null($sesion[1]) &&
+            //    empty($sesion[2]) || is_null($sesion[2]) &&
+            //    empty($sesion[3]) || is_null($sesion[3]) &&
+            //    $sesion[2] != true)
+            // {
+                // return redirect()->to(route('home'));
+                return new ComprarCreditos();
             // } else {
             
             //     $disponibilidadShow = new DisponibilidadShow();
