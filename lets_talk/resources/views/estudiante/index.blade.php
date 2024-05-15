@@ -18,7 +18,7 @@
     </div>
 </div>
 <div class="row p-t-30">
-    <div class="col-xs-12 col-sm-12 col-md-12">
+    <div class="col-2">
         <div class="table-responsive">
             <table class="table table-striped table-bordered table-hover" id="tbl_reservas">
                 <thead>

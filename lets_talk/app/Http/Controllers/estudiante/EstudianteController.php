@@ -11,6 +11,7 @@ use App\Models\entrenador\EventoAgendaEntrenador;
 use App\Http\Responses\administrador\DisponibilidadShow;
 use App\Http\Responses\estudiante\ReservarClase;
 use App\Http\Responses\estudiante\ComprarCreditos;
+use App\Models\estudiante\Credito;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -218,7 +219,6 @@ class EstudianteController extends Controller
     public function misCreditos(Request $request)
     {
         try {
-            
             // $adminCtrl = new AdministradorController();
             // $sesion = $adminCtrl->validarVariablesSesion();
     
@@ -229,7 +229,28 @@ class EstudianteController extends Controller
             //    $sesion[2] != true)
             // {
                 // return redirect()->to(route('home'));
-                return view('estudiante.mis_creditos');
+
+                // $misCreditos = Credito::selectRaw(
+                //     'DATE(fecha_credito) as fecha_credito',
+                //     'paquete',
+                //     DB::raw('COUNT(*) as cantidad')
+                // )
+                // ->groupBy('paquete')
+                // // ->get();
+                // ->toSql();
+
+                $idEstudiante = session('usuario_id');
+
+                $misCreditos = Credito::select(
+                    DB::raw('DATE_FORMAT(FROM_UNIXTIME(fecha_credito), "%d-%m-%Y") as fecha_credito'),
+                    'paquete',
+                    DB::raw('COUNT(*) as cantidad')
+                )
+                ->where('id_estudiante', $idEstudiante)
+                ->groupBy(DB::raw('DATE_FORMAT(FROM_UNIXTIME(fecha_credito), "%d-%m-%Y")'),'paquete')
+                ->get();
+
+                return view('estudiante.mis_creditos', compact('misCreditos'));
             // } else {
             
             //     $disponibilidadShow = new DisponibilidadShow();
@@ -237,7 +258,8 @@ class EstudianteController extends Controller
             // }
 
         } catch (Exception $e) {
-            return response()->json("error_exception");
+            dd($e);
+            return response()->json(['error' => $e->getMessage()]);
         }
     }
     

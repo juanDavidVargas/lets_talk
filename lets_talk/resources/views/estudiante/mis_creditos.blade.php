@@ -26,17 +26,26 @@
 
     {{-- <hr class="border border-1 border-secondary p-0 rounded-0"> --}}
 
-    <div class="row border w-75 ms-auto me-auto mt-5 mb-5 p-5">
-        <div class="col-12 col-md-4">
-            fecha de la compra
-        </div>
-
-        <div class="col-12 col-md-4">
-            6 de marzo
-        </div>
-
-        <div class="col-12 col-md-4">
-            cantidad: 5
+    <div class="row border w-100 mt-5 mb-5 p-3">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover" id="tbl_reservas">
+                <thead>
+                    <tr class="header-table">
+                        <th>Fecha Compra</th>
+                        <th>Paquete</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($misCreditos as $credito)
+                        <tr>
+                            <td>{{$credito->fecha_credito}}</td>
+                            <td>{{$credito->paquete}}</td>
+                            <td>{{$credito->cantidad}}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
 
