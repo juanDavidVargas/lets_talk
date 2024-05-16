@@ -26,23 +26,24 @@
                         <th>Entrenador</th>
                         <th>Fecha</th>
                         <th>Horario</th>
-                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @php
-                        // dd($misSesiones);
-                    @endphp
-                    <tr>
-                        <td>Nombre del Entrenador</td>
-                        <td>March, 6TH</td>
-                        <td>00:00 HRS</td>
-                        <td>
-                        <a href="" class="btn btn-sm btn-info" title="Details" id="btn_details">
-                            
-                        </a>
-                        </td>
-                    </tr>
+                    {{-- @php
+                        dd($misSesiones);
+                    @endphp --}}
+
+                    @foreach ($misSesiones as $sesion)
+                        {{-- @php
+                            dd($sesion);
+                        @endphp --}}
+                        <tr>
+                            <td>{{$sesion->nombre_instructor}}</td>
+                            <td>{{$sesion->start_date}}</td>
+                            <td>{{$sesion->start_time}}</td>
+                        </tr>
+                    @endforeach
+
                 </tbody>
             </table>
         </div>

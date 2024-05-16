@@ -349,19 +349,37 @@ class EstudianteController extends Controller
             //    $sesion[2] != true)
             // {
                 // return redirect()->to(route('home'));
-                $misSesiones = Reserva::leftjoin('evento_agenda_entrenador','evento_agenda_entrenador.id','=','reservas.id_trainer_horario')
-                ->leftjoin('usuarios as estudiante','estudiante.id_user','=','reservas.id_estudiante')
+
+                // select
+                //     reservas.id_estudiante,
+                //     reservas.id_instructor,
+                //     CONCAT(instructor.nombres, ' ', instructor.apellidos) AS nombre_instructor,
+                //     reservas.id_trainer_horario,
+                //     start_date,
+                //     start_time
+                // from
+                //     reservas
+                    
+                // left join evento_agenda_entrenador on evento_agenda_entrenador.id = reservas.id_trainer_horario
+                // /*left join usuarios as estudiante on estudiante.id_user = reservas.id_estudiante*/
+                // left join usuarios as instructor on instructor.id_user = reservas.id_instructor
+
+                // where
+                //     id_estudiante = 14
+                    
+                return Reserva::leftjoin('evento_agenda_entrenador','evento_agenda_entrenador.id','=','reservas.id_trainer_horario')
                 ->leftjoin('usuarios as instructor','instructor.id_user','=','reservas.id_instructor')
                 ->select(
+                    'reservas.id_estudiante',
+                    'reservas.id_instructor',
                     DB::raw("CONCAT(instructor.nombres, ' ', instructor.apellidos) AS nombre_instructor"),
+                    'reservas.id_trainer_horario',
+                    'start_date',
+                    'start_time'
                 )
                 ->where('id_estudiante', $idEstudiante)
+                ->orderBy('start_date', 'desc')
                 ->get();
-                // ->toSql();
-
-                // dd($misSesiones);
-
-                return $misSesiones;
             // } else {
             
             //     $disponibilidadShow = new DisponibilidadShow();
