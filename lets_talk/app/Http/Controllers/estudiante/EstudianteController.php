@@ -12,6 +12,7 @@ use App\Http\Responses\administrador\DisponibilidadShow;
 use App\Http\Responses\estudiante\ReservarClase;
 use App\Http\Responses\estudiante\ComprarCreditos;
 use App\Models\estudiante\Credito;
+use App\Models\usuarios\Reserva;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -42,7 +43,10 @@ class EstudianteController extends Controller
             if($checkConnection->getName() == "database_connection") {
                 return view('database_connection');
             } else {
-                return view($vista);
+                $idEstudiante = session('usuario_id');
+                $misSesiones = $this->misSesiones($idEstudiante);
+
+                return view($vista, compact('misSesiones'));
             }
         }
     }
@@ -321,6 +325,43 @@ class EstudianteController extends Controller
             // {
                 // return redirect()->to(route('home'));
                 return new ComprarCreditos();
+            // } else {
+            
+            //     $disponibilidadShow = new DisponibilidadShow();
+            //     return $disponibilidadShow->disponibilidadPorID($request);
+            // }
+
+        } catch (Exception $e) {
+            return response()->json("error_exception");
+        }
+    }
+
+    public function misSesiones($idEstudiante)
+    {
+        try {
+            // $adminCtrl = new AdministradorController();
+            // $sesion = $adminCtrl->validarVariablesSesion();
+    
+            // if(empty($sesion[0]) || is_null($sesion[0]) &&
+            //    empty($sesion[1]) || is_null($sesion[1]) &&
+            //    empty($sesion[2]) || is_null($sesion[2]) &&
+            //    empty($sesion[3]) || is_null($sesion[3]) &&
+            //    $sesion[2] != true)
+            // {
+                // return redirect()->to(route('home'));
+                $misSesiones = Reserva::leftjoin('evento_agenda_entrenador','evento_agenda_entrenador.id','=','reservas.id_trainer_horario')
+                ->leftjoin('usuarios as estudiante','estudiante.id_user','=','reservas.id_estudiante')
+                ->leftjoin('usuarios as instructor','instructor.id_user','=','reservas.id_instructor')
+                ->select(
+                    DB::raw("CONCAT(instructor.nombres, ' ', instructor.apellidos) AS nombre_instructor"),
+                )
+                ->where('id_estudiante', $idEstudiante)
+                ->get();
+                // ->toSql();
+
+                // dd($misSesiones);
+
+                return $misSesiones;
             // } else {
             
             //     $disponibilidadShow = new DisponibilidadShow();

@@ -30,6 +30,9 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                        // dd($misSesiones);
+                    @endphp
                     <tr>
                         <td>Nombre del Entrenador</td>
                         <td>March, 6TH</td>
