@@ -130,13 +130,13 @@
                             'success'
                         );
                         return;
-                    } else if (response == "clase_no_reservada") {
+                    } else if (response == "clase_ya_reservada") {
                         $("#loaderGif").hide();
                         $("#loaderGif").addClass('ocultar');
 
                         Swal.fire(
                             'Info!',
-                            'Clase No Reservada!',
+                            'Ya realizaste reserva de esta clase en este horario!',
                             'error'
                         );
                         return;

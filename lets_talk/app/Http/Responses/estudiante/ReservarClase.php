@@ -17,23 +17,30 @@ class ReservarClase implements Responsable
 
         DB::connection('mysql')->beginTransaction();
 
-        try {
-            $reservarClaseCreate = Reserva::create([
-                'id_estudiante' => $idEstudiante,
-                'id_instructor' => $idInstructor,
-                'id_trainer_horario' => $idHorario
-            ]);
+        $queryClaseReservada = Reserva::where('id_estudiante',$idEstudiante)
+            ->where('id_instructor',$idInstructor)
+            ->where('id_trainer_horario',$idHorario)
+            ->first();
 
-            if($reservarClaseCreate) {
-                DB::connection('mysql')->commit();
-                return response()->json("clase_reservada");
-            } else {
-                DB::connection('mysql')->rollback();
-                return response()->json("clase_no_reservada");
-            }
-        } catch (Exception $e) {
+        if (isset($queryClaseReservada) && !is_null($queryClaseReservada) && !empty($queryClaseReservada)) {
             DB::connection('mysql')->rollback();
-            return response()->json("error");
+            return response()->json("clase_ya_reservada");
+        } else {
+            try {
+                $reservarClaseCreate = Reserva::create([
+                    'id_estudiante' => $idEstudiante,
+                    'id_instructor' => $idInstructor,
+                    'id_trainer_horario' => $idHorario
+                ]);
+    
+                if($reservarClaseCreate) {
+                    DB::connection('mysql')->commit();
+                    return response()->json("clase_reservada");
+                }
+            } catch (Exception $e) {
+                DB::connection('mysql')->rollback();
+                return response()->json("error");
+            }
         }
     }
 }
