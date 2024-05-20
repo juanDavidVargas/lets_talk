@@ -29,21 +29,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- @php
-                        dd($misSesiones);
-                    @endphp --}}
-
                     @foreach ($misSesiones as $sesion)
-                        {{-- @php
-                            dd($sesion);
-                        @endphp --}}
                         <tr>
                             <td>{{$sesion->nombre_instructor}}</td>
                             <td>{{$sesion->start_date}}</td>
                             <td>{{$sesion->start_time}}</td>
                         </tr>
                     @endforeach
-
                 </tbody>
             </table>
         </div>

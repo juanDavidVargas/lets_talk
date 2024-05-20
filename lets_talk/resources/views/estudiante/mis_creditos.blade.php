@@ -24,8 +24,6 @@
         </div>
     </div>
 
-    {{-- <hr class="border border-1 border-secondary p-0 rounded-0"> --}}
-
     <div class="row border w-100 mt-5 mb-5 p-3">
         <div class="table-responsive">
             <table class="table table-striped table-bordered table-hover" id="tbl_reservas">
