@@ -24,3 +24,14 @@ https://trello.com/b/U9wyz7VG/lets-talk
 Link instrucciones DataTable:
 https://www.itsolutionstuff.com/post/laravel-7-yajra-datatables-exampleexample.html
 
+===============================================================================================
+
+sebasletstalk@gmail.com
+Letstalk20052024+
+
+Crear ID de cliente de OAuth
+letstalkmeet
+
+Google Cloud Platfform Console
+https://console.cloud.google.com/apis/dashboard?authuser=6&hl=es&project=letstalkmeet-423920
+
