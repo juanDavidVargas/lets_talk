@@ -69,7 +69,7 @@ class EstudianteShow implements Responsable
 
         } catch (Exception $e) {
             alert()->error('Error', 'An error has occurred, try again, if the problem persists contact support.');
-            return redirect()->to(rourte('home'));
+            return redirect()->to(route('home'));
         }
     }
 }

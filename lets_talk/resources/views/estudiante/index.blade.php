@@ -26,20 +26,16 @@
                         <th>Entrenador</th>
                         <th>Fecha</th>
                         <th>Horario</th>
-                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Nombre del Entrenador</td>
-                        <td>March, 6TH</td>
-                        <td>00:00 HRS</td>
-                        <td>
-                        <a href="" class="btn btn-sm btn-info" title="Details" id="btn_details">
-                            
-                        </a>
-                        </td>
-                    </tr>
+                    @foreach ($misSesiones as $sesion)
+                        <tr>
+                            <td>{{$sesion->nombre_instructor}}</td>
+                            <td>{{$sesion->start_date}}</td>
+                            <td>{{$sesion->start_time}}</td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>

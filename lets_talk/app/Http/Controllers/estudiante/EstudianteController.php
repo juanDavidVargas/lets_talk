@@ -12,6 +12,7 @@ use App\Http\Responses\administrador\DisponibilidadShow;
 use App\Http\Responses\estudiante\ReservarClase;
 use App\Http\Responses\estudiante\ComprarCreditos;
 use App\Models\estudiante\Credito;
+use App\Models\usuarios\Reserva;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -42,7 +43,10 @@ class EstudianteController extends Controller
             if($checkConnection->getName() == "database_connection") {
                 return view('database_connection');
             } else {
-                return view($vista);
+                $idEstudiante = session('usuario_id');
+                $misSesiones = $this->misSesiones($idEstudiante);
+
+                return view($vista, compact('misSesiones'));
             }
         }
     }
@@ -238,6 +242,7 @@ class EstudianteController extends Controller
                     DB::raw('COUNT(*) as cantidad')
                 )
                 ->where('id_estudiante', $idEstudiante)
+                ->where('id_estado', 7)
                 ->groupBy(DB::raw('DATE_FORMAT(FROM_UNIXTIME(fecha_credito), "%d-%m-%Y")'), 'paquete')
                 ->get();
 
@@ -320,6 +325,61 @@ class EstudianteController extends Controller
             // {
                 // return redirect()->to(route('home'));
                 return new ComprarCreditos();
+            // } else {
+            
+            //     $disponibilidadShow = new DisponibilidadShow();
+            //     return $disponibilidadShow->disponibilidadPorID($request);
+            // }
+
+        } catch (Exception $e) {
+            return response()->json("error_exception");
+        }
+    }
+
+    public function misSesiones($idEstudiante)
+    {
+        try {
+            // $adminCtrl = new AdministradorController();
+            // $sesion = $adminCtrl->validarVariablesSesion();
+    
+            // if(empty($sesion[0]) || is_null($sesion[0]) &&
+            //    empty($sesion[1]) || is_null($sesion[1]) &&
+            //    empty($sesion[2]) || is_null($sesion[2]) &&
+            //    empty($sesion[3]) || is_null($sesion[3]) &&
+            //    $sesion[2] != true)
+            // {
+                // return redirect()->to(route('home'));
+
+                // select
+                //     reservas.id_estudiante,
+                //     reservas.id_instructor,
+                //     CONCAT(instructor.nombres, ' ', instructor.apellidos) AS nombre_instructor,
+                //     reservas.id_trainer_horario,
+                //     start_date,
+                //     start_time
+                // from
+                //     reservas
+                    
+                // left join evento_agenda_entrenador on evento_agenda_entrenador.id = reservas.id_trainer_horario
+                // /*left join usuarios as estudiante on estudiante.id_user = reservas.id_estudiante*/
+                // left join usuarios as instructor on instructor.id_user = reservas.id_instructor
+
+                // where
+                //     id_estudiante = 14
+                    
+                return Reserva::leftjoin('evento_agenda_entrenador','evento_agenda_entrenador.id','=','reservas.id_trainer_horario')
+                ->leftjoin('usuarios as instructor','instructor.id_user','=','reservas.id_instructor')
+                ->select(
+                    'reservas.id_estudiante',
+                    'reservas.id_instructor',
+                    DB::raw("CONCAT(instructor.nombres, ' ', instructor.apellidos) AS nombre_instructor"),
+                    'reservas.id_trainer_horario',
+                    'start_date',
+                    'start_time'
+                )
+                ->where('id_estudiante', $idEstudiante)
+                ->orderBy('start_date', 'desc')
+                ->get();
             // } else {
             
             //     $disponibilidadShow = new DisponibilidadShow();

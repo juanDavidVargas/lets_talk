@@ -13,7 +13,8 @@ class ComprarCreditos implements Responsable
     {
         $idEstudiante = session('usuario_id');
         $cantidadCreditos = intval(request('cantidad_creditos', null));
-        $paqueteActual = Credito::max('paquete') ?? 0;
+        $paqueteActual = Credito::where('id_estudiante', $idEstudiante)->max('paquete') ?? 0;
+
 
         DB::connection('mysql')->beginTransaction();
         
