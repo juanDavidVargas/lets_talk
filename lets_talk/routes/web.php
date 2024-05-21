@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+// use App\Http\Controllers\google_meet\GoogleMeetController;
 
 Route::get('/', function ()
  {
@@ -66,5 +67,19 @@ Route::post('comprar_creditos', 'estudiante\EstudianteController@comprarCreditos
 // Rutas FOOTER
 Route::get('about_us', 'comunes\ComunController@aboutUs')->name('about_us');
 Route::get('services', 'comunes\ComunController@services')->name('services');
+
+
+Route::resource('google_meet', 'google_meet\GoogleMeetController');
+// Route::get('auth_google', 'google_meet\GoogleMeetController@redirectToGoogle')->name('auth_google');
+// Route::get('auth_google_callback', 'google_meet\GoogleMeetController@handleGoogleCallback')->name('auth_google_callback');
+// Route::get('create_meet', 'google_meet\GoogleMeetController@createMeet')->name('create_meet');
+
+Route::get('/auth/google', 'google_meet\GoogleMeetController@redirectToGoogle')->name('auth.google');
+Route::get('/auth/google/callback', 'google_meet\GoogleMeetController@handleGoogleCallback');
+Route::get('/create-meet', 'google_meet\GoogleMeetController@createMeet')->name('createMeet');
+
+// Route::get('/auth/google', [GoogleMeetController::class, 'redirectToGoogle'])->name('auth.google');
+// Route::get('/auth/google/callback', [GoogleMeetController::class, 'handleGoogleCallback']);
+// Route::get('/create-meet', [GoogleMeetController::class, 'createMeet'])->name('createMeet');
 
 
