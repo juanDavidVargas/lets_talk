@@ -3,13 +3,19 @@
 use Illuminate\Support\Facades\Route;
 // use App\Http\Controllers\google_meet\GoogleMeetController;
 
+// ============================================================
+
 Route::get('/', function ()
  {
     return view('inicio_sesion.login');
 })->name('home');
 
+// ============================================================
+
 // RUTA COMPROBAR CONEXIÓN BASE DE DATOS
 Route::get('check_database_connection', 'inicio_sesion\LoginController@checkDatabaseConnection')->name('check_database_connection');
+
+// ============================================================
 
 // Rutas Login
 Route::resource('login', 'inicio_sesion\LoginController');
@@ -21,6 +27,8 @@ Route::post('recovery_password_email', 'inicio_sesion\LoginController@recoveryPa
 Route::get('recovery_password_link/{id}', 'inicio_sesion\LoginController@recoveryPasswordLink')->name('recovery_password_link');
 Route::post('recovery_password_post', 'inicio_sesion\LoginController@recoveryPasswordPost')->name('recovery_password_post');
 Route::get('logout', 'inicio_sesion\LoginController@logout')->name('logout');
+
+// ============================================================
 
 // Rutas ADMINISTRADOR
 Route::resource('administrador', 'admin\AdministradorController');
@@ -42,6 +50,8 @@ Route::post('inactivar_nivel', 'admin\AdministradorController@inactivarNivel')->
 Route::post('activar_nivel', 'admin\AdministradorController@activarNivel')->name('activar_nivel');
 Route::post('consultar_nivel', 'admin\AdministradorController@consultarNivel')->name('consultar_nivel'); // Se consulta para la edición
 
+// ============================================================
+
 // Rutas ENTRENADOR
 Route::resource('trainer', 'entrenador\EntrenadorController');
 Route::post('cargar_eventos_entrenador', 'entrenador\EntrenadorController@cargarEventos')->name('cargar_eventos_entrenador');
@@ -54,6 +64,8 @@ Route::post('actualizacion_masiva_diponibilidades', 'entrenador\EntrenadorContro
 Route::get('student_resume', 'entrenador\EntrenadorController@studentResume')->name('student_resume');
 Route::post('estudiante_hoja_vida', 'entrenador\EntrenadorController@estudianteHojaVida')->name('estudiante_hoja_vida');
 
+// ============================================================
+
 // Rutas ESTUDIANTE
 Route::resource('estudiante', 'estudiante\EstudianteController');
 // Route::get('disponibilidad', 'estudiante\EstudianteController@disponibilidad')->name('estudiante.disponibilidad');
@@ -64,9 +76,19 @@ Route::get('creditos_disponibles', 'estudiante\EstudianteController@creditosDisp
 Route::post('reservar_clase', 'estudiante\EstudianteController@reservarClase')->name('estudiante.reservar_clase');
 Route::post('comprar_creditos', 'estudiante\EstudianteController@comprarCreditos')->name('estudiante.comprar_creditos');
 
+Route::get('/auth/google', 'estudiante\EstudianteController@redirectToGoogle')->name('auth.google');
+Route::get('/auth/google/callback', 'estudiante\EstudianteController@handleGoogleCallback');
+Route::get('/create-meet', 'estudiante\EstudianteController@createMeet')->name('createMeet');
+
+// ============================================================
+
+
+
 // Rutas FOOTER
 Route::get('about_us', 'comunes\ComunController@aboutUs')->name('about_us');
 Route::get('services', 'comunes\ComunController@services')->name('services');
+
+// ============================================================
 
 
 Route::resource('google_meet', 'google_meet\GoogleMeetController');
@@ -74,12 +96,14 @@ Route::resource('google_meet', 'google_meet\GoogleMeetController');
 // Route::get('auth_google_callback', 'google_meet\GoogleMeetController@handleGoogleCallback')->name('auth_google_callback');
 // Route::get('create_meet', 'google_meet\GoogleMeetController@createMeet')->name('create_meet');
 
-Route::get('/auth/google', 'google_meet\GoogleMeetController@redirectToGoogle')->name('auth.google');
-Route::get('/auth/google/callback', 'google_meet\GoogleMeetController@handleGoogleCallback');
-Route::get('/create-meet', 'google_meet\GoogleMeetController@createMeet')->name('createMeet');
+// Route::get('/auth/google', 'google_meet\GoogleMeetController@redirectToGoogle')->name('auth.google');
+// Route::get('/auth/google/callback', 'google_meet\GoogleMeetController@handleGoogleCallback');
+// Route::get('/create-meet', 'google_meet\GoogleMeetController@createMeet')->name('createMeet');
 
 // Route::get('/auth/google', [GoogleMeetController::class, 'redirectToGoogle'])->name('auth.google');
 // Route::get('/auth/google/callback', [GoogleMeetController::class, 'handleGoogleCallback']);
 // Route::get('/create-meet', [GoogleMeetController::class, 'createMeet'])->name('createMeet');
+
+// ============================================================
 
 
