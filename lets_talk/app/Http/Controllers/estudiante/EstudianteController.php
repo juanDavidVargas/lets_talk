@@ -397,6 +397,12 @@ class EstudianteController extends Controller
     
     // ==============================================================
 
+    /*
+    Redirige al usuario a la página de inicio de sesión de Google para autenticarse y autorizar a tu aplicación a acceder a sus datos de Google Calendar.
+    1. Obtiene una instancia de Google_Client usando el método getGoogleClient().
+    2. Llama a createAuthUrl() en el cliente de Google, que genera la URL de autenticación de Google.
+    3. Redirige al usuario a esta URL, donde Google le pedirá que inicie sesión y autorice a tu aplicación.
+    */
     public function redirectToGoogle()
     {
         $client = $this->getGoogleClient();
@@ -404,6 +410,15 @@ class EstudianteController extends Controller
     }
 
     // ==============================================================
+
+    /*
+    Maneja la redirección de vuelta desde Google después de que el usuario haya autenticado y autorizado la aplicación. Intercambia el código de autorización por un token de acceso y lo guarda en la sesión.
+    1. Obtiene una instancia de Google_Client usando el método getGoogleClient().
+    2. Llama a authenticate() en el cliente de Google con el código de autorización recibido en la solicitud (obtenido de request->input('code')).
+    3. Obtiene el token de acceso llamando a getAccessToken().
+    4. Guarda el token de acceso en la sesión usando Session::put('google_access_token', $accessToken).
+    5. Redirige al usuario a la ruta createMeet para crear una reunión en Google Meet.
+    */
 
     public function handleGoogleCallback(Request $request)
     {
@@ -417,6 +432,16 @@ class EstudianteController extends Controller
     }
 
     // ==============================================================
+
+    /*
+    Crea una nueva reunión en Google Meet y proporciona el enlace para unirse a la reunión.
+    1. Obtiene una instancia de Google_Client usando el método getGoogleClient().
+    2. Establece el token de acceso en el cliente de Google usando setAccessToken() con el token guardado en la sesión.
+    3. Crea una instancia de Google_Service_Calendar con el cliente autenticado.
+    4. Define un evento de Google Calendar, incluyendo los detalles de la reunión (resumen, hora de inicio y fin, y datos de la conferencia para crear una reunión de Google Meet).
+    5. Inserta el evento en el calendario primario (primary) usando events->insert().
+    6. Imprime el enlace para unirse a la reunión (getHangoutLink()).
+    */
 
     public function createMeet()
     {
@@ -444,6 +469,16 @@ class EstudianteController extends Controller
     }
 
     // ==============================================================
+
+    /*
+    Configura y devuelve una instancia de Google_Client con las credenciales y configuraciones necesarias para interactuar con las APIs de Google.
+    1. Crea una nueva instancia de Google_Client.
+    2. Configura el client_id, client_secret y redirect_uri usando las variables de entorno (env()).
+    3. Establece el alcance necesario para acceder a los eventos del calendario (Google_Service_Calendar::CALENDAR_EVENTS).
+    4. Configura el tipo de acceso como offline para obtener un token de actualización.
+    5. Establece el prompt como consent para asegurarse de que se solicita el consentimiento del usuario cada vez que se autentica.
+    3. Devuelve la instancia de Google_Client configurada.
+    */
 
     private function getGoogleClient()
     {
