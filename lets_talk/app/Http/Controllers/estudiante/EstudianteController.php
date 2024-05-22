@@ -443,17 +443,35 @@ class EstudianteController extends Controller
     6. Imprime el enlace para unirse a la reunión (getHangoutLink()).
     */
 
-    public function createMeet()
+    public function createMeet($fechaClase, $horaClase)
     {
         $client = $this->getGoogleClient();
         $client->setAccessToken(Session::get('google_access_token'));
 
         $service = new Google_Service_Calendar($client);
 
+        // Crear la fecha y hora de inicio y fin del evento
+        // $startDateTime = $fechaClase . 'T' . $horaClase . ':00-07:00'; // Ajusta la zona horaria según corresponda
+        // $endDateTime = Carbon::parse($startDateTime)->addHour()->format('Y-m-d\TH:i:sP');
+
+        // ===========================================
+
+        $startDateTime = Carbon::createFromFormat('Y-m-d H:i', $fechaClase . ' ' . $horaClase, 'America/Bogota');
+        $endDateTime = $startDateTime->copy()->addHour();
+
+        $timeZone = ['timeZone' => 'America/Bogota'];
+
+        // ===========================================
+
         $event = new Google_Service_Calendar_Event([
             'summary' => 'Google Meet Meeting',
-            'start' => ['dateTime' => '2024-05-25T10:00:00-07:00'],
-            'end' => ['dateTime' => '2024-05-25T11:00:00-07:00'],
+            'start' => ['dateTime' => $startDateTime->toRfc3339String(), $timeZone],
+            'end' => ['dateTime' => $endDateTime->toRfc3339String(), $timeZone],
+
+            // 'start' => ['dateTime' => '2024-05-25T10:00:00-07:00'],
+            // 'start' => ['dateTime' => $startDateTime],
+            // 'end' => ['dateTime' => '2024-05-25T11:00:00-07:00'],
+            // 'end' => ['dateTime' => $endDateTime],
             'conferenceData' => [
                 'createRequest' => [
                     'conferenceSolutionKey' => ['type' => 'hangoutsMeet'],
@@ -467,6 +485,56 @@ class EstudianteController extends Controller
 
         echo 'Join the meeting at: ' . $event->getHangoutLink();
     }
+
+    // public function createMeet($fechaClase, $horaClase)
+    // {
+    //     $client = $this->getGoogleClient();
+
+    //     // Obtener el token de acceso de la sesión
+    //     $accessToken = Session::get('google_access_token');
+
+    //     // Verificar si el token de acceso está presente y es válido
+    //     if (is_null($accessToken) || empty($accessToken)) {
+    //         return response()->json(['error' => 'Token de acceso no está presente en la sesión.'], 401);
+    //     }
+
+    //     // Decodificar el token para asegurarse de que es un JSON válido
+    //     try {
+    //         $accessTokenArray = json_decode($accessToken, true);
+
+    //         // Si json_decode falla, lanzará una excepción
+    //         if (json_last_error() !== JSON_ERROR_NONE) {
+    //             throw new \InvalidArgumentException('Token de acceso no es un JSON válido.');
+    //         }
+
+    //         $client->setAccessToken($accessTokenArray);
+    //     } catch (\Exception $e) {
+    //         return response()->json(['error' => 'Token de acceso no válido: ' . $e->getMessage()], 400);
+    //     }
+
+    //     $service = new Google_Service_Calendar($client);
+
+    //     // Crear la fecha y hora de inicio y fin del evento en la zona horaria de Bogotá
+    //     $startDateTime = Carbon::createFromFormat('Y-m-d H:i', $fechaClase . ' ' . $horaClase, 'America/Bogota');
+    //     $endDateTime = $startDateTime->copy()->addHour();
+
+    //     $event = new Google_Service_Calendar_Event([
+    //         'summary' => 'Google Meet Meeting',
+    //         'start' => ['dateTime' => $startDateTime->toRfc3339String(), 'timeZone' => 'America/Bogota'],
+    //         'end' => ['dateTime' => $endDateTime->toRfc3339String(), 'timeZone' => 'America/Bogota'],
+    //         'conferenceData' => [
+    //             'createRequest' => [
+    //                 'conferenceSolutionKey' => ['type' => 'hangoutsMeet'],
+    //                 'requestId' => 'some-random-string'
+    //             ]
+    //         ]
+    //     ]);
+
+    //     $calendarId = 'primary';
+    //     $event = $service->events->insert($calendarId, $event, ['conferenceDataVersion' => 1]);
+
+    //     return response()->json(['message' => 'Join the meeting at: ' . $event->getHangoutLink()]);
+    // }
 
     // ==============================================================
 

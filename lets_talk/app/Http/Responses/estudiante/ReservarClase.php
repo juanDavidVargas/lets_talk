@@ -9,6 +9,7 @@ use App\Models\usuarios\Reserva;
 use App\Models\estudiante\Credito;
 use App\Models\entrenador\EventoAgendaEntrenador;
 use Carbon\Carbon;
+use App\Http\Controllers\estudiante\EstudianteController;
 
 class ReservarClase implements Responsable
 {
@@ -69,6 +70,12 @@ class ReservarClase implements Responsable
                             ]
                         );
                         DB::connection('mysql')->commit();
+
+                        // Crear una instancia del controlador
+                        $estudianteController = new EstudianteController();
+
+                        // Llamar al método createMeet
+                        $estudianteController->createMeet($fechaClase, $horaClase);
 
                         return response()->json("clase_reservada");
                     }
