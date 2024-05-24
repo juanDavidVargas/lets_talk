@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Session;
 use Google_Client;
 use Google_Service_Calendar;
 use Google_Service_Calendar_Event;
+use Carbon\Carbon;
 
 class EstudianteController extends Controller
 {
@@ -443,8 +444,11 @@ class EstudianteController extends Controller
     6. Imprime el enlace para unirse a la reunión (getHangoutLink()).
     */
 
+    // public function createMeet()
     public function createMeet($fechaClase, $horaClase)
     {
+        // dd($fechaClase, $horaClase);
+
         $client = $this->getGoogleClient();
         $client->setAccessToken(Session::get('google_access_token'));
 
@@ -456,21 +460,32 @@ class EstudianteController extends Controller
 
         // ===========================================
 
-        $startDateTime = Carbon::createFromFormat('Y-m-d H:i', $fechaClase . ' ' . $horaClase, 'America/Bogota');
-        $endDateTime = $startDateTime->copy()->addHour();
+        // $startDateTime = Carbon::createFromFormat('Y-m-d H:i', $fechaClase . ' ' . $horaClase, 'America/Bogota');
+        // $endDateTime = $startDateTime->copy()->addHour();
 
-        $timeZone = ['timeZone' => 'America/Bogota'];
+        // $startDateTime = "2024-04-30";
+        // $endDateTime = "18:00";
+
+        // dd($startDateTime);
+        // dd($endDateTime);
+
+        $timeZone = 'America/Bogota';
+
+        $startDateTime = Carbon::createFromFormat('Y-m-d H:i', $fechaClase . ' ' . $horaClase, $timeZone);
+        // $startDateTime = $fechaClase . 'T' . $horaClase . ':00-07:00';
+        $endDateTime = $startDateTime->copy()->addMinutes(30);
 
         // ===========================================
 
         $event = new Google_Service_Calendar_Event([
             'summary' => 'Google Meet Meeting',
-            'start' => ['dateTime' => $startDateTime->toRfc3339String(), $timeZone],
-            'end' => ['dateTime' => $endDateTime->toRfc3339String(), $timeZone],
+            'start' => ['dateTime' => $startDateTime->toRfc3339String(), 'timeZone' => $timeZone],
+            'end' => ['dateTime' => $endDateTime->toRfc3339String(), 'timeZone' => $timeZone],
 
-            // 'start' => ['dateTime' => '2024-05-25T10:00:00-07:00'],
+            // 'start' => ['dateTime' => '2024-05-25T18:00:00-05:00'],
+            // 'end' => ['dateTime' => '2024-05-25T18:30:00-05:00'],
+
             // 'start' => ['dateTime' => $startDateTime],
-            // 'end' => ['dateTime' => '2024-05-25T11:00:00-07:00'],
             // 'end' => ['dateTime' => $endDateTime],
             'conferenceData' => [
                 'createRequest' => [
