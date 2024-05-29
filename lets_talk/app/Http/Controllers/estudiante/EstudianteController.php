@@ -15,10 +15,10 @@ use App\Models\estudiante\Credito;
 use App\Models\usuarios\Reserva;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
 use Google_Client;
 use Google_Service_Calendar;
 use Google_Service_Calendar_Event;
+use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
 
 class EstudianteController extends Controller
@@ -146,7 +146,6 @@ class EstudianteController extends Controller
             if($checkConnection->getName() == "database_connection") {
                 return view('database_connection');
             } else {
-                
                 $disponibilidadEntrenadores = EventoAgendaEntrenador::leftjoin('usuarios','usuarios.id_user','=','evento_agenda_entrenador.id_instructor')
                             ->select('evento_agenda_entrenador.id as id_evento',
                                 'evento_agenda_entrenador.id_instructor',
@@ -399,161 +398,6 @@ class EstudianteController extends Controller
     // ==============================================================
 
     /*
-    Redirige al usuario a la página de inicio de sesión de Google para autenticarse y autorizar a tu aplicación a acceder a sus datos de Google Calendar.
-    1. Obtiene una instancia de Google_Client usando el método getGoogleClient().
-    2. Llama a createAuthUrl() en el cliente de Google, que genera la URL de autenticación de Google.
-    3. Redirige al usuario a esta URL, donde Google le pedirá que inicie sesión y autorice a tu aplicación.
-    */
-    public function redirectToGoogle()
-    {
-        $client = $this->getGoogleClient();
-        return redirect($client->createAuthUrl());
-    }
-
-    // ==============================================================
-
-    /*
-    Maneja la redirección de vuelta desde Google después de que el usuario haya autenticado y autorizado la aplicación. Intercambia el código de autorización por un token de acceso y lo guarda en la sesión.
-    1. Obtiene una instancia de Google_Client usando el método getGoogleClient().
-    2. Llama a authenticate() en el cliente de Google con el código de autorización recibido en la solicitud (obtenido de request->input('code')).
-    3. Obtiene el token de acceso llamando a getAccessToken().
-    4. Guarda el token de acceso en la sesión usando Session::put('google_access_token', $accessToken).
-    5. Redirige al usuario a la ruta createMeet para crear una reunión en Google Meet.
-    */
-
-    public function handleGoogleCallback(Request $request)
-    {
-        $client = $this->getGoogleClient();
-        $client->authenticate($request->input('code'));
-        $accessToken = $client->getAccessToken();
-
-        Session::put('google_access_token', $accessToken);
-
-        return redirect()->route('createMeet');
-    }
-
-    // ==============================================================
-
-    /*
-    Crea una nueva reunión en Google Meet y proporciona el enlace para unirse a la reunión.
-    1. Obtiene una instancia de Google_Client usando el método getGoogleClient().
-    2. Establece el token de acceso en el cliente de Google usando setAccessToken() con el token guardado en la sesión.
-    3. Crea una instancia de Google_Service_Calendar con el cliente autenticado.
-    4. Define un evento de Google Calendar, incluyendo los detalles de la reunión (resumen, hora de inicio y fin, y datos de la conferencia para crear una reunión de Google Meet).
-    5. Inserta el evento en el calendario primario (primary) usando events->insert().
-    6. Imprime el enlace para unirse a la reunión (getHangoutLink()).
-    */
-
-    // public function createMeet()
-    public function createMeet($fechaClase, $horaClase)
-    {
-        // dd($fechaClase, $horaClase);
-
-        $client = $this->getGoogleClient();
-        $client->setAccessToken(Session::get('google_access_token'));
-
-        $service = new Google_Service_Calendar($client);
-
-        // Crear la fecha y hora de inicio y fin del evento
-        // $startDateTime = $fechaClase . 'T' . $horaClase . ':00-07:00'; // Ajusta la zona horaria según corresponda
-        // $endDateTime = Carbon::parse($startDateTime)->addHour()->format('Y-m-d\TH:i:sP');
-
-        // ===========================================
-
-        // $startDateTime = Carbon::createFromFormat('Y-m-d H:i', $fechaClase . ' ' . $horaClase, 'America/Bogota');
-        // $endDateTime = $startDateTime->copy()->addHour();
-
-        // $startDateTime = "2024-04-30";
-        // $endDateTime = "18:00";
-
-        // dd($startDateTime);
-        // dd($endDateTime);
-
-        $timeZone = 'America/Bogota';
-
-        $startDateTime = Carbon::createFromFormat('Y-m-d H:i', $fechaClase . ' ' . $horaClase, $timeZone);
-        // $startDateTime = $fechaClase . 'T' . $horaClase . ':00-07:00';
-        $endDateTime = $startDateTime->copy()->addMinutes(30);
-
-        // ===========================================
-
-        $event = new Google_Service_Calendar_Event([
-            'summary' => 'Google Meet Meeting',
-            'start' => ['dateTime' => $startDateTime->toRfc3339String(), 'timeZone' => $timeZone],
-            'end' => ['dateTime' => $endDateTime->toRfc3339String(), 'timeZone' => $timeZone],
-
-            // 'start' => ['dateTime' => '2024-05-25T18:00:00-05:00'],
-            // 'end' => ['dateTime' => '2024-05-25T18:30:00-05:00'],
-
-            // 'start' => ['dateTime' => $startDateTime],
-            // 'end' => ['dateTime' => $endDateTime],
-            'conferenceData' => [
-                'createRequest' => [
-                    'conferenceSolutionKey' => ['type' => 'hangoutsMeet'],
-                    'requestId' => 'some-random-string'
-                ]
-            ]
-        ]);
-
-        $calendarId = 'primary';
-        $event = $service->events->insert($calendarId, $event, ['conferenceDataVersion' => 1]);
-
-        echo 'Join the meeting at: ' . $event->getHangoutLink();
-    }
-
-    // public function createMeet($fechaClase, $horaClase)
-    // {
-    //     $client = $this->getGoogleClient();
-
-    //     // Obtener el token de acceso de la sesión
-    //     $accessToken = Session::get('google_access_token');
-
-    //     // Verificar si el token de acceso está presente y es válido
-    //     if (is_null($accessToken) || empty($accessToken)) {
-    //         return response()->json(['error' => 'Token de acceso no está presente en la sesión.'], 401);
-    //     }
-
-    //     // Decodificar el token para asegurarse de que es un JSON válido
-    //     try {
-    //         $accessTokenArray = json_decode($accessToken, true);
-
-    //         // Si json_decode falla, lanzará una excepción
-    //         if (json_last_error() !== JSON_ERROR_NONE) {
-    //             throw new \InvalidArgumentException('Token de acceso no es un JSON válido.');
-    //         }
-
-    //         $client->setAccessToken($accessTokenArray);
-    //     } catch (\Exception $e) {
-    //         return response()->json(['error' => 'Token de acceso no válido: ' . $e->getMessage()], 400);
-    //     }
-
-    //     $service = new Google_Service_Calendar($client);
-
-    //     // Crear la fecha y hora de inicio y fin del evento en la zona horaria de Bogotá
-    //     $startDateTime = Carbon::createFromFormat('Y-m-d H:i', $fechaClase . ' ' . $horaClase, 'America/Bogota');
-    //     $endDateTime = $startDateTime->copy()->addHour();
-
-    //     $event = new Google_Service_Calendar_Event([
-    //         'summary' => 'Google Meet Meeting',
-    //         'start' => ['dateTime' => $startDateTime->toRfc3339String(), 'timeZone' => 'America/Bogota'],
-    //         'end' => ['dateTime' => $endDateTime->toRfc3339String(), 'timeZone' => 'America/Bogota'],
-    //         'conferenceData' => [
-    //             'createRequest' => [
-    //                 'conferenceSolutionKey' => ['type' => 'hangoutsMeet'],
-    //                 'requestId' => 'some-random-string'
-    //             ]
-    //         ]
-    //     ]);
-
-    //     $calendarId = 'primary';
-    //     $event = $service->events->insert($calendarId, $event, ['conferenceDataVersion' => 1]);
-
-    //     return response()->json(['message' => 'Join the meeting at: ' . $event->getHangoutLink()]);
-    // }
-
-    // ==============================================================
-
-    /*
     Configura y devuelve una instancia de Google_Client con las credenciales y configuraciones necesarias para interactuar con las APIs de Google.
     1. Crea una nueva instancia de Google_Client.
     2. Configura el client_id, client_secret y redirect_uri usando las variables de entorno (env()).
@@ -580,5 +424,149 @@ class EstudianteController extends Controller
         // $client->setHttpClient(new \GuzzleHttp\Client(['verify' => 'ruta/a/tu/cacert.pem']));
 
         return $client;
+    }
+
+    /*
+    Redirige al usuario a la página de inicio de sesión de Google para autenticarse y autorizar a tu aplicación a acceder a sus datos de Google Calendar.
+    1. Obtiene una instancia de Google_Client usando el método getGoogleClient().
+    2. Llama a createAuthUrl() en el cliente de Google, que genera la URL de autenticación de Google.
+    3. Redirige al usuario a esta URL, donde Google le pedirá que inicie sesión y autorice a tu aplicación.
+    */
+    public function redirectToGoogle()
+    {
+        $client = $this->getGoogleClient();
+        return redirect($client->createAuthUrl());
+        // return redirect()->route('auth.google');
+    }
+
+    // ==============================================================
+
+    /*
+    Maneja la redirección de vuelta desde Google después de que el usuario haya autenticado y autorizado la aplicación. Intercambia el código de autorización por un token de acceso y lo guarda en la sesión.
+    1. Obtiene una instancia de Google_Client usando el método getGoogleClient().
+    2. Llama a authenticate() en el cliente de Google con el código de autorización recibido en la solicitud (obtenido de request->input('code')).
+    3. Obtiene el token de acceso llamando a getAccessToken().
+    4. Guarda el token de acceso en la sesión usando Session::put('google_access_token', $accessToken).
+    5. Redirige al usuario a la ruta createMeet para crear una reunión en Google Meet.
+    */
+
+    public function handleGoogleCallback(Request $request)
+    {
+        $client = $this->getGoogleClient();
+        $client->authenticate($request->input('code'));
+        $accessToken = $client->getAccessToken();
+
+        Session::put('google_access_token', $accessToken);
+
+        // return redirect()->route('createMeet');
+        
+        $vista = 'estudiante.disponibilidad';
+
+        $disponibilidadEntrenadores = EventoAgendaEntrenador::leftjoin('usuarios','usuarios.id_user','=','evento_agenda_entrenador.id_instructor')
+        ->select('evento_agenda_entrenador.id as id_evento',
+            'evento_agenda_entrenador.id_instructor',
+            'id_user',
+            DB::raw("CONCAT(nombres, ' ', apellidos) AS nombre_completo"),
+            'start_date',
+            'start_time'
+        )
+        ->orderBy('evento_agenda_entrenador.id', 'desc')
+        ->get();
+
+        return view($vista, compact('disponibilidadEntrenadores', $disponibilidadEntrenadores));
+        // return redirect('http://localhost:8000/auth/google');
+    }
+
+    // ==============================================================
+
+    /*
+    Crea una nueva reunión en Google Meet y proporciona el enlace para unirse a la reunión.
+    1. Obtiene una instancia de Google_Client usando el método getGoogleClient().
+    2. Establece el token de acceso en el cliente de Google usando setAccessToken() con el token guardado en la sesión.
+    3. Crea una instancia de Google_Service_Calendar con el cliente autenticado.
+    4. Define un evento de Google Calendar, incluyendo los detalles de la reunión (resumen, hora de inicio y fin, y datos de la conferencia para crear una reunión de Google Meet).
+    5. Inserta el evento en el calendario primario (primary) usando events->insert().
+    6. Imprime el enlace para unirse a la reunión (getHangoutLink()).
+    */
+
+    // public function createMeet($fechaClase, $horaClase)
+    public function createMeet()
+    {
+        // dd($fechaClase, $horaClase);
+
+        $client = $this->getGoogleClient();
+        $client->setAccessToken(Session::get('google_access_token'));
+        $service = new Google_Service_Calendar($client);
+
+        // $timeZone = 'America/Bogota';
+        // $timeZone = '00-05:00';
+
+        // Crear la fecha y hora de inicio y fin del evento
+        // $startDateTime = $fechaClase . 'T' . $horaClase . ':00-05:00'; // Ajusta la zona horaria según corresponda
+        // $endDateTime = Carbon::parse($startDateTime)->addHour()->format('Y-m-d\TH:i:sP');
+
+        // ===========================================
+
+        // $startDateTime = Carbon::createFromFormat('Y-m-d H:i', $fechaClase . ' ' . $horaClase, 'America/Bogota');
+        // $endDateTime = $startDateTime->copy()->addHour();
+
+        // $startDateTime = "2024-04-30";
+        // $endDateTime = "18:00";
+
+        // dd($startDateTime);
+        // dd($endDateTime);
+
+
+        // $startDateTime = Carbon::createFromFormat('Y-m-d H:i', $fechaClase . ' ' . $horaClase, $timeZone);
+        // $startDateTime = $fechaClase . 'T' . $horaClase . ':00-07:00';
+        // $endDateTime = $startDateTime->copy()->addMinutes(30);
+
+        // ===========================================
+
+        $event = new Google_Service_Calendar_Event([
+            'summary' => 'Google Meet Meeting',
+            'start' => ['dateTime' => '2024-04-30T18:00:00-05:00'],
+            'end' => ['dateTime' => '2024-04-30T18:30:00-05:00'],
+
+            // 'start' => ['dateTime' => $startDateTime->toRfc3339String(), 'timeZone' => $timeZone],
+            // 'end' => ['dateTime' => $endDateTime->toRfc3339String(), 'timeZone' => $timeZone],
+
+            // 'start' => ['dateTime' => $startDateTime],
+            // 'end' => ['dateTime' => $endDateTime],
+
+            'conferenceData' => [
+                'createRequest' => [
+                    'conferenceSolutionKey' => ['type' => 'hangoutsMeet'],
+                    'requestId' => 'some-random-string'
+                ]
+            ]
+        ]);
+
+        $calendarId = 'primary';
+        $event = $service->events->insert($calendarId, $event, ['conferenceDataVersion' => 1]);
+
+        // echo 'Join the meeting at: ' . $event->getHangoutLink();
+        $linkMeet = $event->getHangoutLink();
+
+        // $vista = 'estudiante.disponibilidad';
+
+        // $disponibilidadEntrenadores = EventoAgendaEntrenador::leftjoin('usuarios','usuarios.id_user','=','evento_agenda_entrenador.id_instructor')
+        // ->select('evento_agenda_entrenador.id as id_evento',
+        //     'evento_agenda_entrenador.id_instructor',
+        //     'id_user',
+        //     DB::raw("CONCAT(nombres, ' ', apellidos) AS nombre_completo"),
+        //     'start_date',
+        //     'start_time'
+        // )
+        // ->orderBy('evento_agenda_entrenador.id', 'desc')
+        // ->get();
+
+        // return view($vista, compact('disponibilidadEntrenadores', $disponibilidadEntrenadores, 'linkMeet'));
+
+        // return view('estudiante.disponibilidad');
+
+        // $hangoutLink = $event->getHangoutLink();
+        // Redirigir a una vista y pasar el enlace de la reunión
+        // return view('disponibilidad', ['hangoutLink' => $hangoutLink]);
     }
 }

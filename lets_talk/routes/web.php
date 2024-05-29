@@ -78,7 +78,8 @@ Route::post('comprar_creditos', 'estudiante\EstudianteController@comprarCreditos
 
 Route::get('/auth/google', 'estudiante\EstudianteController@redirectToGoogle')->name('auth.google');
 Route::get('/auth/google/callback', 'estudiante\EstudianteController@handleGoogleCallback');
-Route::get('/create-meet/{fechaClase}/{horaClase}', 'estudiante\EstudianteController@createMeet')->name('createMeet');
+Route::get('/create-meet', 'estudiante\EstudianteController@createMeet')->name('createMeet');
+// Route::get('/create-meet/{fechaClase}/{horaClase}', 'estudiante\EstudianteController@createMeet')->name('createMeet');
 
 // ============================================================
 

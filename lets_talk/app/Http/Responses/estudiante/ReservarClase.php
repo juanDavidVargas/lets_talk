@@ -10,6 +10,11 @@ use App\Models\estudiante\Credito;
 use App\Models\entrenador\EventoAgendaEntrenador;
 use Carbon\Carbon;
 use App\Http\Controllers\estudiante\EstudianteController;
+use Google_Client;
+use Google_Service_Calendar;
+use Google_Service_Calendar_Event;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Http\Request;
 
 class ReservarClase implements Responsable
 {
@@ -71,13 +76,33 @@ class ReservarClase implements Responsable
                         );
                         DB::connection('mysql')->commit();
 
-                        // Crear una instancia del controlador
-                        $estudianteController = new EstudianteController();
+                        // return redirect()->route('auth.google')->json("clase_reservada");
 
-                        // Llamar al método createMeet
-                        $estudianteController->createMeet($fechaClase, $horaClase);
+                        // Llamar al método redirectToGoogle
+                        // $createAuthMail = new EstudianteController;
+                        // $createAuthMail->redirectToGoogle();
+                        // return redirect()->route('auth.google');
 
-                        return response()->json("clase_reservada");
+                        // Llamar al método createMeeth
+                        // $createMeet = new EstudianteController;
+                        // $createMeet->createMeet($fechaClase, $horaClase);
+
+                        // http://localhost:8000/auth/google
+                        // $urlAuthMeet = "http://localhost:8000/auth/google";
+
+                        // return response()->json("clase_reservada");
+
+                        return response()->json([
+                            'redirect_url' => route('auth.google'),
+                            'message' => 'clase_reservada'
+                        ]);
+
+                        // return redirect()->route('auth.google')->with('message', 'clase_reservada');
+
+                        // return response()->json([
+                        //     'clase_reservada' => 'clase_reservada',
+                        //     'urlAuthMeet' => $urlAuthMeet
+                        // ]);
                     }
                 } catch (Exception $e) {
                     dd($e);

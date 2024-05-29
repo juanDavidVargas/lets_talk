@@ -5,7 +5,13 @@
 
 @section('content')
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="col-12">
+            <h2 class="text-center" id="linkMeet"></h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
             <h1 class="text-center text-uppercase">Semana</h1>
             <h2 class="text-center text-uppercase">Disponibilidad Entrenadores</h2>
         </div>
@@ -119,16 +125,29 @@
                     $("#loaderGif").hide();
                     $("#loaderGif").addClass('ocultar');
 
-                    if(response == "clase_reservada")
+                    if(response.message == "clase_reservada")
                     {
                         $("#loaderGif").hide();
                         $("#loaderGif").addClass('ocultar');
 
-                        Swal.fire(
-                            'Info!',
-                            'Clase Reservada!',
-                            'success'
-                        );
+                        // Redirigir a la URL antes de mostrar el SweetAlert
+                        // window.location.href = 'http://localhost:8000/auth/google';
+                        window.location.href = response.redirect_url;
+
+                        // setTimeout(function() {
+                        //     window.location.href = 'http://localhost:8000/disponibilidad';
+                        // }, 5000);
+
+                        $("#linkMeet").html(response.linkMeet);
+                        
+                        setTimeout(function() {
+                            Swal.fire(
+                                'Info!',
+                                'Clase Reservada!',
+                                'success'
+                            );
+                        }, 7000);
+                        
                         return;
                     } else if (response == "clase_ya_reservada") {
                         $("#loaderGif").hide();
