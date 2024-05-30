@@ -47,14 +47,23 @@
                                 @php
                                     $idEvento = $disponibilidad->id_evento;
                                     $idInstructor = $disponibilidad->id_instructor;
+
+                                    // dd($disponibilidad);
                                 @endphp
                                 <tr>
                                     <td>{{$disponibilidad->nombre_completo}}</td>
                                     <td>{{$disponibilidad->start_date}}</td>
                                     <td>{{$disponibilidad->start_time}}</td>
-                                    <td>
-                                        <button type="button" class="text-white p-5" onclick="reservarClase('{{$idEvento}}', '{{$idInstructor}}')" style="background-color: #434C6A; padding:0.5em">RESERVAR YA</button>
-                                    </td>
+
+                                    @if ($disponibilidad->id_estado == 7)
+                                        <td>
+                                            <button type="button" class="text-white p-5" onclick="reservarClase('{{$idEvento}}', '{{$idInstructor}}')" style="background-color: #434C6A; padding:0.5em">RESERVAR YA</button>
+                                        </td>
+                                    @else
+                                        <td>
+                                            <button type="button" class="text-white p-5 btn btn-danger" onclick="" style="padding:0.5em">CANCELAR</button>
+                                        </td>
+                                    @endif
                                 </tr>
                             @endforeach
                         </tbody>
@@ -125,20 +134,16 @@
                     $("#loaderGif").hide();
                     $("#loaderGif").addClass('ocultar');
 
-                    if(response.message == "clase_reservada")
+                    if(response == "clase_reservada")
+                    // if(response.message == "clase_reservada")
                     {
                         $("#loaderGif").hide();
                         $("#loaderGif").addClass('ocultar');
 
                         // Redirigir a la URL antes de mostrar el SweetAlert
-                        // window.location.href = 'http://localhost:8000/auth/google';
-                        window.location.href = response.redirect_url;
+                        window.location.href = 'http://localhost:8000/auth/google';
 
-                        // setTimeout(function() {
-                        //     window.location.href = 'http://localhost:8000/disponibilidad';
-                        // }, 5000);
-
-                        $("#linkMeet").html(response.linkMeet);
+                        // $("#linkMeet").html(response.linkMeet);
                         
                         setTimeout(function() {
                             Swal.fire(

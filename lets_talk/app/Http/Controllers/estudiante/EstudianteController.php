@@ -147,15 +147,19 @@ class EstudianteController extends Controller
                 return view('database_connection');
             } else {
                 $disponibilidadEntrenadores = EventoAgendaEntrenador::leftjoin('usuarios','usuarios.id_user','=','evento_agenda_entrenador.id_instructor')
+                            ->leftjoin('reservas','reservas.id_reserva','=','evento_agenda_entrenador.id')
+                            ->leftjoin('creditos','creditos.id_trainer_agenda','=','evento_agenda_entrenador.id')
                             ->select('evento_agenda_entrenador.id as id_evento',
                                 'evento_agenda_entrenador.id_instructor',
                                 'id_user',
                                 DB::raw("CONCAT(nombres, ' ', apellidos) AS nombre_completo"),
                                 'start_date',
-                                'start_time'
+                                'start_time',
+                                'creditos.id_estado',
                             )
                             ->orderBy('evento_agenda_entrenador.id', 'desc')
                             ->get();
+                            
                 return view($vista, compact('disponibilidadEntrenadores', $disponibilidadEntrenadores));
             }
         }
@@ -303,11 +307,8 @@ class EstudianteController extends Controller
             //    $sesion[2] != true)
             // {
                 // return redirect()->to(route('home'));
+                // } else {
                 return new ReservarClase();
-            // } else {
-            
-            //     $disponibilidadShow = new DisponibilidadShow();
-            //     return $disponibilidadShow->disponibilidadPorID($request);
             // }
 
         } catch (Exception $e) {
@@ -353,24 +354,7 @@ class EstudianteController extends Controller
             //    $sesion[2] != true)
             // {
                 // return redirect()->to(route('home'));
-
-                // select
-                //     reservas.id_estudiante,
-                //     reservas.id_instructor,
-                //     CONCAT(instructor.nombres, ' ', instructor.apellidos) AS nombre_instructor,
-                //     reservas.id_trainer_horario,
-                //     start_date,
-                //     start_time
-                // from
-                //     reservas
-                    
-                // left join evento_agenda_entrenador on evento_agenda_entrenador.id = reservas.id_trainer_horario
-                // /*left join usuarios as estudiante on estudiante.id_user = reservas.id_estudiante*/
-                // left join usuarios as instructor on instructor.id_user = reservas.id_instructor
-
-                // where
-                //     id_estudiante = 14
-                    
+            // } else {
                 return Reserva::leftjoin('evento_agenda_entrenador','evento_agenda_entrenador.id','=','reservas.id_trainer_horario')
                 ->leftjoin('usuarios as instructor','instructor.id_user','=','reservas.id_instructor')
                 ->select(
@@ -384,10 +368,6 @@ class EstudianteController extends Controller
                 ->where('id_estudiante', $idEstudiante)
                 ->orderBy('start_date', 'desc')
                 ->get();
-            // } else {
-            
-            //     $disponibilidadShow = new DisponibilidadShow();
-            //     return $disponibilidadShow->disponibilidadPorID($request);
             // }
 
         } catch (Exception $e) {
@@ -395,6 +375,10 @@ class EstudianteController extends Controller
         }
     }
     
+    // ==============================================================
+    // ==============================================================
+    // ==============================================================
+    // ==============================================================
     // ==============================================================
 
     /*
@@ -436,7 +420,6 @@ class EstudianteController extends Controller
     {
         $client = $this->getGoogleClient();
         return redirect($client->createAuthUrl());
-        // return redirect()->route('auth.google');
     }
 
     // ==============================================================
@@ -459,22 +442,22 @@ class EstudianteController extends Controller
         Session::put('google_access_token', $accessToken);
 
         // return redirect()->route('createMeet');
+        return redirect()->route('estudiante.disponibilidad');
         
-        $vista = 'estudiante.disponibilidad';
+        // $vista = 'estudiante.disponibilidad';
 
-        $disponibilidadEntrenadores = EventoAgendaEntrenador::leftjoin('usuarios','usuarios.id_user','=','evento_agenda_entrenador.id_instructor')
-        ->select('evento_agenda_entrenador.id as id_evento',
-            'evento_agenda_entrenador.id_instructor',
-            'id_user',
-            DB::raw("CONCAT(nombres, ' ', apellidos) AS nombre_completo"),
-            'start_date',
-            'start_time'
-        )
-        ->orderBy('evento_agenda_entrenador.id', 'desc')
-        ->get();
+        // $disponibilidadEntrenadores = EventoAgendaEntrenador::leftjoin('usuarios','usuarios.id_user','=','evento_agenda_entrenador.id_instructor')
+        // ->select('evento_agenda_entrenador.id as id_evento',
+        //     'evento_agenda_entrenador.id_instructor',
+        //     'id_user',
+        //     DB::raw("CONCAT(nombres, ' ', apellidos) AS nombre_completo"),
+        //     'start_date',
+        //     'start_time'
+        // )
+        // ->orderBy('evento_agenda_entrenador.id', 'desc')
+        // ->get();
 
-        return view($vista, compact('disponibilidadEntrenadores', $disponibilidadEntrenadores));
-        // return redirect('http://localhost:8000/auth/google');
+        // return view($vista, compact('disponibilidadEntrenadores', $disponibilidadEntrenadores));
     }
 
     // ==============================================================
@@ -492,48 +475,40 @@ class EstudianteController extends Controller
     // public function createMeet($fechaClase, $horaClase)
     public function createMeet()
     {
-        // dd($fechaClase, $horaClase);
-
         $client = $this->getGoogleClient();
         $client->setAccessToken(Session::get('google_access_token'));
         $service = new Google_Service_Calendar($client);
 
         // $timeZone = 'America/Bogota';
-        // $timeZone = '00-05:00';
-
-        // Crear la fecha y hora de inicio y fin del evento
-        // $startDateTime = $fechaClase . 'T' . $horaClase . ':00-05:00'; // Ajusta la zona horaria según corresponda
-        // $endDateTime = Carbon::parse($startDateTime)->addHour()->format('Y-m-d\TH:i:sP');
-
-        // ===========================================
-
-        // $startDateTime = Carbon::createFromFormat('Y-m-d H:i', $fechaClase . ' ' . $horaClase, 'America/Bogota');
-        // $endDateTime = $startDateTime->copy()->addHour();
+        // $timeZone = ':00-05:00';
 
         // $startDateTime = "2024-04-30";
         // $endDateTime = "18:00";
 
-        // dd($startDateTime);
-        // dd($endDateTime);
-
-
+        // Crear la fecha y hora de inicio y fin del evento
+        // $startDateTime = $fechaClase . 'T' . $horaClase . ':00-05:00';
+        // $endDateTime = Carbon::parse($startDateTime)->addHour()->format('Y-m-d\TH:i:sP');
+        // $endDateTime = $startDateTime->copy()->addMinutes(30);
+        // =================================================================================================================
+        // $startDateTime = Carbon::createFromFormat('Y-m-d H:i', $fechaClase . ' ' . $horaClase, 'America/Bogota');
+        // $endDateTime = $startDateTime->copy()->addHour();
+        // =================================================================================================================
         // $startDateTime = Carbon::createFromFormat('Y-m-d H:i', $fechaClase . ' ' . $horaClase, $timeZone);
         // $startDateTime = $fechaClase . 'T' . $horaClase . ':00-07:00';
         // $endDateTime = $startDateTime->copy()->addMinutes(30);
-
-        // ===========================================
+        // =================================================================================================================
 
         $event = new Google_Service_Calendar_Event([
             'summary' => 'Google Meet Meeting',
             'start' => ['dateTime' => '2024-04-30T18:00:00-05:00'],
             'end' => ['dateTime' => '2024-04-30T18:30:00-05:00'],
-
-            // 'start' => ['dateTime' => $startDateTime->toRfc3339String(), 'timeZone' => $timeZone],
-            // 'end' => ['dateTime' => $endDateTime->toRfc3339String(), 'timeZone' => $timeZone],
-
+            // =======================================================
             // 'start' => ['dateTime' => $startDateTime],
             // 'end' => ['dateTime' => $endDateTime],
-
+            // =======================================================
+            // 'start' => ['dateTime' => $startDateTime->toRfc3339String(), 'timeZone' => $timeZone],
+            // 'end' => ['dateTime' => $endDateTime->toRfc3339String(), 'timeZone' => $timeZone],
+            // =======================================================
             'conferenceData' => [
                 'createRequest' => [
                     'conferenceSolutionKey' => ['type' => 'hangoutsMeet'],
@@ -545,8 +520,9 @@ class EstudianteController extends Controller
         $calendarId = 'primary';
         $event = $service->events->insert($calendarId, $event, ['conferenceDataVersion' => 1]);
 
-        // echo 'Join the meeting at: ' . $event->getHangoutLink();
-        $linkMeet = $event->getHangoutLink();
+        echo 'Join the meeting at: ' . $event->getHangoutLink();
+
+        // $linkMeet = $event->getHangoutLink();
 
         // $vista = 'estudiante.disponibilidad';
 

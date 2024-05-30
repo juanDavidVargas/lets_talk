@@ -61,6 +61,15 @@ class ReservarClase implements Responsable
                         $fechaClase = $queryEventoAgendaEntrenador->start_date;
                         $horaClase = $queryEventoAgendaEntrenador->start_time;
 
+                        // Llamar al método redirectToGoogle
+                        // $createAuthMail = new EstudianteController;
+                        // $createAuthMail->redirectToGoogle();
+                        // return redirect()->route('auth.google');
+
+                        // Llamar al método createMeeth
+                        // $createMeet = new EstudianteController;
+                        // $createMeet->createMeet($fechaClase, $horaClase);
+
                         $fechaHora = $fechaClase . ' ' . $horaClase;
                         $fechaHora = Carbon::createFromFormat('Y-m-d H:i', $fechaHora);
                         $fechaHora = $fechaHora->timestamp;
@@ -78,24 +87,15 @@ class ReservarClase implements Responsable
 
                         // return redirect()->route('auth.google')->json("clase_reservada");
 
-                        // Llamar al método redirectToGoogle
-                        // $createAuthMail = new EstudianteController;
-                        // $createAuthMail->redirectToGoogle();
-                        // return redirect()->route('auth.google');
-
-                        // Llamar al método createMeeth
-                        // $createMeet = new EstudianteController;
-                        // $createMeet->createMeet($fechaClase, $horaClase);
-
                         // http://localhost:8000/auth/google
                         // $urlAuthMeet = "http://localhost:8000/auth/google";
 
-                        // return response()->json("clase_reservada");
+                        return response()->json("clase_reservada");
 
-                        return response()->json([
-                            'redirect_url' => route('auth.google'),
-                            'message' => 'clase_reservada'
-                        ]);
+                        // return response()->json([
+                        //     'redirect_url' => route('auth.google'),
+                        //     'message' => 'clase_reservada'
+                        // ]);
 
                         // return redirect()->route('auth.google')->with('message', 'clase_reservada');
 
