@@ -260,7 +260,6 @@
                                 }, 3000);
                                 
                                 return;
-                                return;
                             }
                         } // FIN Success
                     }); // Fon ajax

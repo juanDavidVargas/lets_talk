@@ -149,38 +149,6 @@ class EstudianteController extends Controller
             } else {
                 $idEstudiante = session('usuario_id');
 
-                // $disponibilidadEntrenadores = EventoAgendaEntrenador::leftJoin('usuarios', 'usuarios.id_user', '=', 'evento_agenda_entrenador.id_instructor')
-                //     ->leftJoin('creditos', 'creditos.id_trainer_agenda', '=', 'evento_agenda_entrenador.id')
-                //     ->select(
-                //         'evento_agenda_entrenador.id as id_evento',
-                //         'evento_agenda_entrenador.id_instructor',
-                //         DB::raw("CONCAT(usuarios.nombres, ' ', usuarios.apellidos) AS nombre_completo"),
-                //         'evento_agenda_entrenador.start_date',
-                //         'evento_agenda_entrenador.start_time',
-                //         DB::raw('COALESCE(creditos.id_estado, 7) AS id_estado'),
-                //         DB::raw('GROUP_CONCAT(creditos.id_estudiante) AS id_estudiante')
-                //     )
-                //     // ->whereIn('creditos.id_estado', [7, 8])
-                //     ->where(function ($query) {
-                //         $query->whereNull('creditos.id_estado')
-                //             ->orWhereIn('creditos.id_estado', [7, 8]);
-                //     })
-                //     ->where(function ($query) use ($idEstudiante) {
-                //         $query->whereNull('creditos.id_estudiante')
-                //             ->orWhere('creditos.id_estudiante', $idEstudiante);
-                //     })
-                //     ->groupBy(
-                //         'evento_agenda_entrenador.id',
-                //         'evento_agenda_entrenador.id_instructor',
-                //         'usuarios.nombres',
-                //         'usuarios.apellidos',
-                //         'evento_agenda_entrenador.start_date',
-                //         'evento_agenda_entrenador.start_time',
-                //         'creditos.id_estado'
-                //     )
-                //     ->orderBy('evento_agenda_entrenador.start_date', 'desc')
-                //     ->get();
-
                 $disponibilidadEntrenadores = EventoAgendaEntrenador::leftJoin('usuarios', 'usuarios.id_user', '=', 'evento_agenda_entrenador.id_instructor')
                     ->leftJoin('creditos', function($join) use ($idEstudiante) {
                         $join->on('creditos.id_trainer_agenda', '=', 'evento_agenda_entrenador.id')

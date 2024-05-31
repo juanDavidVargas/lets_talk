@@ -20,8 +20,6 @@ class CancelarClase implements Responsable
 {
     public function toResponse($request)
     {
-        // dd($request);
-
         $idEstudiante =  intval(request('id_estudiante', null));
         $idInstructor = intval(request('id_instructor', null));
         $idHorario = intval(request('id_horario', null));
@@ -35,21 +33,15 @@ class CancelarClase implements Responsable
             ->where('id_trainer_horario',$idHorario)
             ->first();
 
-        // dd($idClaseReservada->id_reserva);
-
         if (isset($idClaseReservada) && !is_null($idClaseReservada) && !empty($idClaseReservada)) {
-            
             try {
-                $claseReservada = Reserva::findOrFail($idClaseReservada);
-
-                // dd($claseReservada);
+                $claseReservada = Reserva::findOrFail($idClaseReservada->id_reserva);
 
                 if ($claseReservada) {
 
-                    $claseCancelada = Reserva::destroy([$claseReservada]);
+                    $claseCancelada = $claseReservada->forceDelete();
 
                     if ($claseCancelada) {
-
                         $idCreditoConsumido = Credito::select('id_credito')
                         ->where('id_estado',$idEstado)
                         ->where('id_estudiante',$idEstudiante)
@@ -59,7 +51,6 @@ class CancelarClase implements Responsable
                         ->first();
 
                         if (isset($idCreditoConsumido) && !is_null($idCreditoConsumido) && !empty($idCreditoConsumido)) {
-
                             $idCreditoLiberado = Credito::where('id_credito', $idCreditoConsumido->id_credito)
                             ->update(
                                 [
@@ -70,22 +61,18 @@ class CancelarClase implements Responsable
                                 ]
                             );
     
-                            if ( (isset($claseReservada) && !is_null($claseReservada) && !empty($claseReservada)) && 
-                            (isset($idCreditoLiberado) && !is_null($idCreditoLiberado) && !empty($idCreditoLiberado)) ) {
+                            if ( (isset($claseReservada) && !is_null($claseReservada) && !empty($claseReservada)) && (isset($idCreditoLiberado) && !is_null($idCreditoLiberado) && !empty($idCreditoLiberado)) ) {
                                 DB::connection('mysql')->commit();
                                 return response()->json("clase_cancelada");
                             }
                         }
                     }
-                    // else {
-                    //     # code...
-                    // }
                 }
             } catch (Exception $e) {
                 dd($e);
                 DB::connection('mysql')->rollback();
                 return response()->json("error");
-            }
+            } // FIN catch
         } // FIN If
     } // FIN toResponse
 } // FIN Class CancelarClase()
