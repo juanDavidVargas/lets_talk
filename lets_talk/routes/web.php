@@ -73,8 +73,9 @@ Route::get('disponibilidad', 'estudiante\EstudianteController@disponibilidadEntr
 // Route::post('traer_disponibilidades', 'estudiante\EstudianteController@traerDisponibilidades')->name('estudiante.traer_disponibilidades');
 Route::get('mis_creditos', 'estudiante\EstudianteController@misCreditos')->name('estudiante.mis_creditos');
 Route::get('creditos_disponibles', 'estudiante\EstudianteController@creditosDisponibles')->name('estudiante.creditos_disponibles');
-Route::post('reservar_clase', 'estudiante\EstudianteController@reservarClase')->name('estudiante.reservar_clase');
 Route::post('comprar_creditos', 'estudiante\EstudianteController@comprarCreditos')->name('estudiante.comprar_creditos');
+Route::post('reservar_clase', 'estudiante\EstudianteController@reservarClase')->name('estudiante.reservar_clase');
+Route::post('cancelar_clase', 'estudiante\EstudianteController@cancelarClase')->name('estudiante.cancelar_clase');
 
 Route::get('/auth/google', 'estudiante\EstudianteController@redirectToGoogle')->name('auth.google');
 Route::get('/auth/google/callback', 'estudiante\EstudianteController@handleGoogleCallback');

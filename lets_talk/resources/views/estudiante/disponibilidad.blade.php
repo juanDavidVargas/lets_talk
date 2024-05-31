@@ -49,9 +49,10 @@
                             
                             @foreach ($disponibilidadEntrenadores as $disponibilidad)
                                 @php
-                                    // $idEvento = $disponibilidad->id_evento;
-                                    // $idInstructor = $disponibilidad->id_instructor;
-
+                                    $idEvento = $disponibilidad->id_evento;
+                                    $idInstructor = $disponibilidad->id_instructor;
+                                    $idEstudiante = $disponibilidad->id_estudiante;
+                                    $idEstado = $disponibilidad->id_estado;
                                     // dd($disponibilidad);
                                 @endphp
                                 <tr>
@@ -61,11 +62,11 @@
 
                                     @if ($disponibilidad->id_estado == 7)
                                         <td>
-                                            <button type="button" class="text-white" onclick="reservarClase('{{$disponibilidad->id_evento}}', '{{$disponibilidad->id_instructor}}')" style="background-color: #434C6A; padding:0.5em">RESERVAR YA</button>
+                                            <button type="button" class="text-white" onclick="reservarClase('{{$idEvento}}', '{{$idInstructor}}')" style="background-color: #434C6A; padding:0.5em">RESERVAR YA</button>
                                         </td>
-                                        @else
+                                    @else
                                         <td>
-                                            <button type="button" class="text-white btn btn-warning">CANCELAR</button>
+                                            <button type="button" class="text-white btn btn-warning" onclick="cancelarClase('{{$idEvento}}','{{$idInstructor}}','{{$idEstudiante}}','{{$idEstado}}')">CANCELAR</button>
                                         </td>
                                     @endif
                                 </tr>
@@ -183,5 +184,78 @@
                 }
             });
         }
+
+        function cancelarClase(idHorario, idInstructor, idEstudiante, idEstado) {
+            console.log(`ID Horario: ${idHorario}`);
+            console.log(`ID Instructor: ${idInstructor}`);
+            console.log(`ID idEstudiante: ${idEstudiante}`);
+            console.log(`ID idEstado: ${idEstado}`);
+
+
+            Swal.fire({
+                title: '¿Realmente quiere cancelar esta clase?',
+                html: 'Deberá crearla nuevamente si cambia de opinión',
+                icon: 'info',
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.value)
+                {
+                    $.ajax({
+                        async: true,
+                        url: "{{route('estudiante.cancelar_clase')}}",
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            'id_horario': idHorario,
+                            'id_instructor': idInstructor,
+                            'id_estudiante': idEstudiante,
+                            'id_estado': idEstado
+                        },
+                        beforeSend: function() {
+                            $("#loaderGif").show();
+                            $("#loaderGif").removeClass('ocultar');
+                        },
+                        success: function(response)
+                        {
+                            console.log(response);
+
+                            $("#loaderGif").hide();
+                            $("#loaderGif").addClass('ocultar');
+
+                            if(response == "clase_cancelada")
+                            {
+                                $("#loaderGif").hide();
+                                $("#loaderGif").addClass('ocultar');
+
+                                Swal.fire(
+                                    'Info!',
+                                    'Clase Cancelada!',
+                                    'success'
+                                );
+                                return;
+                            }
+
+                            if(response == "error")
+                            {
+                                $("#loaderGif").hide();
+                                $("#loaderGif").addClass('ocultar');
+
+                                Swal.fire(
+                                    'Error!',
+                                    'Clase NO Cancelada!',
+                                    'error'
+                                );
+                                
+                                return;
+                            }
+                        } // FIN Success
+                    }); // Fon ajax
+                } // FIN if
+            }); // FIN then de Swal.Fire
+        } // FIN reservarClase
     </script>
 @endsection
