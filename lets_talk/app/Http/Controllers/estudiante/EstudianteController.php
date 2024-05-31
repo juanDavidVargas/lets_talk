@@ -147,24 +147,27 @@ class EstudianteController extends Controller
                 return view('database_connection');
             } else {
                 $disponibilidadEntrenadores = EventoAgendaEntrenador::leftjoin('usuarios','usuarios.id_user','=','evento_agenda_entrenador.id_instructor')
-                            ->leftjoin('reservas','reservas.id_reserva','=','evento_agenda_entrenador.id')
+                            // ->leftjoin('reservas','reservas.id_reserva','=','evento_agenda_entrenador.id')
                             ->leftjoin('creditos','creditos.id_trainer_agenda','=','evento_agenda_entrenador.id')
-                            ->select('evento_agenda_entrenador.id as id_evento',
+                            ->select(
+                                'evento_agenda_entrenador.id as id_evento',
+                                // 'creditos.id_estudiante',
                                 'evento_agenda_entrenador.id_instructor',
-                                'id_user',
+                                // 'usuarios.id_user',
                                 DB::raw("CONCAT(nombres, ' ', apellidos) AS nombre_completo"),
-                                'start_date',
-                                'start_time',
-                                'creditos.id_estado',
+                                'evento_agenda_entrenador.start_date',
+                                'evento_agenda_entrenador.start_time',
+                                'creditos.id_estado'
                             )
-                            ->orderBy('evento_agenda_entrenador.id', 'desc')
+                            ->whereIn('creditos.id_estado', [7,8])
+                            ->orderBy('evento_agenda_entrenador.start_date', 'desc')
                             ->get();
+                            // ->toSql();
                             
-                return view($vista, compact('disponibilidadEntrenadores', $disponibilidadEntrenadores));
+                return view($vista, compact('disponibilidadEntrenadores'));
             }
         }
     }
-
 
     // public function disponibilidad()
     // {

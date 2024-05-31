@@ -43,10 +43,14 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @php
+                                // dd($disponibilidadEntrenadores);
+                            @endphp
+                            
                             @foreach ($disponibilidadEntrenadores as $disponibilidad)
                                 @php
-                                    $idEvento = $disponibilidad->id_evento;
-                                    $idInstructor = $disponibilidad->id_instructor;
+                                    // $idEvento = $disponibilidad->id_evento;
+                                    // $idInstructor = $disponibilidad->id_instructor;
 
                                     // dd($disponibilidad);
                                 @endphp
@@ -55,13 +59,13 @@
                                     <td>{{$disponibilidad->start_date}}</td>
                                     <td>{{$disponibilidad->start_time}}</td>
 
-                                    @if ($disponibilidad->id_estado == 7)
+                                    @if ($disponibilidad->id_estado == 8)
                                         <td>
-                                            <button type="button" class="text-white p-5" onclick="reservarClase('{{$idEvento}}', '{{$idInstructor}}')" style="background-color: #434C6A; padding:0.5em">RESERVAR YA</button>
+                                            <button type="button" class="text-white btn btn-warning" style="background-color: yellow;">CANCELAR</button>
                                         </td>
                                     @else
                                         <td>
-                                            <button type="button" class="text-white p-5 btn btn-danger" onclick="" style="padding:0.5em">CANCELAR</button>
+                                            <button type="button" class="text-white" onclick="reservarClase('{{$disponibilidad->id_evento}}', '{{$disponibilidad->id_instructor}}')" style="background-color: #434C6A; padding:0.5em">RESERVAR YA</button>
                                         </td>
                                     @endif
                                 </tr>
