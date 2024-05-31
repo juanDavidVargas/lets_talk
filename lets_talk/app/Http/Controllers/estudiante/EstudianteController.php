@@ -146,23 +146,24 @@ class EstudianteController extends Controller
             if($checkConnection->getName() == "database_connection") {
                 return view('database_connection');
             } else {
-                $disponibilidadEntrenadores = EventoAgendaEntrenador::leftjoin('usuarios','usuarios.id_user','=','evento_agenda_entrenador.id_instructor')
-                            // ->leftjoin('reservas','reservas.id_reserva','=','evento_agenda_entrenador.id')
-                            ->leftjoin('creditos','creditos.id_trainer_agenda','=','evento_agenda_entrenador.id')
-                            ->select(
-                                'evento_agenda_entrenador.id as id_evento',
-                                // 'creditos.id_estudiante',
-                                'evento_agenda_entrenador.id_instructor',
-                                // 'usuarios.id_user',
-                                DB::raw("CONCAT(nombres, ' ', apellidos) AS nombre_completo"),
-                                'evento_agenda_entrenador.start_date',
-                                'evento_agenda_entrenador.start_time',
-                                'creditos.id_estado'
-                            )
-                            ->whereIn('creditos.id_estado', [7,8])
-                            ->orderBy('evento_agenda_entrenador.start_date', 'desc')
-                            ->get();
-                            // ->toSql();
+                $disponibilidadEntrenadores = EventoAgendaEntrenador::leftJoin('usuarios', 'usuarios.id_user', '=', 'evento_agenda_entrenador.id_instructor')
+                    ->leftJoin('creditos', 'creditos.id_trainer_agenda', '=', 'evento_agenda_entrenador.id')
+                    ->select(
+                        'evento_agenda_entrenador.id as id_evento',
+                        'evento_agenda_entrenador.id_instructor',
+                        DB::raw("CONCAT(usuarios.nombres, ' ', usuarios.apellidos) AS nombre_completo"),
+                        'evento_agenda_entrenador.start_date',
+                        'evento_agenda_entrenador.start_time',
+                        DB::raw('COALESCE(creditos.id_estado, 7) AS id_estado'),
+                        'creditos.id_estudiante'
+                    )
+                    ->where(function ($query) {
+                        $query->whereNull('creditos.id_estado')
+                            ->orWhereIn('creditos.id_estado', [7, 8]);
+                    })
+                    ->orderBy('evento_agenda_entrenador.start_date', 'desc')
+                    ->get();
+                    // ->toSql();
                             
                 return view($vista, compact('disponibilidadEntrenadores'));
             }

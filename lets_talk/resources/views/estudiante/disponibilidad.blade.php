@@ -59,13 +59,13 @@
                                     <td>{{$disponibilidad->start_date}}</td>
                                     <td>{{$disponibilidad->start_time}}</td>
 
-                                    @if ($disponibilidad->id_estado == 8)
-                                        <td>
-                                            <button type="button" class="text-white btn btn-warning" style="background-color: yellow;">CANCELAR</button>
-                                        </td>
-                                    @else
+                                    @if ($disponibilidad->id_estado == 7)
                                         <td>
                                             <button type="button" class="text-white" onclick="reservarClase('{{$disponibilidad->id_evento}}', '{{$disponibilidad->id_instructor}}')" style="background-color: #434C6A; padding:0.5em">RESERVAR YA</button>
+                                        </td>
+                                        @else
+                                        <td>
+                                            <button type="button" class="text-white btn btn-warning">CANCELAR</button>
                                         </td>
                                     @endif
                                 </tr>
