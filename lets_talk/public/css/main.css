@@ -127,7 +127,7 @@ textarea:-ms-input-placeholder { color: #adadad;}
 button {
 	outline: none !important;
 	border: none;
-	/* background: #21277B !important; */
+	background: #21277B;
 }
 
 button:hover {

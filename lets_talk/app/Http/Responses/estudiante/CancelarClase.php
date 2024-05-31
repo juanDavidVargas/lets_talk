@@ -35,43 +35,51 @@ class CancelarClase implements Responsable
             ->where('id_trainer_horario',$idHorario)
             ->first();
 
+        // dd($idClaseReservada->id_reserva);
+
         if (isset($idClaseReservada) && !is_null($idClaseReservada) && !empty($idClaseReservada)) {
             
             try {
                 $claseReservada = Reserva::findOrFail($idClaseReservada);
 
+                // dd($claseReservada);
+
                 if ($claseReservada) {
-                    $claseReservada->forceDelete();
-                    DB::connection('mysql')->commit();
 
-                    // ============================================
+                    $claseCancelada = Reserva::destroy([$claseReservada]);
 
-                    $idCreditoConsumido = Credito::select('id_credito')
-                    ->where('id_estado',$idEstado)
-                    ->where('id_estudiante',$idEstudiante)
-                    ->where('id_instructor',$idInstructor)
-                    ->where('id_trainer_agenda',$idHorario)
-                    ->orderBy('id_credito','desc')
-                    ->first();
+                    if ($claseCancelada) {
 
-                    if (isset($idCreditoConsumido) && !is_null($idCreditoConsumido) && !empty($idCreditoConsumido)) {
+                        $idCreditoConsumido = Credito::select('id_credito')
+                        ->where('id_estado',$idEstado)
+                        ->where('id_estudiante',$idEstudiante)
+                        ->where('id_instructor',$idInstructor)
+                        ->where('id_trainer_agenda',$idHorario)
+                        ->orderBy('id_credito','desc')
+                        ->first();
 
-                        $idCreditoLiberado = Credito::where('id_credito', $idCreditoConsumido->id_credito)
-                        ->update(
-                            [
-                                'id_estado' => 7,
-                                'id_instructor' => null,
-                                'id_trainer_agenda' => null,
-                                'fecha_consumo_credito' => null,
-                            ]
-                        );
+                        if (isset($idCreditoConsumido) && !is_null($idCreditoConsumido) && !empty($idCreditoConsumido)) {
 
-                        if ( (isset($claseReservada) && !is_null($claseReservada) && !empty($claseReservada)) && 
-                        (isset($idCreditoLiberado) && !is_null($idCreditoLiberado) && !empty($idCreditoLiberado)) ) {
-                            DB::connection('mysql')->commit();
-                            return response()->json("clase_cancelada");
+                            $idCreditoLiberado = Credito::where('id_credito', $idCreditoConsumido->id_credito)
+                            ->update(
+                                [
+                                    'id_estado' => 7,
+                                    'id_instructor' => null,
+                                    'id_trainer_agenda' => null,
+                                    'fecha_consumo_credito' => null,
+                                ]
+                            );
+    
+                            if ( (isset($claseReservada) && !is_null($claseReservada) && !empty($claseReservada)) && 
+                            (isset($idCreditoLiberado) && !is_null($idCreditoLiberado) && !empty($idCreditoLiberado)) ) {
+                                DB::connection('mysql')->commit();
+                                return response()->json("clase_cancelada");
+                            }
                         }
                     }
+                    // else {
+                    //     # code...
+                    // }
                 }
             } catch (Exception $e) {
                 dd($e);

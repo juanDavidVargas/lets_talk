@@ -62,7 +62,7 @@
 
                                     @if ($disponibilidad->id_estado == 7)
                                         <td>
-                                            <button type="button" class="text-white" onclick="reservarClase('{{$idEvento}}', '{{$idInstructor}}')" style="background-color: #434C6A; padding:0.5em">RESERVAR YA</button>
+                                            <button type="button" class="text-white" onclick="reservarClase('{{$idEvento}}', '{{$idInstructor}}')" style="background-color: #21277B; padding:0.5em">RESERVAR YA</button>
                                         </td>
                                     @else
                                         <td>
@@ -236,6 +236,11 @@
                                     'Clase Cancelada!',
                                     'success'
                                 );
+
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 3000);
+
                                 return;
                             }
 
@@ -249,7 +254,12 @@
                                     'Clase NO Cancelada!',
                                     'error'
                                 );
+
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 3000);
                                 
+                                return;
                                 return;
                             }
                         } // FIN Success
