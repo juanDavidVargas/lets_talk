@@ -5,16 +5,10 @@ namespace App\Http\Responses\estudiante;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Support\Facades\DB;
 use Exception;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use App\Models\usuarios\Reserva;
 use App\Models\estudiante\Credito;
-use App\Models\entrenador\EventoAgendaEntrenador;
-use Carbon\Carbon;
-use App\Http\Controllers\estudiante\EstudianteController;
-use Google_Client;
-use Google_Service_Calendar;
-use Google_Service_Calendar_Event;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Http\Request;
 
 class CancelarClase implements Responsable
 {

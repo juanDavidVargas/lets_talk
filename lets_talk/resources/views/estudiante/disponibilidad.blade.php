@@ -115,6 +115,8 @@
             });
         });
 
+        // ===============================================================
+
         function reservarClase(idHorario, idInstructor){
 
             console.log(`ID Horario: ${idHorario}`);
@@ -140,7 +142,6 @@
                     $("#loaderGif").addClass('ocultar');
 
                     if(response == "clase_reservada")
-                    // if(response.message == "clase_reservada")
                     {
                         $("#loaderGif").hide();
                         $("#loaderGif").addClass('ocultar');
@@ -184,6 +185,8 @@
                 }
             });
         }
+
+        // ===============================================================
 
         function cancelarClase(idHorario, idInstructor, idEstudiante, idEstado) {
             console.log(`ID Horario: ${idHorario}`);

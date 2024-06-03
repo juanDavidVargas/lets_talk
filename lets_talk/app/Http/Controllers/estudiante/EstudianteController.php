@@ -57,6 +57,9 @@ class EstudianteController extends Controller
         }
     }
 
+    // ==============================================================
+    // ==============================================================
+
     /**
      * Show the form for creating a new resource.
      *
@@ -66,6 +69,9 @@ class EstudianteController extends Controller
     {
         //
     }
+
+    // ==============================================================
+    // ==============================================================
 
     /**
      * Store a newly created resource in storage.
@@ -78,6 +84,9 @@ class EstudianteController extends Controller
         //
     }
 
+    // ==============================================================
+    // ==============================================================
+
     /**
      * Display the specified resource.
      *
@@ -89,6 +98,9 @@ class EstudianteController extends Controller
         //
     }
 
+    // ==============================================================
+    // ==============================================================
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -99,6 +111,9 @@ class EstudianteController extends Controller
     {
         //
     }
+
+    // ==============================================================
+    // ==============================================================
 
     /**
      * Update the specified resource in storage.
@@ -112,6 +127,9 @@ class EstudianteController extends Controller
         //
     }
 
+    // ==============================================================
+    // ==============================================================
+
     /**
      * Remove the specified resource from storage.
      *
@@ -123,10 +141,16 @@ class EstudianteController extends Controller
         //
     }
 
+    // ==============================================================
+    // ==============================================================
+
     // private function share_data()
     // {
     //     view()->share('disponibilidadEntrenadores', $this->disponibilidadEntrenadores());
     // }
+
+    // ==============================================================
+    // ==============================================================    
     
     public function disponibilidadEntrenadores()
     {
@@ -173,11 +197,15 @@ class EstudianteController extends Controller
                     ->orderBy('evento_agenda_entrenador.start_date', 'desc')
                     ->get();
 
+                $this->createMeet();
 
                 return view($vista, compact('disponibilidadEntrenadores'));
             }
         }
     }
+
+    // ==============================================================
+    // ==============================================================
 
     // public function disponibilidad()
     // {
@@ -216,6 +244,9 @@ class EstudianteController extends Controller
     //     }
     // }
 
+    // ==============================================================
+    // ==============================================================
+
     // public function traerDisponibilidades(Request $request)
     // {
     //     try {
@@ -240,6 +271,9 @@ class EstudianteController extends Controller
     //         return response()->json("error_exception");
     //     }
     // }
+
+    // ==============================================================
+    // ==============================================================
 
     public function misCreditos(Request $request)
     {
@@ -280,6 +314,9 @@ class EstudianteController extends Controller
             return response()->json(['error' => $e->getMessage()]);
         }
     }
+
+    // ==============================================================
+    // ==============================================================
     
     public function creditosDisponibles(Request $request)
     {
@@ -306,50 +343,9 @@ class EstudianteController extends Controller
             return response()->json("error_exception");
         }
     }
-        
-    public function reservarClase(Request $request)
-    {
-        try {
-            // $adminCtrl = new AdministradorController();
-            // $sesion = $adminCtrl->validarVariablesSesion();
-    
-            // if(empty($sesion[0]) || is_null($sesion[0]) &&
-            //    empty($sesion[1]) || is_null($sesion[1]) &&
-            //    empty($sesion[2]) || is_null($sesion[2]) &&
-            //    empty($sesion[3]) || is_null($sesion[3]) &&
-            //    $sesion[2] != true)
-            // {
-                // return redirect()->to(route('home'));
-                // } else {
-                return new ReservarClase();
-            // }
 
-        } catch (Exception $e) {
-            return response()->json("error_exception");
-        }
-    }
-
-    public function cancelarClase(Request $request)
-    {
-        try {
-            // $adminCtrl = new AdministradorController();
-            // $sesion = $adminCtrl->validarVariablesSesion();
-    
-            // if(empty($sesion[0]) || is_null($sesion[0]) &&
-            //    empty($sesion[1]) || is_null($sesion[1]) &&
-            //    empty($sesion[2]) || is_null($sesion[2]) &&
-            //    empty($sesion[3]) || is_null($sesion[3]) &&
-            //    $sesion[2] != true)
-            // {
-                // return redirect()->to(route('home'));
-                // } else {
-                return new CancelarClase();
-            // }
-
-        } catch (Exception $e) {
-            return response()->json("error_exception");
-        }
-    }
+    // ==============================================================
+    // ==============================================================
 
     public function comprarCreditos(Request $request)
     {
@@ -375,6 +371,9 @@ class EstudianteController extends Controller
             return response()->json("error_exception");
         }
     }
+
+    // ==============================================================
+    // ==============================================================
 
     public function misSesiones($idEstudiante)
     {
@@ -409,7 +408,32 @@ class EstudianteController extends Controller
             return response()->json("error_exception");
         }
     }
+
+    // ==============================================================
+    // ==============================================================
+        
+    public function reservarClase(Request $request)
+    {
+        try {
+            // $adminCtrl = new AdministradorController();
+            // $sesion = $adminCtrl->validarVariablesSesion();
     
+            // if(empty($sesion[0]) || is_null($sesion[0]) &&
+            //    empty($sesion[1]) || is_null($sesion[1]) &&
+            //    empty($sesion[2]) || is_null($sesion[2]) &&
+            //    empty($sesion[3]) || is_null($sesion[3]) &&
+            //    $sesion[2] != true)
+            // {
+                // return redirect()->to(route('home'));
+                // } else {
+                return new ReservarClase();
+            // }
+
+        } catch (Exception $e) {
+            return response()->json("error_exception");
+        }
+    }
+
     // ==============================================================
     // ==============================================================
     // ==============================================================
@@ -445,6 +469,9 @@ class EstudianteController extends Controller
         return $client;
     }
 
+    // ==============================================================
+    // ==============================================================
+
     /*
     Redirige al usuario a la página de inicio de sesión de Google para autenticarse y autorizar a tu aplicación a acceder a sus datos de Google Calendar.
     1. Obtiene una instancia de Google_Client usando el método getGoogleClient().
@@ -457,6 +484,7 @@ class EstudianteController extends Controller
         return redirect($client->createAuthUrl());
     }
 
+    // ==============================================================
     // ==============================================================
 
     /*
@@ -478,23 +506,9 @@ class EstudianteController extends Controller
 
         // return redirect()->route('createMeet');
         return redirect()->route('estudiante.disponibilidad');
-        
-        // $vista = 'estudiante.disponibilidad';
-
-        // $disponibilidadEntrenadores = EventoAgendaEntrenador::leftjoin('usuarios','usuarios.id_user','=','evento_agenda_entrenador.id_instructor')
-        // ->select('evento_agenda_entrenador.id as id_evento',
-        //     'evento_agenda_entrenador.id_instructor',
-        //     'id_user',
-        //     DB::raw("CONCAT(nombres, ' ', apellidos) AS nombre_completo"),
-        //     'start_date',
-        //     'start_time'
-        // )
-        // ->orderBy('evento_agenda_entrenador.id', 'desc')
-        // ->get();
-
-        // return view($vista, compact('disponibilidadEntrenadores', $disponibilidadEntrenadores));
     }
 
+    // ==============================================================
     // ==============================================================
 
     /*
@@ -557,27 +571,34 @@ class EstudianteController extends Controller
 
         echo 'Join the meeting at: ' . $event->getHangoutLink();
 
-        // $linkMeet = $event->getHangoutLink();
+        return $event->getHangoutLink();
+    }
 
-        // $vista = 'estudiante.disponibilidad';
+    // ==============================================================
+    // ==============================================================
+    // ==============================================================
+    // ==============================================================
+    // ==============================================================
 
-        // $disponibilidadEntrenadores = EventoAgendaEntrenador::leftjoin('usuarios','usuarios.id_user','=','evento_agenda_entrenador.id_instructor')
-        // ->select('evento_agenda_entrenador.id as id_evento',
-        //     'evento_agenda_entrenador.id_instructor',
-        //     'id_user',
-        //     DB::raw("CONCAT(nombres, ' ', apellidos) AS nombre_completo"),
-        //     'start_date',
-        //     'start_time'
-        // )
-        // ->orderBy('evento_agenda_entrenador.id', 'desc')
-        // ->get();
+    public function cancelarClase(Request $request)
+    {
+        try {
+            // $adminCtrl = new AdministradorController();
+            // $sesion = $adminCtrl->validarVariablesSesion();
+    
+            // if(empty($sesion[0]) || is_null($sesion[0]) &&
+            //    empty($sesion[1]) || is_null($sesion[1]) &&
+            //    empty($sesion[2]) || is_null($sesion[2]) &&
+            //    empty($sesion[3]) || is_null($sesion[3]) &&
+            //    $sesion[2] != true)
+            // {
+                // return redirect()->to(route('home'));
+                // } else {
+                return new CancelarClase();
+            // }
 
-        // return view($vista, compact('disponibilidadEntrenadores', $disponibilidadEntrenadores, 'linkMeet'));
-
-        // return view('estudiante.disponibilidad');
-
-        // $hangoutLink = $event->getHangoutLink();
-        // Redirigir a una vista y pasar el enlace de la reunión
-        // return view('disponibilidad', ['hangoutLink' => $hangoutLink]);
+        } catch (Exception $e) {
+            return response()->json("error_exception");
+        }
     }
 }
