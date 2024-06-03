@@ -92,7 +92,7 @@
                 'ordering': false,
                 "lengthMenu": [[10,25,50,100, -1], [10,25,50,100, 'ALL']],
                 dom: 'Blfrtip',
-                "info": "Showing page PAGE de PAGES",
+                "info": "Showing page _PAGE_ de _PAGES_",
                 "infoEmpty": "No hay registros",
                 "buttons": [
                     {
@@ -119,8 +119,8 @@
 
         function reservarClase(idHorario, idInstructor){
 
-            console.log(ID Horario: ${idHorario});
-            console.log(ID Instructor: ${idInstructor});
+            console.log(`ID Horario: ${idHorario}`);
+            console.log(`ID Instructor: ${idInstructor}`);
 
             $.ajax({
                 async: true,
@@ -153,19 +153,6 @@
                         );
                         
                         return;
-                    } 
-                    
-                    else if (response == "clase_ya_reservada")
-                    {
-                        $("#loaderGif").hide();
-                        $("#loaderGif").addClass('ocultar');
-
-                        Swal.fire(
-                            'Info!',
-                            'Ya realizaste reserva de esta clase en este horario!',
-                            'error'
-                        );
-                        return;
                     }
                     else {
                         $("#loaderGif").hide();
@@ -184,10 +171,10 @@
 
         function cancelarClase(idHorario, idInstructor, idEstudiante, idEstado)
         {
-            console.log(ID Horario: ${idHorario});
-            console.log(ID Instructor: ${idInstructor});
-            console.log(ID idEstudiante: ${idEstudiante});
-            console.log(ID idEstado: ${idEstado});
+            console.log(`ID Horario: ${idHorario}`);
+            console.log(`ID Instructor: ${idInstructor}`);
+            console.log(`ID idEstudiante: ${idEstudiante}`);
+            console.log(`ID idEstado: ${idEstado}`);
 
 
             Swal.fire({
