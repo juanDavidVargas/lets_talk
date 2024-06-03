@@ -197,7 +197,7 @@ class EstudianteController extends Controller
                     ->orderBy('evento_agenda_entrenador.start_date', 'desc')
                     ->get();
 
-                $this->createMeet();
+                // $this->createMeet();
 
                 return view($vista, compact('disponibilidadEntrenadores'));
             }
@@ -414,7 +414,8 @@ class EstudianteController extends Controller
         
     public function reservarClase(Request $request)
     {
-        try {
+        try
+        {
             // $adminCtrl = new AdministradorController();
             // $sesion = $adminCtrl->validarVariablesSesion();
     
@@ -450,7 +451,7 @@ class EstudianteController extends Controller
     3. Devuelve la instancia de Google_Client configurada.
     */
 
-    private function getGoogleClient()
+    public function getGoogleClient()
     {
         $client = new Google_Client();
         $client->setClientId(env('GOOGLE_CLIENT_ID'));
@@ -521,43 +522,24 @@ class EstudianteController extends Controller
     6. Imprime el enlace para unirse a la reunión (getHangoutLink()).
     */
 
-    // public function createMeet($fechaClase, $horaClase)
-    public function createMeet()
+    public function createMeet($fechaClase, $horaClase)
     {
         $client = $this->getGoogleClient();
         $client->setAccessToken(Session::get('google_access_token'));
         $service = new Google_Service_Calendar($client);
 
-        // $timeZone = 'America/Bogota';
-        // $timeZone = ':00-05:00';
-
-        // $startDateTime = "2024-04-30";
-        // $endDateTime = "18:00";
+        $timeZone = 'America/Bogota';
+        $timeZone = ':00-05:00';
 
         // Crear la fecha y hora de inicio y fin del evento
-        // $startDateTime = $fechaClase . 'T' . $horaClase . ':00-05:00';
-        // $endDateTime = Carbon::parse($startDateTime)->addHour()->format('Y-m-d\TH:i:sP');
-        // $endDateTime = $startDateTime->copy()->addMinutes(30);
-        // =================================================================================================================
-        // $startDateTime = Carbon::createFromFormat('Y-m-d H:i', $fechaClase . ' ' . $horaClase, 'America/Bogota');
-        // $endDateTime = $startDateTime->copy()->addHour();
-        // =================================================================================================================
-        // $startDateTime = Carbon::createFromFormat('Y-m-d H:i', $fechaClase . ' ' . $horaClase, $timeZone);
-        // $startDateTime = $fechaClase . 'T' . $horaClase . ':00-07:00';
-        // $endDateTime = $startDateTime->copy()->addMinutes(30);
-        // =================================================================================================================
+        $startDateTime = $fechaClase . 'T' . $horaClase . ':00-05:00';
+        $endDateTime = Carbon::parse($startDateTime)->addMinutes(30)->format('Y-m-d\TH:i:sP');
 
         $event = new Google_Service_Calendar_Event([
             'summary' => 'Google Meet Meeting',
-            'start' => ['dateTime' => '2024-04-30T18:00:00-05:00'],
-            'end' => ['dateTime' => '2024-04-30T18:30:00-05:00'],
             // =======================================================
-            // 'start' => ['dateTime' => $startDateTime],
-            // 'end' => ['dateTime' => $endDateTime],
-            // =======================================================
-            // 'start' => ['dateTime' => $startDateTime->toRfc3339String(), 'timeZone' => $timeZone],
-            // 'end' => ['dateTime' => $endDateTime->toRfc3339String(), 'timeZone' => $timeZone],
-            // =======================================================
+            'start' => ['dateTime' => $startDateTime],
+            'end' => ['dateTime' => $endDateTime],
             'conferenceData' => [
                 'createRequest' => [
                     'conferenceSolutionKey' => ['type' => 'hangoutsMeet'],
@@ -568,8 +550,6 @@ class EstudianteController extends Controller
 
         $calendarId = 'primary';
         $event = $service->events->insert($calendarId, $event, ['conferenceDataVersion' => 1]);
-
-        echo 'Join the meeting at: ' . $event->getHangoutLink();
 
         return $event->getHangoutLink();
     }

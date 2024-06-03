@@ -92,7 +92,7 @@
                 'ordering': false,
                 "lengthMenu": [[10,25,50,100, -1], [10,25,50,100, 'ALL']],
                 dom: 'Blfrtip',
-                "info": "Showing page _PAGE_ de _PAGES_",
+                "info": "Showing page PAGE de PAGES",
                 "infoEmpty": "No hay registros",
                 "buttons": [
                     {
@@ -119,8 +119,8 @@
 
         function reservarClase(idHorario, idInstructor){
 
-            console.log(`ID Horario: ${idHorario}`);
-            console.log(`ID Instructor: ${idInstructor}`);
+            console.log(ID Horario: ${idHorario});
+            console.log(ID Instructor: ${idInstructor});
 
             $.ajax({
                 async: true,
@@ -145,22 +145,18 @@
                     {
                         $("#loaderGif").hide();
                         $("#loaderGif").addClass('ocultar');
-
-                        // Redirigir a la URL antes de mostrar el SweetAlert
-                        window.location.href = 'http://localhost:8000/auth/google';
-
-                        // $("#linkMeet").html(response.linkMeet);
                         
-                        setTimeout(function() {
-                            Swal.fire(
-                                'Info!',
-                                'Clase Reservada!',
-                                'success'
-                            );
-                        }, 7000);
+                        Swal.fire(
+                            'Info!',
+                            'Clase Reservada!',
+                            'success'
+                        );
                         
                         return;
-                    } else if (response == "clase_ya_reservada") {
+                    } 
+                    
+                    else if (response == "clase_ya_reservada")
+                    {
                         $("#loaderGif").hide();
                         $("#loaderGif").addClass('ocultar');
 
@@ -186,13 +182,12 @@
             });
         }
 
-        // ===============================================================
-
-        function cancelarClase(idHorario, idInstructor, idEstudiante, idEstado) {
-            console.log(`ID Horario: ${idHorario}`);
-            console.log(`ID Instructor: ${idInstructor}`);
-            console.log(`ID idEstudiante: ${idEstudiante}`);
-            console.log(`ID idEstado: ${idEstado}`);
+        function cancelarClase(idHorario, idInstructor, idEstudiante, idEstado)
+        {
+            console.log(ID Horario: ${idHorario});
+            console.log(ID Instructor: ${idInstructor});
+            console.log(ID idEstudiante: ${idEstudiante});
+            console.log(ID idEstado: ${idEstado});
 
 
             Swal.fire({
