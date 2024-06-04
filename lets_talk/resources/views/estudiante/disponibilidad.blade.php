@@ -38,7 +38,9 @@
                             <tr class="header-table">
                                 <th>Entrenador</th>
                                 <th>Fecha</th>
-                                <th>Hora</th>
+                                <th>Hora Inicio</th>
+                                <th>Hora Final</th>
+                                <th>Link Meet</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -52,6 +54,9 @@
                                     $idEvento = $disponibilidad->id_evento;
                                     $idInstructor = $disponibilidad->id_instructor;
                                     $idEstudiante = $disponibilidad->id_estudiante;
+                                    $FechaClase = $disponibilidad->id_estudiante;
+                                    $claseInicio = $disponibilidad->id_estudiante;
+                                    $claseFinal = $disponibilidad->id_estudiante;
                                     $idEstado = $disponibilidad->id_estado;
                                     // dd($disponibilidad);
                                 @endphp
@@ -59,16 +64,20 @@
                                     <td>{{$disponibilidad->nombre_completo}}</td>
                                     <td>{{$disponibilidad->start_date}}</td>
                                     <td>{{$disponibilidad->start_time}}</td>
+                                    <td>{{$disponibilidad->end_time}}</td>
+
+                                    <td>Link Meet</td>
 
                                     @if ($disponibilidad->id_estado == 7)
                                         <td>
-                                            <button type="button" class="text-white" onclick="reservarClase('{{$idEvento}}', '{{$idInstructor}}')" style="background-color: #21277B; padding:0.5em">RESERVAR YA</button>
+                                            <button type="button" class="text-white" onclick="reservarClase('{{$idEvento}}','{{$idInstructor}}','{{$FechaClase}}','{{$claseInicio}}','{{$claseFinal}}')" style="background-color: #21277B; padding:0.5em">RESERVAR YA</button>
                                         </td>
                                     @else
                                         <td>
                                             <button type="button" class="text-white btn btn-warning" onclick="cancelarClase('{{$idEvento}}','{{$idInstructor}}','{{$idEstudiante}}','{{$idEstado}}')">CANCELAR</button>
                                         </td>
                                     @endif
+
                                 </tr>
                             @endforeach
                         </tbody>
@@ -154,7 +163,23 @@
                         
                         return;
                     }
-                    else {
+
+                    if(response == "creditos_no_disponibles")
+                    {
+                        $("#loaderGif").hide();
+                        $("#loaderGif").addClass('ocultar');
+                        
+                        Swal.fire(
+                            'Info!',
+                            'No tiene créditos Disponibles!',
+                            'success'
+                        );
+                        
+                        return;
+                    }
+
+                    if(response == "error")
+                    {
                         $("#loaderGif").hide();
                         $("#loaderGif").addClass('ocultar');
 

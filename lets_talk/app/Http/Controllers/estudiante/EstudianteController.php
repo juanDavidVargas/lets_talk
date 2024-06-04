@@ -187,6 +187,8 @@ class EstudianteController extends Controller
                         DB::raw("CONCAT(usuarios.nombres, ' ', usuarios.apellidos) AS nombre_completo"),
                         'evento_agenda_entrenador.start_date',
                         'evento_agenda_entrenador.start_time',
+                        'evento_agenda_entrenador.end_date',
+                        'evento_agenda_entrenador.end_time',
                         DB::raw('COALESCE(creditos.id_estado, 7) AS id_estado'),
                         'creditos.id_estudiante'
                     )
