@@ -70,7 +70,7 @@
 
                                     @if ($disponibilidad->id_estado == 7)
                                         <td>
-                                            <button type="button" class="text-white" onclick="reservarClase('{{$idEvento}}','{{$idInstructor}}','{{$FechaClase}}','{{$claseInicio}}','{{$claseFinal}}')" style="background-color: #21277B; padding:0.5em">RESERVAR YA</button>
+                                            <button type="button" class="text-white" onclick="reservarClase('{{$idEvento}}','{{$idInstructor}}','{{$FechaClase}}','{{$claseInicio}}')" style="background-color: #21277B; padding:0.5em">RESERVAR YA</button>
                                         </td>
                                     @else
                                         <td>
@@ -126,84 +126,96 @@
 
         // ===============================================================
 
-        function reservarClase(idHorario,idInstructor,FechaClase,claseInicio,claseFinal) {
+        function reservarClase(idHorario,idInstructor,FechaClase,claseInicio) {
             console.log(`ID Horario: ${idHorario}`);
             console.log(`ID Instructor: ${idInstructor}`);
             console.log(`Fecha Clase: ${FechaClase}`);
             console.log(`Hora Inicio: ${claseInicio}`);
-            console.log(`Hora Final: ${claseFinal}`);
 
-            $.ajax({
-                async: true,
-                url: "{{route('estudiante.reservar_clase')}}",
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    'id_instructor': idInstructor,
-                    'id_horario': idHorario,
-                    'fecha_clase': FechaClase,
-                    'hora_clase_inicio': claseInicio,
-                    'hora_clase_final': claseFinal
-                },
-                beforeSend: function() {
-                    $("#loaderGif").show();
-                    $("#loaderGif").removeClass('ocultar');
-                },
-                success: function(response)
+            Swal.fire({
+                title: '¿Realmente quiere reservar esta clase?',
+                html: 'Puede proceder si está segur@ del horario y entrenador@',
+                icon: 'info',
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.value)
                 {
-                    $("#loaderGif").hide();
-                    $("#loaderGif").addClass('ocultar');
+                    console.log(result.value);
+                    $.ajax({
+                        async: true,
+                        url: "{{route('estudiante.reservar_clase')}}",
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            'id_instructor': idInstructor,
+                            'id_horario': idHorario,
+                            'fecha_clase': FechaClase,
+                            'hora_clase_inicio': claseInicio,
+                        },
+                        beforeSend: function() {
+                            $("#loaderGif").show();
+                            $("#loaderGif").removeClass('ocultar');
+                        },
+                        success: function(response)
+                        {
+                            $("#loaderGif").hide();
+                            $("#loaderGif").addClass('ocultar');
 
-                    if(response == "clase_reservada")
-                    {
-                        $("#loaderGif").hide();
-                        $("#loaderGif").addClass('ocultar');
-                        
-                        Swal.fire(
-                            'Info!',
-                            'Clase Reservada!',
-                            'success'
-                        );
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 3000);
-                        return;
-                    }
+                            if(response == "clase_reservada")
+                            {
+                                $("#loaderGif").hide();
+                                $("#loaderGif").addClass('ocultar');
+                                
+                                Swal.fire(
+                                    'Info!',
+                                    'Clase Reservada!',
+                                    'success'
+                                );
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 3000);
+                                return;
+                            }
 
-                    if(response == "creditos_no_disponibles")
-                    {
-                        $("#loaderGif").hide();
-                        $("#loaderGif").addClass('ocultar');
-                        
-                        Swal.fire(
-                            'Advertencia!',
-                            'No tiene créditos Disponibles!',
-                            'warning'
-                        );
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 3000);
-                        return;
-                    }
+                            if(response == "creditos_no_disponibles")
+                            {
+                                $("#loaderGif").hide();
+                                $("#loaderGif").addClass('ocultar');
+                                
+                                Swal.fire(
+                                    'Advertencia!',
+                                    'No tiene créditos Disponibles!',
+                                    'warning'
+                                );
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 3000);
+                                return;
+                            }
 
-                    if(response == "error")
-                    {
-                        $("#loaderGif").hide();
-                        $("#loaderGif").addClass('ocultar');
+                            if(response == "error")
+                            {
+                                $("#loaderGif").hide();
+                                $("#loaderGif").addClass('ocultar');
 
-                        Swal.fire(
-                            'Error!',
-                            'Ocurrio un error, íntente de nuevo, si el problema persiste, comuniquese con el administrador!',
-                            'error'
-                        );
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 3000);
-                        return;
-                    }
-                }
-            });
+                                Swal.fire(
+                                    'Error!',
+                                    'Ocurrio un error, íntente de nuevo, si el problema persiste, comuniquese con el administrador!',
+                                    'error'
+                                );
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 3000);
+                                return;
+                            }
+                        } // FIN Success
+                    }); // Fin ajax
+                } // FIN if
+            }); // FIN then de Swal.Fire
         }
 
         // ===============================================================
@@ -219,8 +231,8 @@
             Swal.fire({
                 title: '¿Realmente quiere cancelar esta clase?',
                 html: 'Deberá crearla nuevamente si cambia de opinión',
-                icon: 'info',
-                type: 'info',
+                icon: 'warning',
+                type: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Yes',
                 cancelButtonText: 'No'
@@ -286,7 +298,7 @@
                                 return;
                             }
                         } // FIN Success
-                    }); // Fon ajax
+                    }); // Fin ajax
                 } // FIN if
             }); // FIN then de Swal.Fire
         } // FIN reservarClase

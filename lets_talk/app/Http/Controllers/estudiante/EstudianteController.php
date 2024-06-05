@@ -526,7 +526,8 @@ class EstudianteController extends Controller
     6. Imprime el enlace para unirse a la reunión (getHangoutLink()).
     */
 
-    public function createMeet($fechaClase, $horaClaseInicio)
+    public function createMeet()
+    // public function createMeet($fechaClase, $horaClaseInicio)
     {
         $client = $this->getGoogleClient();
         $client->setAccessToken(Session::get('google_access_token'));
