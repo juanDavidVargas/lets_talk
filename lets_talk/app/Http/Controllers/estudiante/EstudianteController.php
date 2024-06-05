@@ -414,25 +414,41 @@ class EstudianteController extends Controller
     // ==============================================================
     // ==============================================================
         
+    // public function reservarClase(Request $request)
+    // {
+    //     try
+    //     {
+    //         // $adminCtrl = new AdministradorController();
+    //         // $sesion = $adminCtrl->validarVariablesSesion();
+    
+    //         // if(empty($sesion[0]) || is_null($sesion[0]) &&
+    //         //    empty($sesion[1]) || is_null($sesion[1]) &&
+    //         //    empty($sesion[2]) || is_null($sesion[2]) &&
+    //         //    empty($sesion[3]) || is_null($sesion[3]) &&
+    //         //    $sesion[2] != true)
+    //         // {
+    //             // return redirect()->to(route('home'));
+    //             // } else {
+    //             return new ReservarClase();
+    //         // }
+
+    //     } catch (Exception $e) {
+    //         return response()->json("error_exception");
+    //     }
+    // }
+
     public function reservarClase(Request $request)
     {
         try
         {
-            // $adminCtrl = new AdministradorController();
-            // $sesion = $adminCtrl->validarVariablesSesion();
-    
-            // if(empty($sesion[0]) || is_null($sesion[0]) &&
-            //    empty($sesion[1]) || is_null($sesion[1]) &&
-            //    empty($sesion[2]) || is_null($sesion[2]) &&
-            //    empty($sesion[3]) || is_null($sesion[3]) &&
-            //    $sesion[2] != true)
-            // {
-                // return redirect()->to(route('home'));
-                // } else {
-                return new ReservarClase();
-            // }
+            $createAuthMail = new EstudianteController();
+            $client = $createAuthMail->getGoogleClient();
+            $authUrl = $client->createAuthUrl();
 
-        } catch (Exception $e) {
+            return response()->json(['status' => 'auth_required', 'auth_url' => $authUrl]);
+        }
+        catch (Exception $e)
+        {
             return response()->json("error_exception");
         }
     }
@@ -501,6 +517,18 @@ class EstudianteController extends Controller
     5. Redirige al usuario a la ruta createMeet para crear una reunión en Google Meet.
     */
 
+    // public function handleGoogleCallback(Request $request)
+    // {
+    //     $client = $this->getGoogleClient();
+    //     $client->authenticate($request->input('code'));
+    //     $accessToken = $client->getAccessToken();
+
+    //     Session::put('google_access_token', $accessToken);
+
+    //     // return redirect()->route('createMeet');
+    //     return redirect()->route('estudiante.disponibilidad');
+    // }
+
     public function handleGoogleCallback(Request $request)
     {
         $client = $this->getGoogleClient();
@@ -509,9 +537,62 @@ class EstudianteController extends Controller
 
         Session::put('google_access_token', $accessToken);
 
-        // return redirect()->route('createMeet');
-        return redirect()->route('estudiante.disponibilidad');
+        // Obtén los datos de la reserva almacenados en la sesión
+        $idEstudiante = session('usuario_id');
+        $idInstructor = session('id_instructor');
+        $idHorario = session('id_horario');
+        $fechaClase = session('fecha_clase');
+        $horaClaseInicio = session('hora_clase_inicio');
+
+        // Crea el enlace de Google Meet
+        $createLinkMeet = $this->createMeet($fechaClase, $horaClaseInicio);
+
+        try
+        {
+            DB::connection('mysql')->beginTransaction();
+
+            $reservarClaseCreate = Reserva::create([
+                'id_estudiante' => $idEstudiante,
+                'id_instructor' => $idInstructor,
+                'id_trainer_horario' => $idHorario
+            ]);
+
+            if(isset($reservarClaseCreate) && !is_null($reservarClaseCreate) && !empty($reservarClaseCreate)) {
+                DB::connection('mysql')->commit();
+
+                $queryEventoAgendaEntrenador = EventoAgendaEntrenador::select('id', 'start_date', 'start_time')
+                                                    ->where('id', $idHorario)
+                                                    ->first();
+
+                $fechaClase = $queryEventoAgendaEntrenador->start_date;
+                $horaClase = $queryEventoAgendaEntrenador->start_time;
+
+                $fechaHora = $fechaClase . ' ' . $horaClase;
+                $fechaHora = Carbon::createFromFormat('Y-m-d H:i', $fechaHora);
+                $fechaHora = $fechaHora->timestamp;
+
+                $idCredito = session('id_credito');
+
+                Credito::where('id_credito', $idCredito)
+                            ->update([
+                                'id_estado' => 8,
+                                'id_instructor' => $idInstructor,
+                                'id_trainer_agenda' => $idHorario,
+                                'fecha_consumo_credito' => $fechaHora,
+                            ]);
+
+                DB::connection('mysql')->commit();
+
+                return redirect()->route('estudiante.disponibilidad')->with('status', 'Clase Reservada');
+            }
+        }
+        catch (Exception $e)
+        {
+            DB::connection('mysql')->rollback();
+            return redirect()->route('estudiante.disponibilidad')->with('error', 'Ocurrió un error, intente de nuevo.');
+        }
     }
+
 
     // ==============================================================
     // ==============================================================
@@ -526,8 +607,8 @@ class EstudianteController extends Controller
     6. Imprime el enlace para unirse a la reunión (getHangoutLink()).
     */
 
-    public function createMeet()
-    // public function createMeet($fechaClase, $horaClaseInicio)
+    // public function createMeet()
+    public function createMeet($fechaClase, $horaClaseInicio)
     {
         $client = $this->getGoogleClient();
         $client->setAccessToken(Session::get('google_access_token'));
@@ -543,6 +624,9 @@ class EstudianteController extends Controller
         $event = new Google_Service_Calendar_Event([
             'summary' => 'Google Meet Meeting',
             // =======================================================
+            'start' => ['dateTime' => '2024-06-06T10:00:00-05:00'],
+            'end' => ['dateTime' => '2024-06-06T11:00:00-05:00'],
+
             'start' => ['dateTime' => $startDateTime],
             'end' => ['dateTime' => $endDateTime],
             'conferenceData' => [

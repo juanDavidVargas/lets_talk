@@ -34,20 +34,25 @@ class ReservarClase implements Responsable
         if (isset($queryDisponibilidadCreditos) && !is_null($queryDisponibilidadCreditos) && !empty($queryDisponibilidadCreditos))
         {
             // dd('si hay crédito disponible');
-
             try
             {
                 // Llamar los métodos de creación del link de Google Meet
                 // $createAuthMail = new EstudianteController();
                 // $createAuthMail->getGoogleClient();
                 // $createAuthMail->redirectToGoogle();
+                // // dd($createAuthMail->redirectToGoogle());
                 // $createLinkMeet = $createAuthMail->createMeet($fechaClase, $horaClaseInicio);
+
+                $createAuthMail = new EstudianteController();
+                $client = $createAuthMail->getGoogleClient();
+                $authUrl = $client->createAuthUrl();
+                $createLinkMeet = $createAuthMail->createMeet($fechaClase, $horaClaseInicio);
 
                 // dd($createLinkMeet);
                 // dd($createAuthMail->redirectToGoogle());
 
-                // if (isset($createLinkMeet) && !is_null($createLinkMeet) && !empty($createLinkMeet))
-                // {
+                if (isset($createLinkMeet) && !is_null($createLinkMeet) && !empty($createLinkMeet))
+                {
                     DB::connection('mysql')->beginTransaction();
 
                     $reservarClaseCreate = Reserva::create([
@@ -83,9 +88,10 @@ class ReservarClase implements Responsable
                                     );
                         DB::connection('mysql')->commit();
 
-                        return response()->json("clase_reservada");
+                        // return response()->json("clase_reservada");
+                        return response()->json(['status' => 'clase_reservada', 'auth_url' => $authUrl]);
                     }
-                // }
+                }
             } catch (Exception $e)
             {
                 dd($e);

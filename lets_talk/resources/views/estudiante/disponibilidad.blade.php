@@ -95,6 +95,26 @@
     <script src="{{asset('DataTable/vfs_fonts.js')}}"></script>
     <script src="{{asset('DataTable/datatables.min.js')}}"></script>
 
+    @if (session('status'))
+        <script>
+            Swal.fire(
+                'Info!',
+                '{{ session('status') }}',
+                'success'
+            );
+        </script>
+    @endif
+
+    @if (session('error'))
+        <script>
+            Swal.fire(
+                'Error!',
+                '{{ session('error') }}',
+                'error'
+            );
+        </script>
+    @endif
+
     <script>
         $( document ).ready(function() {
             $('#tbl_disponibilidades').DataTable({
@@ -165,20 +185,39 @@
                             $("#loaderGif").hide();
                             $("#loaderGif").addClass('ocultar');
 
-                            if(response == "clase_reservada")
-                            {
-                                $("#loaderGif").hide();
-                                $("#loaderGif").addClass('ocultar');
+                            // if(response == "clase_reservada")
+                            // {
+                            //     $("#loaderGif").hide();
+                            //     $("#loaderGif").addClass('ocultar');
                                 
-                                Swal.fire(
-                                    'Info!',
-                                    'Clase Reservada!',
-                                    'success'
-                                );
-                                setTimeout(() => {
-                                    window.location.reload();
-                                }, 3000);
-                                return;
+                            //     Swal.fire(
+                            //         'Info!',
+                            //         'Clase Reservada!',
+                            //         'success'
+                            //     );
+                            //     setTimeout(() => {
+                            //         window.location.reload();
+                            //     }, 3000);
+                            //     return;
+                            // }
+
+                            // if (response.status === "clase_reservada") {
+                            //     // Redirige a la URL de autenticación de Google
+                            //     window.location.href = response.auth_url;
+
+                            //     // Mostrar mensaje de éxito después de redirigir
+                            //     setTimeout(() => {
+                            //         Swal.fire(
+                            //             'Info!',
+                            //             'Clase Reservada!',
+                            //             'success'
+                            //         );
+                            //     }, 5000); // 2 segundos de retraso
+                            // }
+
+                            if (response.status === "auth_required") {
+                                // Redirige a la URL de autenticación de Google
+                                window.location.href = response.auth_url;
                             }
 
                             if(response == "creditos_no_disponibles")
@@ -216,7 +255,7 @@
                     }); // Fin ajax
                 } // FIN if
             }); // FIN then de Swal.Fire
-        }
+        } // FIN function reservarClase
 
         // ===============================================================
 
