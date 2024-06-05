@@ -485,6 +485,8 @@ class EstudianteController extends Controller
     {
         $client = $this->getGoogleClient();
         return redirect($client->createAuthUrl());
+        // return redirect()->route('auth.google');
+        // http://localhost:8000/auth/google
     }
 
     // ==============================================================
@@ -524,17 +526,17 @@ class EstudianteController extends Controller
     6. Imprime el enlace para unirse a la reunión (getHangoutLink()).
     */
 
-    public function createMeet($fechaClase, $horaClase)
+    public function createMeet($fechaClase, $horaClaseInicio)
     {
         $client = $this->getGoogleClient();
         $client->setAccessToken(Session::get('google_access_token'));
         $service = new Google_Service_Calendar($client);
 
-        $timeZone = 'America/Bogota';
-        $timeZone = ':00-05:00';
+        // $timeZone = 'America/Bogota';
+        // $timeZone = ':00-05:00';
 
         // Crear la fecha y hora de inicio y fin del evento
-        $startDateTime = $fechaClase . 'T' . $horaClase . ':00-05:00';
+        $startDateTime = $fechaClase . 'T' . $horaClaseInicio . ':00-05:00';
         $endDateTime = Carbon::parse($startDateTime)->addMinutes(30)->format('Y-m-d\TH:i:sP');
 
         $event = new Google_Service_Calendar_Event([

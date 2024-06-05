@@ -54,9 +54,9 @@
                                     $idEvento = $disponibilidad->id_evento;
                                     $idInstructor = $disponibilidad->id_instructor;
                                     $idEstudiante = $disponibilidad->id_estudiante;
-                                    $FechaClase = $disponibilidad->id_estudiante;
-                                    $claseInicio = $disponibilidad->id_estudiante;
-                                    $claseFinal = $disponibilidad->id_estudiante;
+                                    $FechaClase = $disponibilidad->start_date;
+                                    $claseInicio = $disponibilidad->start_time;
+                                    $claseFinal = $disponibilidad->end_time;
                                     $idEstado = $disponibilidad->id_estado;
                                     // dd($disponibilidad);
                                 @endphp
@@ -126,10 +126,12 @@
 
         // ===============================================================
 
-        function reservarClase(idHorario, idInstructor){
-
+        function reservarClase(idHorario,idInstructor,FechaClase,claseInicio,claseFinal) {
             console.log(`ID Horario: ${idHorario}`);
             console.log(`ID Instructor: ${idInstructor}`);
+            console.log(`Fecha Clase: ${FechaClase}`);
+            console.log(`Hora Inicio: ${claseInicio}`);
+            console.log(`Hora Final: ${claseFinal}`);
 
             $.ajax({
                 async: true,
@@ -139,7 +141,10 @@
                 data: {
                     "_token": "{{ csrf_token() }}",
                     'id_instructor': idInstructor,
-                    'id_horario': idHorario
+                    'id_horario': idHorario,
+                    'fecha_clase': FechaClase,
+                    'hora_clase_inicio': claseInicio,
+                    'hora_clase_final': claseFinal
                 },
                 beforeSend: function() {
                     $("#loaderGif").show();
@@ -160,7 +165,9 @@
                             'Clase Reservada!',
                             'success'
                         );
-                        
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 3000);
                         return;
                     }
 
@@ -170,11 +177,13 @@
                         $("#loaderGif").addClass('ocultar');
                         
                         Swal.fire(
-                            'Info!',
+                            'Advertencia!',
                             'No tiene créditos Disponibles!',
-                            'success'
+                            'warning'
                         );
-                        
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 3000);
                         return;
                     }
 
@@ -188,11 +197,16 @@
                             'Ocurrio un error, íntente de nuevo, si el problema persiste, comuniquese con el administrador!',
                             'error'
                         );
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 3000);
                         return;
                     }
                 }
             });
         }
+
+        // ===============================================================
 
         function cancelarClase(idHorario, idInstructor, idEstudiante, idEstado)
         {

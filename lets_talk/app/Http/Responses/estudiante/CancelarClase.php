@@ -31,7 +31,7 @@ class CancelarClase implements Responsable
             try {
                 $claseReservada = Reserva::findOrFail($idClaseReservada->id_reserva);
 
-                if ($claseReservada) {
+                if (isset($claseReservada) && !is_null($claseReservada) && !empty($claseReservada)) {
 
                     $claseCancelada = $claseReservada->forceDelete();
 
