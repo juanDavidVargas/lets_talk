@@ -47,8 +47,6 @@
                         <tbody>
                             @foreach ($disponibilidadEntrenadores as $disponibilidad)
                                 @php
-                                    // dd($disponibilidad);
-
                                     $idEvento = $disponibilidad->id_evento;
                                     $idInstructor = $disponibilidad->id_instructor;
                                     $idEstudiante = $disponibilidad->id_estudiante;
@@ -56,7 +54,6 @@
                                     $claseInicio = $disponibilidad->start_time;
                                     $claseFinal = $disponibilidad->end_time;
                                     $idEstado = $disponibilidad->id_estado;
-
                                 @endphp
                                 <tr>
                                     <td>{{$disponibilidad->nombre_completo}}</td>
@@ -65,7 +62,9 @@
                                     <td>{{$disponibilidad->end_time}}</td>
 
                                     @if ($disponibilidad->link_meet != null)
-                                        <td>{{$disponibilidad->link_meet}}</td>
+                                        <td>
+                                            <a href="{{$disponibilidad->link_meet}}" target="_blank">{{$disponibilidad->link_meet}}</a>
+                                        </td>
                                     @else
                                         <td></td>
                                     @endif
