@@ -95,7 +95,7 @@
     <script src="{{asset('DataTable/vfs_fonts.js')}}"></script>
     <script src="{{asset('DataTable/datatables.min.js')}}"></script>
 
-    @if (session('status'))
+    {{-- @if (session('status'))
         <script>
             Swal.fire(
                 'Info!',
@@ -113,7 +113,7 @@
                 'error'
             );
         </script>
-    @endif
+    @endif --}}
 
     <script>
         $( document ).ready(function() {
