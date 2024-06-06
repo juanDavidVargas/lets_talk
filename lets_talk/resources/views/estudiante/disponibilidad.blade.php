@@ -45,10 +45,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @php
-                                // dd($disponibilidadEntrenadores);
-                            @endphp
-                            
                             @foreach ($disponibilidadEntrenadores as $disponibilidad)
                                 @php
                                     $idEvento = $disponibilidad->id_evento;
@@ -58,7 +54,6 @@
                                     $claseInicio = $disponibilidad->start_time;
                                     $claseFinal = $disponibilidad->end_time;
                                     $idEstado = $disponibilidad->id_estado;
-                                    // dd($disponibilidad);
                                 @endphp
                                 <tr>
                                     <td>{{$disponibilidad->nombre_completo}}</td>
@@ -77,7 +72,6 @@
                                             <button type="button" class="text-white btn btn-warning" onclick="cancelarClase('{{$idEvento}}','{{$idInstructor}}','{{$idEstudiante}}','{{$idEstado}}')">CANCELAR</button>
                                         </td>
                                     @endif
-
                                 </tr>
                             @endforeach
                         </tbody>
@@ -94,26 +88,6 @@
     <script src="{{asset('DataTable/pdfmake.min.js')}}"></script>
     <script src="{{asset('DataTable/vfs_fonts.js')}}"></script>
     <script src="{{asset('DataTable/datatables.min.js')}}"></script>
-
-    {{-- @if (session('status'))
-        <script>
-            Swal.fire(
-                'Info!',
-                '{{ session('status') }}',
-                'success'
-            );
-        </script>
-    @endif
-
-    @if (session('error'))
-        <script>
-            Swal.fire(
-                'Error!',
-                '{{ session('error') }}',
-                'error'
-            );
-        </script>
-    @endif --}}
 
     <script>
         $( document ).ready(function() {
@@ -185,46 +159,19 @@
                             $("#loaderGif").hide();
                             $("#loaderGif").addClass('ocultar');
 
-                            // if(response == "clase_reservada")
-                            // {
-                            //     $("#loaderGif").hide();
-                            //     $("#loaderGif").addClass('ocultar');
-                                
-                            //     Swal.fire(
-                            //         'Info!',
-                            //         'Clase Reservada!',
-                            //         'success'
-                            //     );
-                            //     setTimeout(() => {
-                            //         window.location.reload();
-                            //     }, 3000);
-                            //     return;
-                            // }
-
-                            // if (response.status === "clase_reservada") {
-                            //     // Redirige a la URL de autenticación de Google
-                            //     window.location.href = response.auth_url;
-
-                            //     // Mostrar mensaje de éxito después de redirigir
-                            //     setTimeout(() => {
-                            //         Swal.fire(
-                            //             'Info!',
-                            //             'Clase Reservada!',
-                            //             'success'
-                            //         );
-                            //     }, 5000); // 2 segundos de retraso
-                            // }
-
                             if (response.status === "auth_required") {
-                                // Redirige a la URL de autenticación de Google
                                 window.location.href = response.auth_url;
-                            }
-
-                            if(response == "creditos_no_disponibles")
-                            {
-                                $("#loaderGif").hide();
-                                $("#loaderGif").addClass('ocultar');
-                                
+                            } else if (response.status === "clase_reservada") {
+                                Swal.fire(
+                                    'Info!',
+                                    'Clase Reservada!',
+                                    'success'
+                                );
+                                $('#linkMeet').text(response.meet_link);
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 3000);
+                            } else if (response.status === "creditos_no_disponibles") {
                                 Swal.fire(
                                     'Advertencia!',
                                     'No tiene créditos Disponibles!',
@@ -233,23 +180,15 @@
                                 setTimeout(() => {
                                     window.location.reload();
                                 }, 3000);
-                                return;
-                            }
-
-                            if(response == "error")
-                            {
-                                $("#loaderGif").hide();
-                                $("#loaderGif").addClass('ocultar');
-
+                            } else if (response.status === "error") {
                                 Swal.fire(
                                     'Error!',
-                                    'Ocurrio un error, íntente de nuevo, si el problema persiste, comuniquese con el administrador!',
+                                    'Ocurrió un error, inténtelo de nuevo. Si el problema persiste, comuníquese con el administrador.',
                                     'error'
                                 );
                                 setTimeout(() => {
                                     window.location.reload();
                                 }, 3000);
-                                return;
                             }
                         } // FIN Success
                     }); // Fin ajax
