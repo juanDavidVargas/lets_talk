@@ -9,6 +9,10 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\usuarios\Reserva;
 use App\Models\estudiante\Credito;
+use Google_Client;
+use Google_Service_Calendar;
+use Google_Service_Calendar_Event;
+use Illuminate\Support\Facades\Session;
 
 class CancelarClase implements Responsable
 {

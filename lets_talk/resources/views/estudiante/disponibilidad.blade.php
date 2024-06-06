@@ -4,11 +4,11 @@
 @stop
 
 @section('content')
-    <div class="row">
+    {{-- <div class="row">
         <div class="col-12">
             <h2 class="text-center" id="linkMeet"></h2>
         </div>
-    </div>
+    </div> --}}
 
     <div class="row">
         <div class="col-12">
@@ -47,6 +47,8 @@
                         <tbody>
                             @foreach ($disponibilidadEntrenadores as $disponibilidad)
                                 @php
+                                    // dd($disponibilidad);
+
                                     $idEvento = $disponibilidad->id_evento;
                                     $idInstructor = $disponibilidad->id_instructor;
                                     $idEstudiante = $disponibilidad->id_estudiante;
@@ -54,6 +56,7 @@
                                     $claseInicio = $disponibilidad->start_time;
                                     $claseFinal = $disponibilidad->end_time;
                                     $idEstado = $disponibilidad->id_estado;
+
                                 @endphp
                                 <tr>
                                     <td>{{$disponibilidad->nombre_completo}}</td>
@@ -61,7 +64,11 @@
                                     <td>{{$disponibilidad->start_time}}</td>
                                     <td>{{$disponibilidad->end_time}}</td>
 
-                                    <td>Link Meet</td>
+                                    @if ($disponibilidad->link_meet != null)
+                                        <td>{{$disponibilidad->link_meet}}</td>
+                                    @else
+                                        <td></td>
+                                    @endif
 
                                     @if ($disponibilidad->id_estado == 7)
                                         <td>
@@ -167,7 +174,7 @@
                                     'Clase Reservada!',
                                     'success'
                                 );
-                                $('#linkMeet').text(response.meet_link);
+                                // $('#linkMeet').text(response.meet_link);
                                 setTimeout(() => {
                                     window.location.reload();
                                 }, 3000);

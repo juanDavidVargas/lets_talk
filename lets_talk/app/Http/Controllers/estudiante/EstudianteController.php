@@ -173,6 +173,7 @@ class EstudianteController extends Controller
                                     ->orWhereNull('creditos.id_estado');
                             });
                     })
+                    ->leftJoin('reservas', 'reservas.id_trainer_horario', '=', 'evento_agenda_entrenador.id')
                     ->select(
                         'evento_agenda_entrenador.id as id_evento',
                         'evento_agenda_entrenador.id_instructor',
@@ -182,7 +183,8 @@ class EstudianteController extends Controller
                         'evento_agenda_entrenador.end_date',
                         'evento_agenda_entrenador.end_time',
                         DB::raw('COALESCE(creditos.id_estado, 7) AS id_estado'),
-                        'creditos.id_estudiante'
+                        'creditos.id_estudiante',
+                        'link_meet'
                     )
                     ->where(function ($query) {
                         $query->whereNull('creditos.id_estado')

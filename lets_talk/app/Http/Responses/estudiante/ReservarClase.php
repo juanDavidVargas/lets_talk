@@ -50,7 +50,8 @@ class ReservarClase implements Responsable
                     $reservarClaseCreate = Reserva::create([
                         'id_estudiante' => $idEstudiante,
                         'id_instructor' => $idInstructor,
-                        'id_trainer_horario' => $idHorario
+                        'id_trainer_horario' => $idHorario,
+                        'link_meet' => $createLinkMeet
                     ]);
     
                     if(isset($reservarClaseCreate) && !is_null($reservarClaseCreate) && !empty($reservarClaseCreate)) {
@@ -77,7 +78,7 @@ class ReservarClase implements Responsable
                         DB::connection('mysql')->commit();
                         // Después de realizar la reserva con éxito
                         Session::forget('google_access_token');
-                        return response()->json(['status' => 'clase_reservada', 'meet_link' => $createLinkMeet]);
+                        return response()->json(['status' => 'clase_reservada']);
                     }
                 }
             } catch (Exception $e)
@@ -194,7 +195,7 @@ class ReservarClase implements Responsable
         $endDateTime = Carbon::parse($startDateTime)->addMinutes(30)->format('Y-m-d\TH:i:sP');
 
         $event = new Google_Service_Calendar_Event([
-            'summary' => 'Clase Google Meet',
+            'summary' => 'Clase LetsTalk',
             'start' => ['dateTime' => $startDateTime],
             'end' => ['dateTime' => $endDateTime],
             'conferenceData' => [
