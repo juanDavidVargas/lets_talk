@@ -184,7 +184,8 @@ class EstudianteController extends Controller
                         'evento_agenda_entrenador.end_time',
                         DB::raw('COALESCE(creditos.id_estado, 7) AS id_estado'),
                         'creditos.id_estudiante',
-                        'link_meet'
+                        'link_meet',
+                        'google_event_id'
                     )
                     ->where(function ($query) {
                         $query->whereNull('creditos.id_estado')

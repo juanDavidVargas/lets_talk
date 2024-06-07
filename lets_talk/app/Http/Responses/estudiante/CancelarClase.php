@@ -41,60 +41,51 @@ class CancelarClase implements Responsable
 
                 if (isset($claseReservada) && !is_null($claseReservada) && !empty($claseReservada))
                 {
-                    // Aquí comienza el código para eliminar el evento del Google Calendar
-                    try
-                    {
-                        try {
-                            // Crear un cliente de Google con las credenciales del archivo JSON
-                            $client = new Google_Client();
-                            $client->setClientId(env('GOOGLE_CLIENT_ID'));
-                            $client->setClientSecret(env('GOOGLE_CLIENT_SECRET'));
-                            $client->setRedirectUri(env('GOOGLE_REDIRECT_URI'));
-                            $client->addScope(Google_Service_Calendar::CALENDAR);
-                            $client->setAccessToken(Session::get('google_access_token'));
-                            // Configurar el cliente Guzzle para desactivar la verificación SSL (Provisional etapa desarrollo)
-                            $client->setHttpClient(new \GuzzleHttp\Client(['verify' => false]));
+                    // try
+                    // {
+                    //     // Crear un cliente de Google con las credenciales del archivo JSON
+                    //     $client = new Google_Client();
+                    //     $client->setClientId(env('GOOGLE_CLIENT_ID'));
+                    //     $client->setClientSecret(env('GOOGLE_CLIENT_SECRET'));
+                    //     $client->setRedirectUri(env('GOOGLE_REDIRECT_URI'));
+                    //     $client->addScope(Google_Service_Calendar::CALENDAR);
 
-                            // Crear una instancia del servicio de Google Calendar
-                            $service = new Google_Service_Calendar($client);
+                    //     $accessToken = Session::get('google_access_token');
+                    //     if (!$accessToken) {
+                    //         throw new Exception('Access token not found in session.');
+                    //     }
 
-                            // Aquí debes obtener el ID del evento asociado con el horario, instructor y estudiante específicos que están siendo cancelados
-                            $idReservaLink = $idClaseReservada->id_reserva;
-                            $service->events->delete('primary', $idReservaLink);
-                            
-                        } catch (Exception $e) {
-                            DB::rollback();
-                            dd($e->getMessage());
-                            return response()->json("error_link");
-                        }
+                    //     $client->setAccessToken($accessToken);
 
-                        // Obtener ID del evento asociado con el horario, instructor y estudiante específicos que están siendo cancelados
-                        // $idHorarioCalendario = EventoAgendaEntrenador::select('id')
-                        //     ->where('id',$idHorario)
-                        //     ->where('id_instructor',$idInstructor)
-                        //     ->first();
+                    //     // $client->setAccessToken(Session::get('google_access_token'));
+                    //     // Configurar el cliente Guzzle para desactivar la verificación SSL (Provisional etapa desarrollo)
+                    //     $client->setHttpClient(new \GuzzleHttp\Client(['verify' => false]));
 
-                        // $idReservaLink = $idHorarioCalendario->id;
+                    //     // Verificar si el token de acceso ha caducado y refrescarlo si es necesario
+                    //     if ($client->isAccessTokenExpired()) {
+                    //         // Asumiendo que has almacenado el refresh token en la sesión
+                    //         $refreshToken = $client->getRefreshToken();
+                    //         if ($refreshToken) {
+                    //             $client->fetchAccessTokenWithRefreshToken($refreshToken);
+                    //             Session::put('google_access_token', $client->getAccessToken());
+                    //         } else {
+                    //             throw new Exception('Access token expired and no refresh token available.');
+                    //         }
+                    //     }
 
-                        // Verificar si el evento existe
-                        // $event = $service->events->get('primary', $idReservaLink);
+                    //     // Crear una instancia del servicio de Google Calendar
+                    //     $service = new Google_Service_Calendar($client);
 
-                        // if ($event) {
-                        //     // Eliminar el evento
-                        //     $service->events->delete('primary', $idReservaLink);
-                        //     // Resto de la lógica para cancelar la clase
-                        //     return response()->json("meet_cancelado");
-                        // } else {
-                        //     return response()->json("evento_no_encontrado");
-                        // }
-                        // $service->events->delete('primary', $idReservaLink);
-                    }
-                    catch (Exception $e)
-                    {
-                        DB::rollback();
-                        dd($e->getMessage());
-                        return response()->json("error_link");
-                    }
+                    //     // Aquí debes obtener el ID del evento asociado con el horario, instructor y estudiante específicos que están siendo cancelados
+                    //     $eventId = $idClaseReservada->id_reserva;
+                    //     $service->events->delete('primary', $eventId);
+                    // }
+                    // catch (Exception $e)
+                    // {
+                    //     DB::rollback();
+                    //     dd($e->getMessage());
+                    //     return response()->json("error_link");
+                    // }
 
                     // ====================================================================
 

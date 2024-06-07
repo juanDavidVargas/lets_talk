@@ -18,6 +18,7 @@ class Reserva extends Model
        'id_estudiante',
        'id_instructor',
        'id_trainer_horario',
-       'link_meet'
+       'link_meet',
+       'google_event_id'
     ];
 }

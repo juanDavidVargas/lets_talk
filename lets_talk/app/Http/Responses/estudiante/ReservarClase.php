@@ -51,10 +51,12 @@ class ReservarClase implements Responsable
                         'id_estudiante' => $idEstudiante,
                         'id_instructor' => $idInstructor,
                         'id_trainer_horario' => $idHorario,
-                        'link_meet' => $createLinkMeet
+                        'link_meet' => $createLinkMeet['eventLink'],
+                        'google_event_id' => $createLinkMeet['eventId'], // Guardar el ID del evento de Google Calendar en la reserva
                     ]);
     
-                    if(isset($reservarClaseCreate) && !is_null($reservarClaseCreate) && !empty($reservarClaseCreate)) {
+                    if(isset($reservarClaseCreate) && !is_null($reservarClaseCreate) && !empty($reservarClaseCreate))
+                    {
                         DB::connection('mysql')->commit();
 
                         $queryEventoAgendaEntrenador = EventoAgendaEntrenador::select('id', 'start_date','start_time')
@@ -209,6 +211,12 @@ class ReservarClase implements Responsable
         $calendarId = 'primary';
         $event = $service->events->insert($calendarId, $event, ['conferenceDataVersion' => 1]);
 
-        return $event->getHangoutLink();
+        $eventId = $event->id;
+        $eventLink = $event->getHangoutLink();
+
+        return [
+            'eventId' => $eventId,
+            'eventLink' => $eventLink
+        ];
     }
 } // FIN class ReservarClase
