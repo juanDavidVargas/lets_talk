@@ -63,7 +63,7 @@
 
                                     @if ($disponibilidad->link_meet != null)
                                         <td>
-                                            <a href="{{$disponibilidad->link_meet}}" target="_blank">{{$disponibilidad->link_meet}}</a>
+                                            <a href="{{$disponibilidad->link_meet}}" target="_blank" class="text-primary">{{$disponibilidad->link_meet}}</a>
                                         </td>
                                     @else
                                         <td></td>
@@ -264,7 +264,25 @@
                                 return;
                             }
 
-                            if(response == "error")
+                            if(response == "error_link")
+                            {
+                                $("#loaderGif").hide();
+                                $("#loaderGif").addClass('ocultar');
+
+                                Swal.fire(
+                                    'Error!',
+                                    'Link Meet NO Cancelado!',
+                                    'error'
+                                );
+
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 3000);
+                                
+                                return;
+                            }
+
+                            if(response == "error_exception")
                             {
                                 $("#loaderGif").hide();
                                 $("#loaderGif").addClass('ocultar');

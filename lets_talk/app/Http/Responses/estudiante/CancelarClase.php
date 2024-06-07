@@ -31,11 +31,33 @@ class CancelarClase implements Responsable
             ->where('id_trainer_horario',$idHorario)
             ->first();
 
-        if (isset($idClaseReservada) && !is_null($idClaseReservada) && !empty($idClaseReservada)) {
-            try {
+        if (isset($idClaseReservada) && !is_null($idClaseReservada) && !empty($idClaseReservada))
+        {
+            try
+            {
                 $claseReservada = Reserva::findOrFail($idClaseReservada->id_reserva);
 
-                if (isset($claseReservada) && !is_null($claseReservada) && !empty($claseReservada)) {
+                if (isset($claseReservada) && !is_null($claseReservada) && !empty($claseReservada))
+                {
+                    // Aquí comienza el código para eliminar el evento del Google Calendar
+                    // try {
+                    //     $client = new Google_Client();
+                    //     $client->setAccessToken(Session::get('google_access_token'));
+
+                    //     // Configurar el cliente Guzzle para desactivar la verificación SSL
+                    //     $client->setHttpClient(new \GuzzleHttp\Client(['verify' => false]));
+
+                    //     $service = new Google_Service_Calendar($client);
+
+                    //     // Aquí debes obtener el ID del evento asociado con el horario, instructor y estudiante específicos que están siendo cancelados
+                    //     $idReservaLink = $idClaseReservada->id_reserva;
+                    //     $service->events->delete('primary', $idReservaLink);
+
+                    // } catch (Exception $e) {
+                    //     DB::rollback();
+                    //     dd($e->getMessage());
+                    //     return response()->json("error_link");
+                    // }
 
                     $claseCancelada = $claseReservada->forceDelete();
 
@@ -48,7 +70,8 @@ class CancelarClase implements Responsable
                         ->orderBy('id_credito','desc')
                         ->first();
 
-                        if (isset($idCreditoConsumido) && !is_null($idCreditoConsumido) && !empty($idCreditoConsumido)) {
+                        if (isset($idCreditoConsumido) && !is_null($idCreditoConsumido) && !empty($idCreditoConsumido))
+                        {
                             $idCreditoLiberado = Credito::where('id_credito', $idCreditoConsumido->id_credito)
                             ->update(
                                 [
@@ -58,8 +81,9 @@ class CancelarClase implements Responsable
                                     'fecha_consumo_credito' => null,
                                 ]
                             );
-    
-                            if ( (isset($claseReservada) && !is_null($claseReservada) && !empty($claseReservada)) && (isset($idCreditoLiberado) && !is_null($idCreditoLiberado) && !empty($idCreditoLiberado)) ) {
+
+                            if ( (isset($claseReservada) && !is_null($claseReservada) && !empty($claseReservada)) && (isset($idCreditoLiberado) && !is_null($idCreditoLiberado) && !empty($idCreditoLiberado)) )
+                            {
                                 DB::connection('mysql')->commit();
                                 return response()->json("clase_cancelada");
                             }
@@ -69,7 +93,7 @@ class CancelarClase implements Responsable
             } catch (Exception $e) {
                 dd($e);
                 DB::connection('mysql')->rollback();
-                return response()->json("error");
+                return response()->json("error_exception");
             } // FIN catch
         } // FIN If
     } // FIN toResponse

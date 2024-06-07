@@ -77,7 +77,7 @@ class ReservarClase implements Responsable
 
                         DB::connection('mysql')->commit();
                         // Después de realizar la reserva con éxito
-                        Session::forget('google_access_token');
+                        // Session::forget('google_access_token');
                         return response()->json(['status' => 'clase_reservada']);
                     }
                 }
