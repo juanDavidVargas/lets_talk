@@ -260,7 +260,23 @@
                                 setTimeout(() => {
                                     window.location.reload();
                                 }, 3000);
+                                return;
+                            }
 
+                            if(response == "meet_cancelado")
+                            {
+                                $("#loaderGif").hide();
+                                $("#loaderGif").addClass('ocultar');
+
+                                Swal.fire(
+                                    'Info!',
+                                    'Meet Cancelado!',
+                                    'success'
+                                );
+
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 3000);
                                 return;
                             }
 
@@ -278,7 +294,6 @@
                                 setTimeout(() => {
                                     window.location.reload();
                                 }, 3000);
-                                
                                 return;
                             }
 
@@ -296,7 +311,6 @@
                                 setTimeout(() => {
                                     window.location.reload();
                                 }, 3000);
-                                
                                 return;
                             }
                         } // FIN Success
