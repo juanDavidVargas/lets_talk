@@ -41,7 +41,7 @@
                                 <th>Hora Inicio</th>
                                 <th>Hora Final</th>
                                 <th>Link Meet</th>
-                                <th>Id Meet</th>
+                                {{-- <th>Id Meet</th> --}}
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -70,13 +70,13 @@
                                         <td></td>
                                     @endif
 
-                                    @if ($disponibilidad->google_event_id != null)
+                                    {{-- @if ($disponibilidad->google_event_id != null)
                                         <td>
                                             <a href="{{$disponibilidad->google_event_id}}" target="_blank" class="text-primary">{{$disponibilidad->google_event_id}}</a>
                                         </td>
                                     @else
                                         <td></td>
-                                    @endif
+                                    @endif --}}
 
                                     @if ($disponibilidad->id_estado == 7)
                                         <td>
