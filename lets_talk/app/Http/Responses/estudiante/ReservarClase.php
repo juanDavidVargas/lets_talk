@@ -167,7 +167,14 @@ class ReservarClase implements Responsable
             $accessToken = $client->getAccessToken();
             Session::put('google_access_token', $accessToken);
 
-            return redirect()->route('estudiante.disponibilidad')->with('status', 'Google authentication successful!');
+            // return redirect()->route('estudiante.disponibilidad')->with('status', 'Google authentication successful!');
+            
+            // Verificar si el token se ha almacenado correctamente
+            if (Session::has('google_access_token')) {
+                return redirect()->route('estudiante.disponibilidad')->with('status', 'Google authentication successful!');
+            } else {
+                return redirect()->route('estudiante.disponibilidad')->with('error', 'Failed to store access token');
+            }
         }
 
         return redirect()->route('estudiante.disponibilidad')->with('error', 'Failed to authenticate with Google');

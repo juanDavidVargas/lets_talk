@@ -60,7 +60,9 @@ class CancelarClase implements Responsable
                         $client->setHttpClient(new \GuzzleHttp\Client(['verify' => false]));
 
                         $accessToken = Session::get('google_access_token');
-                        dd($accessToken);
+                        // dd(Session::all());
+
+                        // dd($accessToken);
 
                         if (!$accessToken) {
                             throw new Exception('Access token no encontrado en la sesión.');

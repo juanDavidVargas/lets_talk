@@ -1,15 +1,9 @@
 @extends('layouts.layout')
-@section('title', 'Create')
+@section('title', 'Reservar Clase')
 @section('css')
 @stop
 
 @section('content')
-    {{-- <div class="row">
-        <div class="col-12">
-            <h2 class="text-center" id="linkMeet"></h2>
-        </div>
-    </div> --}}
-
     <div class="row">
         <div class="col-12">
             <h1 class="text-center text-uppercase">Semana</h1>
@@ -18,13 +12,13 @@
     </div>
 
     <div class="row p-b-20 float-left">
-        <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="col-12">
             <a href="{{route('estudiante.index')}}" class="btn btn-primary">Reservas</a>
         </div>
     </div>
 
     <div class="row p-b-20 float-left">
-        <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="col-12">
             <a href="{{route('estudiante.mis_creditos')}}" class="btn btn-primary">Mis Créditos</a>
         </div>
     </div>
@@ -53,7 +47,8 @@
                                     $FechaClase = $disponibilidad->start_date;
                                     $claseInicio = $disponibilidad->start_time;
                                     $claseFinal = $disponibilidad->end_time;
-                                    $idEstado = $disponibilidad->id_estado;
+                                    // $idEstado = $disponibilidad->id_estado;
+                                    $idEstado = 8;
                                 @endphp
                                 <tr>
                                     <td>{{$disponibilidad->nombre_completo}}</td>
@@ -126,7 +121,8 @@
 
         // ===============================================================
 
-        function reservarClase(idHorario,idInstructor,FechaClase,claseInicio) {
+        function reservarClase(idHorario,idInstructor,FechaClase,claseInicio)
+        {
             console.log(`ID Horario: ${idHorario}`);
             console.log(`ID Instructor: ${idInstructor}`);
             console.log(`Fecha Clase: ${FechaClase}`);
@@ -173,7 +169,6 @@
                                     'Clase Reservada!',
                                     'success'
                                 );
-                                // $('#linkMeet').text(response.meet_link);
                                 setTimeout(() => {
                                     window.location.reload();
                                 }, 3000);
@@ -210,7 +205,6 @@
             console.log(`ID Instructor: ${idInstructor}`);
             console.log(`ID idEstudiante: ${idEstudiante}`);
             console.log(`ID idEstado: ${idEstado}`);
-
 
             Swal.fire({
                 title: '¿Realmente quiere cancelar esta clase?',
