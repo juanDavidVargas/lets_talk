@@ -326,7 +326,8 @@ class EstudianteController extends Controller
                     DB::raw("CONCAT(instructor.nombres, ' ', instructor.apellidos) AS nombre_instructor"),
                     'reservas.id_trainer_horario',
                     'start_date',
-                    'start_time'
+                    'start_time',
+                    'link_meet',
                 )
                 ->where('id_estudiante', $idEstudiante)
                 ->orderBy('start_date', 'desc')

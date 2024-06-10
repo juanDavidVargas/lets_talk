@@ -25,7 +25,9 @@ class CancelarClase implements Responsable
         $idHorario = intval(request('id_horario', null));
         $idEstado = intval(request('id_estado', null));
 
-        DB::connection('mysql')->beginTransaction();
+        // dd($idEstudiante,$idInstructor,$idHorario,$idEstado);
+
+        // DB::connection('mysql')->beginTransaction();
 
         $idClaseReservada = Reserva::select('id_reserva','google_event_id')
             ->where('id_estudiante',$idEstudiante)
@@ -33,11 +35,15 @@ class CancelarClase implements Responsable
             ->where('id_trainer_horario',$idHorario)
             ->first();
 
+        // dd($idClaseReservada);
+
         if (isset($idClaseReservada) && !is_null($idClaseReservada) && !empty($idClaseReservada))
         {
             try
             {
                 $claseReservada = Reserva::findOrFail($idClaseReservada->id_reserva);
+
+                // dd($claseReservada);
 
                 if (isset($claseReservada) && !is_null($claseReservada) && !empty($claseReservada))
                 {
@@ -49,15 +55,15 @@ class CancelarClase implements Responsable
                         $client->setClientSecret(env('GOOGLE_CLIENT_SECRET'));
                         $client->setRedirectUri(env('GOOGLE_REDIRECT_URI'));
                         $client->addScope(Google_Service_Calendar::CALENDAR);
-                        
 
-                        // $client->setAccessToken(Session::get('google_access_token'));
                         // Configurar el cliente Guzzle para desactivar la verificación SSL (Provisional etapa desarrollo)
                         $client->setHttpClient(new \GuzzleHttp\Client(['verify' => false]));
 
                         $accessToken = Session::get('google_access_token');
+                        dd($accessToken);
+
                         if (!$accessToken) {
-                            throw new Exception('Access token not found in session.');
+                            throw new Exception('Access token no encontrado en la sesión.');
                         }
 
                         $client->setAccessToken($accessToken);
@@ -66,11 +72,12 @@ class CancelarClase implements Responsable
                         if ($client->isAccessTokenExpired()) {
                             // Asumiendo que has almacenado el refresh token en la sesión
                             $refreshToken = $client->getRefreshToken();
+                            
                             if ($refreshToken) {
                                 $client->fetchAccessTokenWithRefreshToken($refreshToken);
                                 Session::put('google_access_token', $client->getAccessToken());
                             } else {
-                                throw new Exception('Access token expired and no refresh token available.');
+                                throw new Exception('Access token expiró y no hay token disponible para refrescar.');
                             }
                         }
 
