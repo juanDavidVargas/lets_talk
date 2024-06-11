@@ -96,7 +96,8 @@ class AgendaEntrenadorStore implements Responsable
                     'id_instructor' => $id_instructor,
                     'id_usuario' => $user_id,
                     'id_horario' => $disp,
-                    'num_dia' => intval($dia)
+                    'num_dia' => intval($dia),
+                    'clase_estado' => 10
                 ]);
             }
 
