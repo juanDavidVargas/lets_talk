@@ -43,16 +43,13 @@ class CancelarClase implements Responsable
                 {
                     try
                     {
+                        // Verificar si el token de acceso está en la sesión
+                        if (!Session::has('google_access_token')) {
+                            return $this->redirectToGoogle();
+                        }
+
                         // Crear un cliente de Google con las credenciales del archivo JSON
-                        $client = new Google_Client();
-                        $client->setClientId(env('GOOGLE_CLIENT_ID'));
-                        $client->setClientSecret(env('GOOGLE_CLIENT_SECRET'));
-                        $client->setRedirectUri(env('GOOGLE_REDIRECT_URI'));
-                        $client->addScope(Google_Service_Calendar::CALENDAR);
-
-                        // Configurar el cliente Guzzle para desactivar la verificación SSL (Provisional etapa desarrollo)
-                        $client->setHttpClient(new \GuzzleHttp\Client(['verify' => false]));
-
+                        $client = $this->getGoogleClient();
                         $accessToken = Session::get('google_access_token');
 
                         if (!$accessToken) {
@@ -70,14 +67,14 @@ class CancelarClase implements Responsable
                                 $client->fetchAccessTokenWithRefreshToken($refreshToken);
                                 Session::put('google_access_token', $client->getAccessToken());
                             } else {
-                                throw new Exception('Access token expiró y no hay token disponible para refrescar.');
+                                return $this->redirectToGoogle();
                             }
                         }
 
                         // Crear una instancia del servicio de Google Calendar
                         $service = new Google_Service_Calendar($client);
 
-                        // Aquí debes obtener el ID del evento asociado con el horario, instructor y estudiante específicos que están siendo cancelados
+                        // Obtener el ID del evento asociado con el horario, instructor y estudiante específicos que están siendo cancelados
                         $eventId = $idClaseReservada->google_event_id;
                         $service->events->delete('primary', $eventId);
                     }
@@ -122,6 +119,10 @@ class CancelarClase implements Responsable
                             && (isset($idEventoLiberado) && !is_null($idEventoLiberado) && !empty($idEventoLiberado)) )
                             {
                                 DB::connection('mysql')->commit();
+
+                                // Después de realizar la reserva con éxito, reiniciar la sesión
+                                Session::forget('google_access_token');
+
                                 return response()->json("clase_cancelada");
                             }
                         }
@@ -136,4 +137,40 @@ class CancelarClase implements Responsable
             } // FIN catch
         } // FIN If
     } // FIN toResponse
+
+    // ================================================================
+
+    public function getGoogleClient()
+    {
+        $client = new Google_Client();
+        $client->setClientId(env('GOOGLE_CLIENT_ID'));
+        $client->setClientSecret(env('GOOGLE_CLIENT_SECRET'));
+        $client->setRedirectUri(env('GOOGLE_REDIRECT_URI'));
+        $client->setScopes([Google_Service_Calendar::CALENDAR_EVENTS]);
+        $client->setAccessType('offline');
+        $client->setPrompt('consent');
+
+        // Ignorar verificación de SSL solo para desarrollo local
+        $client->setHttpClient(new \GuzzleHttp\Client(['verify' => false]));
+
+        // Ó Usar el archivo de certificados CA
+        // $client->setHttpClient(new \GuzzleHttp\Client(['verify' => 'ruta/a/tu/cacert.pem']));
+
+        return $client;
+    }
+
+    // ================================================================
+
+    public function redirectToGoogle()
+    {
+        $client = $this->getGoogleClient();
+        $authUrl = $client->createAuthUrl();
+        return response()->json(['status' => 'auth_required', 'auth_url' => $authUrl]);
+    }
+
+    // ================================================================
+
+
+
+    // ================================================================
 } // FIN Class CancelarClase()

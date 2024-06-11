@@ -135,6 +135,11 @@
                             $("#loaderGif").hide();
                             $("#loaderGif").addClass('ocultar');
 
+                            if(response.status === 'auth_required') {
+                                window.location.href = response.auth_url;
+                                return;
+                            }
+
                             if(response == "clase_cancelada")
                             {
                                 $("#loaderGif").hide();
