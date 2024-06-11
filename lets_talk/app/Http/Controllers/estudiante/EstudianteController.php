@@ -191,10 +191,10 @@ class EstudianteController extends Controller
                         $query->whereNull('creditos.id_estado')
                             ->orWhereIn('creditos.id_estado', [7, 8]);
                     })
+                    ->where('evento_agenda_entrenador.clase_estado', 10)
+                    ->where('evento_agenda_entrenador.state', 1)
                     ->orderBy('evento_agenda_entrenador.start_date', 'desc')
                     ->get();
-
-                // $this->createMeet();
 
                 return view($vista, compact('disponibilidadEntrenadores'));
             }

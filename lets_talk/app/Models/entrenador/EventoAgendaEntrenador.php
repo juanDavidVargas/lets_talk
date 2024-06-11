@@ -22,6 +22,7 @@ class EventoAgendaEntrenador extends Model
        'id_instructor',
        'id_usuario',
        'id_horario',
-       'num_dia'
+       'num_dia',
+       'clase_estado'
     ];
 }

@@ -25,9 +25,7 @@ class CancelarClase implements Responsable
         $idHorario = intval(request('id_horario', null));
         $idEstado = intval(request('id_estado', null));
 
-        // dd($idEstudiante,$idInstructor,$idHorario,$idEstado);
-
-        // DB::connection('mysql')->beginTransaction();
+        DB::connection('mysql')->beginTransaction();
 
         $idClaseReservada = Reserva::select('id_reserva','google_event_id')
             ->where('id_estudiante',$idEstudiante)
@@ -35,15 +33,11 @@ class CancelarClase implements Responsable
             ->where('id_trainer_horario',$idHorario)
             ->first();
 
-        // dd($idClaseReservada);
-
         if (isset($idClaseReservada) && !is_null($idClaseReservada) && !empty($idClaseReservada))
         {
             try
             {
                 $claseReservada = Reserva::findOrFail($idClaseReservada->id_reserva);
-
-                // dd($claseReservada);
 
                 if (isset($claseReservada) && !is_null($claseReservada) && !empty($claseReservada))
                 {
@@ -60,9 +54,6 @@ class CancelarClase implements Responsable
                         $client->setHttpClient(new \GuzzleHttp\Client(['verify' => false]));
 
                         $accessToken = Session::get('google_access_token');
-                        // dd(Session::all());
-
-                        // dd($accessToken);
 
                         if (!$accessToken) {
                             throw new Exception('Access token no encontrado en la sesión.');
@@ -121,7 +112,14 @@ class CancelarClase implements Responsable
                                     'fecha_consumo_credito' => null,
                             ]);
 
-                            if ( (isset($claseReservada) && !is_null($claseReservada) && !empty($claseReservada)) && (isset($idCreditoLiberado) && !is_null($idCreditoLiberado) && !empty($idCreditoLiberado)) )
+                            $idEventoLiberado = EventoAgendaEntrenador::where('id', $idHorario)
+                                ->update([
+                                        'clase_estado' => 10,
+                                ]);
+
+                            if ( (isset($claseReservada) && !is_null($claseReservada) && !empty($claseReservada)) 
+                            && (isset($idCreditoLiberado) && !is_null($idCreditoLiberado) && !empty($idCreditoLiberado)) 
+                            && (isset($idEventoLiberado) && !is_null($idEventoLiberado) && !empty($idEventoLiberado)) )
                             {
                                 DB::connection('mysql')->commit();
                                 return response()->json("clase_cancelada");

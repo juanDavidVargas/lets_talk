@@ -59,7 +59,7 @@ class ReservarClase implements Responsable
                     {
                         DB::connection('mysql')->commit();
 
-                        $queryEventoAgendaEntrenador = EventoAgendaEntrenador::select('id', 'start_date','start_time')
+                        $queryEventoAgendaEntrenador = EventoAgendaEntrenador::select('id','start_date','start_time')
                                                         ->where('id',$idHorario)
                                                         ->first();
 
@@ -76,8 +76,14 @@ class ReservarClase implements Responsable
                                         'id_trainer_agenda' => $idHorario,
                                         'fecha_consumo_credito' => $fechaHora,
                                 ]);
-
                         DB::connection('mysql')->commit();
+
+                        EventoAgendaEntrenador::where('id', $idHorario)
+                                ->update([
+                                        'clase_estado' => 9,
+                                ]);
+                        DB::connection('mysql')->commit();
+
                         // Después de realizar la reserva con éxito
                         // Session::forget('google_access_token');
                         return response()->json(['status' => 'clase_reservada']);

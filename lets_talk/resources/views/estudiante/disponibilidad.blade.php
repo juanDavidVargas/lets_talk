@@ -34,7 +34,7 @@
                                 <th>Fecha</th>
                                 <th>Hora Inicio</th>
                                 <th>Hora Final</th>
-                                <th>Link Meet</th>
+                                {{-- <th>Link Meet</th> --}}
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -47,8 +47,7 @@
                                     $FechaClase = $disponibilidad->start_date;
                                     $claseInicio = $disponibilidad->start_time;
                                     $claseFinal = $disponibilidad->end_time;
-                                    // $idEstado = $disponibilidad->id_estado;
-                                    $idEstado = 8;
+                                    $idEstado = $disponibilidad->id_estado;
                                 @endphp
                                 <tr>
                                     <td>{{$disponibilidad->nombre_completo}}</td>
@@ -56,23 +55,23 @@
                                     <td>{{$disponibilidad->start_time}}</td>
                                     <td>{{$disponibilidad->end_time}}</td>
 
-                                    @if ($disponibilidad->link_meet != null)
+                                    {{-- @if ($disponibilidad->link_meet != null)
                                         <td>
                                             <a href="{{$disponibilidad->link_meet}}" target="_blank" class="text-primary">{{$disponibilidad->link_meet}}</a>
                                         </td>
                                     @else
                                         <td></td>
-                                    @endif
+                                    @endif --}}
 
-                                    @if ($disponibilidad->id_estado == 7)
+                                    {{-- @if ($disponibilidad->id_estado == 7) --}}
                                         <td>
                                             <button type="button" class="text-white" onclick="reservarClase('{{$idEvento}}','{{$idInstructor}}','{{$FechaClase}}','{{$claseInicio}}')" style="background-color: #21277B; padding:0.5em">RESERVAR YA</button>
                                         </td>
-                                    @else
+                                    {{-- @else
                                         <td>
                                             <button type="button" class="text-white btn btn-warning" onclick="cancelarClase('{{$idEvento}}','{{$idInstructor}}','{{$idEstudiante}}','{{$idEstado}}')">CANCELAR</button>
                                         </td>
-                                    @endif
+                                    @endif --}}
                                 </tr>
                             @endforeach
                         </tbody>
@@ -294,6 +293,6 @@
                     }); // Fin ajax
                 } // FIN if
             }); // FIN then de Swal.Fire
-        } // FIN reservarClase
+        } // FIN cancelarClase
     </script>
 @endsection

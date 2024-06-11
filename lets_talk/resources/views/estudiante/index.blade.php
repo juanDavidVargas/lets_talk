@@ -189,6 +189,6 @@
                     }); // Fin ajax
                 } // FIN if
             }); // FIN then de Swal.Fire
-        } // FIN reservarClase
+        } // FIN cancelarClase
     </script>
 @endsection
