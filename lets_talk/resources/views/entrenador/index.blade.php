@@ -134,7 +134,9 @@
                                 <td>{{$student->nombre_estudiante}}</td>
                                 <td>{{$student->start_date}}</td>
                                 <td>{{$student->start_time}}</td>
-                                <td><a href="#" id="trainer_sesion_detail_{{$student->id_sesion}}" onclick="seeDetails({{$student->id_sesion}},{{$student->id_estudiante}})" style="color: #434C6A;">SEE DETAILS</a></td>
+                                <td>
+                                    <button onclick="seeDetails({{$student->id_sesion}},{{$student->id_estudiante}})" class="text-white" style="backgroundcolor: #434C6A; padding:0.5rem;">SEE DETAILS</button>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -155,7 +157,8 @@
     <script src="{{asset('DataTable/datatables.min.js')}}"></script>
 
     <script type="text/javascript">
-        $(document ).ready(function() {
+        $(document ).ready(function()
+        {
             $('#tbl_trainer_sessions').DataTable({
                 'ordering': false,
                 "lengthMenu": [[10,25,50,100, -1], [10,25,50,100, 'ALL']],
@@ -185,7 +188,8 @@
 
         // ===================================================
 
-        function seeDetails(idSesion,idUser) {
+        function seeDetails(idSesion,idUser)
+        {
             $.ajax({
                 async: true,
                 _token: "{{csrf_token()}}",
@@ -195,13 +199,15 @@
                 data: {
                     'id_user': idUser
                 },
-                beforeSend: function() {
-                    $("#loaderGif").show();
-                    $("#loaderGif").removeClass('ocultar');
-                },
-                success: function(response) {
-
-                    if(response[0].original == "error_exception") {
+                // beforeSend: function()
+                // {
+                //     $("#loaderGif").show();
+                //     $("#loaderGif").removeClass('ocultar');
+                // },
+                success: function(response)
+                {
+                    if(response[0].original == "error_exception")
+                    {
                         $("#loaderGif").hide();
                         $("#loaderGif").addClass('ocultar');
                         Swal.fire(
@@ -212,7 +218,8 @@
                         return;
                     }
 
-                    if(response == 404) {
+                    if(response == 404)
+                    {
                         $("#loaderGif").hide();
                         $("#loaderGif").addClass('ocultar');
                         Swal.fire(
@@ -260,15 +267,21 @@
 
                     // ==============================================
 
-                    if (response[0].celular) {
+                    if (response[0].celular)
+                    {
                         html += `<p class="gral-font w50">PHONE: ${response[0].celular}</p>`;
-                    } else {
+                    }
+                    else
+                    {
                         html += `<p class="gral-font w50">PHONE: </p>`;
                     }
 
-                    if (response[0].correo) {
+                    if (response[0].correo)
+                    {
                         html += `<p class="gral-font w50">EMAIL: ${response[0].correo}</p>`;
-                    } else {
+                    }
+                    else
+                    {
                         html += `<p class="gral-font w50">EMAIL: </p>`;
                     }
 
@@ -441,8 +454,8 @@
                         background: '#fff',
                     });
 
-                    $('#old_valuation').on('click', function () {
-
+                    $('#old_valuation').on('click', function ()
+                    {
                         let idUserVal = $('#id_estudiante').val();
 
                         $.ajax({
@@ -530,7 +543,6 @@
                             }
                         });
                     })
-
                 }
             });
         }
