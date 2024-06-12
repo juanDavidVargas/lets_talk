@@ -65,7 +65,7 @@
             font-weight: 400;
             line-height: 23px;
             letter-spacing: 0em;
-            background: #FFFFFF;
+            background: #33326C;
             border: 1px solid #FFFFFF;
             color: white;
             box-shadow: 0px 4px 4px 0px #00000040;
@@ -129,15 +129,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @php
-                            // dd($students);
-                        @endphp
                         @foreach ($students as $student)
                             <tr>
-                                <td>{{$student->nombre_completo}}</td>
+                                <td>{{$student->nombre_estudiante}}</td>
                                 <td>{{$student->start_date}}</td>
                                 <td>{{$student->start_time}}</td>
-                                <td><a href="#" id="trainer_sesion_detail_{{$student->id_sesion}}" onclick="seeDetails({{$student->id_sesion}},{{$student->id_user}})" style="color: #434C6A;">SEE DETAILS</a></td>
+                                <td><a href="#" id="trainer_sesion_detail_{{$student->id_sesion}}" onclick="seeDetails({{$student->id_sesion}},{{$student->id_estudiante}})" style="color: #434C6A;">SEE DETAILS</a></td>
                             </tr>
                         @endforeach
                     </tbody>
