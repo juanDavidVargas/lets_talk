@@ -15,6 +15,8 @@ use Google_Service_Calendar;
 use Google_Service_Calendar_Event;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\Reservas\MailReservaClase;
 
 class ReservarClase implements Responsable
 {
@@ -226,9 +228,86 @@ class ReservarClase implements Responsable
         $eventId = $event->id;
         $eventLink = $event->getHangoutLink();
 
+        $this->enviarCorreoReservaClase();
+
         return [
             'eventId' => $eventId,
             'eventLink' => $eventLink
         ];
     }
+
+    // ==============================================================
+    // ==============================================================
+
+    public function enviarCorreoReservaClase()
+    {
+        Mail::to('jgmejiaco@gmail.com')->send(new MailReservaClase());
+
+        // // Consultamos la información del usuario logueado
+        // $datos_usuario = $this->traerDatosUsuario($usuario_id);
+        // $datos_admin = $this->traerDatosAdministrador();
+        // $traer_disponibilidad = $this->disponibilidadUsuario($usuario_id);
+
+        // if(isset($datos_usuario) && !empty($datos_usuario) && !is_null($datos_usuario)
+        //    && $datos_usuario != "error_datos_usuario" &&
+        //    isset($datos_admin) && !empty($datos_admin) && !is_null($datos_admin)
+        //    && $datos_admin != "error_datos_admin")
+        // {
+
+        //     if(isset($traer_disponibilidad) && $traer_disponibilidad != "error_datos_disp")
+        //     {
+        //         //Envio del correo
+        //         Mail::to($datos_admin->correo)->send(new MailReservaClase($datos_usuario,  $datos_admin, $traer_disponibilidad));
+        //     }
+        // }
+    }
+
+    // ==============================================================
+    // ==============================================================
+
+    // public function traerDatosUsuario($usuario_id)
+    // {
+    //     try
+    //     {
+    //         return User::find($usuario_id);
+
+    //     } catch (Exception $e)
+    //     {
+    //         Logger("Error consultando los datos del usuario: {$e}");
+    //         return "error_datos_usuario";
+    //     }
+    // }
+
+    // ==============================================================
+    // ==============================================================
+
+    // public function traerDatosAdministrador()
+    // {
+    //     try
+    //     {
+    //         return User::where('id_rol', 2)->first();
+
+    //     } catch (Exception $e)
+    //     {
+    //         Logger("Error consultando los datos del usuario administrador: {$e}");
+    //         return "error_datos_admin";
+    //     }
+    // }
+
+    // ==============================================================
+    // ==============================================================
+
+    // public function disponibilidadUsuario($usuario_id)
+    // {
+    //     try
+    //     {
+    //         return EventoAgendaEntrenador::where('id_usuario', $usuario_id)
+    //                                         ->where('state', 2)
+    //                                         ->get();
+    //     } catch (Exception $e)
+    //     {
+    //         Logger("Error consultando los datos del usuario administrador: {$e}");
+    //         return "error_datos_disp";
+    //     }
+    // }
 } // FIN class ReservarClase
