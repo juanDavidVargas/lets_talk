@@ -15,6 +15,10 @@ use Google_Service_Calendar;
 use Google_Service_Calendar_Event;
 use Illuminate\Support\Facades\Session;
 use GuzzleHttp\Client;
+use App\User;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\Reservas\MailCancelarClase;
+use Illuminate\Log\Logger;
 
 class CancelarClase implements Responsable
 {
@@ -120,6 +124,9 @@ class CancelarClase implements Responsable
                             {
                                 DB::connection('mysql')->commit();
 
+                                // Enviar correo de cancelación de la clase
+                                $this->enviarCorreoCancelarClase($idEstudiante, $idInstructor, $idHorario);
+
                                 // Después de realizar la reserva con éxito, reiniciar la sesión
                                 Session::forget('google_access_token');
 
@@ -169,8 +176,71 @@ class CancelarClase implements Responsable
     }
 
     // ================================================================
+    // ================================================================
 
+    public function enviarCorreoCancelarClase($idEstudiante, $idInstructor, $idHorario)
+    {
+        $instructor = $this->datosInstructor($idInstructor);
+        $estudiante = $this->datosEstudiante($idEstudiante);
+        $eventoAgendaEntrenador = $this->eventoAgendaEntrenador($idHorario);
 
+        if(
+            (isset($instructor) && !empty($instructor) && !is_null($instructor)) &&
+            (isset($estudiante) && !empty($estudiante) && !is_null($estudiante)) &&
+            (isset($eventoAgendaEntrenador) && !empty($eventoAgendaEntrenador) && !is_null($eventoAgendaEntrenador))
+        )
+        {
+            //Envio del correo
+            Mail::to($instructor->correo)->send(new MailCancelarClase($instructor,$estudiante,$eventoAgendaEntrenador));
+        }
+    }
 
     // ================================================================
+    // ================================================================
+    
+    public function datosInstructor($idInstructor)
+    {
+        try
+        {
+            return User::find($idInstructor);
+
+        } catch (Exception $e)
+        {
+            Logger("Error consultando los datos del usuario administrador: {$e}");
+            return "error_datos_admin";
+        }
+    }
+
+    // ================================================================
+    // ================================================================
+
+    public function datosEstudiante($idEstudiante)
+    {
+        try
+        {
+            return User::find($idEstudiante);
+
+        } catch (Exception $e)
+        {
+            Logger("Error consultando los datos del usuario: {$e}");
+            return "error_datos_estudiante";
+        }
+    }
+
+    // ================================================================
+    // ================================================================
+
+
+    public function eventoAgendaEntrenador($idHorario)
+    {
+        try
+        {
+            return EventoAgendaEntrenador::find($idHorario);
+        } catch (Exception $e)
+        {
+            dd($e);
+            Logger("Error consultando los datos del usuario administrador: {$e}");
+            return "error_datos_disponibilidad";
+        }
+    }
 } // FIN Class CancelarClase()
