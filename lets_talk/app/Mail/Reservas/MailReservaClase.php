@@ -15,17 +15,19 @@ class MailReservaClase extends Mailable //implements ShouldQueue
     public $instructor;
     public $estudiante;
     public $eventoAgendaEntrenador;
+    public $linkClaseReservada;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($instructor,$estudiante,$eventoAgendaEntrenador)
+    public function __construct($instructor,$estudiante,$eventoAgendaEntrenador,$linkClaseReservada)
     {
         $this->instructor = $instructor;
         $this->estudiante = $estudiante;
         $this->eventoAgendaEntrenador = $eventoAgendaEntrenador;
+        $this->linkClaseReservada = $linkClaseReservada;
     }
 
     /**
@@ -36,7 +38,5 @@ class MailReservaClase extends Mailable //implements ShouldQueue
     public function build()
     {
         return $this->view('emails.reservar_clase.reservar_clase')->subject('Clase Reservada por ' . $this->estudiante->nombres . " " . $this->estudiante->apellidos);
-
-        // return $this->markdown('emails.administracion.polizas.mtto_vehiculos')->subject("Placas de vehículos con Mantenimiento tipo Preventivo próximo a vencer");
     }
 }

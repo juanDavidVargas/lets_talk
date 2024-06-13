@@ -45,7 +45,7 @@ class ReservarClase implements Responsable
                     return response()->json(['status' => 'auth_required', 'auth_url' => $authUrl]);
                 }
 
-                $createLinkMeet = $this->createMeet($fechaClase, $horaClaseInicio, $idEstudiante, $idInstructor, $idHorario);
+                $createLinkMeet = $this->createMeet($fechaClase, $horaClaseInicio);
 
                 if (isset($createLinkMeet) && !is_null($createLinkMeet) && !empty($createLinkMeet))
                 {
@@ -87,6 +87,8 @@ class ReservarClase implements Responsable
                                         'clase_estado' => 9,
                                 ]);
                         DB::connection('mysql')->commit();
+
+                        $this->enviarCorreoReservaClase($idEstudiante, $idInstructor, $idHorario);
 
                         // Después de realizar la reserva con éxito, reiniciar la sesión
                         Session::forget('google_access_token');
@@ -202,7 +204,7 @@ class ReservarClase implements Responsable
         6. Imprime el enlace para unirse a la reunión (getHangoutLink()).
     */
 
-    public function createMeet($fechaClase, $horaClaseInicio, $idEstudiante, $idInstructor, $idHorario)
+    public function createMeet($fechaClase, $horaClaseInicio)
     {
         $client = $this->getGoogleClient();
         $client->setAccessToken(Session::get('google_access_token'));
@@ -230,8 +232,6 @@ class ReservarClase implements Responsable
         $eventId = $event->id;
         $eventLink = $event->getHangoutLink();
 
-        $this->enviarCorreoReservaClase($idEstudiante, $idInstructor, $idHorario);
-
         return [
             'eventId' => $eventId,
             'eventLink' => $eventLink
@@ -247,12 +247,17 @@ class ReservarClase implements Responsable
         $instructor = $this->datosInstructor($idInstructor);
         $estudiante = $this->datosEstudiante($idEstudiante);
         $eventoAgendaEntrenador = $this->eventoAgendaEntrenador($idHorario);
-        // dd($eventoAgendaEntrenador->start_date);
+        $linkClaseReservada = $this->linkClaseReservada($idHorario);
 
-        if( (isset($instructor) && !empty($instructor) && !is_null($instructor)) && (isset($estudiante) && !empty($estudiante) && !is_null($estudiante)) )
+        if( 
+            (isset($instructor) && !empty($instructor) && !is_null($instructor)) &&
+            (isset($estudiante) && !empty($estudiante) && !is_null($estudiante)) &&
+            (isset($eventoAgendaEntrenador) && !empty($eventoAgendaEntrenador) && !is_null($eventoAgendaEntrenador)) &&
+            (isset($linkClaseReservada) && !empty($linkClaseReservada) && !is_null($linkClaseReservada))
+        )
         {
             //Envio del correo
-            Mail::to($instructor->correo)->send(new MailReservaClase($instructor,$estudiante,$eventoAgendaEntrenador));
+            Mail::to($instructor->correo)->send(new MailReservaClase($instructor,$estudiante,$eventoAgendaEntrenador,$linkClaseReservada));
         }
     }
 
@@ -297,7 +302,24 @@ class ReservarClase implements Responsable
         try
         {
             return EventoAgendaEntrenador::find($idHorario);
-            // return EventoAgendaEntrenador::where('id', $idHorario);
+        } catch (Exception $e)
+        {
+            dd($e);
+            Logger("Error consultando los datos del usuario administrador: {$e}");
+            return "error_datos_disponibilidad";
+        }
+    }
+    
+    // ==============================================================
+    // ==============================================================
+
+    public function linkClaseReservada($idHorario)
+    {
+        try
+        {
+            // return Reserva::find($idHorario);
+            return Reserva::select('link_meet')
+                ->where('id_trainer_horario', $idHorario)->first();
         } catch (Exception $e)
         {
             dd($e);

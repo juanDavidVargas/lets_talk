@@ -39,29 +39,14 @@
     </style>
 </head>
 <body>
-    {{-- dd($estudiante); --}}
-    {{-- dd($estudiante->nombres); --}}
-    {{-- dd($estudiante->apellidos); --}}
-    {{-- dd($estudiante->celular); --}}
-    {{-- dd($estudiante->correo); --}}
-    {{-- dd($estudiante->usuario); --}}
-    
     <p>Hola! <b>{{$instructor->nombres}} {{$instructor->apellidos}}</b>,</p>
     <p>El/la estudiante <b>{{$estudiante->nombres}} {{$estudiante->apellidos}}</b> ha reservado clase en el siguiente horario:</p>
-    @php
-        // dd($eventoAgendaEntrenador->start_date);
-    @endphp
-    {{-- <p><b>Fecha:</b> {{$eventoAgendaEntrenador->start_date}}</p> --}}
-    {{-- <p><b>Hora:</b> {{$eventoAgendaEntrenador->start_time}}-{{$eventoAgendaEntrenador->end_time}}</p> --}}
 
     <ul>
         <li><b>Fecha:</b> {{$eventoAgendaEntrenador->start_date}}</li>
         <li><b>Hora:</b> {{$eventoAgendaEntrenador->start_time}}-{{$eventoAgendaEntrenador->end_time}}</li>
+        <li><b>Link:</b> <a href="{{$linkClaseReservada->link_meet}}" class="">{{$linkClaseReservada->link_meet}}</a></li>
     </ul>
-
-    <p>
-        <a href="" class="">Ver LinkMeet</a>
-    </p>
 
     <p>Este mensaje es automático, por favor, no responder.</p>
     <p>Muchas Gracias.</p>
