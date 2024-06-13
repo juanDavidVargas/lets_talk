@@ -34,7 +34,6 @@
                                 <th>Fecha</th>
                                 <th>Hora Inicio</th>
                                 <th>Hora Final</th>
-                                {{-- <th>Link Meet</th> --}}
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -54,24 +53,9 @@
                                     <td>{{$disponibilidad->start_date}}</td>
                                     <td>{{$disponibilidad->start_time}}</td>
                                     <td>{{$disponibilidad->end_time}}</td>
-
-                                    {{-- @if ($disponibilidad->link_meet != null)
-                                        <td>
-                                            <a href="{{$disponibilidad->link_meet}}" target="_blank" class="text-primary">{{$disponibilidad->link_meet}}</a>
-                                        </td>
-                                    @else
-                                        <td></td>
-                                    @endif --}}
-
-                                    {{-- @if ($disponibilidad->id_estado == 7) --}}
-                                        <td>
-                                            <button type="button" class="text-white" onclick="reservarClase('{{$idEvento}}','{{$idInstructor}}','{{$FechaClase}}','{{$claseInicio}}')" style="background-color: #21277B; padding:0.5em">RESERVAR YA</button>
-                                        </td>
-                                    {{-- @else
-                                        <td>
-                                            <button type="button" class="text-white btn btn-warning" onclick="cancelarClase('{{$idEvento}}','{{$idInstructor}}','{{$idEstudiante}}','{{$idEstado}}')">CANCELAR</button>
-                                        </td>
-                                    @endif --}}
+                                    <td>
+                                        <button type="button" class="text-white" onclick="reservarClase('{{$idEvento}}','{{$idInstructor}}','{{$FechaClase}}','{{$claseInicio}}')" style="background-color: #21277B; padding:0.5em">RESERVAR YA</button>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

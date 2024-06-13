@@ -243,40 +243,22 @@ class ReservarClase implements Responsable
 
     public function enviarCorreoReservaClase($idEstudiante, $idInstructor, $idHorario)
     {
-        // Mail::to('jgmejiaco@gmail.com')->send(new MailReservaClase());
-
-        // // Consultamos la información del usuario logueado
-        // $estudiante = $this->datosEstudiante($idEstudiante);
+        // Consultamos la información del usuario logueado
         $instructor = $this->datosInstructor($idInstructor);
-        // $traer_disponibilidad = $this->disponibilidadUsuario($usuario_id);
+        $estudiante = $this->datosEstudiante($idEstudiante);
+        $eventoAgendaEntrenador = $this->eventoAgendaEntrenador($idHorario);
+        // dd($eventoAgendaEntrenador->start_date);
 
-        if( isset($instructor) && !empty($instructor) && !is_null($instructor) )
+        if( (isset($instructor) && !empty($instructor) && !is_null($instructor)) && (isset($estudiante) && !empty($estudiante) && !is_null($estudiante)) )
         {
             //Envio del correo
-            // Mail::to('jgmejiaco@gmail.com')->send(new MailReservaClase());
-            Mail::to($instructor->correo)->send(new MailReservaClase());
+            Mail::to($instructor->correo)->send(new MailReservaClase($instructor,$estudiante,$eventoAgendaEntrenador));
         }
     }
 
     // ==============================================================
     // ==============================================================
-
-    // public function datosEstudiante($idEstudiante)
-    // {
-    //     try
-    //     {
-    //         return User::find($idEstudiante);
-
-    //     } catch (Exception $e)
-    //     {
-    //         Logger("Error consultando los datos del usuario: {$e}");
-    //         return "error_datos_estudiante";
-    //     }
-    // }
-
-    // ==============================================================
-    // ==============================================================
-
+    
     public function datosInstructor($idInstructor)
     {
         try
@@ -293,17 +275,34 @@ class ReservarClase implements Responsable
     // ==============================================================
     // ==============================================================
 
-    // public function disponibilidadUsuario($usuario_id)
-    // {
-    //     try
-    //     {
-    //         return EventoAgendaEntrenador::where('id_usuario', $usuario_id)
-    //                                         ->where('state', 2)
-    //                                         ->get();
-    //     } catch (Exception $e)
-    //     {
-    //         Logger("Error consultando los datos del usuario administrador: {$e}");
-    //         return "error_datos_disp";
-    //     }
-    // }
+    public function datosEstudiante($idEstudiante)
+    {
+        try
+        {
+            return User::find($idEstudiante);
+
+        } catch (Exception $e)
+        {
+            Logger("Error consultando los datos del usuario: {$e}");
+            return "error_datos_estudiante";
+        }
+    }
+
+    // ==============================================================
+    // ==============================================================
+
+
+    public function eventoAgendaEntrenador($idHorario)
+    {
+        try
+        {
+            return EventoAgendaEntrenador::find($idHorario);
+            // return EventoAgendaEntrenador::where('id', $idHorario);
+        } catch (Exception $e)
+        {
+            dd($e);
+            Logger("Error consultando los datos del usuario administrador: {$e}");
+            return "error_datos_disponibilidad";
+        }
+    }
 } // FIN class ReservarClase

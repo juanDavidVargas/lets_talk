@@ -39,22 +39,32 @@
     </style>
 </head>
 <body>
-    <p>Hola!</p>
-    {{-- <p>Hola! <b>{{$info_admin->nombres}} {{$info_admin->apellidos}}</b>,</p>
-    <p>El entrenador <b>{{$info_usuario->nombres}} {{$info_usuario->apellidos}}</b> solicita aprobación para las siguientes disponibilidades:</p>
-    @foreach ($disponibilidades as $disponibilidad)
-        <ul>
-            <li><b>Fecha:</b> {{$disponibilidad->start_date}}</li>
-            <li><b>Hora:</b> {{$disponibilidad->start_time}}-{{$disponibilidad->end_time}}</li>
-        </ul>
-    @endforeach
+    {{-- dd($estudiante); --}}
+    {{-- dd($estudiante->nombres); --}}
+    {{-- dd($estudiante->apellidos); --}}
+    {{-- dd($estudiante->celular); --}}
+    {{-- dd($estudiante->correo); --}}
+    {{-- dd($estudiante->usuario); --}}
+    
+    <p>Hola! <b>{{$instructor->nombres}} {{$instructor->apellidos}}</b>,</p>
+    <p>El/la estudiante <b>{{$estudiante->nombres}} {{$estudiante->apellidos}}</b> ha reservado clase en el siguiente horario:</p>
+    @php
+        // dd($eventoAgendaEntrenador->start_date);
+    @endphp
+    {{-- <p><b>Fecha:</b> {{$eventoAgendaEntrenador->start_date}}</p> --}}
+    {{-- <p><b>Hora:</b> {{$eventoAgendaEntrenador->start_time}}-{{$eventoAgendaEntrenador->end_time}}</p> --}}
+
+    <ul>
+        <li><b>Fecha:</b> {{$eventoAgendaEntrenador->start_date}}</li>
+        <li><b>Hora:</b> {{$eventoAgendaEntrenador->start_time}}-{{$eventoAgendaEntrenador->end_time}}</li>
+    </ul>
 
     <p>
-        <a href="{{route('administrador.disponibilidad_entrenadores')}}" class="btn btn_disponibilidad">Ver Solicitud</a>
+        <a href="" class="">Ver LinkMeet</a>
     </p>
 
     <p>Este mensaje es automático, por favor, no responder.</p>
     <p>Muchas Gracias.</p>
-    <p><b>&copy; Let`s Talk</b></p> --}}
+    <p><b>&copy; Let`s Talk</b></p>
 </body>
 </html>
