@@ -226,15 +226,15 @@
 <!-- Footer -->
 <footer class="text-center text-white footer">
     <!-- Grid container -->
-    <div class="p-3">
+    <div class="px-4 pt-4">
         <!-- Section: Links -->
-        <section class="mt-5">
+        <section class="mb-4">
             <!-- Grid row-->
-            <div class="row text-center d-flex justify-content-center pt-5 padding">
+            <div class="row text-center d-flex justify-content-center p-0">
                 <!-- Grid column -->
                 <div class="col-md-2 col-md-offset-2">
                     <h6 class="text-uppercase font-weight-bold">
-                        <a href="{{route('about_us')}}" class="text-white">About us</a>
+                        <a href="{{route('about_us')}}" class="text-white fw-bold" style="text-decoration: none;">About us</a>
                     </h6>
                 </div>
                 <!-- Grid column -->
@@ -242,7 +242,7 @@
                 <!-- Grid column -->
                 <div class="col-md-2">
                     <h6 class="text-uppercase font-weight-bold">
-                        <a href="{{route('services')}}" class="text-white">Services</a>
+                        <a href="{{route('services')}}" class="text-white fw-bold" style="text-decoration: none;">Services</a>
                     </h6>
                 </div>
                 <!-- Grid column -->
@@ -250,7 +250,7 @@
                 <!-- Grid column -->
                 <div class="col-md-2">
                     <h6 class="text-uppercase font-weight-bold">
-                        <a href="#" class="text-white">Help</a>
+                        <a href="#" class="text-white fw-bold" style="text-decoration: none;">Help</a>
                     </h6>
                 </div>
                 <!-- Grid column -->
@@ -258,7 +258,7 @@
                 <!-- Grid column -->
                 <div class="col-md-2">
                     <h6 class="text-uppercase font-weight-bold">
-                        <a href="mailto:letstalkmedellin@gmail.com" class="text-white" target="_blank">Contact</a>
+                        <a href="mailto:letstalkmedellin@gmail.com" class="text-white" target="_blank" style="text-decoration: none;">Contact</a>
                     </h6>
                 </div>
                 <!-- Grid column -->
@@ -267,10 +267,10 @@
         </section>
         <!-- Section: Links -->
 
-        <hr class=""/>
+        <hr class="mt-3"/>
 
         <!-- Section: Social -->
-        <section class="text-center mb-4">
+        <section class="text-center mb-0 p-0">
             <a href="" class="text-white fa-2x facebook">
                 <i class="fa fa-facebook-f"></i>
             </a>
@@ -283,10 +283,10 @@
     <!-- Grid container -->
 
     <!-- Copyright -->
-    <div class="text-center p-3 copy-footer">
-        <p>
+    <div class="text-center p-2 copy-footer">
+        <p class="d-flex justify-content-center align-items-center">
             All Rights Reserved ©
-            <a class="text-white" href="#">Let's Talk</a> {{date('Y')}}
+            <a class="text-white" href="#" style="text-decoration: none;">Let's Talk</a> {{date('Y')}}
         </p>
     </div>
     <!-- Copyright -->
