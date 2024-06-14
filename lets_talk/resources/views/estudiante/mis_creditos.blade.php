@@ -31,15 +31,22 @@
                     <tr class="header-table">
                         <th>Fecha Compra</th>
                         <th>Paquete</th>
-                        <th>Cantidad</th>
+                        <th>Cantidad Paquete</th>
+                        <th>Créditos Consumidos</th>
+                        <th>Créditos Disponibles</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                        // dd($misCreditos);
+                    @endphp
                     @foreach ($misCreditos as $credito)
                         <tr>
                             <td>{{$credito->fecha_credito}}</td>
                             <td>{{$credito->paquete}}</td>
-                            <td>{{$credito->cantidad}}</td>
+                            <td>{{$credito->cantidad_total_paquete}}</td>
+                            <td>{{$credito->cantidad_consumida}}</td>
+                            <td>{{$credito->cantidad_disponible}}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -48,7 +55,7 @@
     </div>
 
     <div class="d-flexswal m-t-30 m-b-30">
-        <button type="button" class="btn btn-primary text-uppercase" onclick="misCreditos()"><span class="text-success">{!!$totalCantidad!!}</span> créditos disponibles</button>
+        <button type="button" class="btn btn-primary text-uppercase" onclick="misCreditos()"><span class="text-success">{!!$totalCreditosDisponibles!!}</span> créditos disponibles</button>
     </div>
 
     <div class="d-flex justify-content-center">

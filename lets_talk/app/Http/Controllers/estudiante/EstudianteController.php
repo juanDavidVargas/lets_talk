@@ -220,19 +220,36 @@ class EstudianteController extends Controller
 
                 $idEstudiante = session('usuario_id');
 
+                // ==============================================
+
                 $misCreditos = Credito::select(
-                    DB::raw('DATE_FORMAT(FROM_UNIXTIME(fecha_credito), "%d-%m-%Y") as fecha_credito'),
-                    'paquete',
-                    DB::raw('COUNT(*) as cantidad')
-                )
-                ->where('id_estudiante', $idEstudiante)
+                        DB::raw('DATE_FORMAT(FROM_UNIXTIME(fecha_credito), "%d-%m-%Y") as fecha_credito'),
+                        'paquete',
+                        DB::raw('COUNT(*) as cantidad_total_paquete'),
+                        DB::raw('SUM(CASE WHEN id_estado = 8 THEN 1 ELSE 0 END) as cantidad_consumida'),
+                        DB::raw('SUM(CASE WHEN id_estado = 7 THEN 1 ELSE 0 END) as cantidad_disponible')
+                    )
+                    ->where('id_estudiante', $idEstudiante)
+                    ->whereNull('deleted_at')
+                    ->groupBy(
+                        DB::raw('DATE_FORMAT(FROM_UNIXTIME(fecha_credito), "%d-%m-%Y")'),
+                        'paquete'
+                    )
+                    ->orderBy('fecha_credito', 'desc')
+                    ->orderBy('paquete', 'desc')
+                    ->get();
+
+                // ==============================================
+                
+                // Consulta para obtener la suma total de créditos disponibles
+                $totalCreditosDisponibles = Credito::where('id_estudiante', $idEstudiante)
                 ->where('id_estado', 7)
-                ->groupBy(DB::raw('DATE_FORMAT(FROM_UNIXTIME(fecha_credito), "%d-%m-%Y")'), 'paquete')
-                ->get();
+                ->whereNull('deleted_at')
+                ->count();
+                
+                // ==============================================
 
-                $totalCantidad = $misCreditos->sum('cantidad');
-
-                return view('estudiante.mis_creditos', compact('misCreditos', 'totalCantidad'));
+                return view('estudiante.mis_creditos', compact('misCreditos', 'totalCreditosDisponibles'));
             // } else {
             //     $disponibilidadShow = new DisponibilidadShow();
             //     return $disponibilidadShow->disponibilidadPorID($request);
