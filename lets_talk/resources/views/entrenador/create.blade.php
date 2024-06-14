@@ -153,8 +153,9 @@
         <a href="{{route('trainer.index')}}" class="btn btn-primary">See My Sessions</a>
     </div>
 </div>
+
 <div class="row p-t-30">
-    <div class="col-xs-12 col-sm-12 col-md-12">
+    <div class="col-12">
         <div class="border_div">
             <div id="calendar"></div>
 
@@ -165,8 +166,9 @@
                         <div class="modal-header bg-primary text-center">
                             <h5 class="modal-title" id="titulo">Event Registration</h5>
                         </div>
+
                         {!! Form::open(['id' => 'formulario', 'autocomplete' => 'off', 'class' => 'login100-form validate-form']) !!}
-                        @csrf
+                            @csrf
                             <div class="modal-body">
                                 <div class="row">
                                     @for($i = 1; $i <= count($horarios); $i++)
@@ -175,8 +177,8 @@
                                                 <label>
                                                    <input type="checkbox" value="{{$horarios[$i]}}" name="horas" id="{{$i}}" onclick="llenarArrayDatos()"><span>{{$horarios[$i]}}</span>
                                                 </label>
-                                             </div>
-                                        </div>
+                                             </div> {{-- FIN cat action --}}
+                                        </div> {{-- FIN form-floating --}}
                                     @endfor
 
                                     <div class="row">
@@ -190,7 +192,8 @@
                                             <input type="hidden" name="fecha_evento" id="fecha_evento" value="">
                                         </div>
                                     </div>
-                                </div>
+                                </div> {{-- FIN modal-body row --}}
+
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                         @if(session('rol') == 2 || session('rol') == "2")
@@ -200,22 +203,22 @@
                                         </div>
                                         @endif
                                     </div>
-                                </div>
-                            </div>
+                                </div> {{-- FIN row --}}
+                            </div> {{-- FIN modal-body --}}
+
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnClose">Close</button>
                                 <button type="submit" class="btn btn-success" id="btnAccion">Save</button>
-                            </div>
-                        {{-- </form> --}}
+                            </div> {{-- FIN modal-footer --}}
                         {!! Form::close() !!}
-                    </div>
-                </div>
-            </div>
+                    </div> {{-- FIN modal-content --}}
+                </div> {{-- FIN modal-dialog --}}
+            </div> {{-- FIN modal --}}
             {{-- Fin Modal --}}
-        </div>
-    </div>
-</div>
-</div>
+        </div> {{-- FIN border_div --}}
+    </div> {{-- FIN col-12 --}}
+</div> {{-- FIN row p-t-30 --}}
+
 
 <!-- Footer -->
 <footer class="text-center text-white footer">
