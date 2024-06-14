@@ -142,83 +142,83 @@
         @endif
     </div>
 
-<div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <h1 class="text-center text-uppercase">Trainer's Agenda</h1>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <h1 class="text-center text-uppercase">Trainer's Agenda</h1>
+        </div>
     </div>
-</div>
 
-<div class="row p-b-20 float-left">
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <a href="{{route('trainer.index')}}" class="btn btn-primary">See My Sessions</a>
+    <div class="row p-b-20 float-left">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <a href="{{route('trainer.index')}}" class="btn btn-primary">See My Sessions</a>
+        </div>
     </div>
-</div>
 
-<div class="row p-t-30">
-    <div class="col-12">
-        <div class="border_div">
-            <div id="calendar"></div>
+    <div class="row p-t-30">
+        <div class="col-12">
+            <div class="border_div">
+                <div id="calendar"></div>
 
-            {{-- Inicio Modal --}}
-            <div class="modal" data-backdrop="static" data-keyboard="false" id="myModal" tabindex="-1" aria-labelledby="Label" aria-hidden="true" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header bg-primary text-center">
-                            <h5 class="modal-title" id="titulo">Event Registration</h5>
-                        </div>
+                {{-- Inicio Modal --}}
+                <div class="modal" data-backdrop="static" data-keyboard="false" id="myModal" tabindex="-1" aria-labelledby="Label" aria-hidden="true" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header bg-primary text-center">
+                                <h5 class="modal-title" id="titulo">Event Registration</h5>
+                            </div>
 
-                        {!! Form::open(['id' => 'formulario', 'autocomplete' => 'off', 'class' => 'login100-form validate-form']) !!}
-                            @csrf
-                            <div class="modal-body">
-                                <div class="row">
-                                    @for($i = 1; $i <= count($horarios); $i++)
-                                        <div class="col-md-4 form-floating mb-3">
-                                            <div class="cat action">
-                                                <label>
-                                                   <input type="checkbox" value="{{$horarios[$i]}}" name="horas" id="{{$i}}" onclick="llenarArrayDatos()"><span>{{$horarios[$i]}}</span>
-                                                </label>
-                                             </div> {{-- FIN cat action --}}
-                                        </div> {{-- FIN form-floating --}}
-                                    @endfor
+                            {!! Form::open(['id' => 'formulario', 'autocomplete' => 'off', 'class' => 'login100-form validate-form']) !!}
+                                @csrf
+                                <div class="modal-body">
+                                    <div class="row">
+                                        @for($i = 1; $i <= count($horarios); $i++)
+                                            <div class="col-md-4 form-floating mb-3">
+                                                <div class="cat action">
+                                                    <label>
+                                                    <input type="checkbox" value="{{$horarios[$i]}}" name="horas" id="{{$i}}" onclick="llenarArrayDatos()"><span>{{$horarios[$i]}}</span>
+                                                    </label>
+                                                </div> {{-- FIN cat action --}}
+                                            </div> {{-- FIN form-floating --}}
+                                        @endfor
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <input type="hidden" name="horarios" id="horarios" value="">
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <input type="hidden" name="fecha_evento" id="fecha_evento" value="">
+                                            </div>
+                                        </div>
+                                    </div> {{-- FIN modal-body row --}}
 
                                     <div class="row">
-                                        <div class="col-md-12">
-                                            <input type="hidden" name="horarios" id="horarios" value="">
+                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                            @if(session('rol') == 2 || session('rol') == "2")
+                                            <div class="wrap-input100 validate-input" data-validate="This Field is Required">
+                                                {!! Form::select('trainer_id', $trainers, null, ['class' => 'input100', 'id' => 'trainer_id']) !!}
+                                                <span class="focus-input100" data-placeholder=""></span>
+                                            </div>
+                                            @endif
                                         </div>
-                                    </div>
+                                    </div> {{-- FIN row --}}
+                                </div> {{-- FIN modal-body --}}
 
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <input type="hidden" name="fecha_evento" id="fecha_evento" value="">
-                                        </div>
-                                    </div>
-                                </div> {{-- FIN modal-body row --}}
-
-                                <div class="row">
-                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                        @if(session('rol') == 2 || session('rol') == "2")
-                                        <div class="wrap-input100 validate-input" data-validate="This Field is Required">
-                                            {!! Form::select('trainer_id', $trainers, null, ['class' => 'input100', 'id' => 'trainer_id']) !!}
-                                            <span class="focus-input100" data-placeholder=""></span>
-                                        </div>
-                                        @endif
-                                    </div>
-                                </div> {{-- FIN row --}}
-                            </div> {{-- FIN modal-body --}}
-
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnClose">Close</button>
-                                <button type="submit" class="btn btn-success" id="btnAccion">Save</button>
-                            </div> {{-- FIN modal-footer --}}
-                        {!! Form::close() !!}
-                    </div> {{-- FIN modal-content --}}
-                </div> {{-- FIN modal-dialog --}}
-            </div> {{-- FIN modal --}}
-            {{-- Fin Modal --}}
-        </div> {{-- FIN border_div --}}
-    </div> {{-- FIN col-12 --}}
-</div> {{-- FIN row p-t-30 --}}
-
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnClose">Close</button>
+                                    <button type="submit" class="btn btn-success" id="btnAccion">Save</button>
+                                </div> {{-- FIN modal-footer --}}
+                            {!! Form::close() !!}
+                        </div> {{-- FIN modal-content --}}
+                    </div> {{-- FIN modal-dialog --}}
+                </div> {{-- FIN modal --}}
+                {{-- Fin Modal --}}
+            </div> {{-- FIN border_div --}}
+        </div> {{-- FIN col-12 --}}
+    </div> {{-- FIN row p-t-30 --}}
+</div> {{-- FIN container --}}
 
 <!-- Footer -->
 <footer class="text-center text-white footer">
@@ -290,7 +290,7 @@
         </p>
     </div>
     <!-- Copyright -->
-</footer>
+</footer> {{-- FIN footer --}}
 
 <script src="{{asset('js/jquery-2.1.3.min.js') }}"></script>
 <script src="{{asset('eventos/js/bootstrap.bundle.min.js')}}"></script>
