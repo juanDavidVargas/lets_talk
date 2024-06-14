@@ -614,8 +614,8 @@ nav .dl-menuwrapper ul.sub-menu {
     /* position: absolute; */
     bottom: 0;
     color: #fff !important;
-    width: 105% !important;
-	margin: 0px 0px 0px -36px;
+    width: 100%;
+	margin: 0;
 	text-decoration: none;
 }
 @media (min-width:992px) {
@@ -624,8 +624,8 @@ nav .dl-menuwrapper ul.sub-menu {
     /* position: absolute; */
     bottom: 0;
     color: #fff !important;
-    width: 105% !important;
-	margin: 0px 0px 0px -36px;
+    width: 100%;
+	margin: 0;
 }
 .footer .copyright {
 		padding:10px 20px;
@@ -1475,7 +1475,7 @@ header.page-header .container,header.page-header .container-fluid {
 .clockbox>div:before {
 	width:2px;
 	background: rgba(255,255,255,0.2);
-	height
+	/* height */
 }
 /* =================================================================== */
 /* PAGINATION

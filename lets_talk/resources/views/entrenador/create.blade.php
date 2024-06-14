@@ -31,8 +31,8 @@
             background-color: #21277B !important;
             bottom: 0;
             color: #fff !important;
-            width: 105% !important;
-            margin: 0px 0px 0px -36px;
+            width: 100%;
+            margin: 0;
             text-decoration: none;
         }
     </style>
@@ -220,10 +220,13 @@
     </div> {{-- FIN row p-t-30 --}}
 </div> {{-- FIN container --}}
 
+<!-- Include Footer -->
+{{-- @include('layouts.footer') --}}
+
 <!-- Footer -->
 <footer class="text-center text-white footer">
     <!-- Grid container -->
-    <div class="container">
+    <div class="p-3">
         <!-- Section: Links -->
         <section class="mt-5">
             <!-- Grid row-->
@@ -264,7 +267,7 @@
         </section>
         <!-- Section: Links -->
 
-        <hr class="my-5"/>
+        <hr class=""/>
 
         <!-- Section: Social -->
         <section class="text-center mb-4">
@@ -274,9 +277,6 @@
             <a href="" class="text-white fa-2x insta">
                 <i class="fa fa-instagram"></i>
             </a>
-            <!-- <a href="" class="text-white fa-2x link">
-                <i class="fa fa-linkedin"></i>
-            </a> -->
         </section>
         <!-- Section: Social -->
     </div>
@@ -290,7 +290,8 @@
         </p>
     </div>
     <!-- Copyright -->
-</footer> {{-- FIN footer --}}
+</footer>
+{{-- FIN footer --}}
 
 <script src="{{asset('js/jquery-2.1.3.min.js') }}"></script>
 <script src="{{asset('eventos/js/bootstrap.bundle.min.js')}}"></script>
