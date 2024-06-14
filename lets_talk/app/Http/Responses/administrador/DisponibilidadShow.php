@@ -14,8 +14,8 @@ class DisponibilidadShow implements Responsable
     {
         try
         {
-            $disponibilidad = DB::table('evento_agenda_entrenador')
-                                    ->join('usuarios', 'usuarios.id_user', '=', 'evento_agenda_entrenador.id_usuario')
+            return DB::table('evento_agenda_entrenador')
+                                    ->join('usuarios', 'usuarios.id_user', '=', 'evento_agenda_entrenador.id_instructor')
                                     ->join('estados', 'estados.id_estado', '=', 'evento_agenda_entrenador.state')
                                     ->select(
                                         'evento_agenda_entrenador.id',
@@ -37,8 +37,6 @@ class DisponibilidadShow implements Responsable
                                     ->whereIn('evento_agenda_entrenador.state', [1,2,3])
                                     ->orderBy('evento_agenda_entrenador.id', 'DESC')
                                     ->get();
-            return $disponibilidad;
-
         } catch (Exception $e)
         {
             alert()->error("Error', 'An error has occurred, try again, if the problem persists contact support.!");
@@ -70,7 +68,6 @@ class DisponibilidadShow implements Responsable
 
     private function consultarDisponibilidades($idHorario, $numDia)
     {
-        // dd($id, $numDia);
         return DB::table('evento_agenda_entrenador')
                 ->join('usuarios', 'usuarios.id_user', '=', 'evento_agenda_entrenador.id_instructor')
                 ->leftJoin('tipo_ingles', 'tipo_ingles.id', '=', 'usuarios.id_tipo_ingles')
