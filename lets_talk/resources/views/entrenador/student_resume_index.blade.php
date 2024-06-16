@@ -1,9 +1,6 @@
 @extends('layouts.layout')
 @section('title', 'Student Resume')
 
-{{-- ============================================================== --}}
-{{-- ============================================================== --}}
-
 @section('css')
     <link href="{{asset('DataTable/datatables.min.css')}}" rel="stylesheet">
 
@@ -108,9 +105,6 @@
     </style>
 @stop
 
-{{-- ============================================================== --}}
-{{-- ============================================================== --}}
-
 @section('content')
     @php
         use Carbon\Carbon;
@@ -174,9 +168,6 @@
     @include('layouts.loader')
 @stop
 
-{{-- ============================================================== --}}
-{{-- ============================================================== --}}
-
 @section('scripts')
     <script src="{{asset('DataTable/pdfmake.min.js')}}"></script>
     <script src="{{asset('DataTable/vfs_fonts.js')}}"></script>
@@ -211,8 +202,6 @@
             });
         });
 
-        // ===================================================
-
         function verEstudiante(idStudent) {
             $.ajax({
                 async: true,
@@ -244,8 +233,6 @@
                     fechaIngresoSistema = new Date(fechaIngresoSistema * 1000).toLocaleDateString('es-ES');
 
                     html = `<p class="gral-font center-align"><strong>STUDENT RESUME</strong></p>`;
-
-                    // ==============================================
 
                     html += `
                             <div class="d-flex flex-row margin-top" style="padding:0; width:100%;">
@@ -289,8 +276,6 @@
                             </div>
                     `;
 
-                    // ==============================================
-
                     html += `
                             <div class="d-flex flex-row margin-top" style="padding:0; width:100%;">
                                 <div style="width:50%">
@@ -311,8 +296,6 @@
                     html += `
                             </div>
                     `;
-
-                    // ==============================================
 
                     html += `
                             <div class="d-flex flex-row margin-top" style="padding:0; width:100%;">
@@ -335,8 +318,6 @@
                             </div>
                     `;
 
-                    // ==============================================
-
                     html += `
                             <div class="d-flex flex-row margin-top" style="padding:0; width:100%;">
                                 <div style="width:50%">
@@ -357,8 +338,6 @@
                     html += `
                             </div>
                     `;
-
-                    // ==============================================
 
                     html += `
                             <div class="d-flex flex-row margin-top" style="padding:0; width:100%;">
@@ -381,8 +360,6 @@
                             </div>
                     `;
 
-                    // ==============================================
-
                     html += `
                             <div class="d-flex flex-row margin-top" style="padding:0; width:100%;">
                                 <div style="width:50%">
@@ -403,8 +380,6 @@
                     html += `
                             </div>
                     `;
-
-                    // ==============================================
 
                     html += `
                             <div class="d-flex flex-row margin-top" style="padding:0; width:100%;">
@@ -427,8 +402,6 @@
                             </div>
                     `;
 
-                    // ==============================================
-
                     html += `
                             <div class="d-flex flex-row margin-top" style="padding:0; width:100%;">
                                 <div style="width:50%">
@@ -450,8 +423,6 @@
                             </div>
                     `;
 
-                    // ==============================================
-
                     html += `
                             <div class="d-flex flex-row margin-top" style="padding:0; width:100%;">
                                 <div style="width:50%">
@@ -472,8 +443,6 @@
                     html += `
                             </div>
                     `;
-
-                    // ==============================================
 
                     Swal.fire({
                         html: html,

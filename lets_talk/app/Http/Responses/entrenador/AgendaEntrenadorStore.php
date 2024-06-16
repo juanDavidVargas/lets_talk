@@ -46,20 +46,7 @@ class AgendaEntrenadorStore implements Responsable
                                                         ->first();
 
                 $hora_inicio = substr($horas_disp->horario, 0, 5);
-                $hora_fin = substr($horas_disp->horario, 6);
-
-                // if(isset($entrenador_id) && !is_null($entrenador_id) && !empty($entrenador_id) && $entrenador_id != "-1") {
-
-                //    $user = $this->traerNombreUsuario($entrenador_id);
-                //    $usuario = $user->usuario;
-                //    $state = 1; // Aprobado
-                //    $user_id = $entrenador_id;
-
-                // } else {
-                //     $usuario = session('username');
-                //     $state = 2;
-                //     $user_id = session('usuario_id');
-                // }
+                $hora_fin = substr($horas_disp->horario, 8);
 
                 if(isset($entrenador_id) && !is_null($entrenador_id) && !empty($entrenador_id) && $entrenador_id != "-1") {
 

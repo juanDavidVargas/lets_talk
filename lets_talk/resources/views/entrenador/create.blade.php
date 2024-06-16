@@ -171,15 +171,16 @@
                                 @csrf
                                 <div class="modal-body">
                                     <div class="row">
-                                        @for($i = 1; $i <= count($horarios); $i++)
+                                        @foreach($horarios as $key => $value)
                                             <div class="col-md-4 form-floating mb-3">
                                                 <div class="cat action">
                                                     <label>
-                                                    <input type="checkbox" value="{{$horarios[$i]}}" name="horas" id="{{$i}}" onclick="llenarArrayDatos()"><span>{{$horarios[$i]}}</span>
+                                                    <input type="checkbox" value="{{$key}}" name="horas" id="{{$key}}"
+                                                            onclick="llenarArrayDatos()"><span>{{$value}}</span>
                                                     </label>
                                                 </div> {{-- FIN cat action --}}
                                             </div> {{-- FIN form-floating --}}
-                                        @endfor
+                                        @endforeach
 
                                         <div class="row">
                                             <div class="col-md-12">

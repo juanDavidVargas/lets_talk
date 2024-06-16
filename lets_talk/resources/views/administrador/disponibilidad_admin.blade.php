@@ -93,10 +93,10 @@
     <script>
         $(document).ready(function() {
 
-            setTimeout(() => {
-                $("#loaderGif").hide();
-                $("#loaderGif").addClass('ocultar');
-            }, 1500);
+            // setTimeout(() => {
+            //     $("#loaderGif").hide();
+            //     $("#loaderGif").addClass('ocultar');
+            // }, 1500);
 
             $('#tbl_trainer_sessions').DataTable({
                 'ordering': false
