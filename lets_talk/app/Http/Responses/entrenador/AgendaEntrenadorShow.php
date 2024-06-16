@@ -113,7 +113,7 @@ class AgendaEntrenadorShow implements Responsable
                         'id_trainer_horario',
                         'eae.start_date',
                         'eae.start_time',
-                        'eae.id AS id_sesion',
+                        'eae.id AS id_sesion'
                     )
                     ->where('reservas.id_instructor', $usuarioLogueado)
                     ->where('ue.estado', 1)
@@ -166,7 +166,7 @@ class AgendaEntrenadorShow implements Responsable
                         'contactos.opcional_skype',
                         'contactos.opcional_zoom',
                         'reserva_estudiante.id_estudiante as id_estudiante',
-                        'reserva_instructor.id_instructor as id_instructor',
+                        'reserva_instructor.id_instructor as id_instructor'
                     )
                     ->where('usuarios.id_user', $idUser)
                     ->where('usuarios.estado', 1)

@@ -11,17 +11,10 @@ use App\Http\Responses\entrenador\AgendaEntrenadorUpdate;
 use App\Models\entrenador\DisponibilidadEntrenadores;
 use App\User;
 use Illuminate\Support\Facades\DB;
-use App\Http\Responses\administrador\DisponibilidadShow;
-use App\Models\usuarios\Nivel;
-use App\Models\usuarios\Contacto;
-use App\Models\entrenador\EvaluacionInterna;
-use App\Models\entrenador\EventoAgendaEntrenador;
 use App\Http\Responses\entrenador\EvaluacionInternaStore;
 use App\Http\Responses\entrenador\DiponibilidadesMasivaUpdate;
 use App\Http\Responses\estudiante\EstudianteShow;
 use App\Traits\MetodosTrait;
-use Carbon\Carbon;
-
 class EntrenadorController extends Controller
 {
     use MetodosTrait;
@@ -79,7 +72,9 @@ class EntrenadorController extends Controller
             if($checkConnection->getName() == "database_connection") {
                 return view('database_connection');
             } else {
-                $array_horarios = DisponibilidadEntrenadores::select('id_horario', 'horario')->pluck('horario', 'id_horario');
+                $array_horarios = DisponibilidadEntrenadores::select('id_horario', 'horario')
+                                    ->where('id_estado', 1)
+                                    ->pluck('horario', 'id_horario');
 
                 $entrenadores = User::join('roles', 'roles.id_rol', 'usuarios.id_rol')
                             ->select(
@@ -90,8 +85,7 @@ class EntrenadorController extends Controller
                             ->whereIn('usuarios.id_rol', [1,2])
                             ->where('usuarios.estado', 1)
                             ->whereNull('usuarios.deleted_at')
-                            ->pluck('usuario', 'id_user')
-                            ;
+                            ->pluck('usuario', 'id_user');
 
                 view()->share('horarios', $array_horarios);
                 view()->share('trainers', $entrenadores);

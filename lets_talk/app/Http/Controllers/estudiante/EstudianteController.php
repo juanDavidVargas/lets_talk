@@ -141,9 +141,6 @@ class EstudianteController extends Controller
         //
     }
 
-    // ==============================================================
-    // ==============================================================
-
     public function disponibilidadEntrenadores()
     {
         $adminCtrl = new AdministradorController();
@@ -162,7 +159,8 @@ class EstudianteController extends Controller
 
             if($checkConnection->getName() == "database_connection") {
                 return view('database_connection');
-            } else {
+            } else
+            {
                 $idEstudiante = session('usuario_id');
 
                 $disponibilidadEntrenadores = EventoAgendaEntrenador::leftJoin('usuarios', 'usuarios.id_user', '=', 'evento_agenda_entrenador.id_instructor')
@@ -344,7 +342,7 @@ class EstudianteController extends Controller
                     'reservas.id_trainer_horario',
                     'start_date',
                     'start_time',
-                    'link_meet',
+                    'link_meet'
                 )
                 ->where('id_estudiante', $idEstudiante)
                 ->orderBy('start_date', 'desc')

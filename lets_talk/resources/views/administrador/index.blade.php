@@ -255,8 +255,6 @@
 
         function updatePassword(id_user)
         {
-            // let id_user = $("#id_user").val();
-
             Swal.fire({
                 title: 'Update Password',
                 html: '<input class="form-control"' +

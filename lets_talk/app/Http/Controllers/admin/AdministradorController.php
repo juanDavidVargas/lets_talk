@@ -482,7 +482,7 @@ class AdministradorController extends Controller
             return view('database_connection');
         } else {
             $todasDisponibilidades = DisponibilidadEntrenadores::select('id_horario', 'horario', 'id_estado')
-                                                                ->orderBy('horario', 'asc')
+                                                                ->orderBy('id_horario', 'DESC')
                                                                 ->get();
             return view($vista, compact('todasDisponibilidades'));
         }

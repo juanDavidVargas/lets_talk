@@ -16,9 +16,9 @@ class HorarioStore implements Responsable
     {
         DB::connection('mysql')->beginTransaction();
 
-        $initialHour = request('initial_hour', null);
-        $finalHour = request('final_hour', null);
-        $horario = $initialHour.'-'.$finalHour;
+        $initialHour = request('hora_inicial', null);
+        $finalHour = request('hora_final', null);
+        $horario = $initialHour.' - '.$finalHour;
 
         $consultaHorario = DisponibilidadEntrenadores::select('horario')
                             ->where('horario', $horario)
@@ -26,8 +26,7 @@ class HorarioStore implements Responsable
 
         if (isset($consultaHorario) && !is_null($consultaHorario) && !empty($consultaHorario))
         {
-            alert()->error('Error', 'The Schedule already exists, chose another one please');
-            return redirect()->to(route('administrador.disponibilidad_admin'));
+            return response()->json('schedule_exist');
         } else
         {
             try
@@ -40,21 +39,17 @@ class HorarioStore implements Responsable
                 if ($nuevoHorario)
                 {
                     DB::connection('mysql')->commit();
-                    alert()->success('Successful Process', 'Schedule successfully created');
-                    return redirect()->to(route('administrador.disponibilidad_admin'));
+                    return response()->json('success');
                 } else
                 {
                     DB::connection('mysql')->rollback();
-                    alert()->error('Error', 'An error accurred, try again');
-                    return redirect()->to(route('administrador.disponibilidad_admin'));
+                    return response()->json('error');
                 }
 
             } catch (Exception $e)
             {
                 DB::connection('mysql')->rollback();
-                alert()->error('Error', 'An error has occurred of database creating the Schedule,
-                                        try again, if the problem persists contact support.');
-                return back();
+                return response()->json('exception');
             }
         }
     }

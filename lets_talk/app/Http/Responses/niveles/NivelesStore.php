@@ -28,7 +28,7 @@ class NivelesStore implements Responsable
             return response()->json("nivel_existe");
         } else
         {
-            $baseFileName = "{$nuevoNivel}"; //nombre base para los archivos
+            $baseFileName = "{$nuevoNivel}";
             $carpetaArchivos = '/upfiles/niveles';
 
             DB::connection('mysql')->beginTransaction();

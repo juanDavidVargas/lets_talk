@@ -160,7 +160,7 @@
             html +=     `<label class="font14">This option creates a new level</label>`;
             html +=     `<div class="div-level-name">
                             <label for="crear_nivel">Level Name</label>
-                            <input type="text" name="crear_nivel" id="crear_nivel" class="level-name" required />
+                            <input type="text" name="crear_nivel" id="crear_nivel" class="level-name" required/>
                         </div>
             `;
             html += `

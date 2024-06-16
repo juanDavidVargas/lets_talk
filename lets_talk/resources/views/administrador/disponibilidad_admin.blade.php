@@ -31,7 +31,7 @@
 
     <div class="row p-b-20 float-left">
         <div class="col-xs-12 col-sm-12 col-md-12">
-            <button class="btn btn-primary" id="btn_create_schedule">Create New Schedule</button>
+            <button class="btn btn-primary" onclick="crearHorario()">Create New Schedule</button>
         </div>
     </div>
 
@@ -102,33 +102,6 @@
                 'ordering': false
             });
 
-            let form_shedule = ''
-
-            form_shedule += `
-                {!! Form::open(['method' => 'POST', 'route' => ['administrador.disponibilidad_admin_store'], 'id' => 'form_store_shedule', 'class' => 'login100-form', 'autocomplete' => 'off']) !!}
-                @csrf
-            `;
-
-            form_shedule += `
-                    <div style="margin-top:2rem;">
-                        <label class="lb-time">Initial Hour</label>
-                        <input type="time" min="08:00" max="20:30" name="initial_hour" id="initial_hour" step="1800" class="hour">
-                    </div>
-
-                    <div>
-                        <label class="lb-time">Final Hour</label>
-                        <input type="time" min="08:00" max="20:00" name="final_hour" id="final_hour" step="1800" class="hour">
-                    </div>
-            `;
-
-            form_shedule += `
-                    <input type="submit" class="btn btn-primary btnSch" id="btn_store_shedule" value="Create Schedule" >
-            `;
-
-            form_shedule += `
-                    {!! Form::close() !!}
-            `;
-
             $('#btn_create_schedule').click(function()
             {
                 Swal.fire({
@@ -142,57 +115,198 @@
                     allowOutsideClick: false,
                     allowEscapeKey: false,
                 });
-
-                form_store_shedule = $("#form_store_shedule");
-
-                form_store_shedule.validate({
-                    rules:{
-                        initial_hour:{required:true},
-                        final_hour:{required:true}
-                    },
-                    messages: {
-                        initial_hour: {required:"Initial Hour is Required"},
-                        final_hour: {required:"Final Hour is Required"},
-                    },
-                    submitHandler: function(form)
-                    {
-                        $("#loaderGif").show();
-                        $("#loaderGif").removeClass('ocultar');
-                        $("#btn_store_shedule").attr('disabled', true);
-                        form.submit();
-                    }
-                });
-
-                $('#final_hour').blur(function ()
-                {
-                    let initial_hour = $('#initial_hour').val();
-                    let final_hour = $('#final_hour').val();
-
-                    initial_hour = initial_hour.replace(':', '');
-                    final_hour = final_hour.replace(':', '');
-
-                    inicial_hora = initial_hour.substr(0, 2);
-                    inicial_minutos = initial_hour.substr(2, 2);
-
-                    final_hora = final_hour.substr(0, 2);
-                    final_minutos = final_hour.substr(2, 2);
-
-                    horaInicialCompleta = (parseInt(inicial_hora*60)) + (parseInt(inicial_minutos));
-                    horaFinalCompleta = (parseInt(final_hora*60)) + (parseInt(final_minutos));
-
-                    let diferencia = horaFinalCompleta - horaInicialCompleta;
-
-                    if (diferencia > 30)
-                    {
-                        Swal.fire(
-                            'Error!',
-                            'The schedule cannot exceed 30 minutes!',
-                            'error'
-                        )
-                    }
-                })
             });
         }); // FIN ready
+
+        function validarHoras()
+        {
+            let initial_hour = $('#initial_hour').val();
+            let final_hour = $('#final_hour').val();
+
+            initial_hour = initial_hour.replace(':', '');
+            final_hour = final_hour.replace(':', '');
+
+            inicial_hora = initial_hour.substr(0, 2);
+            inicial_minutos = initial_hour.substr(2, 2);
+
+            final_hora = final_hour.substr(0, 2);
+            final_minutos = final_hour.substr(2, 2);
+
+            horaInicialCompleta = (parseInt(inicial_hora*60)) + (parseInt(inicial_minutos));
+            horaFinalCompleta = (parseInt(final_hora*60)) + (parseInt(final_minutos));
+
+            let diferencia = horaFinalCompleta - horaInicialCompleta;
+
+            if (diferencia > 31)
+            {
+                Swal.fire(
+                    'Error!',
+                    'The schedule cannot exceed 30 minutes!',
+                    'error'
+                );
+                return;
+            }
+
+            if(diferencia <= 0)
+            {
+                Swal.fire(
+                    'Error!',
+                    'The schedule entered is invalid!',
+                    'error'
+                );
+                return;
+            }
+        }
+
+        function crearHorario()
+        {
+            let form_shedule = ''
+    
+            form_shedule += `
+                    <div style="margin-top:2rem;">
+                        <label class="lb-time">Initial Hour</label>
+                        <input type="time" min="08:00" max="20:30"
+                                name="initial_hour" id="initial_hour" step="1800" class="hour" required>
+                    </div>
+
+                    <div>
+                        <label class="lb-time">Final Hour</label>
+                        <input type="time" min="08:00" max="20:00"
+                                name="final_hour" id="final_hour" step="1800" class="hour"
+                                onblur="validarHoras()" required>
+                    </div>
+
+                    <div class="alert alert-danger ocultar" role="alert" id="schedule_alert">
+                        The fields Initial Hour and Final Hour are required
+                    </div>
+            `;
+
+            form_shedule += `
+                    <input type="button" class="btn btn-primary btnSch" id="btn_store_shedule" value="Create Schedule" >
+            `;
+
+            Swal.fire({
+                title: 'Create Scheduler',
+                html: form_shedule,
+                icon: 'success',
+                type: 'success',
+                showConfirmButton: false,
+                focusConfirm: false,
+                showCloseButton: true,
+                showCancelButton: false,
+                cancelButtonText: 'Cancel',
+                allowOutsideClick: false,
+            });
+
+            $('#btn_store_shedule').on('click', function ()
+            {
+                validarHoras();
+
+                let initial_hour = $('#initial_hour').val();
+                let final_hour = $('#final_hour').val();
+
+                if(initial_hour == "" || final_hour == "")
+                {
+                    $('#initial_hour').attr('required', true);
+                    $('#final_hour').attr('required', true);
+                    $("#schedule_alert").show();
+                    $("#schedule_alert").removeClass('ocultar');
+                } else
+                {
+                    $('#btn_store_shedule').attr('disabled',true);
+                    $("#schedule_alert").hide();
+                    $("#schedule_alert").addClass('ocultar');
+
+                    $.ajax({
+                        async: true,
+                        url: "{{route('administrador.disponibilidad_admin_store')}}",
+                        type: "POST",
+                        dataType: "JSON",
+                        data: {
+                            'hora_inicial': initial_hour,
+                            'hora_final': final_hour
+                        },
+                        beforeSend: function ()
+                        {
+                            $("#loading_ajax").show();
+                            $("#loading_ajax").removeClass('ocultar');
+                        },
+                        success: function(response)
+                        {
+                            $("#loading_ajax").hide();
+                            $("#loading_ajax").addClass('ocultar');
+
+                            if (response == "success")
+                            {
+                                $("#loading_ajax").hide();
+                                $("#loading_ajax").addClass('ocultar');
+
+                                Swal.fire(
+                                    'Great!',
+                                    'Schedule successfully created!',
+                                    'success'
+                                );
+
+                                window.location.reload();
+                                return;
+                            }
+
+                            if (response == "error")
+                            {
+                                $("#loading_ajax").hide();
+                                $("#loading_ajax").addClass('ocultar');
+
+                                Swal.fire(
+                                    'Error!',
+                                    'An error accurred, try again!',
+                                    'error'
+                                );
+
+                                window.location.reload();
+                                return;
+                            }
+
+                            if (response == "exception")
+                            {
+                                $("#loading_ajax").hide();
+                                $("#loading_ajax").addClass('ocultar');
+
+                                Swal.fire(
+                                    'Error!',
+                                    'An error has occurred of database creating the Schedule,'
+                                    + ' try again, if the problem persists contact support.!',
+                                    'error'
+                                );
+
+                                window.location.reload();
+                                return;
+                            }
+
+                            if (response == "schedule_exist")
+                            {
+                                $("#loading_ajax").hide();
+                                $("#loading_ajax").addClass('ocultar');
+
+                                Swal.fire(
+                                    'Error!',
+                                    'The Schedule already exists, choose another one please',
+                                    'error'
+                                );
+
+                                window.location.reload();
+                                return;
+                            }
+                        }
+                    });
+                }
+
+                setTimeout(() => {
+                    $("#schedule_alert").hide();
+                    $("#schedule_alert").addClass('ocultar');
+                }, 6000);
+
+            });
+        }
 
         function changeStateSchedule(idHorario)
         {

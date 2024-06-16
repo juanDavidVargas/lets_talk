@@ -1,6 +1,7 @@
 @extends('layouts.layout')
 @section('title', 'Reservar Clase')
 @section('css')
+    <link href="{{asset('DataTable/datatables.min.css')}}" rel="stylesheet">
 @stop
 
 @section('content')
@@ -54,7 +55,9 @@
                                     <td>{{$disponibilidad->start_time}}</td>
                                     <td>{{$disponibilidad->end_time}}</td>
                                     <td>
-                                        <button type="button" class="text-white" onclick="reservarClase('{{$idEvento}}','{{$idInstructor}}','{{$FechaClase}}','{{$claseInicio}}')" style="background-color: #21277B; padding:0.5em">RESERVAR YA</button>
+                                        <button type="button" class="text-white"
+                                                onclick="reservarClase('{{$idEvento}}','{{$idInstructor}}','{{$FechaClase}}','{{$claseInicio}}')"
+                                                style="background-color: #21277B; padding:0.5em">RESERVAR YA</button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -74,7 +77,8 @@
     <script src="{{asset('DataTable/datatables.min.js')}}"></script>
 
     <script>
-        $( document ).ready(function() {
+        $( document ).ready(function()
+        {
             $('#tbl_disponibilidades').DataTable({
                 'ordering': false,
                 "lengthMenu": [[10,25,50,100, -1], [10,25,50,100, 'ALL']],
