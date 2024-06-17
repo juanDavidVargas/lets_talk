@@ -39,6 +39,9 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @php
+                                // dd($disponibilidadEntrenadores);
+                            @endphp
                             @foreach ($disponibilidadEntrenadores as $disponibilidad)
                                 @php
                                     $idEvento = $disponibilidad->id_evento;
