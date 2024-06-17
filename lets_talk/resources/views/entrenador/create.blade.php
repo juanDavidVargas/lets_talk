@@ -9,8 +9,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Let's Talk - Trainer's Agenda</title>
 
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/404.css') }}">
+    <link rel="stylesheet" href="{{asset('css/style.css')}}">
+    <link rel="stylesheet" href="{{asset('css/404.css')}}">
 
     <link rel="stylesheet" href="{{asset('eventos/css/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{asset('eventos/css/main.min.css')}}">
@@ -227,7 +227,7 @@
 <!-- Footer -->
 <footer class="text-center text-white footer">
     <!-- Grid container -->
-    <div class="px-4 pt-4">
+    <div class="pt-4" style="padding-left:2rem;padding-right:2rem;">
         <!-- Section: Links -->
         <section class="mb-4">
             <!-- Grid row-->
@@ -259,7 +259,7 @@
                 <!-- Grid column -->
                 <div class="col-md-2">
                     <h6 class="text-uppercase font-weight-bold">
-                        <a href="mailto:letstalkmedellin@gmail.com" class="text-white" target="_blank" style="text-decoration: none;">Contact</a>
+                        <a href="mailto:letstalkmedellin@gmail.com" class="text-white fw-bold" target="_blank" style="text-decoration: none;">Contact</a>
                     </h6>
                 </div>
                 <!-- Grid column -->
@@ -268,7 +268,7 @@
         </section>
         <!-- Section: Links -->
 
-        <hr class="mt-3"/>
+        <hr class="mt-3 bg-white"/>
 
         <!-- Section: Social -->
         <section class="text-center mb-0 p-0">
