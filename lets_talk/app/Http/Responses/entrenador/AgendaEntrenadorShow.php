@@ -64,9 +64,12 @@ class AgendaEntrenadorShow implements Responsable
 
     public function cargarInfoEventoPorId($request)
     {
+        // dd($request);
+
         try
         {
-            $eventos = EventoAgendaEntrenador::select(
+            $eventos = EventoAgendaEntrenador::leftjoin('usuarios','usuarios.id_user','=','evento_agenda_entrenador.id_instructor')
+                        ->select(
                                     'id',
                                     'title',
                                     'description',
@@ -78,11 +81,17 @@ class AgendaEntrenadorShow implements Responsable
                                     'state',
                                     'id_usuario',
                                     'id_instructor',
-                                    'id_horario')
-                        ->whereNull('deleted_at')
+                                    'id_horario',
+                                    'usuarios.nombres'
+                        )
+                        ->whereNull('evento_agenda_entrenador.deleted_at')
                         ->where('state', 1)
                         ->where('id', $request->id_evento)
+                        // ->first();
                         ->get();
+                        // ->toSql();
+
+                // dd($eventos);
 
             if(isset($eventos) && !is_null($eventos) && !empty($eventos))
             {
@@ -93,6 +102,7 @@ class AgendaEntrenadorShow implements Responsable
 
         } catch (Exception $e)
         {
+            dd($e);
             return response()->json("error_exception");
         }
     }

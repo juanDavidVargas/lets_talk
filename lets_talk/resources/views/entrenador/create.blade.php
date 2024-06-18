@@ -319,323 +319,329 @@
     let  myData = [];
     let numDay = [];
 
-document.addEventListener('DOMContentLoaded', function ()
-{
-    calendar = new FullCalendar.Calendar(calendarEl, {
-        timeZone: 'local',
-        initialView: 'dayGridMonth',
-        locale: 'en',
-        headerToolbar: {
-            left: 'prev next today',
-            center: 'title',
-            // right: 'dayGridMonth listWeek'
-            right: 'dayGridMonth'
-        },
-        events: myData,
-        displayEventTime: false,
-        buttonText: {
-          month: "Month",
-          list: "Week",
-        },
-        editable: true,
-        dateClick: function (info)
-        {
-            let hoy = moment().format('YYYY-MM-DD');
-            let fechaEvento = moment(info.dateStr).format('YYYY-MM-DD');
-            let daysArray = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            let day = new Date(fechaEvento).getDay() + 1;
-            let dayName = '';
-
-            numDay.shift();
-            numDay.push(day);
-
-            let fecha = new Date();
-            let dias = 14; // Número de días a agregar
-            let nueva_fecha = fecha.setDate(fecha.getDate() + dias);
-            let nueva_fecha_formato = moment(nueva_fecha).format('YYYY-MM-DD');
-
-            if(day === 7 || day == 7 || day == '7')
+    document.addEventListener('DOMContentLoaded', function ()
+    {
+        calendar = new FullCalendar.Calendar(calendarEl, {
+            timeZone: 'local',
+            initialView: 'dayGridMonth',
+            locale: 'en',
+            headerToolbar: {
+                left: 'prev next today',
+                center: 'title',
+                // right: 'dayGridMonth listWeek'
+                right: 'dayGridMonth'
+            },
+            events: myData,
+            displayEventTime: false,
+            buttonText: {
+            month: "Month",
+            list: "Week",
+            },
+            editable: true,
+            dateClick: function (info)
             {
-                dayName = 'Sunday';
+                let hoy = moment().format('YYYY-MM-DD');
+                let fechaEvento = moment(info.dateStr).format('YYYY-MM-DD');
+                let daysArray = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                let day = new Date(fechaEvento).getDay() + 1;
+                let dayName = '';
 
-            } else {
+                numDay.shift();
+                numDay.push(day);
 
-                dayName = daysArray[day];
-            }
+                let fecha = new Date();
+                let dias = 14; // Número de días a agregar
+                let nueva_fecha = fecha.setDate(fecha.getDate() + dias);
+                let nueva_fecha_formato = moment(nueva_fecha).format('YYYY-MM-DD');
 
-            // Validamos que no se puedan crear eventos más de 15 dias en el futuro
-            if(fechaEvento > nueva_fecha_formato)
-            {
-                Swal.fire(
-                    'Error',
-                    'Events cannot be created more than 15 days in advance.',
-                    'error'
-                )
-                return false;
-            }
-
-            if (hoy <= fechaEvento)
-            {
-                frm.reset();
-                document.getElementById('btnAccion').textContent = 'Save';
-                document.getElementById('titulo').textContent = dayName;
-                document.getElementById('fecha_evento').value = fechaEvento;
-                document.getElementById('btnAccion').style.display = 'inline-block';
-                myModal.show();
-            }
-            else
-            {
-                Swal.fire(
-                    'Error',
-                    'You cannot create events in the past',
-                    'error'
-                )
-                return false;
-            }
-        },
-
-        eventClick: function (info)
-        {
-            let evento_id = info.event.id
-            $("#trainer_id").val('-1');
-            $(`#${evento_id}`).attr('checked', false);
-            $(`#${evento_id}`).prop('checked',false);
-
-            $.ajax({
-                async: false,
-                url: "{{route('cargar_info_evento')}}",
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    'id_evento': evento_id
-                },
-                success: function (response)
+                if(day === 7 || day == 7 || day == '7')
                 {
-                   
-                    if(response == "error_exception")
-                    {
-                        Swal.fire(
-                            'Error!',
-                            'An error occurred, try again, if the problem persists contact support.!',
-                            'error'
-                        );
-                        return;
-                    }
+                    dayName = 'Sunday';
 
-                    if(response == "error_query_eventos")
-                    {
-                        Swal.fire(
-                            'Error!',
-                            'An error occurred, try again, if the problem persists contact support.!',
-                            'error'
-                        );
-                        return;
-                    }
+                } else {
 
-                    document.getElementById('titulo').textContent = 'Details Trainer Availability';
-                    document.getElementById('btnAccion').style.display = 'none';
+                    dayName = daysArray[day];
+                }
 
-                    $(`#${evento_id}`).attr('checked', true);
-                    $(`#${evento_id}`).prop('checked',true);
+                // Validamos que no se puedan crear eventos más de 15 dias en el futurotrainer_id
+                if(fechaEvento > nueva_fecha_formato)
+                {
+                    Swal.fire(
+                        'Error',
+                        'Events cannot be created more than 15 days in advance.',
+                        'error'
+                    )
+                    return false;
+                }
 
+                if (hoy <= fechaEvento)
+                {
+                    frm.reset();
+                    document.getElementById('btnAccion').textContent = 'Save';
+                    document.getElementById('titulo').textContent = dayName;
+                    document.getElementById('fecha_evento').value = fechaEvento;
+                    document.getElementById('btnAccion').style.display = 'inline-block';
                     myModal.show();
                 }
-            });
-        },
-        eventDrop: function (info){}
-    });
-
-    calendar.render();
-    frm.addEventListener('submit', function (e)
-    {
-        e.preventDefault();
-        let horas = $("#horarios").val();
-        let fecha_evento = $("#fecha_evento").val();
-        let trainer = $("#trainer_id").val();
-
-        if ((horas == '' || horas == null || horas == undefined) ||
-            (fecha_evento == '' || fecha_evento == null || fecha_evento == undefined))
-        {
-             Swal.fire(
-                 'Error',
-                 'Please, selected a range of hour',
-                 'error'
-             );
-             return;
-        } else if (trainer == '' || trainer == null || trainer == undefined ||
-                   trainer == '-1' || trainer == -1)
-        {
-            Swal.fire(
-                 'Error',
-                 'Please, selected a trainer',
-                 'error'
-             );
-             return;
-        } else
-        {
-            $("#btnAccion").attr('disabled', 'disabled');
-
-            $.ajax({
-                async: true,
-                url: url_store,
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    'hrs_disponibilidad': horas,
-                    'fecha_evento': fecha_evento,
-                    'numero_dia': numDay,
-                    'trainer_id': trainer
-                },
-                beforeSend: function()
+                else
                 {
-                    $("#loaderGif").show();
-                    $("#loaderGif").removeClass('ocultar');
-                    $("#btnAccion").attr('disabled', 'disabled');
-                },
-                success: function(response)
-                {
-                    $("#loaderGif").show();
-                    $("#loaderGif").removeClass('ocultar');
-
-                    if(response == "exception_evento")
-                    {
-                        $("#loaderGif").hide();
-                        $("#loaderGif").addClass('ocultar');
-                        myModal.hide();
-                        $("#loaderGif").hide();
-                        Swal.fire(
-                            'Error',
-                            'An error occurred, contact support.',
-                            'error'
-                        );
-                        return;
-                    }
-
-                    if(response == "error_evento")
-                    {
-                        $("#loaderGif").hide();
-                        $("#loaderGif").addClass('ocultar');
-                        myModal.hide();
-                        $("#loaderGif").hide();
-                        Swal.fire(
-                            'Error',
-                            'An error occurred, try again, if the problem persists contact support.',
-                            'error'
-                        );
-                        return;
-                    }
-
-                    if(response == "error_horas")
-                    {
-                        $("#loaderGif").hide();
-                        $("#loaderGif").addClass('ocultar');
-                        myModal.hide();
-                        $("#loaderGif").hide();
-                        Swal.fire(
-                            'Error',
-                            'Not availability schedule was selected.',
-                            'error'
-                        );
-                        return;
-                    }
-
-                    if(response == "success_evento")
-                    {
-                        $("#loaderGif").hide();
-                        $("#loaderGif").addClass('ocultar');
-                        Swal.fire(
-                            'Successfully!',
-                            'Event successfully created!',
-                            'success'
-                        );
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 3500);
-                    }
+                    Swal.fire(
+                        'Error',
+                        'You cannot create events in the past',
+                        'error'
+                    )
+                    return false;
                 }
-            });
-        }
-    });
-});
+            },
 
-function llenarArrayDatos()
-{
-   //Creamos un array que almacenará los valores de los input "checked"
-    var checked = [];
-
-    //Recorremos todos los input checkbox con name = hr y que se encuentren "checked"
-    $("input[name='horas']:checked").each(function ()
-    {
-        //Mediante la función push agregamos al arreglo los values de los checkbox
-        checked.push(($(this).attr("id")));
-    });
-
-    $("#horarios").val(checked);
-}
-
-$("#btnClose").click(function(info){
-
-    let datos = myData;
-    let array_datos = Object.values(datos);
-
-    array_datos.forEach(element =>
-    {
-        $(`#${element.id}`).removeAttr('checked', false);
-        $(`#${element.id}`).css('background-color', "#21277B");
-    });
-
-});
-
-function cargarEventosPorEntrenador()
-{
-    $.ajax({
-        async: false,
-        url: "{{route('cargar_eventos_entrenador')}}",
-        type: "POST",
-        dataType: "json",
-        data: {
-            "_token": "{{ csrf_token() }}"
-        },
-        success: function(response)
-        {
-            if(response == "error_exception")
+            eventClick: function (info)
             {
-                Swal.fire(
-                    'Error!',
-                    'An error occurred, contact support.!',
-                    'error'
-                );
-                return;
-            }
+                let horario_id = info.event.id
+                let evento_id = info.event.extendedProps.id_evento;
 
-            if(response == "error_query_eventos")
-            {
-                Swal.fire(
-                    'Error!',
-                    'An error occurred, contact support.!',
-                    'error'
-                );
-                return;
-            }
+                console.log(`Id Horario ${horario_id}`);
+                console.log(`Id Evento ${evento_id}`);
+                
+                $("#trainer_id").val('-1');
+                $(`#${horario_id}`).attr('checked', false);
+                $(`#${horario_id}`).prop('checked',false);
 
-            $.each(response.agenda, function(index, element)
-            {
-                myData.push(
+                $.ajax({
+                    async: false,
+                    url: "{{route('cargar_info_evento')}}",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        'id_evento': evento_id,
+                        'id_horario': horario_id,
+                    },
+                    success: function (response)
                     {
-                        id: element.id_horario,
-                        start: `${element.start_date}`,
-                        title: element.title + ' - ' + element.start_time,
-                        color: element.color,
-                        textColor: '#FFFFFF'
-                    }
-                );
-            });
-        }
-    });
-}
+                    
+                        if(response == "error_exception")
+                        {
+                            Swal.fire(
+                                'Error!',
+                                'An error occurred, try again, if the problem persists contact support.!',
+                                'error'
+                            );
+                            return;
+                        }
 
+                        if(response == "error_query_eventos")
+                        {
+                            Swal.fire(
+                                'Error!',
+                                'An error occurred, try again, if the problem persists contact support.!',
+                                'error'
+                            );
+                            return;
+                        }
+
+                        document.getElementById('titulo').textContent = 'Details Trainer Availability';
+                        document.getElementById('btnAccion').style.display = 'none';
+
+                        $(`#${evento_id}`).attr('checked', true);
+                        $(`#${evento_id}`).prop('checked',true);
+
+                        myModal.show();
+                    }
+                });
+            },
+            eventDrop: function (info){}
+        });
+
+        calendar.render();
+        frm.addEventListener('submit', function (e)
+        {
+            e.preventDefault();
+            let horas = $("#horarios").val();
+            let fecha_evento = $("#fecha_evento").val();
+            let trainer = $("#trainer_id").val();
+
+            if ((horas == '' || horas == null || horas == undefined) ||
+                (fecha_evento == '' || fecha_evento == null || fecha_evento == undefined))
+            {
+                Swal.fire(
+                    'Error',
+                    'Please, selected a range of hour',
+                    'error'
+                );
+                return;
+            } else if (trainer == '' || trainer == null || trainer == undefined ||
+                    trainer == '-1' || trainer == -1)
+            {
+                Swal.fire(
+                    'Error',
+                    'Please, selected a trainer',
+                    'error'
+                );
+                return;
+            } else
+            {
+                $("#btnAccion").attr('disabled', 'disabled');
+
+                $.ajax({
+                    async: true,
+                    url: url_store,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        'hrs_disponibilidad': horas,
+                        'fecha_evento': fecha_evento,
+                        'numero_dia': numDay,
+                        'trainer_id': trainer
+                    },
+                    beforeSend: function()
+                    {
+                        $("#loaderGif").show();
+                        $("#loaderGif").removeClass('ocultar');
+                        $("#btnAccion").attr('disabled', 'disabled');
+                    },
+                    success: function(response)
+                    {
+                        $("#loaderGif").show();
+                        $("#loaderGif").removeClass('ocultar');
+
+                        if(response == "exception_evento")
+                        {
+                            $("#loaderGif").hide();
+                            $("#loaderGif").addClass('ocultar');
+                            myModal.hide();
+                            $("#loaderGif").hide();
+                            Swal.fire(
+                                'Error',
+                                'An error occurred, contact support.',
+                                'error'
+                            );
+                            return;
+                        }
+
+                        if(response == "error_evento")
+                        {
+                            $("#loaderGif").hide();
+                            $("#loaderGif").addClass('ocultar');
+                            myModal.hide();
+                            $("#loaderGif").hide();
+                            Swal.fire(
+                                'Error',
+                                'An error occurred, try again, if the problem persists contact support.',
+                                'error'
+                            );
+                            return;
+                        }
+
+                        if(response == "error_horas")
+                        {
+                            $("#loaderGif").hide();
+                            $("#loaderGif").addClass('ocultar');
+                            myModal.hide();
+                            $("#loaderGif").hide();
+                            Swal.fire(
+                                'Error',
+                                'Not availability schedule was selected.',
+                                'error'
+                            );
+                            return;
+                        }
+
+                        if(response == "success_evento")
+                        {
+                            $("#loaderGif").hide();
+                            $("#loaderGif").addClass('ocultar');
+                            Swal.fire(
+                                'Successfully!',
+                                'Event successfully created!',
+                                'success'
+                            );
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 3500);
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+    function llenarArrayDatos()
+    {
+    //Creamos un array que almacenará los valores de los input "checked"
+        var checked = [];
+
+        //Recorremos todos los input checkbox con name = hr y que se encuentren "checked"
+        $("input[name='horas']:checked").each(function ()
+        {
+            //Mediante la función push agregamos al arreglo los values de los checkbox
+            checked.push(($(this).attr("id")));
+        });
+
+        $("#horarios").val(checked);
+    }
+
+    $("#btnClose").click(function(info){
+
+        let datos = myData;
+        let array_datos = Object.values(datos);
+
+        array_datos.forEach(element =>
+        {
+            $(`#${element.id}`).removeAttr('checked', false);
+            $(`#${element.id}`).css('background-color', "#21277B");
+        });
+
+    });
+
+    function cargarEventosPorEntrenador()
+    {
+        $.ajax({
+            async: false,
+            url: "{{route('cargar_eventos_entrenador')}}",
+            type: "POST",
+            dataType: "json",
+            data: {
+                "_token": "{{ csrf_token() }}"
+            },
+            success: function(response)
+            {
+                if(response == "error_exception")
+                {
+                    Swal.fire(
+                        'Error!',
+                        'An error occurred, contact support.!',
+                        'error'
+                    );
+                    return;
+                }
+
+                if(response == "error_query_eventos")
+                {
+                    Swal.fire(
+                        'Error!',
+                        'An error occurred, contact support.!',
+                        'error'
+                    );
+                    return;
+                }
+
+                $.each(response.agenda, function(index, element)
+                {
+                    myData.push(
+                        {
+                            id: element.id_horario + element.id,
+                            // id_evento: element.id,
+                            start: `${element.start_date}`,
+                            title: element.title + ' - ' + element.start_time,
+                            color: element.color,
+                            textColor: '#FFFFFF'
+                        }
+                    );
+                });
+            }
+        });
+    }
 </script>
 </body>
 </html>
