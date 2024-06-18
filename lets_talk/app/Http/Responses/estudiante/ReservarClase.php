@@ -85,6 +85,7 @@ class ReservarClase implements Responsable
                         EventoAgendaEntrenador::where('id', $idHorario)
                                 ->update([
                                         'clase_estado' => 9,
+                                        'color' => '#dc3545',
                                 ]);
                         DB::connection('mysql')->commit();
 

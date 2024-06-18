@@ -116,6 +116,7 @@ class CancelarClase implements Responsable
                             $idEventoLiberado = EventoAgendaEntrenador::where('id', $idHorario)
                                 ->update([
                                         'clase_estado' => 10,
+                                        'color' => '#157347',
                                 ]);
 
                             if ( (isset($claseReservada) && !is_null($claseReservada) && !empty($claseReservada)) 
