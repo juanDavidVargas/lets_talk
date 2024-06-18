@@ -626,7 +626,7 @@ function cargarEventosPorEntrenador()
                     {
                         id: element.id_horario,
                         start: `${element.start_date}`,
-                        title: element.title,
+                        title: element.title + ' - ' + element.start_time,
                         color: element.color,
                         textColor: '#FFFFFF'
                     }
