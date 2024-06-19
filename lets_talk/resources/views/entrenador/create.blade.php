@@ -404,11 +404,22 @@
 
                 let idEvento = ids[0];
                 let idHorario = ids[1];
+                let idInstructor = ids[2];
+                let claseEstado = ids[3];
+                let nombreInstructor = ids[4];
 
                 console.log(`Id Evento ${idEvento}`);
                 console.log(`Id Horario ${idHorario}`);
+                console.log(`Id Instructor ${idInstructor}`);
+                console.log(`Clase Estado ${claseEstado}`);
+                console.log(`Nombre Instructor ${nombreInstructor}`);
                 
-                $("#trainer_id").val('-1');
+                if (claseEstado == 10 || claseEstado == "10") {
+                    $("#trainer_id").val('-1');
+                } else {
+                    $("#trainer_id").val(idInstructor);
+                }
+
                 $(`#${idHorario}`).attr('checked', false);
                 $(`#${idHorario}`).prop('checked',false);
 
@@ -420,7 +431,6 @@
                     data: {
                         "_token": "{{ csrf_token() }}",
                         'id_evento': idEvento,
-                        'id_horario': idHorario,
                     },
                     success: function (response)
                     {
@@ -634,9 +644,10 @@
 
                 $.each(response.agenda, function(index, element)
                 {
+                    console.log(element);
                     myData.push(
                         {
-                            id: [element.id, element.id_horario],
+                            id: [element.id, element.id_horario, element.id_instructor, element.clase_estado, element.nombres],
                             start: `${element.start_date}`,
                             title: element.title + ' - ' + element.start_time,
                             color: element.color,
