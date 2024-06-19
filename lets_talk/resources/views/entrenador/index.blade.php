@@ -106,7 +106,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="col-12">
             <h1 class="text-center text-uppercase">Trainer's Sessions</h1>
         </div>
     </div>
@@ -116,7 +116,8 @@
             {{-- <a href="{{route('administrador.create')}}" class="btn btn-primary">Create New User</a> --}}
         </div>
     </div>
-    <div class="row p-t-30">
+
+    <div class="row p-t-30" style="padding-left:5rem;padding-right:5rem;">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="table-responsive">
                 <table class="table table-striped table-bordered table-hover" id="tbl_trainer_sessions" aria-describedby="sesiones entrenadores">

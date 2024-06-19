@@ -5,18 +5,18 @@
 
 @section('content')
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="col-12">
             <h1 class="text-center text-uppercase">Mis Sesiones</h1>
         </div>
     </div>
 
-    <div class="row p-b-20 float-left">
+    <div class="row p-b-20 float-left" style="padding-left:5rem;padding-right:5rem;">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <a href="{{route('estudiante.disponibilidad')}}" class="btn btn-primary">Atrás Disponibilidad</a>
         </div>
     </div>
 
-    <div class="row p-t-30">
+    <div class="row p-t-30" style="padding-left:5rem;padding-right:5rem;">
         <div class="col-2">
             <div class="table-responsive">
                 <table class="table table-striped table-bordered table-hover" id="tbl_reservas">

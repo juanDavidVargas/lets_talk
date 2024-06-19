@@ -5,9 +5,9 @@
     @include('layouts.header')
     <style>
         .contenido-cuerpo {
-            width:95%;
-            margin-left: auto;
-            margin-right: auto;
+            width:100%;
+            /* margin-left: auto; */
+            /* margin-right: auto; */
             margin-bottom: 5em;
         }
         .contenido-row {

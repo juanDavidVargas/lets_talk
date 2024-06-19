@@ -111,17 +111,18 @@
     @endphp
 
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="col-12">
             <h1 class="text-center text-uppercase">Student Resume</h1>
         </div>
     </div>
 
-    <div class="row p-b-20 float-right">
+    <div class="row p-b-20 float-right" style="padding-left:5rem;padding-right:5rem;">
         <div class="col-xs-12 col-sm-12 col-md-12">
             {{-- <a href="{{route('administrador.create')}}" class="btn btn-primary">Create New User</a> --}}
         </div>
     </div>
-    <div class="row p-t-30">
+
+    <div class="row p-t-30" style="padding-left:5rem;padding-right:5rem;">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="table-responsive">
                 <table class="table table-striped table-bordered table-hover w-100" id="tbl_student_resume" aria-describedby="Student Resume">

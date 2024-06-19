@@ -24,18 +24,18 @@
 
 @section('content')
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="col-12">
             <h2 class="text-center text-uppercase">Trainer's Schedule</h2>
         </div>
     </div>
 
-    <div class="row p-b-20 float-left">
+    <div class="row p-b-20 float-left" style="padding-left:5rem;padding-right:5rem;">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <button class="btn btn-primary" onclick="crearHorario()">Create New Schedule</button>
         </div>
     </div>
 
-    <div class="row p-t-30">
+    <div class="row p-t-30" style="padding-left:5rem;padding-right:5rem;">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="table-responsive">
                 <table class="table table-striped table-bordered table-hover"

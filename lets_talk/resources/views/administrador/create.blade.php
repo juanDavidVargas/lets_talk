@@ -10,8 +10,8 @@
         </div>
     </div>
 
-    <div class="row m-b-30 m-t-30">
-        <div class="col-xs-12 col-sm-12 col-md-12">
+    <div class="row m-b-30 m-t-30" style="padding-left:5rem;padding-right:5rem;">
+        <div class="col-12">
             <a class="btn btn-warning"
                 href="{{route('administrador.index')}}">
                 <i class="fa fa-arrow-left" aria-hidden="true"></i>&nbsp;Back
@@ -23,7 +23,8 @@
 
     {!! Form::open(['method' => 'POST',
         'route' => ['administrador.store'], 'class' => 'login100-form validate-form',
-        'autocomplete' => 'off', 'id' => 'form_new_user', 'accept-charset' => 'UTF-8']) !!}
+        'autocomplete' => 'off', 'id' => 'form_new_user', 'accept-charset' => 'UTF-8',
+        'style' => 'padding-left:5rem;padding-right:5rem;']) !!}
     @csrf
         @include('administrador.fields')
     {!! Form::close() !!}
