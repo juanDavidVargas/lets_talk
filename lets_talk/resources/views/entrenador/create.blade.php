@@ -396,15 +396,21 @@
 
             eventClick: function (info)
             {
-                let horario_id = info.event.id
-                let evento_id = info.event.extendedProps.id_evento;
+                let ids = info.event.id;
+                console.log(ids);
 
-                console.log(`Id Horario ${horario_id}`);
-                console.log(`Id Evento ${evento_id}`);
+                // Convertir el string en un array
+                ids = ids.split(',');
+
+                let idEvento = ids[0];
+                let idHorario = ids[1];
+
+                console.log(`Id Evento ${idEvento}`);
+                console.log(`Id Horario ${idHorario}`);
                 
                 $("#trainer_id").val('-1');
-                $(`#${horario_id}`).attr('checked', false);
-                $(`#${horario_id}`).prop('checked',false);
+                $(`#${idHorario}`).attr('checked', false);
+                $(`#${idHorario}`).prop('checked',false);
 
                 $.ajax({
                     async: false,
@@ -413,8 +419,8 @@
                     dataType: 'json',
                     data: {
                         "_token": "{{ csrf_token() }}",
-                        'id_evento': evento_id,
-                        'id_horario': horario_id,
+                        'id_evento': idEvento,
+                        'id_horario': idHorario,
                     },
                     success: function (response)
                     {
@@ -442,8 +448,8 @@
                         document.getElementById('titulo').textContent = 'Details Trainer Availability';
                         document.getElementById('btnAccion').style.display = 'none';
 
-                        $(`#${evento_id}`).attr('checked', true);
-                        $(`#${evento_id}`).prop('checked',true);
+                        $(`#${idHorario}`).attr('checked', true);
+                        $(`#${idHorario}`).prop('checked',true);
 
                         myModal.show();
                     }
@@ -630,8 +636,7 @@
                 {
                     myData.push(
                         {
-                            id: element.id_horario + element.id,
-                            // id_evento: element.id,
+                            id: [element.id, element.id_horario],
                             start: `${element.start_date}`,
                             title: element.title + ' - ' + element.start_time,
                             color: element.color,
