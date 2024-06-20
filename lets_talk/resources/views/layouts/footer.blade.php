@@ -1,7 +1,7 @@
 <!-- Footer -->
-<footer class="text-center text-white footer">
+<footer class="text-center text-white footer" style="padding-top:2rem;">
     <!-- Grid container -->
-    <div class="" style="margin-top:3rem;padding-left:4rem;padding-right:4rem;padding-top:0rem;">
+    <div class="" style="margin-top:0rem;padding-left:4rem;padding-right:4rem;padding-top:0rem;">
         <!-- Section: Links -->
         <section class="">
             <!-- Grid row-->
