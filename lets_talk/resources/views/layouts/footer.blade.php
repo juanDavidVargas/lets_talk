@@ -1,9 +1,9 @@
 <!-- Footer -->
 <footer class="text-center text-white footer">
     <!-- Grid container -->
-    <div class="pt-4 mt-3" style="margin-top: 3rem;padding-left:4rem;padding-right:4rem;">
+    <div class="" style="margin-top:3rem;padding-left:4rem;padding-right:4rem;padding-top:0rem;">
         <!-- Section: Links -->
-        <section class="mb-4">
+        <section class="">
             <!-- Grid row-->
             <div class="row text-center d-flex justify-content-center p-0">
                 <!-- Grid column -->
@@ -79,7 +79,7 @@
 <script src="{{ asset('js/jquery.grid-a-licious.js') }}"></script>
 <script src="{{ asset('js/404.js') }}"></script>
 
- {{-- Scripts Login Entrenador  --}}
+{{-- Scripts Login Entrenador  --}}
 <script src="{{asset('vendor/animsition/js/animsition.min.js')}}"></script>
 <script src="{{asset('vendor/bootstrap/js/popper.js')}}"></script>
 <script src="{{asset('vendor/select2/select2.min.js')}}"></script>
@@ -95,9 +95,9 @@
 <script type="text/javascript">
     $.ajaxSetup({
         headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-    </script>
+</script>
 
 @include('sweetalert::alert')

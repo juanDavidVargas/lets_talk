@@ -10,7 +10,7 @@
         </div>
     </div>
 
-    <div class="row p-b-20 float-left" style="padding-left:5rem;padding-right:5rem;">
+    <div class="row p-b-20 float-left" style="padding-left:3rem;padding-right:5rem;">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <a href="{{route('estudiante.disponibilidad')}}" class="btn btn-primary">Atrás Disponibilidad</a>
         </div>

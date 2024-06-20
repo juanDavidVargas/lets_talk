@@ -12,13 +12,13 @@
         </div>
     </div>
 
-    <div class="row p-b-20 float-left">
+    <div class="row p-b-20 float-left" style="padding-left:3rem;padding-right:5rem;">
         <div class="col-12">
             <a href="{{route('estudiante.index')}}" class="btn btn-primary">Reservas</a>
         </div>
     </div>
 
-    <div class="row p-b-20 float-left">
+    <div class="row p-b-20 float-left" style="padding-left:3rem;padding-right:5rem;">
         <div class="col-12">
             <a href="{{route('estudiante.mis_creditos')}}" class="btn btn-primary">Mis Créditos</a>
         </div>
