@@ -196,7 +196,7 @@
                                     </div> {{-- FIN modal-body row --}}
 
                                     <div class="row">
-                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <div class="col-12">
                                             @if(session('rol') == 2 || session('rol') == "2")
                                             <div class="wrap-input100 validate-input" data-validate="This Field is Required">
                                                 {!! Form::select('trainer_id', $trainers, null, ['class' => 'input100', 'id' => 'trainer_id']) !!}

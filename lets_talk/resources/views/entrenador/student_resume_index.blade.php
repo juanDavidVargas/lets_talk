@@ -166,7 +166,7 @@
         </div>
     </div>
 
-    @include('layouts.loader')
+    {{-- @include('layouts.loader') --}}
 @stop
 
 @section('scripts')
