@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Reservas\MailReservaClase;
 use Illuminate\Log\Logger;
+use Illuminate\Support\Facades\Log;
 
 class ReservarClase implements Responsable
 {
@@ -40,7 +41,8 @@ class ReservarClase implements Responsable
         {
             try
             {
-                if (!Session::has('google_access_token')) {
+                if (!Session::has('google_access_token'))
+                {
                     $authUrl = $this->getGoogleClient()->createAuthUrl();
                     return response()->json(['status' => 'auth_required', 'auth_url' => $authUrl]);
                 }
@@ -91,9 +93,9 @@ class ReservarClase implements Responsable
 
                         $this->enviarCorreoReservaClase($idEstudiante, $idInstructor, $idHorario);
 
-                        // Después de realizar la reserva con éxito, reiniciar la sesión
+                        // Limpiar la sesión después de completar la reserva
                         Session::forget('google_access_token');
-                        
+
                         return response()->json(['status' => 'clase_reservada']);
                     }
                 }
@@ -108,7 +110,7 @@ class ReservarClase implements Responsable
             return response()->json(['status' => 'creditos_no_disponibles']);
         }
     } // FIN toResponse
-
+    
     // ==============================================================
     // ==============================================================
     // ==============================================================
@@ -176,13 +178,15 @@ class ReservarClase implements Responsable
     {
         $client = $this->getGoogleClient();
 
-        if ($request->has('code')) {
+        if ($request->has('code'))
+        {
             $client->authenticate($request->get('code'));
             $accessToken = $client->getAccessToken();
             Session::put('google_access_token', $accessToken);
 
             // Verificar si el token se ha almacenado correctamente
-            if (Session::has('google_access_token')) {
+            if (Session::has('google_access_token'))
+            {
                 return redirect()->route('estudiante.disponibilidad')->with('status', 'Google authentication successful!');
             } else {
                 return redirect()->route('estudiante.disponibilidad')->with('error', 'Failed to store access token');
@@ -250,7 +254,7 @@ class ReservarClase implements Responsable
         $eventoAgendaEntrenador = $this->eventoAgendaEntrenador($idHorario);
         $linkClaseReservada = $this->linkClaseReservada($idHorario);
 
-        if( 
+        if(
             (isset($instructor) && !empty($instructor) && !is_null($instructor)) &&
             (isset($estudiante) && !empty($estudiante) && !is_null($estudiante)) &&
             (isset($eventoAgendaEntrenador) && !empty($eventoAgendaEntrenador) && !is_null($eventoAgendaEntrenador)) &&
@@ -297,7 +301,6 @@ class ReservarClase implements Responsable
     // ==============================================================
     // ==============================================================
 
-
     public function eventoAgendaEntrenador($idHorario)
     {
         try
@@ -318,7 +321,6 @@ class ReservarClase implements Responsable
     {
         try
         {
-            // return Reserva::find($idHorario);
             return Reserva::select('link_meet')
                 ->where('id_trainer_horario', $idHorario)->first();
         } catch (Exception $e)
@@ -328,4 +330,12 @@ class ReservarClase implements Responsable
             return "error_datos_disponibilidad";
         }
     }
+
+    // ==============================================================
+    // ==============================================================
+    // ==============================================================
+    // ==============================================================
+    // ==============================================================
+
+
 } // FIN class ReservarClase

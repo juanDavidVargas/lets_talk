@@ -68,19 +68,17 @@ Route::post('estudiante_hoja_vida', 'entrenador\EntrenadorController@estudianteH
 
 // Rutas ESTUDIANTE
 Route::resource('estudiante', 'estudiante\EstudianteController');
-// Route::get('disponibilidad', 'estudiante\EstudianteController@disponibilidad')->name('estudiante.disponibilidad');
 Route::get('disponibilidad', 'estudiante\EstudianteController@disponibilidadEntrenadores')->name('estudiante.disponibilidad');
-// Route::post('traer_disponibilidades', 'estudiante\EstudianteController@traerDisponibilidades')->name('estudiante.traer_disponibilidades');
 Route::get('mis_creditos', 'estudiante\EstudianteController@misCreditos')->name('estudiante.mis_creditos');
 Route::get('creditos_disponibles', 'estudiante\EstudianteController@creditosDisponibles')->name('estudiante.creditos_disponibles');
 Route::post('comprar_creditos', 'estudiante\EstudianteController@comprarCreditos')->name('estudiante.comprar_creditos');
 Route::post('reservar_clase', 'estudiante\EstudianteController@reservarClase')->name('estudiante.reservar_clase');
 Route::post('cancelar_clase', 'estudiante\EstudianteController@cancelarClase')->name('estudiante.cancelar_clase');
 
+// Rutas de Autenticación de Google
 Route::get('/auth/google', 'estudiante\EstudianteController@redirectToGoogle')->name('auth.google');
 Route::get('/auth/google/callback', 'estudiante\EstudianteController@handleGoogleCallback');
 Route::get('/create-meet', 'estudiante\EstudianteController@createMeet')->name('createMeet');
-// Route::get('/create-meet/{fechaClase}/{horaClase}', 'estudiante\EstudianteController@createMeet')->name('createMeet');
 
 // ============================================================
 
