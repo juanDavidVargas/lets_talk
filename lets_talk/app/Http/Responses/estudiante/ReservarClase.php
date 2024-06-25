@@ -31,6 +31,19 @@ class ReservarClase implements Responsable
         $fechaClase = request('fecha_clase', null);
         $horaClaseInicio = request('hora_clase_inicio', null);
 
+        // ======================================================
+
+        // Guardar los detalles de la reserva en la sesión
+        Session::put('reservation_details', [
+            'id_estudiante' => $idEstudiante,
+            'id_instructor' => $idInstructor,
+            'id_horario' => $idHorario,
+            'fecha_clase' => $fechaClase,
+            'hora_clase_inicio' => $horaClaseInicio,
+        ]);
+
+        // ======================================================
+
         $queryDisponibilidadCreditos = Credito::select('id_credito', 'paquete')
                                     ->where('id_estado', 7)
                                     ->where('id_estudiante',$idEstudiante)
@@ -47,10 +60,52 @@ class ReservarClase implements Responsable
                     return response()->json(['status' => 'auth_required', 'auth_url' => $authUrl]);
                 }
 
+                return $this->processReservation();
+
+            }
+            catch (Exception $e)
+            {
+                dd($e);
+                DB::connection('mysql')->rollback();
+                return response()->json('error');
+            }
+        } else {
+            DB::connection('mysql')->rollback();
+            return response()->json('creditos_no_disponibles');
+        }
+    } // FIN toResponse
+
+    // ==============================================================
+    // ==============================================================
+    // ==============================================================
+    // ==============================================================
+    // ==============================================================
+
+    public function processReservation()
+    {
+        $reservationDetails = Session::get('reservation_details');
+        if (!$reservationDetails) {
+            return response()->json('error');
+        }
+
+        $idEstudiante = $reservationDetails['id_estudiante'];
+        $idInstructor = $reservationDetails['id_instructor'];
+        $idHorario = $reservationDetails['id_horario'];
+        $fechaClase = $reservationDetails['fecha_clase'];
+        $horaClaseInicio = $reservationDetails['hora_clase_inicio'];
+
+        $queryDisponibilidadCreditos = Credito::select('id_credito', 'paquete')
+            ->where('id_estado', 7)
+            ->where('id_estudiante', $idEstudiante)
+            ->orderBy('id_credito', 'asc')
+            ->first();
+
+        if (isset($queryDisponibilidadCreditos) && !is_null($queryDisponibilidadCreditos) && !empty($queryDisponibilidadCreditos))
+        {
+            try {
                 $createLinkMeet = $this->createMeet($fechaClase, $horaClaseInicio);
 
-                if (isset($createLinkMeet) && !is_null($createLinkMeet) && !empty($createLinkMeet))
-                {
+                if (isset($createLinkMeet) && !is_null($createLinkMeet) && !empty($createLinkMeet)) {
                     DB::connection('mysql')->beginTransaction();
 
                     $reservarClaseCreate = Reserva::create([
@@ -58,58 +113,56 @@ class ReservarClase implements Responsable
                         'id_instructor' => $idInstructor,
                         'id_trainer_horario' => $idHorario,
                         'link_meet' => $createLinkMeet['eventLink'],
-                        'google_event_id' => $createLinkMeet['eventId'], // Guardar el ID del evento de Google Calendar en la reserva
+                        'google_event_id' => $createLinkMeet['eventId'],
                     ]);
-    
-                    if(isset($reservarClaseCreate) && !is_null($reservarClaseCreate) && !empty($reservarClaseCreate))
-                    {
+
+                    if (isset($reservarClaseCreate) && !is_null($reservarClaseCreate) && !empty($reservarClaseCreate)) {
                         DB::connection('mysql')->commit();
 
-                        $queryEventoAgendaEntrenador = EventoAgendaEntrenador::select('id','start_date','start_time')
-                                                        ->where('id',$idHorario)
-                                                        ->first();
+                        $queryEventoAgendaEntrenador = EventoAgendaEntrenador::select('id', 'start_date', 'start_time')
+                            ->where('id', $idHorario)
+                            ->first();
 
                         $fechaClase = $queryEventoAgendaEntrenador->start_date;
                         $horaClase = $queryEventoAgendaEntrenador->start_time;
-
                         $fechaHora = Carbon::createFromFormat('Y-m-d H:i', $fechaClase . ' ' . $horaClase)->timestamp;
-                        $idCredito = $queryDisponibilidadCreditos->id_credito;
 
+                        $idCredito = $queryDisponibilidadCreditos->id_credito;
                         Credito::where('id_credito', $idCredito)
-                                ->update([
-                                        'id_estado' => 8,
-                                        'id_instructor' => $idInstructor,
-                                        'id_trainer_agenda' => $idHorario,
-                                        'fecha_consumo_credito' => $fechaHora,
-                                ]);
+                            ->update([
+                                'id_estado' => 8,
+                                'id_instructor' => $idInstructor,
+                                'id_trainer_agenda' => $idHorario,
+                                'fecha_consumo_credito' => $fechaHora,
+                            ]);
+
                         DB::connection('mysql')->commit();
 
                         EventoAgendaEntrenador::where('id', $idHorario)
-                                ->update([
-                                        'clase_estado' => 9,
-                                        'color' => '#dc3545',
-                                ]);
+                            ->update([
+                                'clase_estado' => 9,
+                                'color' => '#dc3545',
+                            ]);
+
                         DB::connection('mysql')->commit();
 
                         $this->enviarCorreoReservaClase($idEstudiante, $idInstructor, $idHorario);
 
-                        // Limpiar la sesión después de completar la reserva
+                        // Reiniciar la sesión
                         Session::forget('google_access_token');
+                        Session::forget('reservation_details');
 
-                        return response()->json(['status' => 'clase_reservada']);
+                        return response()->json('clase_reservada');
                     }
                 }
-            } catch (Exception $e)
-            {
-                dd($e);
+            } catch (Exception $e) {
                 DB::connection('mysql')->rollback();
-                return response()->json(['status' => 'error']);
+                return response()->json('error');
             }
         } else {
-            DB::connection('mysql')->rollback();
-            return response()->json(['status' => 'creditos_no_disponibles']);
+            return response()->json('creditos_no_disponibles');
         }
-    } // FIN toResponse
+    }
     
     // ==============================================================
     // ==============================================================
@@ -185,12 +238,29 @@ class ReservarClase implements Responsable
             Session::put('google_access_token', $accessToken);
 
             // Verificar si el token se ha almacenado correctamente
-            if (Session::has('google_access_token'))
-            {
-                return redirect()->route('estudiante.disponibilidad')->with('status', 'Google authentication successful!');
+
+            if (Session::has('google_access_token')) {
+                $reservationStatus = $this->processReservation();
+
+                if ($reservationStatus == 'clase_reservada') {
+                    return redirect()->route('estudiante.disponibilidad');
+                } 
+                // else {
+                //     return redirect()->route('estudiante.disponibilidad')->with('error', $reservationStatus['status']);
+                // }
             } else {
                 return redirect()->route('estudiante.disponibilidad')->with('error', 'Failed to store access token');
             }
+
+            // if (Session::has('google_access_token'))
+            // {
+            //     return $this->processReservation();
+
+                
+            //     // return redirect()->route('estudiante.disponibilidad')->with('status', 'Google authentication successful!');
+            // } else {
+            //     return redirect()->route('estudiante.disponibilidad')->with('error', 'Failed to store access token');
+            // }
         }
 
         return redirect()->route('estudiante.disponibilidad')->with('error', 'Failed to authenticate with Google');

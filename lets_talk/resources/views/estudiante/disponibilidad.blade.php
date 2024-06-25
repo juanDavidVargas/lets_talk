@@ -153,8 +153,8 @@
 
                             if (response.status === "auth_required") {
                                 window.location.href = response.auth_url;
-                            } else if (response.status === "clase_reservada") {
-                                window.location.href = "{{ route('estudiante.disponibilidad') }}";
+                            } else if (response == "clase_reservada") {
+                                // window.location.href = "{{ route('estudiante.disponibilidad') }}";
                                 Swal.fire(
                                     'Info!',
                                     'Clase Reservada!',
@@ -164,7 +164,7 @@
                                 {
                                     window.location.reload();
                                 }, 3000);
-                            } else if (response.status === "creditos_no_disponibles") {
+                            } else if (response === "creditos_no_disponibles") {
                                 Swal.fire(
                                     'Advertencia!',
                                     'No tiene créditos Disponibles!',
@@ -174,7 +174,7 @@
                                 {
                                     window.location.reload();
                                 }, 3000);
-                            } else if (response.status === "error") {
+                            } else if (response === "error") {
                                 Swal.fire(
                                     'Error!',
                                     'Ocurrió un error, inténtelo de nuevo. Si el problema persiste, comuníquese con el administrador.',
