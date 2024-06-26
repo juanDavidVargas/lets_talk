@@ -151,41 +151,58 @@
                             $("#loaderGif").hide();
                             $("#loaderGif").addClass('ocultar');
 
-                            if (response.status === "auth_required") {
+                            console.log(response); // Registro adicional
+
+                            if (response.status === "auth_required")
+                            {
                                 window.location.href = response.auth_url;
-                            } else if (response == "clase_reservada") {
-                                // window.location.href = "{{ route('estudiante.disponibilidad') }}";
+                            } else if (response.status === 'clase_reservada')
+                            {
+                                console.log("Clase reservada, mostrando Swal.fire...");
                                 Swal.fire(
                                     'Info!',
                                     'Clase Reservada!',
                                     'success'
-                                );
-                                setTimeout(() =>
-                                {
+                                ).then(() => {
+                                    setTimeout(() => {
                                     window.location.reload();
-                                }, 3000);
-                            } else if (response === "creditos_no_disponibles") {
+                                    }, 3000);
+                                });
+                            } else if (response.status === 'creditos_no_disponibles')
+                            {
                                 Swal.fire(
                                     'Advertencia!',
                                     'No tiene créditos Disponibles!',
                                     'warning'
-                                );
-                                setTimeout(() =>
-                                {
+                                ).then(() => {
+                                    setTimeout(() => {
                                     window.location.reload();
-                                }, 3000);
-                            } else if (response === "error") {
+                                    }, 3000);
+                                });
+                            } else if (response.status === 'error')
+                            {
                                 Swal.fire(
                                     'Error!',
                                     'Ocurrió un error, inténtelo de nuevo. Si el problema persiste, comuníquese con el administrador.',
                                     'error'
-                                );
-                                setTimeout(() =>
-                                {
+                                ).then(() => {
+                                    setTimeout(() => {
                                     window.location.reload();
-                                }, 3000);
+                                    }, 3000);
+                                });
+                            } else
+                            {
+                                console.error("Unexpected response status:", response);
                             }
-                        } // FIN Success
+                        }, // FIN Success
+                        error: function(xhr, status, error) {
+                            console.log("Error en la solicitud AJAX", error);
+                            Swal.fire(
+                                'Error!',
+                                'Ocurrió un error en la comunicación con el servidor. Inténtelo de nuevo más tarde.',
+                                'error'
+                            );
+                        } // Fin error: function()
                     }); // Fin ajax
                 } // FIN if
             }); // FIN then de Swal.Fire
