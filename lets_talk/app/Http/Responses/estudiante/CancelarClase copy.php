@@ -31,16 +31,6 @@ class CancelarClase implements Responsable
 
         // ======================================================
 
-        // Guardar los detalles de la cancelación en la sesión
-        // Session::put('detalles_cancelacion', [
-        //     'id_estudiante' => $idEstudiante,
-        //     'id_instructor' => $idInstructor,
-        //     'id_horario' => $idHorario,
-        //     'id_estado' => $idEstado,
-        // ]);
-
-        // ======================================================
-
         DB::connection('mysql')->beginTransaction();
 
         $idClaseReservada = Reserva::select('id_reserva','google_event_id')
@@ -105,8 +95,6 @@ class CancelarClase implements Responsable
 
                     // ====================================================================
 
-                    // return $this->cancelarClase();
-
                     $claseCancelada = $claseReservada->forceDelete();
 
                     if ($claseCancelada)
@@ -165,91 +153,6 @@ class CancelarClase implements Responsable
     // ================================================================
     // ================================================================
 
-    // public function cancelarClase()
-    // {
-    //     $detallesCancelacion = Session::get('detalles_cancelacion');
-    //     if (!$detallesCancelacion) {
-    //         return response()->json(['status' => 'error']);
-    //     }
-
-    //     $idEstudiante = $detallesCancelacion['id_estudiante'];
-    //     $idInstructor = $detallesCancelacion['id_instructor'];
-    //     $idHorario = $detallesCancelacion['id_horario'];
-    //     $idEstado = $detallesCancelacion['id_estado'];
-
-
-    //     $idClaseReservada = Reserva::select('id_reserva','google_event_id')
-    //         ->where('id_estudiante',$idEstudiante)
-    //         ->where('id_instructor',$idInstructor)
-    //         ->where('id_trainer_horario',$idHorario)
-    //         ->first();
-
-    //     if (isset($idClaseReservada) && !is_null($idClaseReservada) && !empty($idClaseReservada))
-    //     {
-    //         try
-    //         {
-    //             $claseReservada = Reserva::findOrFail($idClaseReservada->id_reserva);
-
-    //             if (isset($claseReservada) && !is_null($claseReservada) && !empty($claseReservada))
-    //             {
-    //                 $claseCancelada = $claseReservada->forceDelete();
-
-    //                 if ($claseCancelada)
-    //                 {
-    //                     $idCreditoConsumido = Credito::select('id_credito')
-    //                     ->where('id_estado',$idEstado)
-    //                     ->where('id_estudiante',$idEstudiante)
-    //                     ->where('id_instructor',$idInstructor)
-    //                     ->where('id_trainer_agenda',$idHorario)
-    //                     ->orderBy('id_credito','desc')
-    //                     ->first();
-
-    //                     if (isset($idCreditoConsumido) && !is_null($idCreditoConsumido) && !empty($idCreditoConsumido))
-    //                     {
-    //                         $idCreditoLiberado = Credito::where('id_credito', $idCreditoConsumido->id_credito)
-    //                         ->update([
-    //                                 'id_estado' => 7,
-    //                                 'id_instructor' => null,
-    //                                 'id_trainer_agenda' => null,
-    //                                 'fecha_consumo_credito' => null,
-    //                         ]);
-
-    //                         $idEventoLiberado = EventoAgendaEntrenador::where('id', $idHorario)
-    //                             ->update([
-    //                                     'clase_estado' => 10,
-    //                                     'color' => '#157347',
-    //                             ]);
-
-    //                         if ( (isset($claseReservada) && !is_null($claseReservada) && !empty($claseReservada)) 
-    //                         && (isset($idCreditoLiberado) && !is_null($idCreditoLiberado) && !empty($idCreditoLiberado)) 
-    //                         && (isset($idEventoLiberado) && !is_null($idEventoLiberado) && !empty($idEventoLiberado)) )
-    //                         {
-    //                             DB::connection('mysql')->commit();
-
-    //                             // Enviar correo de cancelación de la clase
-    //                             $this->enviarCorreoCancelarClase($idEstudiante, $idInstructor, $idHorario);
-
-    //                             // Después de realizar la reserva con éxito, reiniciar la sesión
-    //                             Session::forget('google_access_token');
-
-    //                             return response()->json("clase_cancelada");
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //         catch (Exception $e)
-    //         {
-    //             dd($e);
-    //             DB::connection('mysql')->rollback();
-    //             return response()->json("error_exception");
-    //         } // FIN catch
-    //     } // FIN If
-    // } // FIN cancelarClase()
-
-    // ================================================================
-    // ================================================================
-
     public function getGoogleClient()
     {
         $client = new Google_Client();
@@ -278,41 +181,6 @@ class CancelarClase implements Responsable
         $authUrl = $client->createAuthUrl();
         return response()->json(['status' => 'auth_required', 'auth_url' => $authUrl]);
     }
-
-    // ================================================================
-    // ================================================================
-
-    // public function handleGoogleCallback(Request $request)
-    // {
-    //     $client = $this->getGoogleClient();
-
-    //     if ($request->has('code'))
-    //     {
-    //         $client->authenticate($request->get('code'));
-    //         $accessToken = $client->getAccessToken();
-    //         Session::put('google_access_token', $accessToken);
-
-    //         // Verificar si el token se ha almacenado correctamente
-    //         if (Session::has('google_access_token'))
-    //         {
-    //             $cancelarClaseStatus = $this->cancelarClase();
-
-    //             if ($cancelarClaseStatus == "clase_cancelada")
-    //             {
-    //                 return response()->json('clase_cancelada');
-    //             }
-    //             else
-    //             {
-    //                 return redirect()->route('estudiante.index')->with('error', $cancelarClaseStatus);
-    //             }
-    //         } else
-    //         {
-    //             return redirect()->route('estudiante.index')->with('error', 'Failed to store access token');
-    //         }
-    //     }
-
-    //     return redirect()->route('estudiante.index')->with('error', 'Failed to authenticate with Google');
-    // }
 
     // ================================================================
     // ================================================================
