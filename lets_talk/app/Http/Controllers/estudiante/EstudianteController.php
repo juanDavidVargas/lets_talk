@@ -150,7 +150,7 @@ class EstudianteController extends Controller
            empty($sesion[1]) || is_null($sesion[1]) &&
            empty($sesion[2]) || is_null($sesion[2]) &&
            empty($sesion[3]) || is_null($sesion[3]) &&
-           $sesion[2] != true)
+           $sesion[2])
         {
             return redirect()->to(route('home'));
         } else {
@@ -209,53 +209,59 @@ class EstudianteController extends Controller
     public function misCreditos(Request $request)
     {
         try {
-            // $adminCtrl = new AdministradorController();
-            // $sesion = $adminCtrl->validarVariablesSesion();
+            $adminCtrl = new AdministradorController();
+            $sesion = $adminCtrl->validarVariablesSesion();
     
-            // if(empty($sesion[0]) || is_null($sesion[0]) &&
-            //    empty($sesion[1]) || is_null($sesion[1]) &&
-            //    empty($sesion[2]) || is_null($sesion[2]) &&
-            //    empty($sesion[3]) || is_null($sesion[3]) &&
-            //    $sesion[2] != true)
-            // {
-                // return redirect()->to(route('home'));
+            if(
+                empty($sesion[0]) || is_null($sesion[0]) &&
+                empty($sesion[1]) || is_null($sesion[1]) &&
+                empty($sesion[2]) || is_null($sesion[2]) &&
+                empty($sesion[3]) || is_null($sesion[3]) &&
+                $sesion[2]
+               )
+            {
+                return redirect()->to(route('home'));
+            }
+            else
+            {
+                $vista = 'estudiante.mis_creditos';
+                $checkConnection = $this->checkDatabaseConnection($vista);
 
-                $idEstudiante = session('usuario_id');
+                if($checkConnection->getName() == "database_connection") {
+                    return view('database_connection');
+                } else {
+                    $idEstudiante = session('usuario_id');
 
-                // ==============================================
-
-                $misCreditos = Credito::select(
-                        DB::raw('DATE_FORMAT(FROM_UNIXTIME(fecha_credito), "%d-%m-%Y") as fecha_credito'),
-                        'paquete',
-                        DB::raw('COUNT(*) as cantidad_total_paquete'),
-                        DB::raw('SUM(CASE WHEN id_estado = 8 THEN 1 ELSE 0 END) as cantidad_consumida'),
-                        DB::raw('SUM(CASE WHEN id_estado = 7 THEN 1 ELSE 0 END) as cantidad_disponible')
-                    )
-                    ->where('id_estudiante', $idEstudiante)
+                    $misCreditos = Credito::select(
+                            DB::raw('DATE_FORMAT(FROM_UNIXTIME(fecha_credito), "%d-%m-%Y") as fecha_credito'),
+                            'paquete',
+                            DB::raw('COUNT(*) as cantidad_total_paquete'),
+                            DB::raw('SUM(CASE WHEN id_estado = 8 THEN 1 ELSE 0 END) as cantidad_consumida'),
+                            DB::raw('SUM(CASE WHEN id_estado = 7 THEN 1 ELSE 0 END) as cantidad_disponible')
+                        )
+                        ->where('id_estudiante', $idEstudiante)
+                        ->whereNull('deleted_at')
+                        ->groupBy(
+                            DB::raw('DATE_FORMAT(FROM_UNIXTIME(fecha_credito), "%d-%m-%Y")'),
+                            'paquete'
+                        )
+                        ->orderBy('fecha_credito', 'desc')
+                        ->orderBy('paquete', 'desc')
+                        ->get();
+    
+                    // ==============================================
+                    
+                    // Consulta para obtener la suma total de créditos disponibles
+                    $totalCreditosDisponibles = Credito::where('id_estudiante', $idEstudiante)
+                    ->where('id_estado', 7)
                     ->whereNull('deleted_at')
-                    ->groupBy(
-                        DB::raw('DATE_FORMAT(FROM_UNIXTIME(fecha_credito), "%d-%m-%Y")'),
-                        'paquete'
-                    )
-                    ->orderBy('fecha_credito', 'desc')
-                    ->orderBy('paquete', 'desc')
-                    ->get();
-
-                // ==============================================
-                
-                // Consulta para obtener la suma total de créditos disponibles
-                $totalCreditosDisponibles = Credito::where('id_estudiante', $idEstudiante)
-                ->where('id_estado', 7)
-                ->whereNull('deleted_at')
-                ->count();
-                
-                // ==============================================
-
-                return view('estudiante.mis_creditos', compact('misCreditos', 'totalCreditosDisponibles'));
-            // } else {
-            //     $disponibilidadShow = new DisponibilidadShow();
-            //     return $disponibilidadShow->disponibilidadPorID($request);
-            // }
+                    ->count();
+                    
+                    // ==============================================
+    
+                    return view($vista, compact('misCreditos', 'totalCreditosDisponibles'));
+                }
+            }
 
         } catch (Exception $e) {
             dd($e);
@@ -269,24 +275,21 @@ class EstudianteController extends Controller
     public function creditosDisponibles(Request $request)
     {
         try {
-            
-            // $adminCtrl = new AdministradorController();
-            // $sesion = $adminCtrl->validarVariablesSesion();
+            $adminCtrl = new AdministradorController();
+            $sesion = $adminCtrl->validarVariablesSesion();
     
-            // if(empty($sesion[0]) || is_null($sesion[0]) &&
-            //    empty($sesion[1]) || is_null($sesion[1]) &&
-            //    empty($sesion[2]) || is_null($sesion[2]) &&
-            //    empty($sesion[3]) || is_null($sesion[3]) &&
-            //    $sesion[2] != true)
-            // {
-                // return redirect()->to(route('home'));
+            if(empty($sesion[0]) || is_null($sesion[0]) &&
+               empty($sesion[1]) || is_null($sesion[1]) &&
+               empty($sesion[2]) || is_null($sesion[2]) &&
+               empty($sesion[3]) || is_null($sesion[3]) &&
+               $sesion[2]
+            )
+            {
+                return redirect()->to(route('home'));
+            } else
+            {
                 return view('estudiante.creditos_disponibles');
-            // } else {
-            
-            //     $disponibilidadShow = new DisponibilidadShow();
-            //     return $disponibilidadShow->disponibilidadPorID($request);
-            // }
-
+            }
         } catch (Exception $e) {
             return response()->json("error_exception");
         }
@@ -298,22 +301,20 @@ class EstudianteController extends Controller
     public function comprarCreditos(Request $request)
     {
         try {
-            // $adminCtrl = new AdministradorController();
-            // $sesion = $adminCtrl->validarVariablesSesion();
+            $adminCtrl = new AdministradorController();
+            $sesion = $adminCtrl->validarVariablesSesion();
     
-            // if(empty($sesion[0]) || is_null($sesion[0]) &&
-            //    empty($sesion[1]) || is_null($sesion[1]) &&
-            //    empty($sesion[2]) || is_null($sesion[2]) &&
-            //    empty($sesion[3]) || is_null($sesion[3]) &&
-            //    $sesion[2] != true)
-            // {
-                // return redirect()->to(route('home'));
+            if(empty($sesion[0]) || is_null($sesion[0]) &&
+               empty($sesion[1]) || is_null($sesion[1]) &&
+               empty($sesion[2]) || is_null($sesion[2]) &&
+               empty($sesion[3]) || is_null($sesion[3]) &&
+               $sesion[2]
+            )
+            {
+                return redirect()->to(route('home'));
+            } else {
                 return new ComprarCreditos();
-            // } else {
-            
-            //     $disponibilidadShow = new DisponibilidadShow();
-            //     return $disponibilidadShow->disponibilidadPorID($request);
-            // }
+            }
 
         } catch (Exception $e) {
             return response()->json("error_exception");
@@ -326,17 +327,19 @@ class EstudianteController extends Controller
     public function misSesiones($idEstudiante)
     {
         try {
-            // $adminCtrl = new AdministradorController();
-            // $sesion = $adminCtrl->validarVariablesSesion();
+            $adminCtrl = new AdministradorController();
+            $sesion = $adminCtrl->validarVariablesSesion();
     
-            // if(empty($sesion[0]) || is_null($sesion[0]) &&
-            //    empty($sesion[1]) || is_null($sesion[1]) &&
-            //    empty($sesion[2]) || is_null($sesion[2]) &&
-            //    empty($sesion[3]) || is_null($sesion[3]) &&
-            //    $sesion[2] != true)
-            // {
-                // return redirect()->to(route('home'));
-            // } else {
+            if(empty($sesion[0]) || is_null($sesion[0]) &&
+               empty($sesion[1]) || is_null($sesion[1]) &&
+               empty($sesion[2]) || is_null($sesion[2]) &&
+               empty($sesion[3]) || is_null($sesion[3]) &&
+               $sesion[2]
+            )
+            {
+                return redirect()->to(route('home'));
+            } else
+            {
                 return Reserva::leftjoin('evento_agenda_entrenador','evento_agenda_entrenador.id','=','reservas.id_trainer_horario')
                 ->leftjoin('usuarios as instructor','instructor.id_user','=','reservas.id_instructor')
                 ->select(
@@ -351,8 +354,7 @@ class EstudianteController extends Controller
                 ->where('id_estudiante', $idEstudiante)
                 ->orderBy('start_date', 'desc')
                 ->get();
-            // }
-
+            }
         } catch (Exception $e) {
             return response()->json("error_exception");
         }
@@ -365,20 +367,20 @@ class EstudianteController extends Controller
     {
         try
         {
-            // $adminCtrl = new AdministradorController();
-            // $sesion = $adminCtrl->validarVariablesSesion();
+            $adminCtrl = new AdministradorController();
+            $sesion = $adminCtrl->validarVariablesSesion();
     
-            // if(empty($sesion[0]) || is_null($sesion[0]) &&
-            //    empty($sesion[1]) || is_null($sesion[1]) &&
-            //    empty($sesion[2]) || is_null($sesion[2]) &&
-            //    empty($sesion[3]) || is_null($sesion[3]) &&
-            //    $sesion[2] != true)
-            // {
-                // return redirect()->to(route('home'));
-                // } else {
+            if(empty($sesion[0]) || is_null($sesion[0]) &&
+               empty($sesion[1]) || is_null($sesion[1]) &&
+               empty($sesion[2]) || is_null($sesion[2]) &&
+               empty($sesion[3]) || is_null($sesion[3]) &&
+               $sesion[2]
+            )
+            {
+                return redirect()->to(route('home'));
+                } else {
                 return new ReservarClase();
-            // }
-
+            }
         } catch (Exception $e) {
             return response()->json("error_exception");
         }
@@ -392,8 +394,27 @@ class EstudianteController extends Controller
 
     public function getGoogleClient()
     {
-        $reservarClase = new ReservarClase();
-        return $reservarClase->getGoogleClient();
+        try {
+            $adminCtrl = new AdministradorController();
+            $sesion = $adminCtrl->validarVariablesSesion();
+    
+            if(empty($sesion[0]) || is_null($sesion[0]) &&
+               empty($sesion[1]) || is_null($sesion[1]) &&
+               empty($sesion[2]) || is_null($sesion[2]) &&
+               empty($sesion[3]) || is_null($sesion[3]) &&
+               $sesion[2]
+            )
+            {
+                return redirect()->to(route('home'));
+            } else
+            {
+                $reservarClase = new ReservarClase();
+                return $reservarClase->getGoogleClient();
+            }
+        } catch (Exception $e)
+        {
+            return response()->json("error_exception");
+        }
     }
 
     // ==============================================================
@@ -401,8 +422,27 @@ class EstudianteController extends Controller
 
     public function redirectToGoogle()
     {
-        $redirectToGoogle = new ReservarClase();
-        return $redirectToGoogle->redirectToGoogle();
+        try {
+            $adminCtrl = new AdministradorController();
+            $sesion = $adminCtrl->validarVariablesSesion();
+    
+            if(empty($sesion[0]) || is_null($sesion[0]) &&
+               empty($sesion[1]) || is_null($sesion[1]) &&
+               empty($sesion[2]) || is_null($sesion[2]) &&
+               empty($sesion[3]) || is_null($sesion[3]) &&
+               $sesion[2]
+            )
+            {
+                return redirect()->to(route('home'));
+            } else
+            {
+                $redirectToGoogle = new ReservarClase();
+                return $redirectToGoogle->redirectToGoogle();
+            }
+        } catch (Exception $e)
+        {
+            return response()->json("error_exception");
+        }
     }
 
     // ==============================================================
@@ -410,8 +450,27 @@ class EstudianteController extends Controller
 
     public function handleGoogleCallbackReservar(Request $request)
     {
-        $handleGoogleCallbackReservar = new ReservarClase();
-        return $handleGoogleCallbackReservar->handleGoogleCallbackReservar($request);
+        try {
+            $adminCtrl = new AdministradorController();
+            $sesion = $adminCtrl->validarVariablesSesion();
+    
+            if(empty($sesion[0]) || is_null($sesion[0]) &&
+               empty($sesion[1]) || is_null($sesion[1]) &&
+               empty($sesion[2]) || is_null($sesion[2]) &&
+               empty($sesion[3]) || is_null($sesion[3]) &&
+               $sesion[2]
+            )
+            {
+                return redirect()->to(route('home'));
+            } else
+            {
+                $handleGoogleCallbackReservar = new ReservarClase();
+                return $handleGoogleCallbackReservar->handleGoogleCallbackReservar($request);
+            }
+        } catch (Exception $e)
+        {
+            return response()->json("error_exception");
+        }
     }
 
     // ==============================================================
@@ -419,8 +478,27 @@ class EstudianteController extends Controller
 
     public function handleGoogleCallbackCancelar(Request $request)
     {
-        $handleGoogleCallbackCancelar = new CancelarClase();
-        return $handleGoogleCallbackCancelar->handleGoogleCallbackCancelar($request);
+        try {
+            $adminCtrl = new AdministradorController();
+            $sesion = $adminCtrl->validarVariablesSesion();
+    
+            if(empty($sesion[0]) || is_null($sesion[0]) &&
+               empty($sesion[1]) || is_null($sesion[1]) &&
+               empty($sesion[2]) || is_null($sesion[2]) &&
+               empty($sesion[3]) || is_null($sesion[3]) &&
+               $sesion[2]
+            )
+            {
+                return redirect()->to(route('home'));
+            } else
+            {
+                $handleGoogleCallbackCancelar = new CancelarClase();
+                return $handleGoogleCallbackCancelar->handleGoogleCallbackCancelar($request);
+            }
+        } catch (Exception $e)
+        {
+            return response()->json("error_exception");
+        }
     }
 
     // ==============================================================
@@ -428,8 +506,27 @@ class EstudianteController extends Controller
 
     public function createMeet()
     {
-        $createMeet = new ReservarClase();
-        return $createMeet->createMeet();
+        try {
+            $adminCtrl = new AdministradorController();
+            $sesion = $adminCtrl->validarVariablesSesion();
+    
+            if(empty($sesion[0]) || is_null($sesion[0]) &&
+               empty($sesion[1]) || is_null($sesion[1]) &&
+               empty($sesion[2]) || is_null($sesion[2]) &&
+               empty($sesion[3]) || is_null($sesion[3]) &&
+               $sesion[2]
+            )
+            {
+                return redirect()->to(route('home'));
+            } else
+            {
+                $createMeet = new ReservarClase();
+                return $createMeet->createMeet();
+            }
+        } catch (Exception $e)
+        {
+            return response()->json("error_exception");
+        }
     }
 
     // ==============================================================
@@ -441,31 +538,24 @@ class EstudianteController extends Controller
     public function cancelarClase(Request $request)
     {
         try {
-            // $adminCtrl = new AdministradorController();
-            // $sesion = $adminCtrl->validarVariablesSesion();
+            $adminCtrl = new AdministradorController();
+            $sesion = $adminCtrl->validarVariablesSesion();
     
-            // if(empty($sesion[0]) || is_null($sesion[0]) &&
-            //    empty($sesion[1]) || is_null($sesion[1]) &&
-            //    empty($sesion[2]) || is_null($sesion[2]) &&
-            //    empty($sesion[3]) || is_null($sesion[3]) &&
-            //    $sesion[2] != true)
-            // {
-                // return redirect()->to(route('home'));
-                // } else {
+            if(empty($sesion[0]) || is_null($sesion[0]) &&
+               empty($sesion[1]) || is_null($sesion[1]) &&
+               empty($sesion[2]) || is_null($sesion[2]) &&
+               empty($sesion[3]) || is_null($sesion[3]) &&
+               $sesion[2]
+            )
+            {
+                return redirect()->to(route('home'));
+            } else
+            {
                 return new CancelarClase();
-            // }
-
-        } catch (Exception $e) {
-            dd($e);
+            }
+        } catch (Exception $e)
+        {
             return response()->json("error_exception");
         }
     }
-    
-    // ==============================================================
-    // ==============================================================
-    // ==============================================================
-    // ==============================================================
-    // ==============================================================
-
-
 } // FIN Class EstudianteController

@@ -160,7 +160,6 @@ class EntrenadorController extends Controller
         {
             return redirect()->to(route('home'));
         } else {
-
             return new AgendaEntrenadorUpdate($id);
         }
     }

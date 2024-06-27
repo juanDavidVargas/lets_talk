@@ -18,51 +18,53 @@
         </div>
     </div>
 
-    <div class="row p-b-20 float-left">
+    <div class="row p-b-20 float-left" style="padding-left:3rem;padding-right:5rem;">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <a href="{{route('estudiante.index')}}" class="btn btn-primary text-uppercase">Atrás Disponibilidad</a>
         </div>
     </div>
 
-    <div class="row border w-100 mt-5 mb-5 p-3">
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered table-hover" id="tbl_reservas">
-                <thead>
-                    <tr class="header-table">
-                        <th>Fecha Compra</th>
-                        <th>Paquete</th>
-                        <th>Cantidad Paquete</th>
-                        <th>Créditos Consumidos</th>
-                        <th>Créditos Disponibles</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @php
-                        // dd($misCreditos);
-                    @endphp
-                    @foreach ($misCreditos as $credito)
-                        <tr>
-                            <td>{{$credito->fecha_credito}}</td>
-                            <td>{{$credito->paquete}}</td>
-                            <td>{{$credito->cantidad_total_paquete}}</td>
-                            <td>{{$credito->cantidad_consumida}}</td>
-                            <td>{{$credito->cantidad_disponible}}</td>
+    <div class="row p-t-30" style="padding-left:5rem;padding-right:5rem;">
+        <div class="row border w-100 mt-5 mb-5">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover" id="tbl_reservas">
+                    <thead>
+                        <tr class="header-table">
+                            <th>Fecha Compra</th>
+                            <th>Paquete</th>
+                            <th>Cantidad Paquete</th>
+                            <th>Créditos Consumidos</th>
+                            <th>Créditos Disponibles</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @php
+                            // dd($misCreditos);
+                        @endphp
+                        @foreach ($misCreditos as $credito)
+                            <tr>
+                                <td>{{$credito->fecha_credito}}</td>
+                                <td>{{$credito->paquete}}</td>
+                                <td>{{$credito->cantidad_total_paquete}}</td>
+                                <td>{{$credito->cantidad_consumida}}</td>
+                                <td>{{$credito->cantidad_disponible}}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
-    <div class="d-flexswal m-t-30 m-b-30">
+    <div class="d-flexswal m-t-30 m-b-30" style="padding-left:3rem;padding-right:5rem;">
         <button type="button" class="btn btn-primary text-uppercase" onclick="misCreditos()"><span class="text-success">{!!$totalCreditosDisponibles!!}</span> créditos disponibles</button>
     </div>
 
-    <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center" style="padding-left:3rem;padding-right:5rem;">
         <a href="https://www.pse.com.co/persona" target="_blank" class="btn btn-primary text-uppercase">comprar más créditos</a>
     </div>
 
-    <div class="m-t-30 m-b-30">
+    <div class="m-t-30 m-b-30" style="padding-left:3rem;padding-right:5rem;">
         <button type="button" class="btn btn-primary text-uppercase" onclick="comprarCreditos()">comprar créditos</button>
     </div>
 
