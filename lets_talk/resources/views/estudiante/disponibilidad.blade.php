@@ -106,8 +106,8 @@
                         }
                     },
                 ]
-            });
-        });
+            }); // FIN DataTable tbl_disponibilidades
+        }); // FIN Document REady
 
         // ===============================================================
 
@@ -207,104 +207,5 @@
                 } // FIN if
             }); // FIN then de Swal.Fire
         } // FIN function reservarClase
-
-        // ===============================================================
-
-        function cancelarClase(idHorario, idInstructor, idEstudiante, idEstado)
-        {
-            console.log(`ID Horario: ${idHorario}`);
-            console.log(`ID Instructor: ${idInstructor}`);
-            console.log(`ID idEstudiante: ${idEstudiante}`);
-            console.log(`ID idEstado: ${idEstado}`);
-
-            Swal.fire({
-                title: '¿Realmente quiere cancelar esta clase?',
-                html: 'Deberá crearla nuevamente si cambia de opinión',
-                icon: 'warning',
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'No'
-            }).then((result) => {
-                if (result.value)
-                {
-                    $.ajax({
-                        async: true,
-                        url: "{{route('estudiante.cancelar_clase')}}",
-                        type: 'POST',
-                        dataType: 'json',
-                        data: {
-                            "_token": "{{ csrf_token() }}",
-                            'id_horario': idHorario,
-                            'id_instructor': idInstructor,
-                            'id_estudiante': idEstudiante,
-                            'id_estado': idEstado
-                        },
-                        beforeSend: function() {
-                            $("#loaderGif").show();
-                            $("#loaderGif").removeClass('ocultar');
-                        },
-                        success: function(response)
-                        {
-                            console.log(response);
-
-                            $("#loaderGif").hide();
-                            $("#loaderGif").addClass('ocultar');
-
-                            if(response == "clase_cancelada")
-                            {
-                                $("#loaderGif").hide();
-                                $("#loaderGif").addClass('ocultar');
-
-                                Swal.fire(
-                                    'Info!',
-                                    'Clase Cancelada!',
-                                    'success'
-                                );
-
-                                setTimeout(() => {
-                                    window.location.reload();
-                                }, 3000);
-                                return;
-                            }
-
-                            if(response == "error_link")
-                            {
-                                $("#loaderGif").hide();
-                                $("#loaderGif").addClass('ocultar');
-
-                                Swal.fire(
-                                    'Error!',
-                                    'Link Meet NO Cancelado!',
-                                    'error'
-                                );
-
-                                setTimeout(() => {
-                                    window.location.reload();
-                                }, 3000);
-                                return;
-                            }
-
-                            if(response == "error_exception")
-                            {
-                                $("#loaderGif").hide();
-                                $("#loaderGif").addClass('ocultar');
-
-                                Swal.fire(
-                                    'Error!',
-                                    'Clase NO Cancelada!',
-                                    'error'
-                                );
-
-                                setTimeout(() => {
-                                    window.location.reload();
-                                }, 3000);
-                                return;
-                            }
-                        } // FIN Success
-                    }); // Fin ajax
-                } // FIN if
-            }); // FIN then de Swal.Fire
-        } // FIN cancelarClase
     </script>
 @endsection
