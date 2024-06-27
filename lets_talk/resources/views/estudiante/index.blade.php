@@ -96,15 +96,10 @@
 
         function cancelarClase(idHorario, idInstructor, idEstudiante, idEstado)
         {
-            console.log(`ID Horario: ${idHorario}`);
-            console.log(`ID Instructor: ${idInstructor}`);
-            console.log(`ID idEstudiante: ${idEstudiante}`);
-            console.log(`ID idEstado: ${idEstado}`);
-
             Swal.fire({
                 title: '¿Realmente quiere cancelar esta clase?',
                 html: 'Deberá crearla nuevamente si cambia de opinión',
-                // icon: 'warning',
+                icon: 'warning',
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Yes',
@@ -135,7 +130,8 @@
                             $("#loaderGif").hide();
                             $("#loaderGif").addClass('ocultar');
 
-                            if(response.status === 'auth_required') {
+                            if(response.status === 'auth_required')
+                            {
                                 window.location.href = response.auth_url;
                                 return;
                             }
@@ -175,7 +171,6 @@
                                 setTimeout(() => {
                                     window.location.reload();
                                 }, 3000);
-                                return;
                             });
                         }, // FIN Success
                         error: function(xhr, status, error) {

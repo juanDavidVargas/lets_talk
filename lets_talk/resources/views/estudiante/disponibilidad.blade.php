@@ -39,9 +39,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @php
-                                // dd($disponibilidadEntrenadores);
-                            @endphp
                             @foreach ($disponibilidadEntrenadores as $disponibilidad)
                                 @php
                                     $idEvento = $disponibilidad->id_evento;
@@ -113,11 +110,6 @@
 
         function reservarClase(idHorario,idInstructor,FechaClase,claseInicio)
         {
-            console.log(`ID Horario: ${idHorario}`);
-            console.log(`ID Instructor: ${idInstructor}`);
-            console.log(`Fecha Clase: ${FechaClase}`);
-            console.log(`Hora Inicio: ${claseInicio}`);
-
             Swal.fire({
                 title: '¿Realmente quiere reservar esta clase?',
                 html: 'Puede proceder si está segur@ del horario y entrenador@',
@@ -156,44 +148,39 @@
                             if (response.status === "auth_required")
                             {
                                 window.location.href = response.auth_url;
-                            } else if (response.status === 'clase_reservada')
+                                return;
+                            }
+
+                            // Define variables para el título, texto y tipo de alerta
+                            let title, text, type;
+                            
+                            if (response.status === 'clase_reservada')
                             {
-                                console.log("Clase reservada, mostrando Swal.fire...");
-                                Swal.fire(
-                                    'Info!',
-                                    'Clase Reservada!',
-                                    'success'
-                                ).then(() => {
-                                    setTimeout(() => {
-                                    window.location.reload();
-                                    }, 3000);
-                                });
+                                title = 'Advertencia!';
+                                text = 'Clase Reservada!';
+                                type = 'success';
                             } else if (response.status === 'creditos_no_disponibles')
                             {
-                                Swal.fire(
-                                    'Advertencia!',
-                                    'No tiene créditos Disponibles!',
-                                    'warning'
-                                ).then(() => {
-                                    setTimeout(() => {
-                                    window.location.reload();
-                                    }, 3000);
-                                });
-                            } else if (response.status === 'error')
-                            {
-                                Swal.fire(
-                                    'Error!',
-                                    'Ocurrió un error, inténtelo de nuevo. Si el problema persiste, comuníquese con el administrador.',
-                                    'error'
-                                ).then(() => {
-                                    setTimeout(() => {
-                                    window.location.reload();
-                                    }, 3000);
-                                });
+                                title = 'Info!';
+                                text = 'No tiene créditos Disponibles!';
+                                type = 'warning';
                             } else
                             {
-                                console.error("Unexpected response status:", response);
+                                title = 'Error!';
+                                text = 'Ocurrió un error, inténtelo de nuevo. Si el problema persiste, comuníquese con el administrador!';
+                                type = 'error';
                             }
+
+                            // Mostrar alerta con Swal.fire
+                            Swal.fire({
+                                title: title,
+                                text: text,
+                                type: type
+                            }).then(() => {
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 3000);
+                            });
                         }, // FIN Success
                         error: function(xhr, status, error) {
                             console.log("Error en la solicitud AJAX", error);
