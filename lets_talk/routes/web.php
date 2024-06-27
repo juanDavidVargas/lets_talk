@@ -77,7 +77,8 @@ Route::post('cancelar_clase', 'estudiante\EstudianteController@cancelarClase')->
 
 // Rutas de Autenticación de Google
 Route::get('/auth/google', 'estudiante\EstudianteController@redirectToGoogle')->name('auth.google');
-Route::get('/auth/google/callback', 'estudiante\EstudianteController@handleGoogleCallback');
+Route::get('/auth/google/callback/reservar', 'estudiante\EstudianteController@handleGoogleCallbackReservar');
+Route::get('/auth/google/callback/cancelar', 'estudiante\EstudianteController@handleGoogleCallbackCancelar');
 Route::get('/create-meet', 'estudiante\EstudianteController@createMeet')->name('createMeet');
 
 // ============================================================

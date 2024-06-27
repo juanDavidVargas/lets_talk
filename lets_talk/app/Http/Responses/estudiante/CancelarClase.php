@@ -31,140 +31,121 @@ class CancelarClase implements Responsable
 
         // ======================================================
 
-        DB::connection('mysql')->beginTransaction();
+        // Guardar los detalles de la cancelación en la sesión
+        Session::put('detalles_cancelacion', [
+            'id_estudiante' => $idEstudiante,
+            'id_instructor' => $idInstructor,
+            'id_horario' => $idHorario,
+            'id_estado' => $idEstado,
+        ]);
 
-        $idClaseReservada = Reserva::select('id_reserva','google_event_id')
-            ->where('id_estudiante',$idEstudiante)
-            ->where('id_instructor',$idInstructor)
-            ->where('id_trainer_horario',$idHorario)
-            ->first();
+        // Verificar si el token de acceso está en la sesión
+        if (!Session::has('google_access_token')) {
+            return $this->redirectToGoogle();
+        }
 
-        if (isset($idClaseReservada) && !is_null($idClaseReservada) && !empty($idClaseReservada))
-        {
-            try
-            {
-                $claseReservada = Reserva::findOrFail($idClaseReservada->id_reserva);
-
-                if (isset($claseReservada) && !is_null($claseReservada) && !empty($claseReservada))
-                {
-                    try
-                    {
-                        // Verificar si el token de acceso está en la sesión
-                        if (!Session::has('google_access_token'))
-                        {
-                            return $this->redirectToGoogle();
-                        }
-
-                        // Crear un cliente de Google con las credenciales del archivo JSON
-                        $client = $this->getGoogleClient();
-                        $accessToken = Session::get('google_access_token');
-
-                        if (!$accessToken)
-                        {
-                            throw new Exception('Access token no encontrado en la sesión.');
-                        }
-
-                        $client->setAccessToken($accessToken);
-
-                        // Verificar si el token de acceso ha caducado y refrescarlo si es necesario
-                        if ($client->isAccessTokenExpired()) {
-                            // Asumiendo que has almacenado el refresh token en la sesión
-                            $refreshToken = $client->getRefreshToken();
-                            
-                            if ($refreshToken) {
-                                $client->fetchAccessTokenWithRefreshToken($refreshToken);
-                                Session::put('google_access_token', $client->getAccessToken());
-                            } else {
-                                return $this->redirectToGoogle();
-                            }
-                        }
-
-                        // Crear una instancia del servicio de Google Calendar
-                        $service = new Google_Service_Calendar($client);
-
-                        // Obtener el ID del evento asociado con el horario, instructor y estudiante específicos que están siendo cancelados
-                        $eventId = $idClaseReservada->google_event_id;
-                        $service->events->delete('primary', $eventId);
-                    }
-                    catch (Exception $e)
-                    {
-                        DB::rollback();
-                        // dd($e->getMessage());
-                        // return response()->json("error_link");
-                        return response()->json(['status' => 'error_link']);
-                        // return redirect()->route('estudiante.disponibilidad')->with('status', 'error_link');
-                    }
-
-                    // ====================================================================
-
-                    $claseCancelada = $claseReservada->forceDelete();
-
-                    if ($claseCancelada)
-                    {
-                        $idCreditoConsumido = Credito::select('id_credito')
-                        ->where('id_estado',$idEstado)
-                        ->where('id_estudiante',$idEstudiante)
-                        ->where('id_instructor',$idInstructor)
-                        ->where('id_trainer_agenda',$idHorario)
-                        ->orderBy('id_credito','desc')
-                        ->first();
-
-                        if (isset($idCreditoConsumido) && !is_null($idCreditoConsumido) && !empty($idCreditoConsumido))
-                        {
-                            $idCreditoLiberado = Credito::where('id_credito', $idCreditoConsumido->id_credito)
-                            ->update([
-                                    'id_estado' => 7,
-                                    'id_instructor' => null,
-                                    'id_trainer_agenda' => null,
-                                    'fecha_consumo_credito' => null,
-                            ]);
-
-                            $idEventoLiberado = EventoAgendaEntrenador::where('id', $idHorario)
-                                ->update([
-                                        'clase_estado' => 10,
-                                        'color' => '#157347',
-                                ]);
-
-                            if ( (isset($claseReservada) && !is_null($claseReservada) && !empty($claseReservada))
-                            && (isset($idCreditoLiberado) && !is_null($idCreditoLiberado) && !empty($idCreditoLiberado))
-                            && (isset($idEventoLiberado) && !is_null($idEventoLiberado) && !empty($idEventoLiberado)) )
-                            {
-                                DB::connection('mysql')->commit();
-
-                                // Enviar correo de cancelación de la clase
-                                $this->enviarCorreoCancelarClase($idEstudiante, $idInstructor, $idHorario);
-
-                                // Después de realizar la reserva con éxito, reiniciar la sesión
-                                Session::forget('google_access_token');
-
-                                // return response()->json("clase_cancelada");
-                                return response()->json(['status' => 'clase_cancelada']);
-                                // return redirect()->route('estudiante.disponibilidad')->with('status', 'clase_cancelada');
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception $e)
-            {
-                dd($e);
-                DB::connection('mysql')->rollback();
-                // return response()->json("error_exception");
-                return response()->json(['status' => 'error_exception']);
-                // return redirect()->route('estudiante.disponibilidad')->with('status', 'error_exception');
-            } // FIN catch
-        } // FIN If
+        return $this->procesoCancelacion();
     } // FIN toResponse
 
     // ================================================================
     // ================================================================
+
+    public function procesoCancelacion()
+    {
+        $detalles = Session::get('detalles_cancelacion');
+        if (!$detalles) {
+            return response()->json(['status' => 'error_no_details']);
+        }
+
+        $idEstudiante = $detalles['id_estudiante'];
+        $idInstructor = $detalles['id_instructor'];
+        $idHorario = $detalles['id_horario'];
+        $idEstado = $detalles['id_estado'];
+
+        DB::beginTransaction();
+
+        $idClaseReservada = Reserva::select('id_reserva', 'google_event_id')
+            ->where('id_estudiante', $idEstudiante)
+            ->where('id_instructor', $idInstructor)
+            ->where('id_trainer_horario', $idHorario)
+            ->first();
+
+        if ($idClaseReservada) {
+            try
+            {
+                $claseReservada = Reserva::findOrFail($idClaseReservada->id_reserva);
+
+                $client = $this->getGoogleClient();
+                $accessToken = Session::get('google_access_token');
+
+                if (!$accessToken) {
+                    throw new Exception('Access token no encontrado en la sesión.');
+                }
+
+                $client->setAccessToken($accessToken);
+
+                if ($client->isAccessTokenExpired()) {
+                    $refreshToken = $client->getRefreshToken();
+                    if ($refreshToken) {
+                        $client->fetchAccessTokenWithRefreshToken($refreshToken);
+                        Session::put('google_access_token', $client->getAccessToken());
+                    } else {
+                        return $this->redirectToGoogle();
+                    }
+                }
+
+                $service = new Google_Service_Calendar($client);
+                $eventId = $idClaseReservada->google_event_id;
+                $service->events->delete('primary', $eventId);
+
+                $claseCancelada = $claseReservada->forceDelete();
+
+                if ($claseCancelada) {
+                    $idCreditoConsumido = Credito::select('id_credito')
+                        ->where('id_estado', $idEstado)
+                        ->where('id_estudiante', $idEstudiante)
+                        ->where('id_instructor', $idInstructor)
+                        ->where('id_trainer_agenda', $idHorario)
+                        ->orderBy('id_credito', 'desc')
+                        ->first();
+
+                    if ($idCreditoConsumido) {
+                        Credito::where('id_credito', $idCreditoConsumido->id_credito)
+                            ->update([
+                                'id_estado' => 7,
+                                'id_instructor' => null,
+                                'id_trainer_agenda' => null,
+                                'fecha_consumo_credito' => null,
+                            ]);
+
+                        EventoAgendaEntrenador::where('id', $idHorario)
+                            ->update([
+                                'clase_estado' => 10,
+                                'color' => '#157347',
+                            ]);
+
+                        DB::commit();
+                        $this->enviarCorreoCancelarClase($idEstudiante, $idInstructor, $idHorario);
+                        Session::forget('google_access_token');
+                        Session::forget('detalles_cancelacion');
+                        return response()->json(['status' => 'clase_cancelada']);
+                    }
+                }
+            } catch (Exception $e) {
+                DB::rollback();
+                return response()->json(['status' => 'error_exception', 'message' => $e->getMessage()]);
+            }
+        }
+
+        return response()->json(['status' => 'error_no_clase']);
+    }
 
     public function getGoogleClient()
     {
         $client = new Google_Client();
         $client->setClientId(env('GOOGLE_CLIENT_ID'));
         $client->setClientSecret(env('GOOGLE_CLIENT_SECRET'));
-        $client->setRedirectUri(env('GOOGLE_REDIRECT_URI'));
+        $client->setRedirectUri(env('GOOGLE_REDIRECT_URI_CANCELAR'));
         $client->setScopes([Google_Service_Calendar::CALENDAR_EVENTS]);
         $client->setAccessType('offline');
         $client->setPrompt('consent');
@@ -186,6 +167,37 @@ class CancelarClase implements Responsable
         $client = $this->getGoogleClient();
         $authUrl = $client->createAuthUrl();
         return response()->json(['status' => 'auth_required', 'auth_url' => $authUrl]);
+    }
+
+    // ================================================================
+    // ================================================================
+
+    public function handleGoogleCallbackCancelar(Request $request)
+    {
+        $client = $this->getGoogleClient();
+
+        if ($request->has('code'))
+        {
+            $client->authenticate($request->get('code'));
+            Session::put('google_access_token', $client->getAccessToken());
+
+            // Verificar si el token se ha almacenado correctamente
+            if (Session::has('google_access_token'))
+            {
+                $cancelacionStatus = $this->procesoCancelacion();
+
+                if ($cancelacionStatus == "clase_cancelada") {
+                    return response()->json(['status' => 'clase_cancelada']);
+                }
+                else
+                {
+                    return redirect()->route('estudiante.disponibilidad')->with('error', $cancelacionStatus);
+                }
+            } else
+            {
+                return redirect()->route('estudiante.disponibilidad')->with('error', 'Failed to store access token');
+            }
+        }
     }
 
     // ================================================================

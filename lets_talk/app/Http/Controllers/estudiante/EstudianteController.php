@@ -408,10 +408,19 @@ class EstudianteController extends Controller
     // ==============================================================
     // ==============================================================
 
-    public function handleGoogleCallback(Request $request)
+    public function handleGoogleCallbackReservar(Request $request)
     {
-        $handleGoogleCallback = new ReservarClase();
-        return $handleGoogleCallback->handleGoogleCallback($request);
+        $handleGoogleCallbackReservar = new ReservarClase();
+        return $handleGoogleCallbackReservar->handleGoogleCallbackReservar($request);
+    }
+
+    // ==============================================================
+    // ==============================================================
+
+    public function handleGoogleCallbackCancelar(Request $request)
+    {
+        $handleGoogleCallbackCancelar = new CancelarClase();
+        return $handleGoogleCallbackCancelar->handleGoogleCallbackCancelar($request);
     }
 
     // ==============================================================

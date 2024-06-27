@@ -52,23 +52,15 @@ class ReservarClase implements Responsable
 
         if (isset($queryDisponibilidadCreditos) && !is_null($queryDisponibilidadCreditos) && !empty($queryDisponibilidadCreditos))
         {
-            try
-            {
-                if (!Session::has('google_access_token'))
-                {
-                    $authUrl = $this->getGoogleClient()->createAuthUrl();
-                    return response()->json(['status' => 'auth_required', 'auth_url' => $authUrl]);
-                }
 
-                return $this->processReservation();
-
-            }
-            catch (Exception $e)
+            if (!Session::has('google_access_token'))
             {
-                dd($e);
-                DB::connection('mysql')->rollback();
-                return response()->json(['status' => 'error']);
+                $authUrl = $this->getGoogleClient()->createAuthUrl();
+                return response()->json(['status' => 'auth_required', 'auth_url' => $authUrl]);
             }
+
+            return $this->processReservation();
+
         } else {
             DB::connection('mysql')->rollback();
             return response()->json(['status' => 'creditos_no_disponibles']);
@@ -84,6 +76,7 @@ class ReservarClase implements Responsable
     public function processReservation()
     {
         $reservationDetails = Session::get('reservation_details');
+
         if (!$reservationDetails) {
             return response()->json(['status' => 'error']);
         }
@@ -153,7 +146,6 @@ class ReservarClase implements Responsable
                         Session::forget('reservation_details');
 
                         return response()->json(['status' => 'clase_reservada']);
-                        // return redirect()->route('estudiante.disponibilidad')->with('status', json_encode(['status' => 'clase_reservada']));
                     }
                 }
             } catch (Exception $e) {
@@ -186,7 +178,7 @@ class ReservarClase implements Responsable
         $client = new Google_Client();
         $client->setClientId(env('GOOGLE_CLIENT_ID'));
         $client->setClientSecret(env('GOOGLE_CLIENT_SECRET'));
-        $client->setRedirectUri(env('GOOGLE_REDIRECT_URI'));
+        $client->setRedirectUri(env('GOOGLE_REDIRECT_URI_RESERVAR'));
         $client->setScopes([Google_Service_Calendar::CALENDAR_EVENTS]);
         $client->setAccessType('offline');
         $client->setPrompt('consent');
@@ -228,7 +220,7 @@ class ReservarClase implements Responsable
         5. Redirige al usuario a la ruta createMeet para crear una reunión en Google Meet.
     */
 
-    public function handleGoogleCallback(Request $request)
+    public function handleGoogleCallbackReservar(Request $request)
     {
         $client = $this->getGoogleClient();
 
@@ -245,11 +237,7 @@ class ReservarClase implements Responsable
                 $reservationStatus = $this->processReservation();
 
                 if ($reservationStatus == "clase_reservada") {
-                    // return redirect()->route('estudiante.disponibilidad');
                     return response()->json(['status' => 'clase_reservada']);
-                    // return response()->json("clase_reservada");
-                    // return redirect()->route('estudiante.disponibilidad')->with('status', 'clase_reservada');
-                    // return redirect()->route('estudiante.disponibilidad')->with('status', json_encode(['status' => 'clase_reservada']));
                 }
                 else
                 {
@@ -260,8 +248,6 @@ class ReservarClase implements Responsable
                 return redirect()->route('estudiante.disponibilidad')->with('error', 'Failed to store access token');
             }
         }
-
-        return redirect()->route('estudiante.disponibilidad')->with('error', 'Failed to authenticate with Google');
     }
 
     // ==============================================================
@@ -398,12 +384,4 @@ class ReservarClase implements Responsable
             return "error_datos_disponibilidad";
         }
     }
-
-    // ==============================================================
-    // ==============================================================
-    // ==============================================================
-    // ==============================================================
-    // ==============================================================
-
-
 } // FIN class ReservarClase

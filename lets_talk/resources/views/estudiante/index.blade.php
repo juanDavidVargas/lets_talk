@@ -140,78 +140,43 @@
                                 return;
                             }
 
+                            // Define variables para el título, texto y tipo de alerta
+                            let title, text, type;
+
+                            // Verifica el estado de la respuesta y asigna valores adecuados
+                            if (response.status === "clase_cancelada")
+                            {
+                                title = 'Info!';
+                                text = 'Clase Cancelada!';
+                                type = 'success';
+                            } else if (response.status === "error_link")
+                            {
+                                title = 'Error!';
+                                text = 'Link Meet NO Cancelado!';
+                                type = 'error';
+                            } else if (response.status === "error_exception")
+                            {
+                                title = 'Error!';
+                                text = 'Error Exception!';
+                                type = 'error';
+                            } else
+                            {
+                                title = 'Error!';
+                                text = 'Error al cancelar la clase!';
+                                type = 'error';
+                            }
+
+                            // Mostrar alerta con Swal.fire
                             Swal.fire({
-                                title: response.status === "clase_cancelada" ? 'Info!' : 'Error!',
-                                text: response.status === "clase_cancelada" ? 'Clase Cancelada!' : 'Error al cancelar la clase!',
-                                type: response.status === "clase_cancelada" ? 'success' : 'error'
+                                title: title,
+                                text: text,
+                                type: type
                             }).then(() => {
                                 setTimeout(() => {
                                     window.location.reload();
                                 }, 3000);
+                                return;
                             });
-
-                            // if(response.status == "clase_cancelada")
-                            // {
-                            //     $("#loaderGif").hide();
-                            //     $("#loaderGif").addClass('ocultar');
-
-                            //     Swal.fire(
-                            //         'Info!',
-                            //         'Clase Cancelada!',
-                            //         'success'
-                            //     );
-
-                            //     setTimeout(() => {
-                            //         window.location.reload();
-                            //     }, 3000);
-                            //     return;
-                            // }
-
-                            // if(response.status == "error_link")
-                            // {
-                            //     $("#loaderGif").hide();
-                            //     $("#loaderGif").addClass('ocultar');
-
-                            //     Swal.fire(
-                            //         'Error!',
-                            //         'Link Meet NO Cancelado!',
-                            //         'error'
-                            //     );
-
-                            //     setTimeout(() => {
-                            //         window.location.reload();
-                            //     }, 3000);
-                            //     return;
-                            // }
-
-                            // if(response.status == "error_exception")
-                            // {
-                            //     $("#loaderGif").hide();
-                            //     $("#loaderGif").addClass('ocultar');
-
-                            //     Swal.fire(
-                            //         'Error!',
-                            //         'Clase NO Cancelada!',
-                            //         'error'
-                            //     );
-
-                            //     setTimeout(() => {
-                            //         window.location.reload();
-                            //     }, 3000);
-                            //     return;
-                            // }
-
-                            // Swal.fire({
-                            //     title: 'Info!',
-                            //     text: response.status === "clase_cancelada" ? 'Clase Cancelada!' : 
-                            //         response.status === "error_link" ? 'Link Meet NO Cancelado!' : 
-                            //         'Clase NO Cancelada!',
-                            //     type: response.status === "clase_cancelada" ? 'success' : 'error'
-                            // }).then(() => {
-                            //     setTimeout(() => {
-                            //         window.location.reload();
-                            //     }, 3000);
-                            // });
                         }, // FIN Success
                         error: function(xhr, status, error) {
                             $("#loaderGif").hide();
@@ -227,23 +192,5 @@
                 } // FIN if
             }); // FIN then de Swal.Fire
         } // FIN cancelarClase
-
-        // $(document).ready(function() {
-        //     const flashMessage = @json(session('status'));
-
-        //     if (flashMessage) {
-        //         Swal.fire(
-        //             flashMessage === 'clase_cancelada' ? 'Info!' : 'Error!',
-        //             flashMessage === 'clase_cancelada' ? 'Clase Cancelada!' : 
-        //             flashMessage === 'error_link' ? 'Link Meet NO Cancelado!' : 
-        //             'Clase NO Cancelada!',
-        //             flashMessage === 'clase_cancelada' ? 'success' : 'error'
-        //         ).then(() => {
-        //             setTimeout(() => {
-        //                 window.location.reload();
-        //             }, 3000);
-        //         });
-        //     }
-        // });
     </script>
 @endsection
