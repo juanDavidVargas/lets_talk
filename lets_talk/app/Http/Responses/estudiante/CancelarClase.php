@@ -128,7 +128,9 @@ class CancelarClase implements Responsable
                         $this->enviarCorreoCancelarClase($idEstudiante, $idInstructor, $idHorario);
                         Session::forget('google_access_token');
                         Session::forget('detalles_cancelacion');
-                        return response()->json(['status' => 'clase_cancelada']);
+
+                        // return response()->json(['status' => 'clase_cancelada']);
+                        return 'clase_cancelada';
                     }
                 }
             } catch (Exception $e) {
@@ -185,17 +187,35 @@ class CancelarClase implements Responsable
             if (Session::has('google_access_token'))
             {
                 $cancelacionStatus = $this->procesoCancelacion();
+                // dd($cancelacionStatus);
 
-                if ($cancelacionStatus == "clase_cancelada") {
-                    return response()->json(['status' => 'clase_cancelada']);
+                if ($cancelacionStatus === "clase_cancelada")
+                {
+                    // dd($cancelacionStatus);
+                    alert()->success('Clase Cancelada', 'Puedes reservar nuevamente');
+                    return redirect()->route('estudiante.disponibilidad');
+                    // return response()->json(['status' => 'clase_cancelada']);
+                    // return response()->json('clase_cancelada');
+                    // return redirect()->route('estudiante.disponibilidad')->with('status', 'clase_cancelada');
+                    // return redirect()->route('estudiante.disponibilidad')->with(['status' => 'clase_cancelada']);
                 }
                 else
                 {
-                    return redirect()->route('estudiante.disponibilidad')->with('error', $cancelacionStatus);
+                    // dd('clase no cancelada');
+                    // return response()->json(['status' => 'error']);
+                    // return redirect()->route('estudiante.disponibilidad')->with('error', $cancelacionStatus);
+
+                    alert()->success('Error', 'Clase no cancelada');
+                    return redirect()->route('estudiante.disponibilidad');
                 }
             } else
             {
-                return redirect()->route('estudiante.disponibilidad')->with('error', 'Failed to store access token');
+                // dd('google_access_token no almacenado');
+                // return response()->json(['status' => 'error']);
+                // return redirect()->route('estudiante.disponibilidad')->with('error', 'Failed to store access token');
+
+                alert()->success('Error', 'Falla en el almacenamiento del Access Token');
+                return redirect()->route('estudiante.disponibilidad');
             }
         }
     }
