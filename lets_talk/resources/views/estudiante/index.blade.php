@@ -140,12 +140,7 @@
                             let title, text, type;
 
                             // Verifica el estado de la respuesta y asigna valores adecuados
-                            if (response.status === "clase_cancelada")
-                            {
-                                title = 'Info!';
-                                text = 'Clase Cancelada!';
-                                type = 'success';
-                            } else if (response.status === "error_link")
+                            if (response.status === "error_link")
                             {
                                 title = 'Error!';
                                 text = 'Link Meet NO Cancelado!';

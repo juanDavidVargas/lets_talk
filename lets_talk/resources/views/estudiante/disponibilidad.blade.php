@@ -154,12 +154,7 @@
                             // Define variables para el título, texto y tipo de alerta
                             let title, text, type;
                             
-                            if (response.status === 'clase_reservada')
-                            {
-                                title = 'Advertencia!';
-                                text = 'Clase Reservada!';
-                                type = 'success';
-                            } else if (response.status === 'creditos_no_disponibles')
+                            if (response.status === 'creditos_no_disponibles')
                             {
                                 title = 'Info!';
                                 text = 'No tiene créditos Disponibles!';

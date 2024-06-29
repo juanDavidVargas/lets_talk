@@ -129,7 +129,6 @@ class CancelarClase implements Responsable
                         Session::forget('google_access_token');
                         Session::forget('detalles_cancelacion');
 
-                        // return response()->json(['status' => 'clase_cancelada']);
                         return 'clase_cancelada';
                     }
                 }
@@ -187,33 +186,19 @@ class CancelarClase implements Responsable
             if (Session::has('google_access_token'))
             {
                 $cancelacionStatus = $this->procesoCancelacion();
-                // dd($cancelacionStatus);
 
                 if ($cancelacionStatus === "clase_cancelada")
                 {
-                    // dd($cancelacionStatus);
                     alert()->success('Clase Cancelada', 'Puedes reservar nuevamente');
                     return redirect()->route('estudiante.disponibilidad');
-                    // return response()->json(['status' => 'clase_cancelada']);
-                    // return response()->json('clase_cancelada');
-                    // return redirect()->route('estudiante.disponibilidad')->with('status', 'clase_cancelada');
-                    // return redirect()->route('estudiante.disponibilidad')->with(['status' => 'clase_cancelada']);
                 }
                 else
                 {
-                    // dd('clase no cancelada');
-                    // return response()->json(['status' => 'error']);
-                    // return redirect()->route('estudiante.disponibilidad')->with('error', $cancelacionStatus);
-
                     alert()->success('Error', 'Clase no cancelada');
                     return redirect()->route('estudiante.disponibilidad');
                 }
             } else
             {
-                // dd('google_access_token no almacenado');
-                // return response()->json(['status' => 'error']);
-                // return redirect()->route('estudiante.disponibilidad')->with('error', 'Failed to store access token');
-
                 alert()->success('Error', 'Falla en el almacenamiento del Access Token');
                 return redirect()->route('estudiante.disponibilidad');
             }
@@ -283,7 +268,6 @@ class CancelarClase implements Responsable
             return EventoAgendaEntrenador::find($idHorario);
         } catch (Exception $e)
         {
-            dd($e);
             Logger("Error consultando los datos del usuario administrador: {$e}");
             return "error_datos_disponibilidad";
         }
