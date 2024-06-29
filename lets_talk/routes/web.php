@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-// use App\Http\Controllers\google_meet\GoogleMeetController;
+use Illuminate\Support\Facades\Artisan;
 
 // ============================================================
 
@@ -14,6 +14,23 @@ Route::get('/', function ()
 
 // RUTA COMPROBAR CONEXIÓN BASE DE DATOS
 Route::get('check_database_connection', 'inicio_sesion\LoginController@checkDatabaseConnection')->name('check_database_connection');
+
+// ============================================================
+
+// SERVIDOR REMOTO (CPANEL) DEL STORAGE:LINK
+Route::get('storage-link', function(){
+    Artisan::call('storage:link');
+
+    if (file_exists(public_path('storage'))) {
+        return 'El directorio "public/storage" ya existe';
+    }
+
+    app('files')->link(
+        storage_path(('app/public')), public_path('storage')
+    );
+
+    return 'El directorio "public/storage" ha sido vinculado (linked)';
+});
 
 // ============================================================
 
