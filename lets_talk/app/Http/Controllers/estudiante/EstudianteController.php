@@ -353,6 +353,7 @@ class EstudianteController extends Controller
                 )
                 ->where('id_estudiante', $idEstudiante)
                 ->orderBy('start_date', 'desc')
+                ->orderBy('start_time', 'desc')
                 ->get();
             }
         } catch (Exception $e) {

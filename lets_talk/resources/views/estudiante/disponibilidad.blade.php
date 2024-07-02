@@ -5,6 +5,10 @@
 @stop
 
 @section('content')
+    @php
+        use Carbon\Carbon;
+    @endphp
+    
     <div class="row">
         <div class="col-12">
             <h1 class="text-center text-uppercase">Semana</h1>
@@ -48,6 +52,10 @@
                                     $claseInicio = $disponibilidad->start_time;
                                     $claseFinal = $disponibilidad->end_time;
                                     $idEstado = $disponibilidad->id_estado;
+
+                                    $diaHoy = Carbon::now();
+                                    $diaClase = Carbon::createFromFormat('Y-m-d H:i', $disponibilidad->start_date . ' ' . $disponibilidad->start_time);
+                                    $diaClaseMenosDosHoras = $diaClase->copy()->subHours(2); // Restamos dos horas al inicio de la clase
                                 @endphp
                                 <tr>
                                     <td>{{$disponibilidad->nombre_completo}}</td>
@@ -55,9 +63,15 @@
                                     <td>{{$disponibilidad->start_time}}</td>
                                     <td>{{$disponibilidad->end_time}}</td>
                                     <td>
-                                        <button type="button" class="text-white"
+                                        {{-- <button type="button" class="text-white"
                                                 onclick="reservarClase('{{$idEvento}}','{{$idInstructor}}','{{$FechaClase}}','{{$claseInicio}}')"
-                                                style="background-color: #21277B; padding:0.5em">RESERVAR YA</button>
+                                                style="background-color: #21277B; padding:0.5em">RESERVAR YA</button> --}}
+
+                                        @if($diaClaseMenosDosHoras > $diaHoy)
+                                            <button type="button" class="text-white"
+                                                    onclick="reservarClase('{{$idEvento}}','{{$idInstructor}}','{{$FechaClase}}','{{$claseInicio}}')"
+                                                    style="background-color: #21277B; padding:0.5em">RESERVAR YA</button>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
