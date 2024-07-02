@@ -162,8 +162,9 @@ class EstudianteController extends Controller
             } else
             {
                 $idEstudiante = session('usuario_id');
-                $diaHoy = Carbon::now();
-                $diaHoy = $diaHoy->format('Y-m-d');
+
+                $diaHoy = Carbon::now()->format('Y-m-d');
+                $horaAhora = Carbon::now();
 
                 $disponibilidadEntrenadores = EventoAgendaEntrenador::leftJoin('usuarios', 'usuarios.id_user', '=', 'evento_agenda_entrenador.id_instructor')
                     ->leftJoin('creditos', function($join) use ($idEstudiante) {
@@ -194,6 +195,7 @@ class EstudianteController extends Controller
                     ->where('evento_agenda_entrenador.clase_estado', 10)
                     ->where('evento_agenda_entrenador.state', 1)
                     ->where('evento_agenda_entrenador.start_date', '>=',  $diaHoy)
+                    ->where(DB::raw("CONCAT(evento_agenda_entrenador.start_date, ' ', evento_agenda_entrenador.start_time)"), '>=', $horaAhora->copy()->addHours(2)->format('Y-m-d H:i:s'))
                     ->orderBy('evento_agenda_entrenador.start_date', 'desc')
                     ->orderBy('evento_agenda_entrenador.start_time', 'desc')
                     ->get();
