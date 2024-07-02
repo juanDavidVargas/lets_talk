@@ -32,7 +32,7 @@ class EntrenadorController extends Controller
            empty($sesion[1]) || is_null($sesion[1]) &&
            empty($sesion[2]) || is_null($sesion[2]) &&
            empty($sesion[3]) || is_null($sesion[3]) &&
-           $sesion[2] != true)
+           $sesion[2])
         {
             return redirect()->to(route('home'));
         } else {
@@ -62,7 +62,7 @@ class EntrenadorController extends Controller
            empty($sesion[1]) || is_null($sesion[1]) &&
            empty($sesion[2]) || is_null($sesion[2]) &&
            empty($sesion[3]) || is_null($sesion[3]) &&
-           $sesion[2] != true)
+           $sesion[2])
         {
             return redirect()->to(route('home'));
         } else {
@@ -109,7 +109,7 @@ class EntrenadorController extends Controller
            empty($sesion[1]) || is_null($sesion[1]) &&
            empty($sesion[2]) || is_null($sesion[2]) &&
            empty($sesion[3]) || is_null($sesion[3]) &&
-           $sesion[2] != true)
+           $sesion[2])
         {
             return redirect()->to(route('home'));
         } else {
@@ -156,7 +156,7 @@ class EntrenadorController extends Controller
            empty($sesion[1]) || is_null($sesion[1]) &&
            empty($sesion[2]) || is_null($sesion[2]) &&
            empty($sesion[3]) || is_null($sesion[3]) &&
-           $sesion[2] != true)
+           $sesion[2])
         {
             return redirect()->to(route('home'));
         } else {
@@ -184,7 +184,7 @@ class EntrenadorController extends Controller
            empty($sesion[1]) || is_null($sesion[1]) &&
            empty($sesion[2]) || is_null($sesion[2]) &&
            empty($sesion[3]) || is_null($sesion[3]) &&
-           $sesion[2] != true)
+           $sesion[2])
         {
             return redirect()->to(route('home'));
         } else {
@@ -202,7 +202,7 @@ class EntrenadorController extends Controller
            empty($sesion[1]) || is_null($sesion[1]) &&
            empty($sesion[2]) || is_null($sesion[2]) &&
            empty($sesion[3]) || is_null($sesion[3]) &&
-           $sesion[2] != true)
+           $sesion[2])
         {
             return redirect()->to(route('home'));
         } else {
@@ -220,7 +220,7 @@ class EntrenadorController extends Controller
            empty($sesion[1]) || is_null($sesion[1]) &&
            empty($sesion[2]) || is_null($sesion[2]) &&
            empty($sesion[3]) || is_null($sesion[3]) &&
-           $sesion[2] != true)
+           $sesion[2])
         {
             return redirect()->to(route('home'));
         } else {
@@ -240,7 +240,7 @@ class EntrenadorController extends Controller
            empty($sesion[1]) || is_null($sesion[1]) &&
            empty($sesion[2]) || is_null($sesion[2]) &&
            empty($sesion[3]) || is_null($sesion[3]) &&
-           $sesion[2] != true)
+           $sesion[2])
         {
             return redirect()->to(route('home'));
         } else {
@@ -260,7 +260,7 @@ class EntrenadorController extends Controller
            empty($sesion[1]) || is_null($sesion[1]) &&
            empty($sesion[2]) || is_null($sesion[2]) &&
            empty($sesion[3]) || is_null($sesion[3]) &&
-           $sesion[2] != true)
+           $sesion[2])
         {
             return response()->json([404]);
         } else {
@@ -282,7 +282,7 @@ class EntrenadorController extends Controller
            empty($sesion[1]) || is_null($sesion[1]) &&
            empty($sesion[2]) || is_null($sesion[2]) &&
            empty($sesion[3]) || is_null($sesion[3]) &&
-           $sesion[2] != true)
+           $sesion[2])
         {
             return redirect()->to(route('home'));
         } else {
@@ -301,7 +301,7 @@ class EntrenadorController extends Controller
            empty($sesion[1]) || is_null($sesion[1]) &&
            empty($sesion[2]) || is_null($sesion[2]) &&
            empty($sesion[3]) || is_null($sesion[3]) &&
-           $sesion[2] != true)
+           $sesion[2])
         {
             return response()->json([404]);
         } else {
@@ -323,7 +323,7 @@ class EntrenadorController extends Controller
            empty($sesion[1]) || is_null($sesion[1]) &&
            empty($sesion[2]) || is_null($sesion[2]) &&
            empty($sesion[3]) || is_null($sesion[3]) &&
-           $sesion[2] != true)
+           $sesion[2])
         {
             return response()->json("redirect");
         } else {
@@ -342,7 +342,7 @@ class EntrenadorController extends Controller
            empty($sesion[1]) || is_null($sesion[1]) &&
            empty($sesion[2]) || is_null($sesion[2]) &&
            empty($sesion[3]) || is_null($sesion[3]) &&
-           $sesion[2] != true)
+           $sesion[2])
         {
             return redirect()->to(route('home'));
         } else {
@@ -368,7 +368,7 @@ class EntrenadorController extends Controller
            empty($sesion[1]) || is_null($sesion[1]) &&
            empty($sesion[2]) || is_null($sesion[2]) &&
            empty($sesion[3]) || is_null($sesion[3]) &&
-           $sesion[2] != true)
+           $sesion[2])
         {
             return redirect()->to(route('home'));
         } else {
