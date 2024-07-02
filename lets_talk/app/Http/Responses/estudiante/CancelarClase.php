@@ -40,7 +40,8 @@ class CancelarClase implements Responsable
         ]);
 
         // Verificar si el token de acceso está en la sesión
-        if (!Session::has('google_access_token')) {
+        if (!Session::has('google_access_token'))
+        {
             return $this->redirectToGoogle();
         }
 
@@ -134,7 +135,10 @@ class CancelarClase implements Responsable
                 }
             } catch (Exception $e) {
                 DB::rollback();
-                return response()->json(['status' => 'error_exception', 'message' => $e->getMessage()]);
+                alert()->error('Error', 'Error Exception, contacte a Soporte');
+                Session::forget('google_access_token');
+                Session::forget('detalles_cancelacion');
+                return redirect()->route('estudiante.index');
             }
         }
 
@@ -194,13 +198,17 @@ class CancelarClase implements Responsable
                 }
                 else
                 {
-                    alert()->success('Error', 'Clase no cancelada');
-                    return redirect()->route('estudiante.disponibilidad');
+                    alert()->error('Error', 'Verifique el email utilizado en la reserva');
+                    Session::forget('google_access_token');
+                    Session::forget('detalles_cancelacion');
+                    return redirect()->route('estudiante.index');
                 }
             } else
             {
                 alert()->success('Error', 'Falla en el almacenamiento del Access Token');
-                return redirect()->route('estudiante.disponibilidad');
+                Session::forget('google_access_token');
+                Session::forget('detalles_cancelacion');
+                return redirect()->route('estudiante.index');
             }
         }
     }

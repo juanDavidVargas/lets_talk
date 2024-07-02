@@ -39,7 +39,7 @@ class EstudianteController extends Controller
            empty($sesion[1]) || is_null($sesion[1]) &&
            empty($sesion[2]) || is_null($sesion[2]) &&
            empty($sesion[3]) || is_null($sesion[3]) &&
-           $sesion[2] != true)
+           $sesion[2])
         {
             return redirect()->to(route('home'));
         } else {
@@ -193,7 +193,7 @@ class EstudianteController extends Controller
                     })
                     ->where('evento_agenda_entrenador.clase_estado', 10)
                     ->where('evento_agenda_entrenador.state', 1)
-                    ->where('evento_agenda_entrenador.start_date', '>',  $diaHoy)
+                    ->where('evento_agenda_entrenador.start_date', '>=',  $diaHoy)
                     ->orderBy('evento_agenda_entrenador.start_date', 'desc')
                     ->orderBy('evento_agenda_entrenador.start_time', 'desc')
                     ->get();

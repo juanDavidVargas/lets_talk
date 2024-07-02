@@ -4,6 +4,9 @@
 @stop
 
 @section('content')
+    @php
+        use Carbon\Carbon;
+    @endphp
     <div class="row">
         <div class="col-12">
             <h1 class="text-center text-uppercase">Mis Sesiones</h1>
@@ -44,7 +47,21 @@
                                 <td>{{$sesion->start_time}}</td>
                                 <td><a href="{{$sesion->link_meet}}" target="_blank" class="text-primary">{{$sesion->link_meet}}</a></td>
                                 <td>
-                                    <button type="button" class="text-white btn btn-warning" onclick="cancelarClase('{{$idEvento}}','{{$idInstructor}}','{{$idEstudiante}}','{{$idEstado}}')">CANCELAR</button>
+                                    @php
+                                        $diaHoy = Carbon::now();
+                                        $diaClase = Carbon::createFromFormat('Y-m-d H:i', $sesion->start_date . ' ' . $sesion->start_time);
+
+                                        // $diaHoy = Carbon::now()->format('Y-m-d H:i');
+                                        // $diaClase = $sesion->start_date . ' ' . $sesion->start_time;
+
+                                        // dd($diaHoy, $diaClase);
+                                    @endphp
+
+                                    @if($diaClase > $diaHoy)
+                                        <button type="button" class="text-white btn btn-warning" onclick="cancelarClase('{{$idEvento}}','{{$idInstructor}}','{{$idEstudiante}}','{{$idEstado}}')">CANCELAR</button>
+                                    @else
+                                        {{-- <button type="button" class="text-white btn btn-secondary">CANCELAR</button> --}}
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

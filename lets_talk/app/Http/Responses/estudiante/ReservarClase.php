@@ -239,7 +239,7 @@ class ReservarClase implements Responsable
                 if ($reservationStatus === "clase_reservada")
                 {
                     alert()->success('Clase Reservada', 'Puedes cancelar de no poder asistir');
-                    return redirect()->route('estudiante.disponibilidad');
+                    return redirect()->route('estudiante.index');
 
                 }
                 else

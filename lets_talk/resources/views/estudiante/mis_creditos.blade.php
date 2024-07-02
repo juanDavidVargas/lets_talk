@@ -38,9 +38,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @php
-                            // dd($misCreditos);
-                        @endphp
                         @foreach ($misCreditos as $credito)
                             <tr>
                                 <td>{{$credito->fecha_credito}}</td>
@@ -57,7 +54,7 @@
     </div>
 
     <div class="d-flexswal m-t-30 m-b-30" style="padding-left:3rem;padding-right:5rem;">
-        <button type="button" class="btn btn-primary text-uppercase" onclick="misCreditos()"><span class="text-success">{!!$totalCreditosDisponibles!!}</span> créditos disponibles</button>
+        <button type="button" class="btn btn-primary text-uppercase" onclick="misCreditos()"><span class="fw-bold" style="color:yellow;">{!!$totalCreditosDisponibles!!}</span> créditos disponibles</button>
     </div>
 
     <div class="d-flex justify-content-center" style="padding-left:3rem;padding-right:5rem;">
