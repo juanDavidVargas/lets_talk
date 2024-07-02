@@ -108,9 +108,11 @@ class AgendaEntrenadorShow implements Responsable
     public function traerSesionesEntrenadores()
     {
         $usuarioLogueado = session('usuario_id');
+        $rolUsuario = session('rol');
 
-        try {
-            return DB::table('reservas')
+        try
+        {
+            $traerSesionesEntrenadores = DB::table('reservas')
                     ->leftjoin('usuarios as ui', 'ui.id_user', '=', 'reservas.id_instructor')
                     ->leftjoin('usuarios as ue', 'ue.id_user', '=', 'reservas.id_estudiante')
                     ->leftjoin('evento_agenda_entrenador as eae', 'eae.id', '=', 'reservas.id_trainer_horario')
@@ -124,16 +126,21 @@ class AgendaEntrenadorShow implements Responsable
                         'eae.start_time',
                         'eae.id AS id_sesion'
                     )
-                    ->where('reservas.id_instructor', $usuarioLogueado)
                     ->where('ue.estado', 1)
                     ->where('ue.id_rol', 3)
                     ->whereNull('ue.deleted_at')
                     ->whereNull('eae.deleted_at')
                     ->whereIn('eae.state', [1])
-                    ->orderBy('eae.start_date', 'DESC')
-                    ->get();
-                    // ->toSql();
-        } catch (Exception $e) {
+                    ->orderBy('eae.start_date', 'DESC');
+
+                    // Filtro según el rol del usuario
+                    if ($rolUsuario == 1) // Profesor
+                    {
+                        $traerSesionesEntrenadores->where('reservas.id_instructor', $usuarioLogueado);
+                    }
+                    return $traerSesionesEntrenadores->get();
+        } catch (Exception $e)
+        {
             alert()->error("Error', 'An error has occurred, try again, if the problem persists contact support.!");
             return back();
         }
@@ -190,7 +197,8 @@ class AgendaEntrenadorShow implements Responsable
 
     public function traerDatosEvalInterna($idEstudiante)
     {
-        try {
+        try
+        {
 
             return DB::table('evaluacion_interna')
                     ->leftjoin('usuarios as estudiante', 'estudiante.id_user', '=', 'evaluacion_interna.id_estudiante')
@@ -206,7 +214,8 @@ class AgendaEntrenadorShow implements Responsable
                     ->orderBy('evaluacion_interna.created_at','DESC')
                     ->get();
 
-        } catch (Exception $e) {
+        } catch (Exception $e)
+        {
             return response()->json("error_exception");
         }
     }

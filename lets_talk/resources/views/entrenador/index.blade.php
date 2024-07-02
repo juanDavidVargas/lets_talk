@@ -111,12 +111,6 @@
         </div>
     </div>
 
-    <div class="row p-b-20 float-right">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            {{-- <a href="{{route('administrador.create')}}" class="btn btn-primary">Create New User</a> --}}
-        </div>
-    </div>
-
     <div class="row p-t-30" style="padding-left:5rem;padding-right:5rem;">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="table-responsive">
@@ -136,7 +130,10 @@
                                 <td>{{$student->start_date}}</td>
                                 <td>{{$student->start_time}}</td>
                                 <td>
-                                    <button onclick="seeDetails({{$student->id_sesion}},{{$student->id_estudiante}})" class="text-white" style="backgroundcolor: #434C6A; padding:0.5rem;">SEE DETAILS</button>
+                                    <button onclick="seeDetails({{$student->id_sesion}},{{$student->id_estudiante}})"
+                                            class="text-white"
+                                            style="backgroundcolor: #434C6A; padding:0.5rem;">SEE DETAILS
+                                    </button>
                                 </td>
                             </tr>
                         @endforeach
