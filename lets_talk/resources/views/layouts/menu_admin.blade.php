@@ -25,10 +25,6 @@
     </li>
 
     <li role="presentation">
-        <a href="#">Reservations</a>
-    </li>
-
-    <li role="presentation">
         <a href="{{route('administrador.niveles_index')}}">Levels</a>
     </li>
 
