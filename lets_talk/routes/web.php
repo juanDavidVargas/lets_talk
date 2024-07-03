@@ -66,7 +66,7 @@ Route::post('editar_nivel', 'admin\AdministradorController@editarNivel')->name('
 Route::post('inactivar_nivel', 'admin\AdministradorController@inactivarNivel')->name('inactivar_nivel');
 Route::post('activar_nivel', 'admin\AdministradorController@activarNivel')->name('activar_nivel');
 Route::post('consultar_nivel', 'admin\AdministradorController@consultarNivel')->name('consultar_nivel');
-Route::get('disponibilidades_libres', 'admin\AdministradorController@disponibilidadesLibres')->name('disponibilidades_libres');
+Route::get('disponibilidades_libres', 'admin\AdministradorController@disponibilidadesLibres')->name('administrador.disponibilidades_libres');
 
 // ============================================================
 

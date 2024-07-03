@@ -21,6 +21,10 @@
     </li>
 
     <li role="presentation">
+        <a href="{{route('administrador.disponibilidades_libres')}}">Free Availability</a>
+    </li>
+
+    <li role="presentation">
         <a href="#">Reservations</a>
     </li>
 
