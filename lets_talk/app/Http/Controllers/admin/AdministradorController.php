@@ -24,6 +24,7 @@ use App\Http\Responses\niveles\NivelesActivar;
 use App\Http\Responses\administrador\HorarioStore;
 use App\Http\Responses\administrador\HorarioState;
 use App\Http\Responses\administrador\DisponibilidadUpdate;
+use App\Http\Responses\administrador\DisponibilidadesLibres;
 use App\Http\Controllers\DatabaseConnectionController;
 use App\Traits\MetodosTrait;
 
@@ -657,5 +658,34 @@ class AdministradorController extends Controller
     public function services()
     {
         return view('layouts.services');
+    }
+
+    public function disponibilidadesLibres()
+    {
+        $vista = 'administrador.disponibilidad_libre';
+        $checkConnection = $this->checkDatabaseConnection($vista);
+
+        if($checkConnection->getName() == "database_connection")
+        {
+            return view('database_connection');
+        }
+        else
+        {
+            try
+            {
+                $disponibilidadesLibresObj = new DisponibilidadesLibres();
+                $disponibilidadesLibres = $disponibilidadesLibresObj->obtenerDisponibilidadesLibres();
+
+                if ($disponibilidadesLibres !== null)
+                {
+                    return view($vista, compact('disponibilidadesLibres'));
+                }
+    
+            } catch (Exception $e)
+            {
+                alert()->error("Error', 'An error has occurred, try again, if the problem persists contact support.!");
+                return redirect()->to(route('administrador.index'));
+            }
+        }
     }
 }
