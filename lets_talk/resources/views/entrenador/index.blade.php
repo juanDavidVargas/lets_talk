@@ -157,6 +157,11 @@
     <script type="text/javascript">
         $(document ).ready(function()
         {
+            setTimeout(() => {
+                $("#loaderGif").hide();
+                $("#loaderGif").addClass('ocultar');
+            }, 1500);
+
             $('#tbl_trainer_sessions').DataTable({
                 'ordering': false,
                 "lengthMenu": [[10,25,50,100, -1], [10,25,50,100, 'ALL']],
@@ -197,11 +202,11 @@
                 data: {
                     'id_user': idUser
                 },
-                // beforeSend: function()
-                // {
-                //     $("#loaderGif").show();
-                //     $("#loaderGif").removeClass('ocultar');
-                // },
+                beforeSend: function()
+                {
+                    $("#loaderGif").show();
+                    $("#loaderGif").removeClass('ocultar');
+                },
                 success: function(response)
                 {
                     if(response[0].original == "error_exception")

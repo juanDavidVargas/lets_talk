@@ -4,6 +4,7 @@
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{asset('css/dataTables.bootstrap.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('css/fixedHeader.bootstrap.min.css')}}">
+    <link href="{{asset('DataTable/datatables.min.css')}}" rel="stylesheet">
 
     <style>
         .btnSch {

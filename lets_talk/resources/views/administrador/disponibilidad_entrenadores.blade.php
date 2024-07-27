@@ -1,13 +1,9 @@
 @extends('layouts.layout')
 @section('title', 'Availability Trainers')
 
-{{-- ===================================== --}}
-
 @section('css')
 <link href="{{asset('DataTable/datatables.min.css')}}" rel="stylesheet">
 @stop
-
-{{-- ===================================== --}}
 
 @section('content')
 <div class="row" style="padding-left:5rem;padding-right:5rem;">
