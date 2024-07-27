@@ -24,13 +24,20 @@ return [
     |
     */
 
-    'user'      => [
-        'morph_prefix' => 'user',
-        'guards'       => [
-            'web',
-            'api'
-        ],
-        'resolver'     => OwenIt\Auditing\Resolvers\UserResolver::class
+    // 'user'      => [
+    //     'morph_prefix' => 'user',
+    //     'guards'       => [
+    //         'web',
+    //         'api'
+    //     ],
+    //     'resolver'     => OwenIt\Auditing\Resolvers\UserResolver::class
+    // ],
+
+    'user' => [
+        'model' => App\Models\User::class,
+        'resolver' => function () {
+            return Auth::check() ? Auth::user()->getAuthIdentifier() : null;
+        }
     ],
 
     /*
