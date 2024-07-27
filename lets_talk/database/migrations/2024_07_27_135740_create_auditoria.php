@@ -13,15 +13,37 @@ class CreateAuditoria extends Migration
      */
     public function up()
     {
-        Schema::create('audit', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('event');
-            $table->json('old_values');
-            $table->json('new_values');
-            $table->unsignedInteger('id_user');
-            $table->timestamps();
+        Schema::create('audits', function (Blueprint $table) {
+            // $table->increments('id');
+            // $table->string('event')->nullable();
+            // $table->json('old_values')->nullable();
+            // $table->json('new_values')->nullable();
+            // $table->integer('auditable_id')->nullable();
+            // $table->string('auditable_type')->nullable();
+            // $table->string('user_type')->nullable();
+            // $table->string('tags')->nullable();
+            // $table->string('ip_address')->nullable();
+            // $table->string('user_agent')->nullable();
+            // $table->string('url')->nullable();
+            // $table->unsignedInteger('user_id')->nullable();
+            // $table->timestamps();
 
-            $table->foreign('id_user')->references('id_user')->on('usuarios');
+            // $table->foreign('user_id')->references('id_user')->on('usuarios');
+
+                $table->bigIncrements('id');
+                $table->string('user_type')->nullable();
+                $table->unsignedBigInteger('user_id')->nullable();
+                $table->string('event');
+                $table->morphs('auditable');
+                $table->text('old_values')->nullable();
+                $table->text('new_values')->nullable();
+                $table->text('url')->nullable();
+                $table->ipAddress('ip_address')->nullable();
+                $table->string('user_agent', 1023)->nullable();
+                $table->string('tags')->nullable();
+                $table->timestamps();
+    
+                $table->index(['user_id', 'user_type']);
         });
     }
 
@@ -32,6 +54,6 @@ class CreateAuditoria extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('audit');
+        Schema::dropIfExists('audits');
     }
 }
