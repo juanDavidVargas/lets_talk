@@ -59,86 +59,26 @@
                 </div>
             </div>
         @else
-
-        {{-- Inicio Menu --}}
-        <div class="col-xs-6 col-sm-6 col-md-6">
-            <div class="sign-out">
-                {{-- Rol Entrenador --}}
-                @if(!is_null(session('rol')) && (session('rol') == 1 || session('rol') == "1"))
-                    <ul class="nav nav-tabs">
-                        @if(Request::path() == "trainer")
-                            <li class="nav-item">
-                                <a href="{{route('trainer.create')}}" class="nav-link active" aria-current="page">Trainer's Agenda</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{route('trainer.index')}}" class="nav-link" aria-current="page">Trainer's Sessions</a>
-                            </li>
+            {{-- Inicio Menu --}}
+            <div class="col-xs-6 col-sm-6 col-md-6">
+                <div class="sign-out">
+                    {{-- Rol Entrenador (id = 1) --}}
+                    @if(!is_null(session('rol')) && (session('rol') == 1 || session('rol') == "1"))
+                        @include('layouts.menu_entrenador')
+                    {{-- Rol Estudiante (id = 3) --}}
+                    @elseif(!is_null(session('rol')) && (session('rol') == 3 || session('rol') == "3"))
+                        @include('layouts.menu_estudiante')
+                    @else
+                    {{-- Rol admin (id = 2) --}}
+                        @if(!is_null(session('rol')) && (session('rol') == 2 || session('rol') == "2"))
+                            @include('layouts.menu_admin')
                         @else
-                            <li class="nav-item">
-                                <a href="{{route('trainer.create')}}" class="nav-link" aria-current="page">Trainer's Agenda</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{route('trainer.index')}}" class="nav-link" aria-current="page">Trainer's Sessions</a>
-                            </li>
+                            <p>&nbsp;</p>
                         @endif
-                        <li>
-                            <a href="{{route('logout')}}" title="Cerrar Sesión">
-                                <i class="fa fa-sign-out fa-3x" aria-hidden="true"></i>
-                            </a>
-                        </li>
-                    </ul>
-                {{-- Rol Estudiante --}}
-                @elseif(!is_null(session('rol')) && (session('rol') == 3 || session('rol') == "3"))
-                    <ul class="nav nav-tabs">
-                        @if(Request::path == "student")
-                            <li class="nav-item">
-                                <a href="#" class="nav-link" aria-current="page">Diponibilidad Entrenadores</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link" aria-current="page">Reservas</a>
-                            </li>
-                        @else
-                            <li class="nav-item">
-                                <a href="#" class="nav-link" aria-current="page">Diponibilidad Entrenadores</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link" aria-current="page">Reservas</a>
-                            </li>
-                        @endif
-                        <li>
-                            <a href="{{route('logout')}}" title="Cerrar Sesión">
-                                <i class="fa fa-sign-out fa-3x" aria-hidden="true"></i>
-                            </a>
-                        </li>
-                    </ul>
-                    {{-- Rol Administrador --}}
-                @else
-                    <ul class="nav nav-tabs">
-                        <li class="nav-item">
-                            <a class="pointer" href="{{route('administrador.index')}}" class="nav-link" aria-current="page">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{route('trainer.create')}}" class="nav-link active" aria-current="page">Trainer's Agenda</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{route('trainer.index')}}" class="nav-link" aria-current="page">Trainer's Sessions</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link" aria-current="page">Availability Trainer's</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link" aria-current="page">Reservations</a>
-                        </li>
-                        <li>
-                            <a href="{{route('logout')}}" title="Cerrar Sesión">
-                                <i class="fa fa-sign-out fa-3x" aria-hidden="true"></i>
-                            </a>
-                        </li>
-                    </ul>
-                @endif
+                    @endif
+                </div>
             </div>
-        </div>
-        {{-- Fin Menu --}}
+            {{-- Fin Menu --}}
         @endif
     </div>
 

@@ -1,6 +1,7 @@
 @extends('layouts.layout')
 @section('title', 'Mis Créditos')
 @section('css')
+    <link href="{{asset('DataTable/datatables.min.css')}}" rel="stylesheet">
     <style>
         .swal2-cancel {
             background-color: #1D9BF0;
@@ -69,6 +70,8 @@
 @stop
 
 @section('scripts')
+    <script src="{{asset('DataTable/datatables.min.js')}}"></script>
+
     <script>
         function misCreditos() {
             html = ``;

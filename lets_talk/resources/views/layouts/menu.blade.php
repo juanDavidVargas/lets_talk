@@ -8,8 +8,8 @@
         @elseif(!is_null(session('rol')) && (session('rol') == 3 || session('rol') == "3"))
             @include('layouts.menu_estudiante')
         @else
+        {{-- Rol admin (id = 2) --}}
             @if(!is_null(session('rol')) && (session('rol') == 2 || session('rol') == "2"))
-                {{-- Rol admin (id = 2) --}}
                 @include('layouts.menu_admin')
             @else
                 <p>&nbsp;</p>

@@ -1,6 +1,7 @@
 @extends('layouts.layout')
 @section('title', 'Mis Sesiones')
 @section('css')
+    <link href="{{asset('DataTable/datatables.min.css')}}" rel="stylesheet">
 @stop
 
 @section('content')
@@ -76,6 +77,11 @@
     <script>
         $(document).ready(function()
         {
+            setTimeout(() => {
+                $("#loaderGif").hide();
+                $("#loaderGif").addClass('ocultar');
+            }, 1500);
+            
             $('#tbl_reservas').DataTable({
                 'ordering': false,
                 "lengthMenu": [[10,25,50,100, -1], [10,25,50,100, 'ALL']],

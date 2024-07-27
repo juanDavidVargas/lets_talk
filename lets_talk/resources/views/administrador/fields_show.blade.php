@@ -39,8 +39,8 @@
     </div>
 
     @php
-    use Carbon\Carbon;
-    $fecha_nacimiento_formato = isset($usuario) ? Carbon::parse($usuario->fecha_nacimiento) : null;
+        use Carbon\Carbon;
+        $fecha_nacimiento_formato = isset($usuario) ? Carbon::parse($usuario->fecha_nacimiento) : null;
     @endphp
 
     <div class="col-xs-12 col-sm-12 col-md-3">
