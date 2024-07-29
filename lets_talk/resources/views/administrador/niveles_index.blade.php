@@ -92,15 +92,15 @@
                                         @if ($nivel->id_nivel == 0)
                                             <span class="badge badge-primary">No Edition Allowed</span>
                                         @else
-                                            <a href="#" class="btn btn-info"
+                                            <button class="btn btn-info"
                                                 id="level_update_{{$nivel->id_nivel}}"
-                                                onclick="editarNivel({{$nivel->id_nivel}})">Edit Level</a>
-                                            <a href="#" class="btn btn-warning" id="level_inactive_{{$nivel->id_nivel}}"
-                                                onclick="inactivarNivel({{$nivel->id_nivel}})">Inactive Level</a>
+                                                onclick="editarNivel({{$nivel->id_nivel}})">Edit Level</button>
+                                            <button class="btn btn-warning" id="level_inactive_{{$nivel->id_nivel}}"
+                                                onclick="inactivarNivel({{$nivel->id_nivel}})">Inactive Level</button>
                                         @endif
                                     @else
-                                        <a href="#" class="btn btn-success" id="level_active_{{$nivel->id_nivel}}"
-                                            onclick="activarNivel({{$nivel->id_nivel}})">Active Level</a>
+                                        <button class="btn btn-success" id="level_active_{{$nivel->id_nivel}}"
+                                            onclick="activarNivel({{$nivel->id_nivel}})">Active Level</button>
                                     @endif
                                 </td>
                             </tr>
