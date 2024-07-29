@@ -28,7 +28,7 @@
     <div class="row p-t-30" style="padding-left:5rem;padding-right:5rem;">
         <div class="row border w-100 mt-5 mb-5">
             <div class="table-responsive">
-                <table class="table table-striped table-bordered table-hover" id="tbl_reservas">
+                <table class="table table-striped table-bordered table-hover" id="tbl_mis_creditos">
                     <thead>
                         <tr class="header-table">
                             <th>Fecha Compra</th>
@@ -51,15 +51,15 @@
                     </tbody>
                 </table>
             </div>
+
+            <div style="display:flex; justify-content:center;">
+                <h4>Total Créditos <span class="fw-bold" style="color:green;">{!!$totalCreditosDisponibles!!}</span></h4>
+            </div>
         </div>
     </div>
 
     <div class="d-flexswal m-t-30 m-b-30" style="padding-left:3rem;padding-right:5rem;">
-        <button type="button" class="btn btn-primary text-uppercase" onclick="misCreditos()"><span class="fw-bold" style="color:yellow;">{!!$totalCreditosDisponibles!!}</span> créditos disponibles</button>
-    </div>
-
-    <div class="d-flex justify-content-center" style="padding-left:3rem;padding-right:5rem;">
-        <a href="https://www.pse.com.co/persona" target="_blank" class="btn btn-primary text-uppercase">comprar más créditos</a>
+        <button type="button" class="btn btn-primary text-uppercase" onclick="misCreditos()">Historial Créditos</button>
     </div>
 
     <div class="m-t-30 m-b-30" style="padding-left:3rem;padding-right:5rem;">
@@ -73,21 +73,57 @@
     <script src="{{asset('DataTable/datatables.min.js')}}"></script>
 
     <script>
+        $(document ).ready(function()
+        {
+            setTimeout(() => {
+                $("#loaderGif").hide();
+                $("#loaderGif").addClass('ocultar');
+            }, 1500);
+
+            $('#tbl_mis_creditos').DataTable({
+                'ordering': false,
+                "lengthMenu": [[10,25,50,100, -1], [10,25,50,100, 'ALL']],
+                dom: 'Blfrtip',
+                "info": "Showing page _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros",
+                "buttons": [
+                    {
+                        extend: 'copyHtml5',
+                        text: 'Copiar',
+                        className: 'waves-effect waves-light btn-rounded btn-sm btn-primary',
+                        init: function(api, node, config) {
+                            $(node).removeClass('dt-button')
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Excel',
+                        className: 'waves-effect waves-light btn-rounded btn-sm btn-primary',
+                        init: function(api, node, config) {
+                            $(node).removeClass('dt-button')
+                        }
+                    },
+                ]
+            });
+        });
+
+        // ===============================================
+
         function misCreditos() {
             html = ``;
             html += `<table border=1 style="border-collapse:separate !important" cellspacing="10" id="tbl_old_evaluation" >`;
             html +=     `<thead>`;
             html +=         `<tr style="background-color: #21277B">`;
             html +=             `<th style="text-align:center;width:55%;color:white;font-size:16px;">RESERVA CON</th>`;
-            html +=             `<th style="text-align:center;width:15%;color:white;font-size:16px;">CRÉDITOS</th>`;
             html +=             `<th style="text-align:center;width:30%;color:white;font-size:16px;">FECHA</th>`;
+            html +=             `<th style="text-align:center;width:15%;color:white;font-size:16px;">HORA</th>`;
             html +=         `</tr>`;
             html +=     `</thead>`;
             html +=     `<body>`;
                                 html += `<tr>`;
                                 html +=     `<td style="width:55%;font-size:12px;">Sebastian Villamizar</td>`;
-                                html +=     `<td style="width:15%;font-size:12px;">1</td>`;
                                 html +=     `<td style="width:30%;font-size:12px;">Marzo 20, 2024</td>`;
+                                html +=     `<td style="width:15%;font-size:12px;">10:00</td>`;
                                 html += `</tr>`;
             html +=     `</body>`;
             html += `<table>`;
@@ -112,24 +148,30 @@
 
         // =====================================================
 
+
+        let paquetes = @json($paquetes);
+
         function comprarCreditos() {
             html = '';
             html += `   <h3 class="gral-font margin-y">Comprar Créditos</h3>`;
             html += `   {!! Form::open(['method' => 'POST', 'route' => ['estudiante.comprar_creditos'],'class'=>['form-horizontal form-bordered']]) !!}`;
             html += `   @csrf`;
-            html += `       <div class="col-12">
-                                <div class="form-group d-flex align-items-center">
-                                    <label for="cantidad_creditos" class="form-label text-uppercase fs-1 w-100">Cargo</label>
-                                    <select name="cantidad_creditos" class="form-control select2 w-100" id="cantidad_creditos">
-                                        <option value="">Seleccione Paquete...</option>
-                                        <option value="5">Paquete 5 Créditos</option>
-                                        <option value="10">Paquete 10 Créditos</option>
-                                        <option value="15">Paquete 15 Créditos</option>
-                                        <option value="20">Paquete 20 Créditos</option>
-                                    </select>
-                                </div>
-                            </div>
+            html += `
+                    <div class="col-12">
+                        <div class="form-group d-flex align-items-center">
+                            <select name="cantidad_creditos" class="form-control select2 w-100" id="cantidad_creditos" required>
+                                <option value="" selected >Seleccionar...</option>
             `;
+                                $.each(paquetes, function(id_paquete, nombre_paquete){
+                                    html += ' <option value="'+id_paquete+'">'+nombre_paquete+'</option>'
+                                });
+
+            html += `
+                            </select>
+                        </div>
+                    </div>
+            `;
+
             html += `       <div class="p-3">
                                 <button type="submit" class="text-white">Comprar Créditos</button>
                             </div>

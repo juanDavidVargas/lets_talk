@@ -290,140 +290,140 @@
 
                     // ==============================================
 
-                    html += `
-                            <div class="d-flex flex-row" style="padding:0; width:100%">
-                                <div style="margin-right:1rem;">
-                    `;
-                                    if (response[0].zoom) {
-                                        html += `<p class="gral-font">ZOOM: ${response[0].zoom}</p>`;
-                                    } else {
-                                        html += `<p class="gral-font">ZOOM: </p>`;
-                                    }
-                    html += `   </div>`;
+                    // html += `
+                    //         <div class="d-flex flex-row" style="padding:0; width:100%">
+                    //             <div style="margin-right:1rem;">
+                    // `;
+                    //                 if (response[0].zoom) {
+                    //                     html += `<p class="gral-font">ZOOM: ${response[0].zoom}</p>`;
+                    //                 } else {
+                    //                     html += `<p class="gral-font">ZOOM: </p>`;
+                    //                 }
+                    // html += `   </div>`;
 
-                    html += `   <div>`;
-                                    if (response[0].zoom_clave) {
-                                        html += `<p class="gral-font">ZOOM PASS: ${response[0].zoom_clave}</p>`;
-                                    } else {
-                                        html += `<p class="gral-font">PASS: </p>`;
-                                    }
-                    html += `   </div>`;
-                    html += `
-                            </div>
-                    `;
-
-                    // ==============================================
-
-                    html += `<p class="gral-font center-align margin-y">SESSION INFO</p>`;
-
-
-                    if (response[0].id_primer_contacto == 1) { // Phone
-                        html += `   <div class="d-flex flex-row w100" style="">
-                                        <p class="gral-font w50">1ST CONTACT:</p>
-                                        <p class="gral-font w50">
-                                            <img src="{{asset('img/icons8-phone-48.png')}}" width="20" height="20" alt="phone"></img>
-                                            ${response[0].primer_telefono}
-                                        </p>
-                                    </div>
-                        `;
-                    } else if (response[0].id_primer_contacto == 2) { // Whatsapp-Celular
-                        html += `   <div class="d-flex flex-row w100" style="">
-                                        <p class="gral-font w50">1ST CONTACT:</p>
-                                        <p class="gral-font w50">
-                                            <img src="{{asset('img/icons8-whatsapp-48.png')}}" width="20" height="20" alt="whatsapp"></img>
-                                            ${response[0].primer_celular}
-                                        </p>
-                                    </div>
-                        `;
-                    } else if (response[0].id_primer_contacto == 3) { // Skype
-                        html += `   <div class="d-flex flex-row w100" style="">
-                                        <p class="gral-font w50">1ST CONTACT:</p>
-                                        <p class="gral-font w50">
-                                            <img src="{{asset('img/icons8-skype-48.png')}}" width="20" height="20" alt="skype"></img>
-                                            ${response[0].primer_skype}
-                                        </p>
-                                    </div>
-                        `;
-                    } else if (response[0].id_primer_contacto == 4) { // Email
-                        html += `   <div class="d-flex flex-row w100" style="">
-                                        <p class="gral-font w50">1ST CONTACT:</p>
-                                        <p class="gral-font w50">
-                                            <img src="{{asset('img/icons8-email-48.png')}}" width="20" height="20" alt="email"></img>
-                                            ${response[0].primer_correo}
-                                        </p>
-                                    </div>
-                        `;
-                    } else if (response[0].id_primer_contacto == 5) { // Zoom
-                        html += `   <div class="d-flex flex-row w100" style="">
-                                        <p class="gral-font w50">1ST CONTACT:</p>
-                                        <p class="gral-font w50">
-                                            <img src="{{asset('img/icons8-zoom-48.png')}}" width="20" height="20" alt="zoom"></img>
-                                            ${response[0].primer_zoom}
-                                        </p>
-                                    </div>
-                        `;
-                    } else { // Null
-                        html += `   <div class="d-flex flex-row w100" style="">
-                                        <p class="gral-font w50">1ST CONTACT:</p>
-                                        <p class="gral-font w50"></p>
-                                    </div>
-                        `;
-                    }
+                    // html += `   <div>`;
+                    //                 if (response[0].zoom_clave) {
+                    //                     html += `<p class="gral-font">ZOOM PASS: ${response[0].zoom_clave}</p>`;
+                    //                 } else {
+                    //                     html += `<p class="gral-font">PASS: </p>`;
+                    //                 }
+                    // html += `   </div>`;
+                    // html += `
+                    //         </div>
+                    // `;
 
                     // ==============================================
 
-                    if (response[0].id_segundo_contacto == 1) { // Phone
-                        html += `   <div class="d-flex flex-row w100" style="">
-                                        <p class="gral-font w50">2ND CONTACT:</p>
-                                        <p class="gral-font w50">
-                                            <img src="{{asset('img/icons8-phone-48.png')}}" width="20" height="20" alt="phone"></img>
-                                            ${response[0].segundo_telefono}
-                                        </p>
-                                    </div>
-                        `;
-                    } else if (response[0].id_segundo_contacto == 2) { // Whatsapp-Celular
-                        html += `   <div class="d-flex flex-row w100" style="">
-                                        <p class="gral-font w50">2ND CONTACT:</p>
-                                        <p class="gral-font w50">
-                                            <img src="{{asset('img/icons8-whatsapp-48.png')}}" width="20" height="20" alt="whatsapp"></img>
-                                            ${response[0].segundo_celular}
-                                        </p>
-                                    </div>
-                        `;
-                    } else if (response[0].id_segundo_contacto == 3) { // Skype
-                        html += `   <div class="d-flex flex-row w100" style="">
-                                        <p class="gral-font w50">2ND CONTACT:</p>
-                                        <p class="gral-font w50">
-                                            <img src="{{asset('img/icons8-skype-48.png')}}" width="20" height="20" alt="skype"></img>
-                                            ${response[0].segundo_skype}
-                                        </p>
-                                    </div>
-                        `;
-                    } else if (response[0].id_segundo_contacto == 4) { // Email
-                        html += `   <div class="d-flex flex-row w100" style="">
-                                        <p class="gral-font w50">2ND CONTACT:</p>
-                                        <p class="gral-font w50">
-                                            <img src="{{asset('img/icons8-email-48.png')}}" width="20" height="20" alt="email"></img>
-                                            ${response[0].segundo_correo}
-                                        </p>
-                                    </div>
-                        `;
-                    } else if (response[0].id_segundo_contacto == 5) { // Zoom
-                        html += `   <div class="d-flex flex-row w100" style="">
-                                        <p class="gral-font w50">2ND CONTACT:</p>
-                                        <p class="gral-font w50">
-                                            <img src="{{asset('img/icons8-zoom-48.png')}}" width="20" height="20" alt="zoom"></img>
-                                            ${response[0].segundo_zoom}
-                                        </p>
-                                    </div>
-                        `;
-                    } else { // Null
-                        html += `   <div class="d-flex flex-row w100" style="">
-                                        <p class="gral-font w50">2ND CONTACT:</p>
-                                        <p class="gral-font w50"></p>
-                                    </div>
-                        `;
-                    }
+                    // html += `<p class="gral-font center-align margin-y">SESSION INFO</p>`;
+
+
+                    // if (response[0].id_primer_contacto == 1) { // Phone
+                    //     html += `   <div class="d-flex flex-row w100" style="">
+                    //                     <p class="gral-font w50">1ST CONTACT:</p>
+                    //                     <p class="gral-font w50">
+                    //                         <img src="{{asset('img/icons8-phone-48.png')}}" width="20" height="20" alt="phone"></img>
+                    //                         ${response[0].primer_telefono}
+                    //                     </p>
+                    //                 </div>
+                    //     `;
+                    // } else if (response[0].id_primer_contacto == 2) { // Whatsapp-Celular
+                    //     html += `   <div class="d-flex flex-row w100" style="">
+                    //                     <p class="gral-font w50">1ST CONTACT:</p>
+                    //                     <p class="gral-font w50">
+                    //                         <img src="{{asset('img/icons8-whatsapp-48.png')}}" width="20" height="20" alt="whatsapp"></img>
+                    //                         ${response[0].primer_celular}
+                    //                     </p>
+                    //                 </div>
+                    //     `;
+                    // } else if (response[0].id_primer_contacto == 3) { // Skype
+                    //     html += `   <div class="d-flex flex-row w100" style="">
+                    //                     <p class="gral-font w50">1ST CONTACT:</p>
+                    //                     <p class="gral-font w50">
+                    //                         <img src="{{asset('img/icons8-skype-48.png')}}" width="20" height="20" alt="skype"></img>
+                    //                         ${response[0].primer_skype}
+                    //                     </p>
+                    //                 </div>
+                    //     `;
+                    // } else if (response[0].id_primer_contacto == 4) { // Email
+                    //     html += `   <div class="d-flex flex-row w100" style="">
+                    //                     <p class="gral-font w50">1ST CONTACT:</p>
+                    //                     <p class="gral-font w50">
+                    //                         <img src="{{asset('img/icons8-email-48.png')}}" width="20" height="20" alt="email"></img>
+                    //                         ${response[0].primer_correo}
+                    //                     </p>
+                    //                 </div>
+                    //     `;
+                    // } else if (response[0].id_primer_contacto == 5) { // Zoom
+                    //     html += `   <div class="d-flex flex-row w100" style="">
+                    //                     <p class="gral-font w50">1ST CONTACT:</p>
+                    //                     <p class="gral-font w50">
+                    //                         <img src="{{asset('img/icons8-zoom-48.png')}}" width="20" height="20" alt="zoom"></img>
+                    //                         ${response[0].primer_zoom}
+                    //                     </p>
+                    //                 </div>
+                    //     `;
+                    // } else { // Null
+                    //     html += `   <div class="d-flex flex-row w100" style="">
+                    //                     <p class="gral-font w50">1ST CONTACT:</p>
+                    //                     <p class="gral-font w50"></p>
+                    //                 </div>
+                    //     `;
+                    // }
+
+                    // ==============================================
+
+                    // if (response[0].id_segundo_contacto == 1) { // Phone
+                    //     html += `   <div class="d-flex flex-row w100" style="">
+                    //                     <p class="gral-font w50">2ND CONTACT:</p>
+                    //                     <p class="gral-font w50">
+                    //                         <img src="{{asset('img/icons8-phone-48.png')}}" width="20" height="20" alt="phone"></img>
+                    //                         ${response[0].segundo_telefono}
+                    //                     </p>
+                    //                 </div>
+                    //     `;
+                    // } else if (response[0].id_segundo_contacto == 2) { // Whatsapp-Celular
+                    //     html += `   <div class="d-flex flex-row w100" style="">
+                    //                     <p class="gral-font w50">2ND CONTACT:</p>
+                    //                     <p class="gral-font w50">
+                    //                         <img src="{{asset('img/icons8-whatsapp-48.png')}}" width="20" height="20" alt="whatsapp"></img>
+                    //                         ${response[0].segundo_celular}
+                    //                     </p>
+                    //                 </div>
+                    //     `;
+                    // } else if (response[0].id_segundo_contacto == 3) { // Skype
+                    //     html += `   <div class="d-flex flex-row w100" style="">
+                    //                     <p class="gral-font w50">2ND CONTACT:</p>
+                    //                     <p class="gral-font w50">
+                    //                         <img src="{{asset('img/icons8-skype-48.png')}}" width="20" height="20" alt="skype"></img>
+                    //                         ${response[0].segundo_skype}
+                    //                     </p>
+                    //                 </div>
+                    //     `;
+                    // } else if (response[0].id_segundo_contacto == 4) { // Email
+                    //     html += `   <div class="d-flex flex-row w100" style="">
+                    //                     <p class="gral-font w50">2ND CONTACT:</p>
+                    //                     <p class="gral-font w50">
+                    //                         <img src="{{asset('img/icons8-email-48.png')}}" width="20" height="20" alt="email"></img>
+                    //                         ${response[0].segundo_correo}
+                    //                     </p>
+                    //                 </div>
+                    //     `;
+                    // } else if (response[0].id_segundo_contacto == 5) { // Zoom
+                    //     html += `   <div class="d-flex flex-row w100" style="">
+                    //                     <p class="gral-font w50">2ND CONTACT:</p>
+                    //                     <p class="gral-font w50">
+                    //                         <img src="{{asset('img/icons8-zoom-48.png')}}" width="20" height="20" alt="zoom"></img>
+                    //                         ${response[0].segundo_zoom}
+                    //                     </p>
+                    //                 </div>
+                    //     `;
+                    // } else { // Null
+                    //     html += `   <div class="d-flex flex-row w100" style="">
+                    //                     <p class="gral-font w50">2ND CONTACT:</p>
+                    //                     <p class="gral-font w50"></p>
+                    //                 </div>
+                    //     `;
+                    // }
 
                     // ==============================================
 

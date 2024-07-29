@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Traits\MetodosTrait;
 use App\Models\entrenador\DisponibilidadEntrenadores;
 use App\Models\entrenador\EventoAgendaEntrenador;
+use App\Models\estudiante\Paquete;
 use App\Http\Responses\administrador\DisponibilidadShow;
 use App\Http\Responses\estudiante\ReservarClase;
 use App\Http\Responses\estudiante\CancelarClase;
@@ -140,6 +141,23 @@ class EstudianteController extends Controller
     {
         //
     }
+    
+    // ==============================================================
+    // ==============================================================
+
+    private function shareData()
+    {
+        $paquetes = Paquete::orderBy('nombre_paquete', 'asc')->get()->mapWithKeys(function ($paquete) {
+            return [$paquete->id_paquete => $paquete->nombre_paquete . ' - ' .$paquete->valor_paquete];
+        });
+    
+        view()->share('paquetes', $paquetes);
+
+        // view()->share('paquetes', Paquete::orderBy('nombre_paquete','asc')->pluck('nombre_paquete', 'id_paquete'));
+    }
+    
+    // ==============================================================
+    // ==============================================================
 
     public function disponibilidadEntrenadores()
     {
@@ -260,7 +278,8 @@ class EstudianteController extends Controller
                     ->count();
                     
                     // ==============================================
-    
+
+                    $this->shareData();
                     return view($vista, compact('misCreditos', 'totalCreditosDisponibles'));
                 }
             }
