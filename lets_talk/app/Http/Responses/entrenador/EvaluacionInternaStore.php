@@ -17,6 +17,11 @@ class EvaluacionInternaStore implements Responsable
 
     public function toResponse($request)
     {
+        $request->validate([
+            'evaluacion_interna' => 'required|string',
+            'archivo_evaluacion' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048', // tamaño máximo de archivo de 2MB
+        ]);
+
         $evaluacionInterna = request('evaluacion_interna', null);
         $idEstudiante = request('id_estudiante', null);
         $idInstructor = session('usuario_id');
@@ -25,7 +30,6 @@ class EvaluacionInternaStore implements Responsable
         $carpetaArchivos = '/upfiles/evaluacion_interna';
         $fechaActual = Carbon::now()->format('d-m-Y_H_i_s');
         $fileName = $fechaActual.'-'.$idInstructor.'-'.$idEstudiante;
-        // dd($fileName,$evaluacionInterna,$idEstudiante,$idInstructor,$archivoEvaluacion);
         
         DB::connection('mysql')->beginTransaction();
         
@@ -36,8 +40,6 @@ class EvaluacionInternaStore implements Responsable
             } else {
                 $archivoEvaluacion = null;
             }
-
-            dd($fileName,$evaluacionInterna,$idEstudiante,$idInstructor,$archivoEvaluacion);
 
             $evaluacionInternaCreate = EvaluacionInterna::create([
                 'evaluacion_interna' => $evaluacionInterna,

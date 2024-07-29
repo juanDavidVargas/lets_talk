@@ -187,7 +187,7 @@
                     },
                 ]
             });
-        });
+        }); // FIN Document.ready
 
         // ===================================================
 
@@ -291,12 +291,13 @@
                     // ==============================================
 
                     html += `   <p class="gral-font margin-y">INTERNAL EVALUATION (NOTES)</p>`;
-                    html += `   {!! Form::open(['method' => 'POST', 'route' => ['evaluacion_interna_entrenador'],'class'=>['form-horizontal form-bordered', 'enctype' => 'multipart/form-data']]) !!}`;
+                    html += `   {!! Form::open(['method' => 'POST', 'route' => ['evaluacion_interna_entrenador'],'class'=>['form-horizontal form-bordered'], 'enctype' => 'multipart/form-data']) !!}`;
                     html += `   @csrf`;
                     html += `       <input type="hidden" name="id_estudiante" id="id_estudiante" value="${response[0].id_user}"/>`;
                     html += `       <textarea name="evaluacion_interna" class="w100" rows="10" required></textarea>`;
-                    html += `    <div class="div-file" style="margin-top:5rem">
+                    html += `   <div class="div-file" style="margin-top:5rem">
                                     <input type="file" name="archivo_evaluacion" id="archivo_evaluacion" class="" />
+                                    <p id="fileError" style="color: red; display: none;">Please upload a valid PDF or image file.</p>
                                 </div>
                     `;
                     html += `   <div class="margin-top flex flex-end">
@@ -323,6 +324,10 @@
                         padding: '5em',
                         background: '#fff',
                     });
+
+                    // ==========================================================
+                    // ==========================================================
+                    // ==========================================================
 
                     $('#old_valuation').on('click', function ()
                     {
@@ -415,6 +420,6 @@
                     })
                 }
             });
-        }
+        } // FIN seeDetails(idSesion,idUser)
     </script>
 @endsection
