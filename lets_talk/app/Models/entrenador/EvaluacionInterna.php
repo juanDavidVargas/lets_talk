@@ -14,5 +14,6 @@ class EvaluacionInterna extends Model
        'evaluacion_interna',
        'id_estudiante',
        'id_instructor',
+       'archivo_evaluacion'
     ];
 }
