@@ -191,8 +191,12 @@
 
         // ===================================================
 
-        function seeDetails(idSesion,idUser)
+        function seeDetails(idSesion,idEstudiante)
         {
+            console.log(idSesion);
+            console.log(idEstudiante);
+            // console.log(idInstructor);
+
             $.ajax({
                 async: true,
                 _token: "{{csrf_token()}}",
@@ -200,7 +204,9 @@
                 type: "POST",
                 dataType: "json",
                 data: {
-                    'id_user': idUser
+                    // 'id_clase': idSesion
+                    'id_estudiante': idEstudiante
+                    // 'id_instructor': idInstructor
                 },
                 // beforeSend: function()
                 // {
@@ -331,7 +337,7 @@
 
                     $('#old_valuation').on('click', function ()
                     {
-                        let idUserVal = $('#id_estudiante').val();
+                        let idEstudiante = $('#id_estudiante').val();
 
                         $.ajax({
                             async: true,
@@ -339,7 +345,9 @@
                             type: "POST",
                             dataType: "json",
                             data: {
-                                'id_estudiante': idUserVal
+                                // 'id_clase': idSesion,
+                                'id_estudiante': idEstudiante,
+                                // 'id_instructor': idInstructor
                             },
                             beforeSend: function() {
                                 $("#loaderGif").show();
@@ -370,22 +378,31 @@
                                 }
 
                                 html = ``;
-                                html += `<table border=1 style="border-collapse:separate !important" cellspacing="10" id="tbl_old_evaluation" >`;
+                                html += `<table border=1 style="border-collapse:separate !important; width:100%" cellspacing="10" id="tbl_old_evaluation" >`;
                                 html +=     `<thead>`;
                                 html +=         `<tr style="background-color: #21277B">`;
-                                html +=             `<th style="text-align:center;width:15%;color:white;font-size:18px;">STUDENT</th>`;
-                                html +=             `<th style="text-align:center;width:55%;color:white;font-size:18px;">NOTES</th>`;
-                                html +=             `<th style="text-align:center;width:15%;color:white;font-size:18px;">INSTRUCTOR</th>`;
-                                html +=             `<th style="text-align:center;width:15%;color:white;font-size:18px;">DATE</th>`;
+                                html +=             `<th style="text-align:center;width:15%;color:white;font-size:14px;">STUDENT</th>`;
+                                html +=             `<th style="text-align:center;width:37%;color:white;font-size:14px;">NOTES</th>`;
+                                html +=             `<th style="text-align:center;width:15%;color:white;font-size:14px;">INSTRUCTOR</th>`;
+                                html +=             `<th style="text-align:center;width:10%;color:white;font-size:14px;">CLASS DATE</th>`;
+                                html +=             `<th style="text-align:center;width:10%;color:white;font-size:14px;">EVIDENCE</th>`;
+                                html +=             `<th style="text-align:center;width:13%;color:white;font-size:14px;">EVALUATION</th>`;
                                 html +=         `</tr>`;
                                 html +=     `</thead>`;
                                 html +=     `<body>`;
                                                 response.forEach(element => {
                                                     html += `<tr>`;
                                                     html +=     `<td style="width:15%;font-size:12px;">${element.nombre_estudiante}</td>`;
-                                                    html +=     `<td style="width:55%;font-size:12px;" class="valuation">${element.evaluacion_interna}</td>`;
+                                                    html +=     `<td style="width:37%;font-size:12px;" class="valuation">${element.evaluacion_interna}</td>`;
                                                     html +=     `<td style="width:15%;font-size:12px;">${element.nombre_instructor}</td>`;
-                                                    html +=     `<td style="width:15%;font-size:12px;">${element.created_at}</td>`;
+                                                    html +=     `<td style="width:10%;font-size:12px;">${element.created_at}</td>`;
+
+                                                    if (element.archivo_evaluacion != null) {
+                                                        html +=     `<td style="width:10%;font-size:12px;"><a href="/storage/${element.archivo_evaluacion}" target="_blank" style="color:blue">File</a></td>`;
+                                                    } else {
+                                                        html +=     `<td style="width:10%;font-size:12px;"></td>`;
+                                                    }
+                                                    html +=     `<td style="width:13%;font-size:12px;">${element.created_at}</td>`;
                                                     html += `</tr>`;
                                                 });
                                 html +=     `</body>`;

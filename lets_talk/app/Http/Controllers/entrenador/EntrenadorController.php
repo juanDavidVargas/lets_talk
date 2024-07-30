@@ -264,9 +264,12 @@ class EntrenadorController extends Controller
         {
             return response()->json([404]);
         } else {
-            $idUser = $request->id_user;
+            // $idClase = $request->id_clase;
+            $idEstudiante = $request->id_estudiante;
+            // $idInstructor = $request->id_instructor;
             $trainerShow = new AgendaEntrenadorShow();
-            $query = $trainerShow->detalles($idUser);
+            $query = $trainerShow->detalles($idEstudiante);
+            // $query = $trainerShow->detalles($idClase,$idEstudiante,$idInstructor);
             return response()->json([$query]);
         }
     }
