@@ -130,7 +130,7 @@
                                 <td>{{$student->start_date}}</td>
                                 <td>{{$student->start_time}}</td>
                                 <td>
-                                    <button onclick="seeDetails({{$student->id_sesion}},{{$student->id_estudiante}})"
+                                    <button onclick="seeDetails({{$student->id_sesion}},{{$student->id_estudiante}},{{$student->id_instructor}})"
                                             class="text-white"
                                             style="backgroundcolor: #434C6A; padding:0.5rem;">SEE DETAILS
                                     </button>
@@ -191,10 +191,10 @@
 
         // ===================================================
 
-        function seeDetails(idSesion,idEstudiante)
+        function seeDetails(idSesion,idEstudiante,idInstructor)
         {
-            console.log(idSesion);
-            console.log(idEstudiante);
+            // console.log(idSesion);
+            // console.log(idEstudiante);
             // console.log(idInstructor);
 
             $.ajax({
@@ -300,6 +300,7 @@
                     html += `   {!! Form::open(['method' => 'POST', 'route' => ['evaluacion_interna_entrenador'],'class'=>['form-horizontal form-bordered'], 'enctype' => 'multipart/form-data']) !!}`;
                     html += `   @csrf`;
                     html += `       <input type="hidden" name="id_estudiante" id="id_estudiante" value="${response[0].id_user}"/>`;
+                    html += `       <input type="hidden" name="id_instructor" id="id_instructor" value="${response[0].id_instructor}"/>`;
                     html += `       <textarea name="evaluacion_interna" class="w100" rows="10" required></textarea>`;
                     html += `   <div class="div-file" style="margin-top:5rem">
                                     <input type="file" name="archivo_evaluacion" id="archivo_evaluacion" class="" />
@@ -337,7 +338,13 @@
 
                     $('#old_valuation').on('click', function ()
                     {
-                        let idEstudiante = $('#id_estudiante').val();
+                        let idEstudianteEvaluacion = idEstudiante;
+                        let idInstructorEvaluacion = idInstructor;
+                        let idSesionEvaluacion = idSesion;
+
+                        console.log(idEstudianteEvaluacion);
+                        console.log(idInstructorEvaluacion);
+                        console.log(idSesionEvaluacion);
 
                         $.ajax({
                             async: true,
@@ -345,14 +352,14 @@
                             type: "POST",
                             dataType: "json",
                             data: {
-                                // 'id_clase': idSesion,
-                                'id_estudiante': idEstudiante,
-                                // 'id_instructor': idInstructor
+                                'id_clase': idSesion,
+                                'id_estudiante': idEstudianteEvaluacion,
+                                'id_instructor': idInstructor
                             },
-                            beforeSend: function() {
-                                $("#loaderGif").show();
-                                $("#loaderGif").removeClass('ocultar');
-                            },
+                            // beforeSend: function() {
+                            //     $("#loaderGif").show();
+                            //     $("#loaderGif").removeClass('ocultar');
+                            // },
                             success: function(response) {
 
                                 if(response == 404) {

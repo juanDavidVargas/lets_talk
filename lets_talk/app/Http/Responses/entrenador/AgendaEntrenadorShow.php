@@ -184,7 +184,7 @@ class AgendaEntrenadorShow implements Responsable
                         'contactos.opcional_skype',
                         'contactos.opcional_zoom',
                         'reserva_estudiante.id_estudiante as id_estudiante',
-                        'reserva_instructor.id_instructor as id_instructor'
+                        'reserva_instructor.id_instructor as id_instructor',
                     )
                     ->where('usuarios.id_user', $idEstudiante)
                     ->where('usuarios.estado', 1)
@@ -193,11 +193,12 @@ class AgendaEntrenadorShow implements Responsable
                     ->first();
 
         } catch (Exception $e) {
+            dd($e);
             return response()->json("error_exception");
         }
     }
 
-    public function traerDatosEvalInterna($idEstudiante)
+    public function traerDatosEvalInterna($idEstudiante,$idInstructor,$idClase)
     {
         try
         {
@@ -208,7 +209,7 @@ class AgendaEntrenadorShow implements Responsable
                     ->leftjoin('reservas as reserva_estudiante', 'reserva_estudiante.id_estudiante', '=', 'estudiante.id_user')
                     ->leftjoin('reservas as reserva_instructor', 'reserva_instructor.id_instructor', '=', 'instructor.id_user')
                     ->where('evaluacion_interna.id_estudiante', $idEstudiante)
-                    ->where('evaluacion_interna.id_instructor', 13)
+                    ->where('evaluacion_interna.id_instructor', $idInstructor)
                     ->select(
                         DB::raw("CONCAT(estudiante.nombres, ' ', estudiante.apellidos) AS nombre_estudiante"),
                         'evaluacion_interna.evaluacion_interna',
