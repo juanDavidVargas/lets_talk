@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class CreateAudits extends Migration
 {
@@ -30,11 +31,11 @@ class CreateAudits extends Migration
                 $table->index(['user_id', 'user_type']);
         });
 
-        DB::table('audits')->update([
-            'user_type'  => \App\User::class,
-            'created_at' => DB::raw('created_at'),
-            'updated_at' => DB::raw('updated_at'),
-        ]); 
+        // DB::table('audits')->update([
+        //     'user_type'  => \App\User::class,
+        //     'created_at' => DB::raw('created_at'),
+        //     'updated_at' => DB::raw('updated_at'),
+        // ]);
     }
 
     /**
