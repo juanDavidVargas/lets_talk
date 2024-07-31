@@ -2,15 +2,20 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
-use OwenIt\Auditing\Auditable;
+// use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+// use OwenIt\Auditing\Auditable;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class User extends Authenticatable implements AuditableContract
+class User extends Authenticatable implements Auditable
+// class User extends Authenticatable implements AuditableContract
+// class User extends Model implements Auditable
 {
     use Notifiable;
-    use Auditable;
+    // use Auditable;
+    use \OwenIt\Auditing\Auditable;
 
     protected $connection = 'mysql';
     protected $table = 'usuarios';

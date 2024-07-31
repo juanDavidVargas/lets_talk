@@ -24,23 +24,13 @@ return [
     |
     */
 
-    // 'user'      => [
-    //     'morph_prefix' => 'user',
-    //     'guards'       => [
-    //         'web',
-    //         'api'
-    //     ],
-    //     'resolver'     => OwenIt\Auditing\Resolvers\UserResolver::class
-    // ],
-
-    'user' => [
-        'primary_key' => 'id',
-        'foreign_key' => 'user_id',
+    'user'      => [
         'morph_prefix' => 'user',
-        'guards' => [
+        'guards'       => [
             'web',
             'api'
         ],
+        'resolver'     => OwenIt\Auditing\Resolvers\UserResolver::class
     ],
 
     /*
@@ -51,17 +41,10 @@ return [
     | Define the IP Address, User Agent and URL resolver implementations.
     |
     */
-    // 'resolvers' => [
-    //     'ip_address' => OwenIt\Auditing\Resolvers\IpAddressResolver::class,
-    //     'user_agent' => OwenIt\Auditing\Resolvers\UserAgentResolver::class,
-    //     'url'        => OwenIt\Auditing\Resolvers\UrlResolver::class,
-    // ],
-
-    'resolver' => [
-        'user' => OwenIt\Auditing\Resolvers\UserResolver::class,
+    'resolvers' => [
         'ip_address' => OwenIt\Auditing\Resolvers\IpAddressResolver::class,
         'user_agent' => OwenIt\Auditing\Resolvers\UserAgentResolver::class,
-        'url' => OwenIt\Auditing\Resolvers\UrlResolver::class,
+        'url'        => OwenIt\Auditing\Resolvers\UrlResolver::class,
     ],
 
     /*
@@ -145,7 +128,7 @@ return [
     |
     */
 
-    'timestamps' => true,
+    'timestamps' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -211,5 +194,5 @@ return [
     |
     */
 
-    'console' => false,
+    'console' => true,
 ];
