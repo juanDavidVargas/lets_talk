@@ -279,8 +279,10 @@ class EstudianteController extends Controller
                     
                     // ==============================================
 
+                    $misSesiones = $this->misSesiones($idEstudiante);
+
                     $this->shareData();
-                    return view($vista, compact('misCreditos', 'totalCreditosDisponibles'));
+                    return view($vista, compact('misCreditos', 'totalCreditosDisponibles', 'misSesiones'));
                 }
             }
 

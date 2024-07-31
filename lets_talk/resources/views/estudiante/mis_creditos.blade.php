@@ -109,24 +109,35 @@
 
         // ===============================================
 
+        let misSesiones = @json($misSesiones);
+        console.log(misSesiones);
+
         function misCreditos() {
             html = ``;
-            html += `<table border=1 style="border-collapse:separate !important" cellspacing="10" id="tbl_old_evaluation" >`;
+            html += `<table border=1 style="border-collapse:separate !important; width:100%" cellspacing="10" id="tbl_historial_creditos" >`;
             html +=     `<thead>`;
             html +=         `<tr style="background-color: #21277B">`;
-            html +=             `<th style="text-align:center;width:55%;color:white;font-size:16px;">RESERVA CON</th>`;
-            html +=             `<th style="text-align:center;width:30%;color:white;font-size:16px;">FECHA</th>`;
-            html +=             `<th style="text-align:center;width:15%;color:white;font-size:16px;">HORA</th>`;
+            html +=             `<th style="text-align:center;width:55%;color:white;font-size:14px;">RESERVA CON</th>`;
+            html +=             `<th style="text-align:center;width:30%;color:white;font-size:14px;">FECHA</th>`;
+            html +=             `<th style="text-align:center;width:15%;color:white;font-size:14px;">HORA</th>`;
             html +=         `</tr>`;
             html +=     `</thead>`;
             html +=     `<body>`;
+                            misSesiones.forEach(sesion => {
+                                let nombre_instructor = sesion.nombre_instructor;
+                                let start_date = sesion.start_date;
+                                let start_time = sesion.start_time;
+
                                 html += `<tr>`;
-                                html +=     `<td style="width:55%;font-size:12px;">Sebastian Villamizar</td>`;
-                                html +=     `<td style="width:30%;font-size:12px;">Marzo 20, 2024</td>`;
-                                html +=     `<td style="width:15%;font-size:12px;">10:00</td>`;
+                                html +=     `<td style="width:55%;font-size:12px;">${nombre_instructor}</td>`;
+                                html +=     `<td style="width:30%;font-size:12px;">${start_date}</td>`;
+                                html +=     `<td style="width:15%;font-size:12px;">${start_time}</td>`;
                                 html += `</tr>`;
+                            });
             html +=     `</body>`;
             html += `<table>`;
+
+            // =====================================
 
             Swal.fire({
                 html: html,
@@ -144,13 +155,22 @@
                     cancelButton: {customClass:'swal2-cancel'}
                 }
             });
+
+            // =====================================
+
+            $('#tbl_historial_creditos').DataTable({
+                'paging'      : true,
+                'lengthChange': true,
+                'searching'   : true,
+                'ordering'    : false,
+                'responsive'  : true,
+            });
         }
 
         // =====================================================
 
-
         let paquetes = @json($paquetes);
-
+        
         function comprarCreditos() {
             html = '';
             html += `   <h3 class="gral-font margin-y">Comprar Créditos</h3>`;
