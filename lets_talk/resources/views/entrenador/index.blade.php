@@ -204,9 +204,9 @@
                 type: "POST",
                 dataType: "json",
                 data: {
-                    // 'id_clase': idSesion
-                    'id_estudiante': idEstudiante
-                    // 'id_instructor': idInstructor
+                    'id_clase': idSesion,
+                    'id_estudiante': idEstudiante,
+                    'id_instructor': idInstructor
                 },
                 // beforeSend: function()
                 // {
@@ -215,6 +215,8 @@
                 // },
                 success: function(response)
                 {
+                    console.log(response);
+
                     if(response[0].original == "error_exception")
                     {
                         $("#loaderGif").hide();
@@ -300,7 +302,7 @@
                     html += `   {!! Form::open(['method' => 'POST', 'route' => ['evaluacion_interna_entrenador'],'class'=>['form-horizontal form-bordered'], 'enctype' => 'multipart/form-data']) !!}`;
                     html += `   @csrf`;
                     html += `       <input type="hidden" name="id_estudiante" id="id_estudiante" value="${response[0].id_user}"/>`;
-                    html += `       <input type="hidden" name="id_instructor" id="id_instructor" value="${response[0].id_instructor}"/>`;
+                    html += `       <input type="hidden" name="id_trainer_horario" id="id_trainer_horario" value="${response[0].id_trainer_horario}"/>`;
                     html += `       <textarea name="evaluacion_interna" class="w100" rows="10" required></textarea>`;
                     html += `   <div class="div-file" style="margin-top:5rem">
                                     <input type="file" name="archivo_evaluacion" id="archivo_evaluacion" class="" />
@@ -402,8 +404,11 @@
                                                     html +=     `<td style="width:15%;font-size:12px;">${element.nombre_estudiante}</td>`;
                                                     html +=     `<td style="width:37%;font-size:12px;" class="valuation">${element.evaluacion_interna}</td>`;
                                                     html +=     `<td style="width:15%;font-size:12px;">${element.nombre_instructor}</td>`;
-                                                    html +=     `<td style="width:10%;font-size:12px;">${element.created_at}</td>`;
-
+                                                    if (element.fecha_clase != null) {
+                                                        html +=     `<td style="width:10%;font-size:12px;">${element.fecha_clase}</td>`;
+                                                    } else {
+                                                        html +=     `<td style="width:10%;font-size:12px;"></td>`;
+                                                    }
                                                     if (element.archivo_evaluacion != null) {
                                                         html +=     `<td style="width:10%;font-size:12px;"><a href="/storage/${element.archivo_evaluacion}" target="_blank" style="color:blue">File</a></td>`;
                                                     } else {

@@ -30,7 +30,6 @@ class AgendaEntrenadorShow implements Responsable
         try
         {
             $eventos = EventoAgendaEntrenador::leftjoin('usuarios','usuarios.id_user','=','evento_agenda_entrenador.id_instructor')
-                        // ->leftjoin('evaluacion_interna','evaluacion_interna.id_instructor','=','usuarios.id_user')
                         ->select(
                             'id',
                             'title',
@@ -47,7 +46,6 @@ class AgendaEntrenadorShow implements Responsable
                             'num_dia',
                             'clase_estado',
                             'usuarios.nombres',
-                            // 'archivo_evaluacion'
                         )
                         ->whereNull('evento_agenda_entrenador.deleted_at')
                         ->where('state', 1)
@@ -148,7 +146,7 @@ class AgendaEntrenadorShow implements Responsable
         }
     }
 
-    public function detalles($idEstudiante)
+    public function detalles($idClase,$idEstudiante,$idInstructor)
     {
         try {
             return DB::table('usuarios')
@@ -185,8 +183,10 @@ class AgendaEntrenadorShow implements Responsable
                         'contactos.opcional_zoom',
                         'reserva_estudiante.id_estudiante as id_estudiante',
                         'reserva_instructor.id_instructor as id_instructor',
+                        'reserva_estudiante.id_trainer_horario'
                     )
-                    ->where('usuarios.id_user', $idEstudiante)
+                    ->where('reserva_estudiante.id_estudiante', $idEstudiante)
+                    ->where('reserva_estudiante.id_trainer_horario', $idClase)
                     ->where('usuarios.estado', 1)
                     ->where('usuarios.id_rol', 3)
                     ->whereNull('usuarios.deleted_at')
@@ -202,21 +202,19 @@ class AgendaEntrenadorShow implements Responsable
     {
         try
         {
-
             return DB::table('evaluacion_interna')
                     ->leftjoin('usuarios as estudiante', 'estudiante.id_user', '=', 'evaluacion_interna.id_estudiante')
                     ->leftjoin('usuarios as instructor', 'instructor.id_user', '=', 'evaluacion_interna.id_instructor')
-                    ->leftjoin('reservas as reserva_estudiante', 'reserva_estudiante.id_estudiante', '=', 'estudiante.id_user')
-                    ->leftjoin('reservas as reserva_instructor', 'reserva_instructor.id_instructor', '=', 'instructor.id_user')
+                    ->leftjoin('evento_agenda_entrenador', 'evento_agenda_entrenador.id', '=', 'evaluacion_interna.id_trainer_horario')
                     ->where('evaluacion_interna.id_estudiante', $idEstudiante)
-                    ->where('evaluacion_interna.id_instructor', $idInstructor)
+                    ->where('evaluacion_interna.id_trainer_horario', $idClase)
                     ->select(
                         DB::raw("CONCAT(estudiante.nombres, ' ', estudiante.apellidos) AS nombre_estudiante"),
                         'evaluacion_interna.evaluacion_interna',
                         DB::raw("CONCAT(instructor.nombres, ' ', instructor.apellidos) AS nombre_instructor"),
                         'evaluacion_interna.created_at',
                         'archivo_evaluacion',
-                        // ''
+                        DB::raw("CONCAT(start_date, ' ', start_time) AS fecha_clase"),
                     )
                     ->orderBy('evaluacion_interna.created_at','DESC')
                     ->get();

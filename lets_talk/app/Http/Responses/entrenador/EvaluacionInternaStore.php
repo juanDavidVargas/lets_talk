@@ -25,7 +25,7 @@ class EvaluacionInternaStore implements Responsable
         $evaluacionInterna = request('evaluacion_interna', null);
         $idEstudiante = request('id_estudiante', null);
         $idInstructor = session('usuario_id');
-        $archivoEvaluacion = request('archivo_evaluacion', null);
+        $idTrainerHorario = request('id_trainer_horario', null);
         
         $carpetaArchivos = '/upfiles/evaluacion_interna';
         $fechaActual = Carbon::now()->format('d-m-Y_H_i_s');
@@ -45,7 +45,8 @@ class EvaluacionInternaStore implements Responsable
                 'evaluacion_interna' => $evaluacionInterna,
                 'id_estudiante' => $idEstudiante,
                 'id_instructor' => $idInstructor,
-                'archivo_evaluacion' => $archivoEvaluacion
+                'archivo_evaluacion' => $archivoEvaluacion,
+                'id_trainer_horario' => $idTrainerHorario
             ]);
 
             if ($evaluacionInternaCreate) {

@@ -264,12 +264,11 @@ class EntrenadorController extends Controller
         {
             return response()->json([404]);
         } else {
-            // $idClase = $request->id_clase;
             $idEstudiante = $request->id_estudiante;
-            // $idInstructor = $request->id_instructor;
+            $idInstructor = $request->id_instructor;
+            $idClase = $request->id_clase;
             $trainerShow = new AgendaEntrenadorShow();
-            $query = $trainerShow->detalles($idEstudiante);
-            // $query = $trainerShow->detalles($idClase,$idEstudiante,$idInstructor);
+            $query = $trainerShow->detalles($idClase,$idEstudiante,$idInstructor);
             return response()->json([$query]);
         }
     }
@@ -311,7 +310,6 @@ class EntrenadorController extends Controller
             $idEstudiante = intval($request->id_estudiante);
             $idInstructor = intval($request->id_instructor);
             $idClase = intval($request->id_clase);
-            // $idInstructor = intval($request->id_instructor); // Se habilita al estar listo el módulo de estudiante
             $trainerShow = new AgendaEntrenadorShow();
             return $trainerShow->traerDatosEvalInterna($idEstudiante,$idInstructor,$idClase);
         }
