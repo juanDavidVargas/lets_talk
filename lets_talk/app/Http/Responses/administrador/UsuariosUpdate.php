@@ -11,6 +11,7 @@ use App\Http\Responses\administrador\UsuariosShow;
 use Illuminate\Support\Facades\Hash;
 use App\Models\usuarios\Contacto;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class UsuariosUpdate implements Responsable
 {
@@ -18,6 +19,20 @@ class UsuariosUpdate implements Responsable
     public function toResponse($request)
     {
         Log::info('Current user:', ['user' => auth()->user()]);
+
+        $webUser = Auth::guard('web')->user();
+        $apiUser = Auth::guard('api')->user();
+
+        Log::info('Current web user:', ['user' => $webUser]);
+        Log::info('Current api user:', ['user' => $apiUser]);
+
+        Log::info('Request details:', [
+            'url' => $request->url(),
+            'method' => $request->method(),
+            'user' => auth()->user(),
+            'user_id' => auth()->id(),
+            'session' => $request->session()->all(),
+        ]);
 
         $usuarioShow = new UsuariosShow();
         $nombres = request('nombres', null);

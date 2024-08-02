@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Responses\administrador\UsuariosShow;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class UsuariosStore implements Responsable
 {
@@ -17,6 +18,12 @@ class UsuariosStore implements Responsable
     public function toResponse($request)
     {
         Log::info('Current user:', ['user' => auth()->user()]);
+
+        $webUser = Auth::guard('web')->user();
+        $apiUser = Auth::guard('api')->user();
+
+        Log::info('Current web user:', ['user' => $webUser]);
+        Log::info('Current api user:', ['user' => $apiUser]);
 
         $usuarioShow = new UsuariosShow();
         $nombres = request('nombres', null);

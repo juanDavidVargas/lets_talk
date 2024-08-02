@@ -34,10 +34,10 @@ return [
             'web',
             'api'
         ],
-        'resolver'  => function() {
-            return Auth::guard('web')->user() ?: Auth::guard('api')->user();
-        },
-        // 'resolver'  => OwenIt\Auditing\Resolvers\UserResolver::class
+        'resolver'  => OwenIt\Auditing\Resolvers\UserResolver::class
+        // 'resolver'  => function() {
+        //     return Auth::guard('web')->user() ?: Auth::guard('api')->user();
+        // },
         // 'user'      => OwenIt\Auditing\Resolvers\UserResolver::class,
     ],
 
