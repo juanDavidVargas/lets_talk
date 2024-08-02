@@ -9,11 +9,15 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Responses\administrador\UsuariosShow;
+use Illuminate\Support\Facades\Log;
 
 class UsuariosStore implements Responsable
 {
+    
     public function toResponse($request)
     {
+        Log::info('Current user:', ['user' => auth()->user()]);
+
         $usuarioShow = new UsuariosShow();
         $nombres = request('nombres', null);
         $apellidos = request('apellidos', null);

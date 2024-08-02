@@ -5,16 +5,17 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Log;
 // use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 // use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable;
 
+// class User extends Model implements Auditable
 class User extends Authenticatable implements Auditable
 // class User extends Authenticatable implements AuditableContract
-// class User extends Model implements Auditable
 {
     use Notifiable;
-    // use Auditable;
+    // use AuditingAuditable;
     use \OwenIt\Auditing\Auditable;
 
     protected $connection = 'mysql';
@@ -50,4 +51,17 @@ class User extends Authenticatable implements Auditable
     protected $hidden = [
         'password'
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            Log::info('Creating event: Current user:', ['user' => auth()->user()]);
+        });
+
+        static::updating(function ($model) {
+            Log::info('Updating event: Current user:', ['user' => auth()->user()]);
+        });
+    }
 }

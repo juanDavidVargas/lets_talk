@@ -10,11 +10,15 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Responses\administrador\UsuariosShow;
 use Illuminate\Support\Facades\Hash;
 use App\Models\usuarios\Contacto;
+use Illuminate\Support\Facades\Log;
 
 class UsuariosUpdate implements Responsable
 {
+    
     public function toResponse($request)
     {
+        Log::info('Current user:', ['user' => auth()->user()]);
+
         $usuarioShow = new UsuariosShow();
         $nombres = request('nombres', null);
         $apellidos = request('apellidos', null);
