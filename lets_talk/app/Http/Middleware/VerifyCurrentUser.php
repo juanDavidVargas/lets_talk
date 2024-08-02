@@ -6,8 +6,10 @@ use Closure;
 use Illuminate\Support\Facades\Log;
 use App\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
-class VerifyCurrentUser
+class VerifyCurrentUser extends Middleware
 {
     /**
      * Handle an incoming request.
@@ -19,6 +21,7 @@ class VerifyCurrentUser
     public function handle($request, Closure $next)
     {
         Log::info('Current user:', ['user' => auth()->user()]);
+        Log::info('CSRF token:', ['token' => $request->session()->token()]);
 
         // if (session()->has('usuario_id')) {
         //     $user = User::find(session('usuario_id'));

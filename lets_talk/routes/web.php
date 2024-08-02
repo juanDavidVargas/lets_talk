@@ -35,10 +35,7 @@ Route::get('storage-link', function(){
 
 // ============================================================
 
-// Route::group(['middleware' => ['auth']], function () {
-Route::group(['middleware' => ['verify.current.user']], function () {
-    // Route::group(['middleware' => ['verify.current.user', 'auth']], function () {
-// Route::middleware(['verify.current.user', 'auth'])->group(function () {
+Route::group(['middleware' => ['verify_current_user']], function () {
     // Rutas Login
     Route::resource('login', 'inicio_sesion\LoginController');
     Route::get('login_estudiante', 'inicio_sesion\LoginController@loginEstudiante')->name('login_estudiante');
@@ -49,11 +46,9 @@ Route::group(['middleware' => ['verify.current.user']], function () {
     Route::get('recovery_password_link/{id}', 'inicio_sesion\LoginController@recoveryPasswordLink')->name('recovery_password_link');
     Route::post('recovery_password_post', 'inicio_sesion\LoginController@recoveryPasswordPost')->name('recovery_password_post');
     Route::get('logout', 'inicio_sesion\LoginController@logout')->name('logout');
-// });
 
-// ============================================================
+    // ============================================================
 
-// Route::group(['middleware' => ['verify.current.user']], function () {
     // Rutas ADMINISTRADOR
     Route::resource('administrador', 'admin\AdministradorController');
     Route::post('cambiar_estado', 'admin\AdministradorController@cambiarEstadoUsuario')->name('cambiar_estado');
@@ -74,46 +69,47 @@ Route::group(['middleware' => ['verify.current.user']], function () {
     Route::post('activar_nivel', 'admin\AdministradorController@activarNivel')->name('activar_nivel');
     Route::post('consultar_nivel', 'admin\AdministradorController@consultarNivel')->name('consultar_nivel');
     Route::get('disponibilidades_libres', 'admin\AdministradorController@disponibilidadesLibres')->name('administrador.disponibilidades_libres');
+// });
+
+    // ============================================================
+
+    // Rutas ENTRENADOR
+    Route::resource('trainer', 'entrenador\EntrenadorController');
+    Route::post('cargar_eventos_entrenador', 'entrenador\EntrenadorController@cargarEventos')->name('cargar_eventos_entrenador');
+    Route::delete('eliminar_evento', 'entrenador\EntrenadorController@deleteEvent')->name('eliminar_evento');
+    Route::post('cargar_info_evento', 'entrenador\EntrenadorController@cargarInfoEventoPorId')->name('cargar_info_evento');
+    Route::post('detalle_sesion_entrenador', 'entrenador\EntrenadorController@cargaDetalleSesion')->name('detalle_sesion_entrenador');
+    Route::post('evaluacion_interna_entrenador', 'entrenador\EntrenadorController@evaluacionInternaEntrenador')->name('evaluacion_interna_entrenador');
+    Route::post('consulta_evaluacion_interna', 'entrenador\EntrenadorController@consultaEvaluacionInterna')->name('consulta_evaluacion_interna');
+    Route::post('actualizacion_masiva_diponibilidades', 'entrenador\EntrenadorController@actualizacionMasivaDiponibilidades')->name('actualizacion_masiva_diponibilidades');
+    Route::get('student_resume', 'entrenador\EntrenadorController@studentResume')->name('student_resume');
+    Route::post('estudiante_hoja_vida', 'entrenador\EntrenadorController@estudianteHojaVida')->name('estudiante_hoja_vida');
+
+    // ============================================================
+
+    // Rutas ESTUDIANTE
+    Route::resource('estudiante', 'estudiante\EstudianteController');
+    Route::get('disponibilidad', 'estudiante\EstudianteController@disponibilidadEntrenadores')->name('estudiante.disponibilidad');
+    Route::get('mis_creditos', 'estudiante\EstudianteController@misCreditos')->name('estudiante.mis_creditos');
+    Route::get('creditos_disponibles', 'estudiante\EstudianteController@creditosDisponibles')->name('estudiante.creditos_disponibles');
+    Route::post('comprar_creditos', 'estudiante\EstudianteController@comprarCreditos')->name('estudiante.comprar_creditos');
+    Route::post('reservar_clase', 'estudiante\EstudianteController@reservarClase')->name('estudiante.reservar_clase');
+    Route::post('cancelar_clase', 'estudiante\EstudianteController@cancelarClase')->name('estudiante.cancelar_clase');
+
+    // Rutas de Autenticación de Google
+    Route::get('/auth/google', 'estudiante\EstudianteController@redirectToGoogle')->name('auth.google');
+    Route::get('/auth/google/callback/reservar', 'estudiante\EstudianteController@handleGoogleCallbackReservar');
+    Route::get('/auth/google/callback/cancelar', 'estudiante\EstudianteController@handleGoogleCallbackCancelar');
+    Route::get('/create-meet', 'estudiante\EstudianteController@createMeet')->name('createMeet');
+
+    // ============================================================
+
+    // Rutas FOOTER
+    Route::get('about_us', 'comunes\ComunController@aboutUs')->name('about_us');
+    Route::get('services', 'comunes\ComunController@services')->name('services');
+
+    // ============================================================
 });
-
-// ============================================================
-
-// Rutas ENTRENADOR
-Route::resource('trainer', 'entrenador\EntrenadorController');
-Route::post('cargar_eventos_entrenador', 'entrenador\EntrenadorController@cargarEventos')->name('cargar_eventos_entrenador');
-Route::delete('eliminar_evento', 'entrenador\EntrenadorController@deleteEvent')->name('eliminar_evento');
-Route::post('cargar_info_evento', 'entrenador\EntrenadorController@cargarInfoEventoPorId')->name('cargar_info_evento');
-Route::post('detalle_sesion_entrenador', 'entrenador\EntrenadorController@cargaDetalleSesion')->name('detalle_sesion_entrenador');
-Route::post('evaluacion_interna_entrenador', 'entrenador\EntrenadorController@evaluacionInternaEntrenador')->name('evaluacion_interna_entrenador');
-Route::post('consulta_evaluacion_interna', 'entrenador\EntrenadorController@consultaEvaluacionInterna')->name('consulta_evaluacion_interna');
-Route::post('actualizacion_masiva_diponibilidades', 'entrenador\EntrenadorController@actualizacionMasivaDiponibilidades')->name('actualizacion_masiva_diponibilidades');
-Route::get('student_resume', 'entrenador\EntrenadorController@studentResume')->name('student_resume');
-Route::post('estudiante_hoja_vida', 'entrenador\EntrenadorController@estudianteHojaVida')->name('estudiante_hoja_vida');
-
-// ============================================================
-
-// Rutas ESTUDIANTE
-Route::resource('estudiante', 'estudiante\EstudianteController');
-Route::get('disponibilidad', 'estudiante\EstudianteController@disponibilidadEntrenadores')->name('estudiante.disponibilidad');
-Route::get('mis_creditos', 'estudiante\EstudianteController@misCreditos')->name('estudiante.mis_creditos');
-Route::get('creditos_disponibles', 'estudiante\EstudianteController@creditosDisponibles')->name('estudiante.creditos_disponibles');
-Route::post('comprar_creditos', 'estudiante\EstudianteController@comprarCreditos')->name('estudiante.comprar_creditos');
-Route::post('reservar_clase', 'estudiante\EstudianteController@reservarClase')->name('estudiante.reservar_clase');
-Route::post('cancelar_clase', 'estudiante\EstudianteController@cancelarClase')->name('estudiante.cancelar_clase');
-
-// Rutas de Autenticación de Google
-Route::get('/auth/google', 'estudiante\EstudianteController@redirectToGoogle')->name('auth.google');
-Route::get('/auth/google/callback/reservar', 'estudiante\EstudianteController@handleGoogleCallbackReservar');
-Route::get('/auth/google/callback/cancelar', 'estudiante\EstudianteController@handleGoogleCallbackCancelar');
-Route::get('/create-meet', 'estudiante\EstudianteController@createMeet')->name('createMeet');
-
-// ============================================================
-
-// Rutas FOOTER
-Route::get('about_us', 'comunes\ComunController@aboutUs')->name('about_us');
-Route::get('services', 'comunes\ComunController@services')->name('services');
-
-// ============================================================
 
 
 

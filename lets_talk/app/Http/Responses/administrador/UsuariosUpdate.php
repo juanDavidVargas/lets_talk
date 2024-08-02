@@ -18,21 +18,21 @@ class UsuariosUpdate implements Responsable
     
     public function toResponse($request)
     {
-        Log::info('Current user:', ['user' => auth()->user()]);
+        // Log::info('Current user:', ['user' => auth()->user()]);
 
-        $webUser = Auth::guard('web')->user();
-        $apiUser = Auth::guard('api')->user();
+        // $webUser = Auth::guard('web')->user();
+        // $apiUser = Auth::guard('api')->user();
 
-        Log::info('Current web user:', ['user' => $webUser]);
-        Log::info('Current api user:', ['user' => $apiUser]);
+        // Log::info('Current web user:', ['user' => $webUser]);
+        // Log::info('Current api user:', ['user' => $apiUser]);
 
-        Log::info('Request details:', [
-            'url' => $request->url(),
-            'method' => $request->method(),
-            'user' => auth()->user(),
-            'user_id' => auth()->id(),
-            'session' => $request->session()->all(),
-        ]);
+        // Log::info('Request details:', [
+        //     'url' => $request->url(),
+        //     'method' => $request->method(),
+        //     'user' => auth()->user(),
+        //     'user_id' => auth()->id(),
+        //     'session' => $request->session()->all(),
+        // ]);
 
         $usuarioShow = new UsuariosShow();
         $nombres = request('nombres', null);
@@ -279,6 +279,8 @@ class UsuariosUpdate implements Responsable
                 if($usuarioUpdate || $usuarioUpdateContacto)
                 {
                     DB::connection('mysql')->commit();
+                    // $user = Auth::user();
+                    // $request->session()->save();
                     alert()->success('Successfull Process', 'User updated correctly.');
                     return redirect()->to(route('administrador.index'));
 

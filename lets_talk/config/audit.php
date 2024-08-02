@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
-
 return [
 
     'enabled' => env('AUDITING_ENABLED', true),
@@ -26,19 +24,13 @@ return [
     |
     */
 
-    'user' => [
-        // 'primary_key' => 'id',
-        // 'foreign_key' => 'user_id',
+    'user'      => [
         'morph_prefix' => 'user',
-        'guards' => [
+        'guards'       => [
             'web',
-            'api'
+            'api',
         ],
-        'resolver'  => OwenIt\Auditing\Resolvers\UserResolver::class
-        // 'resolver'  => function() {
-        //     return Auth::guard('web')->user() ?: Auth::guard('api')->user();
-        // },
-        // 'user'      => OwenIt\Auditing\Resolvers\UserResolver::class,
+        'resolver' => OwenIt\Auditing\Resolvers\UserResolver::class
     ],
 
     /*
@@ -49,19 +41,11 @@ return [
     | Define the User, IP Address, User Agent and URL resolver implementations.
     |
     */
-
-    'resolver' => [
-        // 'user'       => OwenIt\Auditing\Resolvers\UserResolver::class,
+    'resolvers' => [
         'ip_address' => OwenIt\Auditing\Resolvers\IpAddressResolver::class,
         'user_agent' => OwenIt\Auditing\Resolvers\UserAgentResolver::class,
         'url'        => OwenIt\Auditing\Resolvers\UrlResolver::class,
     ],
-
-    // 'resolvers' => [
-    //     'ip_address' => OwenIt\Auditing\Resolvers\IpAddressResolver::class,
-    //     'user_agent' => OwenIt\Auditing\Resolvers\UserAgentResolver::class,
-    //     'url'        => OwenIt\Auditing\Resolvers\UrlResolver::class,
-    // ],
 
     /*
     |--------------------------------------------------------------------------

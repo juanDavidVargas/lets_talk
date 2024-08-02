@@ -109,6 +109,9 @@ class UsuariosStore implements Responsable
 
                     alert()->success('Successful Process', 'User successfully created, the user name is: '
                                         . $nuevo_usuario->usuario . ' and the password is you document number');
+
+                    // $user = Auth::user();
+                    // $request->session()->save();
                     return redirect()->to(route('administrador.index'));
 
                 } else {

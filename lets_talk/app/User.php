@@ -52,16 +52,16 @@ class User extends Authenticatable implements Auditable
         'password'
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
+    // protected static function boot()
+    // {
+    //     parent::boot();
 
-        static::creating(function ($model) {
-            Log::info('Creating event: Current user:', ['user' => auth()->user()]);
-        });
+    //     static::creating(function ($model) {
+    //         Log::info('Creating event: Current user:', ['user' => auth()->user()]);
+    //     });
 
-        static::updating(function ($model) {
-            Log::info('Updating event: Current user:', ['user' => auth()->user()]);
-        });
-    }
+    //     static::updating(function ($model) {
+    //         Log::info('Updating event: Current user:', ['user' => auth()->user()]);
+    //     });
+    // }
 }
