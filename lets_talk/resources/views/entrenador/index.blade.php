@@ -299,7 +299,7 @@
                     // ==============================================
 
                     html += `   <p class="gral-font margin-y">INTERNAL EVALUATION (NOTES)</p>`;
-                    html += `   {!! Form::open(['method' => 'POST', 'route' => ['evaluacion_interna_entrenador'],'class'=>['form-horizontal form-bordered'], 'enctype' => 'multipart/form-data']) !!}`;
+                    html += `   {!! Form::open(['method' => 'POST', 'route' => ['evaluacion_interna_entrenador'],'class'=>['form-horizontal form-bordered'],'id'=>'form_evaluacion', 'enctype'=>'multipart/form-data']) !!}`;
                     html += `   @csrf`;
                     html += `       <input type="hidden" name="id_estudiante" id="id_estudiante" value="${response[0].id_user}"/>`;
                     html += `       <input type="hidden" name="id_trainer_horario" id="id_trainer_horario" value="${response[0].id_trainer_horario}"/>`;
@@ -332,6 +332,40 @@
                         width: 850,
                         padding: '5em',
                         background: '#fff',
+                    });
+
+                    // Validar el formulario
+                    formEvaluacionInterna = $('#form_evaluacion');
+
+                    formEvaluacionInterna.validate({
+                        rules: {
+                            evaluacion_interna:{
+                                required: true,
+                            },
+                            archivo_evaluacion: {
+                                required: false,
+                                filetype: true
+                            }
+                        },
+                        messages: {
+                            archivo_evaluacion: {
+                                filetype: "Please upload a valid PDF or image file (jpg, jpeg, png)."
+                            }
+                        },
+                        errorPlacement: function(error, element) {
+                            if (element.attr("name") == "archivo_evaluacion") {
+                                error.appendTo('#fileError');
+                            } else {
+                                error.insertAfter(element);
+                            }
+                        },
+                        // errorPlacement: function(error, element) {
+                        // if ( element.hasClass('datapicker') ){
+                        //         error.appendTo( element.closest("div.form-group") );
+                        //     }else{
+                        //         error.appendTo( element.parent() );
+                        //     }
+                        // }
                     });
 
                     // ==========================================================
