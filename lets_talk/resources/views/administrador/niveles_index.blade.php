@@ -168,19 +168,29 @@
                       The field Level Name is required
                     </div>
             `;
-            html +=     `<div class="div-level-name div-file">
-                            <input type="file" name="file_crear_nivel" id="file_crear_nivel" class="file" />
-                        </div>
+
+            // html +=     `<div class="div-level-name div-file">
+            //                 <input type="file" name="file_crear_nivel" id="file_crear_nivel" class="file" />
+            //             </div>
+            // `;
+
+            html += `       <div class="file-container" style="margin-top:5rem">
+                                <div class="div-file">
+                                    <input type="file" name="file_crear_nivel" id="file_crear_nivel" class="file" onchange="displaySelectedFile('file_crear_nivel', 'selected_file_crear_nivel')" />
+                                </div>
+                                <p id="fileError" style="color: red; display: none;">Please upload a valid PDF or image file.</p>
+                            </div>
             `;
+
             html += `<img  class="ocultar" src="{{asset('img/loading.gif')}}"
                             id="loading_ajax"
                             alt="loading..." />
-                    `;
+            `;
 
             html += `<div class="div-level-name">
                             <input type="button" value="Create Level" class="btn btn-primary" id="btn_crear_nivel">
                         </div>
-                    `;
+            `;
 
             Swal.fire({
                 title: 'Create Level',
@@ -414,6 +424,23 @@
                 cancelButtonText: 'Cancel',
                 allowOutsideClick: false,
             });
+        }
+
+        // ============================================
+
+        function displaySelectedFile(inputId, displayElementId) {
+            const input = document.getElementById(inputId);
+            const selectedFile = input.files[0];
+            const displayElement = document.getElementById(displayElementId);
+
+            if (selectedFile) {
+                const selectedFileName = selectedFile.name;
+                displayElement.textContent = selectedFileName;
+                displayElement.classList.remove('hidden');
+            } else {
+                displayElement.textContent = '';
+                displayElement.classList.add('hidden');
+            }
         }
     </script>
 @endsection

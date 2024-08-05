@@ -40,3 +40,4 @@
     <script src="{{ asset('js/jquery-2.1.3.min.js') }}"></script>
     {{-- <script src="{{ asset('js/jquery-2.2.4.min.js') }}"></script> --}}
     <script src="{{asset('js/jquery.validatev1.19.1.min.js')}}"></script>
+    {{-- <script src="{{asset('js/jquery.validatev1.19.5.min.js')}}"></script> --}}

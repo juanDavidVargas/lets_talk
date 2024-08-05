@@ -17,10 +17,10 @@ class EvaluacionInternaStore implements Responsable
 
     public function toResponse($request)
     {
-        $request->validate([
-            'evaluacion_interna' => 'required|string',
-            'archivo_evaluacion' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048', // tamaño máximo de archivo de 2MB
-        ]);
+        // $request->validate([
+        //     'evaluacion_interna' => 'required|string',
+        //     'archivo_evaluacion' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048', // tamaño máximo de archivo de 2MB
+        // ]);
 
         $evaluacionInterna = request('evaluacion_interna', null);
         $idEstudiante = request('id_estudiante', null);

@@ -304,10 +304,12 @@
                     html += `       <input type="hidden" name="id_estudiante" id="id_estudiante" value="${response[0].id_user}"/>`;
                     html += `       <input type="hidden" name="id_trainer_horario" id="id_trainer_horario" value="${response[0].id_trainer_horario}"/>`;
                     html += `       <textarea name="evaluacion_interna" class="w100" rows="10" required></textarea>`;
-                    html += `   <div class="div-file" style="margin-top:5rem">
-                                    <input type="file" name="archivo_evaluacion" id="archivo_evaluacion" class="" />
-                                    <p id="fileError" style="color: red; display: none;">Please upload a valid PDF or image file.</p>
-                                </div>
+                    html += `       <div class="file-container" style="margin-top:5rem">
+                                        <div class="div-file">
+                                            <input type="file" name="archivo_evaluacion" id="archivo_evaluacion" class="file" onchange="displaySelectedFile('archivo_evaluacion', 'selected_archivo_evaluacion')" />
+                                        </div>
+                                        <p id="fileError" style="color: red; display: none;">Please upload a valid PDF or image file.</p>
+                                    </div>
                     `;
                     html += `   <div class="margin-top flex flex-end">
                                     <button type="submit" class="btn-evaluation">SAVE EVALUATION</button>
@@ -334,39 +336,69 @@
                         background: '#fff',
                     });
 
-                    // Validar el formulario
-                    formEvaluacionInterna = $('#form_evaluacion');
-
-                    formEvaluacionInterna.validate({
-                        rules: {
-                            evaluacion_interna:{
-                                required: true,
-                            },
-                            archivo_evaluacion: {
-                                required: false,
-                                filetype: true
-                            }
-                        },
-                        messages: {
-                            archivo_evaluacion: {
-                                filetype: "Please upload a valid PDF or image file (jpg, jpeg, png)."
-                            }
-                        },
-                        errorPlacement: function(error, element) {
-                            if (element.attr("name") == "archivo_evaluacion") {
-                                error.appendTo('#fileError');
-                            } else {
-                                error.insertAfter(element);
-                            }
-                        },
-                        // errorPlacement: function(error, element) {
-                        // if ( element.hasClass('datapicker') ){
-                        //         error.appendTo( element.closest("div.form-group") );
-                        //     }else{
-                        //         error.appendTo( element.parent() );
+                    // $(document).ready(function()
+                    // {
+                        // Agregar método personalizado para validar el tipo de archivo
+                        // $.validator.addMethod("filetype", function(value, element) {
+                        //     if (element.files.length === 0) {
+                        //         return true; // No file selected, allow submit (if not required)
                         //     }
-                        // }
+                        //     var fileType = element.files[0].type;
+                        //     var allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+                        //     return allowedTypes.includes(fileType);
+                        // }, "Please upload a valid PDF or image file (jpg, jpeg, png).");
+                    // });
+
+                    $('#archivo_evaluacion').change(function() {
+                        var fileType = this.files[0].type;
+                        console.log('Selected file type:', fileType);
                     });
+
+                    $('#form_evaluacion').on('submit', function(e) {
+                        var archivoInput = $('#archivo_evaluacion');
+                        var fileType = archivoInput[0].files.length ? archivoInput[0].files[0].type : '';
+                        var allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+
+                        if (fileType && !allowedTypes.includes(fileType)) {
+                            e.preventDefault();
+                            $('#fileError').text('Please upload a valid PDF or image file (jpg, jpeg, png).').show();
+                        } else {
+                            $('#fileError').hide();
+                        }
+                    });
+
+                    // Validar el formulario
+                    // formEvaluacionInterna = $('#form_evaluacion');
+                    // // $('#form_evaluacion').validate({
+                    // formEvaluacionInterna.validate({
+                    //     rules: {
+                    //         evaluacion_interna:{
+                    //             required: true,
+                    //         },
+                    //         archivo_evaluacion: {
+                    //             required: false,
+                    //             filetype: true
+                    //         }
+                    //     },
+                    //     messages: {
+                    //         evaluacion_interna: {
+                    //             required: "This field is required."
+                    //         },
+                    //         archivo_evaluacion: {
+                    //             filetype: "Please upload a valid PDF or image file (jpg, jpeg, png)."
+                    //         }
+                    //     },
+                    //     errorPlacement: function(error, element) {
+                    //         if (element.attr("name") == "archivo_evaluacion") {
+                    //             error.appendTo('#fileError');
+                    //         } else {
+                    //             error.insertAfter(element);
+                    //         }
+                    //     },
+                    //     submitHandler: function(formEvaluacionInterna) {
+                    //         formEvaluacionInterna.submit(); // Submit the form
+                    //     }
+                    // });
 
                     // ==========================================================
                     // ==========================================================
@@ -484,5 +516,44 @@
                 }
             });
         } // FIN seeDetails(idSesion,idUser)
+
+        // ============================================
+
+        // function displaySelectedFile(inputId, displayElementId) {
+        //     const input = document.getElementById(inputId);
+        //     const selectedFile = input.files[0];
+        //     const displayElement = document.getElementById(displayElementId);
+
+        //     if (selectedFile) {
+        //         const selectedFileName = selectedFile.name;
+        //         displayElement.textContent = selectedFileName;
+        //         displayElement.classList.remove('hidden');
+        //     } else {
+        //         displayElement.textContent = '';
+        //         displayElement.classList.add('hidden');
+        //     }
+        // }
+
+        // function displaySelectedFile(inputId, displayId) {
+        //     var input = document.getElementById(inputId);
+        //     var display = document.getElementById(displayId);
+
+        //     if (input.files && input.files[0]) {
+        //         display.innerHTML = input.files[0].name;
+        //     } else {
+        //         display.innerHTML = "No file selected";
+        //     }
+        // }
+
+        function displaySelectedFile(inputId, displayId) {
+            var input = document.getElementById(inputId);
+            var display = document.getElementById(displayId);
+
+            if (input.files && input.files[0]) {
+                display.innerHTML = input.files[0].name;
+            } else {
+                display.innerHTML = "No file selected";
+            }
+        }
     </script>
 @endsection

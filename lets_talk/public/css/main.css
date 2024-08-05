@@ -508,12 +508,14 @@ iframe {
     color: #FFFFFF !important;
 }
 
-.div-file{
+/* ======================================== */
+
+/* .div-file{
   position: relative;
   display: inline-block;
-}
+} */
 
-.div-file::before {
+/* .div-file::before {
   background-color: #5678EF;
   color: white;
   display: flex;
@@ -527,14 +529,48 @@ iframe {
   top: 0;
   bottom: 0;
   font-size: 14px;
-}
+} */
 
-.div-file input[type="file"] {
+/* .div-file input[type="file"] {
   opacity: 0;
   width: 200px;
   height: 32px;
   display: inline-block;
+} */
+
+/* ======================================== */
+
+.file-container .div-file {
+  position: relative;
+  display: inline-block;
+  width: 50%;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
+
+.file-container .div-file::before {
+  background-color: #449D44;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3px;
+  content: 'Upload file';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  font-size: 14px;
+}
+
+.file {
+  opacity: 0;
+  height: 32px;
+  display: inline-block;
+}
+
+/* ======================================== */
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover{
   background-color: #337AB7 !important;
