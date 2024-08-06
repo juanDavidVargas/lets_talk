@@ -17,6 +17,15 @@ class NivelesUpdate implements Responsable
 
     public function toResponse($request)
     {
+        // $messages = [
+        //     'file_editar_nivel.file' => 'Por favor, sube un archivo PDF o imagen (jpg, jpeg, png).',
+        //     'file_editar_nivel.max' => 'El tamaño máximo permitido para el archivo es de 2MB.',
+        // ];
+
+        // $request->validate([
+        //     'file_editar_nivel' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        // ], $messages);
+
         $idNivel = intval(request('id_nivel', null));
         $newNameNivel = strtoupper(request('editar_nivel', null));
         $carpetaArchivos = '/upfiles/niveles';

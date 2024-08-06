@@ -318,14 +318,21 @@
                         </div>
                     `;
 
-            html +=     `<div class="div-file">
-                            <input type="file" name="file_editar_nivel" id="file_editar_nivel" class="file" />
+            // html +=     `<div class="div-file">
+            //                 <input type="file" name="file_editar_nivel" id="file_editar_nivel" class="file" />
+            //             </div>
+            // `;
+
+            html += `   <div class="file-container" style="margin-top:5rem">
+                            <div class="div-file">
+                                <input type="file" name="file_editar_nivel" id="file_editar_nivel" class="file" onchange="displaySelectedFile('file_editar_nivel', 'selected_file_editar_nivel')" />
+                            </div>
+                            <p id="fileError" style="color: red; display: none;">Please upload a valid PDF or image file.</p>
                         </div>
             `;
-            html += `<img  class="ocultar" src="{{asset('img/loading.gif')}}"
-                    id="loading_ajax"
-                    alt="loading..." />
-            `;
+
+            html += `<img class="ocultar" src="{{asset('img/loading.gif')}}" id="loading_ajax" alt="loading..." />`;
+
             html += `{!! Form::close() !!}`;
 
             Swal.fire({
@@ -358,6 +365,19 @@
     
                     } else
                     {
+                        // $('#form_edit_nivel').on('submit', function(e) {
+                        //     var archivoInput = $('#file_editar_nivel');
+                        //     var fileType = archivoInput[0].files.length ? archivoInput[0].files[0].type : '';
+                        //     var allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+
+                        //     if (fileType && !allowedTypes.includes(fileType)) {
+                        //         e.preventDefault();
+                        //         $('#fileError').text('Please upload a valid PDF or image file (jpg, jpeg, png).').show();
+                        //     } else {
+                        //         $('#fileError').hide();
+                        //     }
+                        // });
+                        
                         formulario.submit();
                     }
                 }

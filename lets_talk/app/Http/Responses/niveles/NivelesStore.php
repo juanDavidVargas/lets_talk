@@ -17,6 +17,15 @@ class NivelesStore implements Responsable
 
     public function toResponse($request)
     {
+        // $messages = [
+        //     'file_crear_nivel.file' => 'Por favor, sube un archivo PDF o imagen (jpg, jpeg, png).',
+        //     'file_crear_nivel.max' => 'El tamaño máximo permitido para el archivo es de 2MB.',
+        // ];
+
+        // $request->validate([
+        //     'file_crear_nivel' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        // ], $messages);
+
         $nuevoNivel = strtoupper(request('nuevo_crear_nivel', null));
 
         $validarNivel = Nivel::select('nivel_descripcion')
