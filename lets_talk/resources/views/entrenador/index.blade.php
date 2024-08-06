@@ -193,10 +193,6 @@
 
         function seeDetails(idSesion,idEstudiante,idInstructor)
         {
-            // console.log(idSesion);
-            // console.log(idEstudiante);
-            // console.log(idInstructor);
-
             $.ajax({
                 async: true,
                 _token: "{{csrf_token()}}",
@@ -336,19 +332,6 @@
                         background: '#fff',
                     });
 
-                    // $(document).ready(function()
-                    // {
-                        // Agregar método personalizado para validar el tipo de archivo
-                        // $.validator.addMethod("filetype", function(value, element) {
-                        //     if (element.files.length === 0) {
-                        //         return true; // No file selected, allow submit (if not required)
-                        //     }
-                        //     var fileType = element.files[0].type;
-                        //     var allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
-                        //     return allowedTypes.includes(fileType);
-                        // }, "Please upload a valid PDF or image file (jpg, jpeg, png).");
-                    // });
-
                     $('#archivo_evaluacion').change(function() {
                         var fileType = this.files[0].type;
                         console.log('Selected file type:', fileType);
@@ -366,39 +349,6 @@
                             $('#fileError').hide();
                         }
                     });
-
-                    // Validar el formulario
-                    // formEvaluacionInterna = $('#form_evaluacion');
-                    // // $('#form_evaluacion').validate({
-                    // formEvaluacionInterna.validate({
-                    //     rules: {
-                    //         evaluacion_interna:{
-                    //             required: true,
-                    //         },
-                    //         archivo_evaluacion: {
-                    //             required: false,
-                    //             filetype: true
-                    //         }
-                    //     },
-                    //     messages: {
-                    //         evaluacion_interna: {
-                    //             required: "This field is required."
-                    //         },
-                    //         archivo_evaluacion: {
-                    //             filetype: "Please upload a valid PDF or image file (jpg, jpeg, png)."
-                    //         }
-                    //     },
-                    //     errorPlacement: function(error, element) {
-                    //         if (element.attr("name") == "archivo_evaluacion") {
-                    //             error.appendTo('#fileError');
-                    //         } else {
-                    //             error.insertAfter(element);
-                    //         }
-                    //     },
-                    //     submitHandler: function(formEvaluacionInterna) {
-                    //         formEvaluacionInterna.submit(); // Submit the form
-                    //     }
-                    // });
 
                     // ==========================================================
                     // ==========================================================
@@ -519,40 +469,18 @@
 
         // ============================================
 
-        // function displaySelectedFile(inputId, displayElementId) {
-        //     const input = document.getElementById(inputId);
-        //     const selectedFile = input.files[0];
-        //     const displayElement = document.getElementById(displayElementId);
+        function displaySelectedFile(inputId, displayElementId) {
+            const input = document.getElementById(inputId);
+            const selectedFile = input.files[0];
+            const displayElement = document.getElementById(displayElementId);
 
-        //     if (selectedFile) {
-        //         const selectedFileName = selectedFile.name;
-        //         displayElement.textContent = selectedFileName;
-        //         displayElement.classList.remove('hidden');
-        //     } else {
-        //         displayElement.textContent = '';
-        //         displayElement.classList.add('hidden');
-        //     }
-        // }
-
-        // function displaySelectedFile(inputId, displayId) {
-        //     var input = document.getElementById(inputId);
-        //     var display = document.getElementById(displayId);
-
-        //     if (input.files && input.files[0]) {
-        //         display.innerHTML = input.files[0].name;
-        //     } else {
-        //         display.innerHTML = "No file selected";
-        //     }
-        // }
-
-        function displaySelectedFile(inputId, displayId) {
-            var input = document.getElementById(inputId);
-            var display = document.getElementById(displayId);
-
-            if (input.files && input.files[0]) {
-                display.innerHTML = input.files[0].name;
+            if (selectedFile) {
+                const selectedFileName = selectedFile.name;
+                displayElement.textContent = selectedFileName;
+                displayElement.classList.remove('hidden');
             } else {
-                display.innerHTML = "No file selected";
+                displayElement.textContent = '';
+                displayElement.classList.add('hidden');
             }
         }
     </script>

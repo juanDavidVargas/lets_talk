@@ -169,11 +169,6 @@
                     </div>
             `;
 
-            // html +=     `<div class="div-level-name div-file">
-            //                 <input type="file" name="file_crear_nivel" id="file_crear_nivel" class="file" />
-            //             </div>
-            // `;
-
             html += `       <div class="file-container" style="margin-top:5rem">
                                 <div class="div-file">
                                     <input type="file" name="file_crear_nivel" id="file_crear_nivel" class="file" onchange="displaySelectedFile('file_crear_nivel', 'selected_file_crear_nivel')" />
