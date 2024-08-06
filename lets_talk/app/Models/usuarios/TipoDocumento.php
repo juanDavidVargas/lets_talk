@@ -11,6 +11,6 @@ class TipoDocumento extends Model
     protected $primaryKey = 'id';
     public $timestamps = true;
     protected $fillable = [
-       'descripcion'
+       'descripcion', 'abreviatura'
     ];
 }

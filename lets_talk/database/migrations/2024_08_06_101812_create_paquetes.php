@@ -16,7 +16,8 @@ class CreatePaquetes extends Migration
         Schema::create('paquetes', function (Blueprint $table) {
             $table->increments('id_paquete');
             $table->string('nombre_paquete')->nullable();
-            $table->string('valor_paquete')->nullable();
+            $table->double('valor_paquete')->nullable();
+            $table->string('valor_letras_paquete')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

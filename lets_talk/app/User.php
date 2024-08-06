@@ -6,16 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Log;
-// use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
-// use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable;
+use App\Models\usuarios\TipoDocumento;
 
 // class User extends Model implements Auditable
 class User extends Authenticatable implements Auditable
 // class User extends Authenticatable implements AuditableContract
 {
     use Notifiable;
-    // use AuditingAuditable;
     use \OwenIt\Auditing\Auditable;
 
     protected $connection = 'mysql';
@@ -52,16 +50,8 @@ class User extends Authenticatable implements Auditable
         'password'
     ];
 
-    // protected static function boot()
-    // {
-    //     parent::boot();
-
-    //     static::creating(function ($model) {
-    //         Log::info('Creating event: Current user:', ['user' => auth()->user()]);
-    //     });
-
-    //     static::updating(function ($model) {
-    //         Log::info('Updating event: Current user:', ['user' => auth()->user()]);
-    //     });
-    // }
+    public function documento()
+    {
+        return $this->belongsTo(TipoDocumento::class, 'id_tipo_documento', 'id');
+    }
 }

@@ -65,155 +65,6 @@ class UsuariosUpdate implements Responsable
             $tipo_ingles = $id_tipo_ingles;
         }
 
-        // ==========================================================================
-        // ==========================================================================
-
-        $idPrimerContacto = request('id_primer_contacto', null);
-
-        if (isset($idPrimerContacto) && $idPrimerContacto != "-1") {
-            $idPrimerContacto = request('id_primer_contacto', null);
-
-            if ($idPrimerContacto == 1) { // Phone
-                $primerTelefono = request('primer_telefono', null);
-                $primerCelular = null;
-                $primerCorreo = null;
-                $primerSkype = null;
-                $primerZoom = null;
-            } elseif ($idPrimerContacto == 2) { // Whatsapp - Celular
-                $primerTelefono = null;
-                $primerCelular = request('primer_celular', null);
-                $primerCorreo = null;
-                $primerSkype = null;
-                $primerZoom = null;
-            } elseif ($idPrimerContacto == 3) { // Skype
-                $primerTelefono = null;
-                $primerCelular = null;
-                $primerCorreo = null;
-                $primerSkype = request('primer_skype', null);
-                $primerZoom = null;
-            }
-            elseif ($idPrimerContacto == 4) { // Email
-                $primerTelefono = null;
-                $primerCelular = null;
-                $primerCorreo = request('primer_correo', null);
-                $primerSkype = null;
-                $primerZoom = null;
-            } else { // Zoom
-                $primerTelefono = null;
-                $primerCelular = null;
-                $primerCorreo = null;
-                $primerSkype = null;
-                $primerZoom = request('primer_zoom', null);
-            }
-        } else {
-            $idPrimerContacto = null;
-            $primerTelefono = null;
-            $primerCelular = null;
-            $primerCorreo = null;
-            $primerSkype = null;
-            $primerZoom = null;
-        }
-
-        // =====================================
-
-        $idSegundoContacto = request('id_segundo_contacto', null);
-
-        if (isset($idSegundoContacto) && $idSegundoContacto != "-1") {
-            $idSegundoContacto = request('id_segundo_contacto', null);
-
-            if ($idSegundoContacto == 1) { // Phone
-                $segundoTelefono = request('segundo_telefono', null);
-                $segundoCelular = null;
-                $segundoCorreo = null;
-                $segundoSkype = null;
-                $segundoZoom = null;
-            } elseif ($idSegundoContacto == 2) { // Whatsapp - Celular
-                $segundoTelefono = null;
-                $segundoCelular = request('segundo_celular', null);
-                $segundoCorreo = null;
-                $segundoSkype = null;
-                $segundoZoom = null;
-            } elseif ($idSegundoContacto == 3) { // Skype
-                $segundoTelefono = null;
-                $segundoCelular = null;
-                $segundoCorreo = null;
-                $segundoSkype = request('segundo_skype', null);
-                $segundoZoom = null;
-            }
-            elseif ($idSegundoContacto == 4) { // Email
-                $segundoTelefono = null;
-                $segundoCelular = null;
-                $segundoCorreo = request('segundo_correo', null);
-                $segundoSkype = null;
-                $segundoZoom = null;
-            } else { // Zoom
-                $segundoTelefono = null;
-                $segundoCelular = null;
-                $segundoCorreo = null;
-                $segundoSkype = null;
-                $segundoZoom = request('segundo_zoom', null);
-            }
-        } else {
-            $idSegundoContacto = null;
-            $segundoTelefono = null;
-            $segundoCelular = null;
-            $segundoCorreo = null;
-            $segundoSkype = null;
-            $segundoZoom = null;
-        }
-
-        // =====================================
-
-        $idOpcionalContacto = request('id_opcional_contacto', null);
-        $opcionalZoom = request('opcional_zoom', null);
-
-        if (isset($idOpcionalContacto) && $idOpcionalContacto != "-1") {
-            $idOpcionalContacto = request('id_opcional_contacto', null);
-
-            if ($idOpcionalContacto == 1) { // Phone
-                $opcionalTelefono = request('opcional_telefono', null);
-                $opcionalCelular = null;
-                $opcionalCorreo = null;
-                $opcionalSkype = null;
-                $opcionalZoom = null;
-            } elseif ($idOpcionalContacto == 2) { // Whatsapp - Celular
-                $opcionalTelefono = null;
-                $opcionalCelular = request('opcional_celular', null);
-                $opcionalCorreo = null;
-                $opcionalSkype = null;
-                $opcionalZoom = null;
-            } elseif ($idOpcionalContacto == 3) { // Skype
-                $opcionalTelefono = null;
-                $opcionalCelular = null;
-                $opcionalCorreo = null;
-                $opcionalSkype = request('opcional_skype', null);
-                $opcionalZoom = null;
-            }
-            elseif ($idOpcionalContacto == 4) { // Email
-                $opcionalTelefono = null;
-                $opcionalCelular = null;
-                $opcionalCorreo = request('opcional_correo', null);
-                $opcionalSkype = null;
-                $opcionalZoom = null;
-            } else { // Zoom
-                $opcionalTelefono = null;
-                $opcionalCelular = null;
-                $opcionalCorreo = null;
-                $opcionalSkype = null;
-                $opcionalZoom = request('opcional_zoom', null);
-            }
-        } else {
-            $idOpcionalContacto = null;
-            $opcionalTelefono = null;
-            $opcionalCelular = null;
-            $opcionalCorreo = null;
-            $opcionalSkype = null;
-            $opcionalZoom = null;
-        }
-
-        // ==========================================================================
-        // ==========================================================================
-
         // Consultamos si ya existe un usuario con la cedula ingresada
         $consulta_cedula = $usuarioShow->consultarCedula2($numero_documento, $id_user);
 
@@ -279,8 +130,6 @@ class UsuariosUpdate implements Responsable
                 if($usuarioUpdate || $usuarioUpdateContacto)
                 {
                     DB::connection('mysql')->commit();
-                    // $user = Auth::user();
-                    // $request->session()->save();
                     alert()->success('Successfull Process', 'User updated correctly.');
                     return redirect()->to(route('administrador.index'));
 
@@ -292,7 +141,6 @@ class UsuariosUpdate implements Responsable
 
             } catch (Exception $e)
             {
-                // dd($e);
                 DB::connection('mysql')->rollback();
                 alert()->error('Error', 'An error occurred updating the user, try again, if the problem persists contact support.');
                 return back();
@@ -360,8 +208,6 @@ class UsuariosUpdate implements Responsable
             return response()->json(0);
         }
     }
-
-    // ======================================================
 
     public function consultarUserUpdate($idUser)
     {

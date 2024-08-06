@@ -123,7 +123,6 @@ class UsuariosStore implements Responsable
             } catch (Exception $e)
             {
                 DB::connection('mysql')->rollback();
-                dd($e);
                 alert()->error('Error', 'An error has occurred creating the user, try again,
                                         if the problem persists contact support.');
                 return back();

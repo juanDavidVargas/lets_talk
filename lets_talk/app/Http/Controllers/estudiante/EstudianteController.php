@@ -148,12 +148,10 @@ class EstudianteController extends Controller
     private function shareData()
     {
         $paquetes = Paquete::orderBy('nombre_paquete', 'asc')->get()->mapWithKeys(function ($paquete) {
-            return [$paquete->id_paquete => $paquete->nombre_paquete . ' - ' .$paquete->valor_paquete];
+            return [$paquete->id_paquete => $paquete->nombre_paquete . ' - ' .$paquete->valor_letras_paquete];
         });
     
         view()->share('paquetes', $paquetes);
-
-        // view()->share('paquetes', Paquete::orderBy('nombre_paquete','asc')->pluck('nombre_paquete', 'id_paquete'));
     }
     
     // ==============================================================
@@ -287,14 +285,10 @@ class EstudianteController extends Controller
             }
 
         } catch (Exception $e) {
-            dd($e);
             return response()->json(['error' => $e->getMessage()]);
         }
     }
 
-    // ==============================================================
-    // ==============================================================
-    
     public function creditosDisponibles(Request $request)
     {
         try {
@@ -317,9 +311,6 @@ class EstudianteController extends Controller
             return response()->json("error_exception");
         }
     }
-
-    // ==============================================================
-    // ==============================================================
 
     public function comprarCreditos(Request $request)
     {

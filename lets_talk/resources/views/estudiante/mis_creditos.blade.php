@@ -107,10 +107,7 @@
             });
         });
 
-        // ===============================================
-
         let misSesiones = @json($misSesiones);
-        console.log(misSesiones);
 
         function misCreditos() {
             html = ``;
@@ -136,8 +133,6 @@
                             });
             html +=     `</body>`;
             html += `<table>`;
-
-            // =====================================
 
             Swal.fire({
                 html: html,
@@ -167,8 +162,6 @@
             });
         }
 
-        // =====================================================
-
         let paquetes = @json($paquetes);
         
         function comprarCreditos() {
@@ -179,7 +172,7 @@
             html += `
                     <div class="col-12">
                         <div class="form-group d-flex align-items-center">
-                            <select name="cantidad_creditos" class="form-control select2 w-100" id="cantidad_creditos" required>
+                            <select name="cantidad_creditos" class="form-control select2 w-100" id="cantidad_creditos">
                                 <option value="" selected >Seleccionar...</option>
             `;
                                 $.each(paquetes, function(id_paquete, nombre_paquete){
@@ -188,12 +181,16 @@
 
             html += `
                             </select>
+
+                            <div class="alert alert-danger ocultar" role="alert" id="alert_cantCred">
+                                Por favor, seleccione una opción
+                            </div>
                         </div>
                     </div>
             `;
 
             html += `       <div class="p-3">
-                                <button type="submit" class="text-white">Comprar Créditos</button>
+                                <button type="submit" class="text-white btn btn-sm btn-success" id="comprar_creditos">Comprar Créditos</button>
                             </div>
             `;
             html += `   {!! Form::close() !!}`;
@@ -215,5 +212,6 @@
                 }
             });
         }
+
     </script>
 @endsection

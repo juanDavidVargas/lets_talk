@@ -16,6 +16,7 @@ class Paquete extends Model
     public $timestamps = true;
     protected $fillable = [
        'nombre_paquete',
-       'valor_paquete'
+       'valor_paquete',
+       'valor_letras_paquete'
     ];
 }

@@ -100,7 +100,6 @@ class AgendaEntrenadorShow implements Responsable
 
         } catch (Exception $e)
         {
-            dd($e);
             return response()->json("error_exception");
         }
     }
@@ -193,7 +192,6 @@ class AgendaEntrenadorShow implements Responsable
                     ->first();
 
         } catch (Exception $e) {
-            dd($e);
             return response()->json("error_exception");
         }
     }
