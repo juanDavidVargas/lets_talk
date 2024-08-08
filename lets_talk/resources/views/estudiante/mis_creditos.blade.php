@@ -31,9 +31,9 @@
                 <table class="table table-striped table-bordered table-hover" id="tbl_mis_creditos">
                     <thead>
                         <tr class="header-table">
-                            <th>Fecha Compra</th>
-                            <th>Paquete</th>
-                            <th>Cantidad Paquete</th>
+                            <th>Fecha Compra Paquete</th>
+                            <th>Número Paquete</th>
+                            <th>Créditos Paquete</th>
                             <th>Créditos Consumidos</th>
                             <th>Créditos Disponibles</th>
                         </tr>
@@ -53,13 +53,13 @@
             </div>
 
             <div style="display:flex; justify-content:center;">
-                <h4>Total Créditos <span class="fw-bold" style="color:green;">{!!$totalCreditosDisponibles!!}</span></h4>
+                <span class="badge badge-success">Total Créditos: <span class="text-white">{!!$totalCreditosDisponibles!!}</span></span>
             </div>
         </div>
     </div>
 
     <div class="d-flexswal m-t-30 m-b-30" style="padding-left:3rem;padding-right:5rem;">
-        <button type="button" class="btn btn-primary text-uppercase" onclick="misCreditos()">Historial Créditos</button>
+        <button type="button" class="btn btn-primary text-uppercase" onclick="misCreditos()">Historial Compras Créditos</button>
     </div>
 
     <div class="m-t-30 m-b-30" style="padding-left:3rem;padding-right:5rem;">

@@ -20,6 +20,7 @@ class CreateCreditos extends Migration
             $table->integer('id_instructor')->nullable()->unsigned();
             $table->integer('fecha_credito')->nullable();
             $table->integer('fecha_consumo_credito')->nullable();
+            $table->text('url_checkout_payvalida')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

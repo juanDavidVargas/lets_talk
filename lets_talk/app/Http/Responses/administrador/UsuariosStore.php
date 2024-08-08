@@ -144,7 +144,7 @@ class UsuariosStore implements Responsable
         }
     }
 
-    private function quitarCaracteresEspeciales($cadena)
+    public function quitarCaracteresEspeciales($cadena)
     {
         $no_permitidas = array("á", "é", "í", "ó", "ú", "Á", "É", "Í", "Ó", "Ú", "ñ",
         "À", "Ã", "Ì", "Ò", "Ù", "Ã™", "Ã ","Ã¨", "Ã¬", "Ã²", "Ã¹", "ç", "Ç", "Ã¢",

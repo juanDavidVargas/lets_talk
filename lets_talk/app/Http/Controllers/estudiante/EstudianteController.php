@@ -14,6 +14,7 @@ use App\Http\Responses\estudiante\ReservarClase;
 use App\Http\Responses\estudiante\CancelarClase;
 use App\Http\Responses\estudiante\ComprarCreditos;
 use App\Models\estudiante\Credito;
+use App\Http\Responses\estudiante\CreditosShow;
 use App\Models\usuarios\Reserva;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -226,7 +227,8 @@ class EstudianteController extends Controller
 
     public function misCreditos(Request $request)
     {
-        try {
+        try
+        {
             $adminCtrl = new AdministradorController();
             $sesion = $adminCtrl->validarVariablesSesion();
     
@@ -247,40 +249,32 @@ class EstudianteController extends Controller
 
                 if($checkConnection->getName() == "database_connection") {
                     return view('database_connection');
-                } else {
+                } else
+                {
                     $idEstudiante = session('usuario_id');
+                    $creditosShow = new CreditosShow();
+                    $misCreditos = $creditosShow->toResponse($idEstudiante);
+                    $totalCreditosDisponibles =  $creditosShow->totalCreditosDisponibles($idEstudiante);
+                    $misSesiones =$creditosShow->sesionesEstudiante($idEstudiante);
 
-                    $misCreditos = Credito::select(
-                            DB::raw('DATE_FORMAT(FROM_UNIXTIME(fecha_credito), "%d-%m-%Y") as fecha_credito'),
-                            'paquete',
-                            DB::raw('COUNT(*) as cantidad_total_paquete'),
-                            DB::raw('SUM(CASE WHEN id_estado = 8 THEN 1 ELSE 0 END) as cantidad_consumida'),
-                            DB::raw('SUM(CASE WHEN id_estado = 7 THEN 1 ELSE 0 END) as cantidad_disponible')
-                        )
-                        ->where('id_estudiante', $idEstudiante)
-                        ->whereNull('deleted_at')
-                        ->groupBy(
-                            DB::raw('DATE_FORMAT(FROM_UNIXTIME(fecha_credito), "%d-%m-%Y")'),
-                            'paquete'
-                        )
-                        ->orderBy('fecha_credito', 'desc')
-                        ->orderBy('paquete', 'desc')
-                        ->get();
-    
-                    // ==============================================
-                    
-                    // Consulta para obtener la suma total de créditos disponibles
-                    $totalCreditosDisponibles = Credito::where('id_estudiante', $idEstudiante)
-                    ->where('id_estado', 7)
-                    ->whereNull('deleted_at')
-                    ->count();
-                    
-                    // ==============================================
-
-                    $misSesiones = $this->misSesiones($idEstudiante);
+                    if($misCreditos == "error_exception" || $totalCreditosDisponibles == "error_exception" ||
+                        $misSesiones == "error_exception")
+                    {
+                        alert()->error("Error", "Ha ocurrido un error de base de datos, íntente de nuevo!");
+                        return redirect()->to(route('estudiante.mis_creditos'));
+                    }
 
                     $this->shareData();
-                    return view($vista, compact('misCreditos', 'totalCreditosDisponibles', 'misSesiones'));
+
+                    if(isset($_GET['order']) && !is_null($_GET['order']))
+                    {
+                        alert()->success("Proceso Exitoso", "Los créditos han sido comprados correctamente!");
+                        return redirect()->to(route('estudiante.mis_creditos'));
+
+                    } else
+                    {
+                        return view($vista, compact('misCreditos', 'totalCreditosDisponibles', 'misSesiones'));
+                    }
                 }
             }
 
@@ -330,13 +324,12 @@ class EstudianteController extends Controller
                 return new ComprarCreditos();
             }
 
-        } catch (Exception $e) {
-            return response()->json("error_exception");
+        } catch (Exception $e)
+        {
+            dd($e);
+            alert()->error("Error", "Ha ocurrido un error, íntente de nuevo, si el problema persiste, contácte con soporte!");
         }
     }
-
-    // ==============================================================
-    // ==============================================================
 
     public function misSesiones($idEstudiante)
     {
@@ -354,29 +347,12 @@ class EstudianteController extends Controller
                 return redirect()->to(route('home'));
             } else
             {
-                return Reserva::leftjoin('evento_agenda_entrenador','evento_agenda_entrenador.id','=','reservas.id_trainer_horario')
-                ->leftjoin('usuarios as instructor','instructor.id_user','=','reservas.id_instructor')
-                ->select(
-                    'reservas.id_estudiante',
-                    'reservas.id_instructor',
-                    DB::raw("CONCAT(instructor.nombres, ' ', instructor.apellidos) AS nombre_instructor"),
-                    'reservas.id_trainer_horario',
-                    'start_date',
-                    'start_time',
-                    'link_meet'
-                )
-                ->where('id_estudiante', $idEstudiante)
-                ->orderBy('start_date', 'desc')
-                ->orderBy('start_time', 'desc')
-                ->get();
+                
             }
         } catch (Exception $e) {
             return response()->json("error_exception");
         }
     }
-
-    // ==============================================================
-    // ==============================================================
         
     public function reservarClase(Request $request)
     {
@@ -400,12 +376,6 @@ class EstudianteController extends Controller
             return response()->json("error_exception");
         }
     }
-
-    // ==============================================================
-    // ==============================================================
-    // ==============================================================
-    // ==============================================================
-    // ==============================================================
 
     public function getGoogleClient()
     {
@@ -432,9 +402,6 @@ class EstudianteController extends Controller
         }
     }
 
-    // ==============================================================
-    // ==============================================================
-
     public function redirectToGoogle()
     {
         try {
@@ -459,9 +426,6 @@ class EstudianteController extends Controller
             return response()->json("error_exception");
         }
     }
-
-    // ==============================================================
-    // ==============================================================
 
     public function handleGoogleCallbackReservar(Request $request)
     {
@@ -488,9 +452,6 @@ class EstudianteController extends Controller
         }
     }
 
-    // ==============================================================
-    // ==============================================================
-
     public function handleGoogleCallbackCancelar(Request $request)
     {
         try {
@@ -516,9 +477,6 @@ class EstudianteController extends Controller
         }
     }
 
-    // ==============================================================
-    // ==============================================================
-
     public function createMeet()
     {
         try {
@@ -543,12 +501,6 @@ class EstudianteController extends Controller
             return response()->json("error_exception");
         }
     }
-
-    // ==============================================================
-    // ==============================================================
-    // ==============================================================
-    // ==============================================================
-    // ==============================================================
 
     public function cancelarClase(Request $request)
     {

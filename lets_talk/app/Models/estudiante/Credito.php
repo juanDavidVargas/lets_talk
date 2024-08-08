@@ -22,5 +22,7 @@ class Credito extends Model
        'paquete',
        'fecha_credito',
        'fecha_consumo_credito',
+       'url_checkout_payvalida',
+       'id_paquete'
     ];
 }
