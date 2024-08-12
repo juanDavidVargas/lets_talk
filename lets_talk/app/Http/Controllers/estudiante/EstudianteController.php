@@ -347,7 +347,21 @@ class EstudianteController extends Controller
                 return redirect()->to(route('home'));
             } else
             {
-                
+                return Reserva::leftjoin('evento_agenda_entrenador','evento_agenda_entrenador.id','=','reservas.id_trainer_horario')
+                ->leftjoin('usuarios as instructor','instructor.id_user','=','reservas.id_instructor')
+                ->select(
+                    'reservas.id_estudiante',
+                    'reservas.id_instructor',
+                    DB::raw("CONCAT(instructor.nombres, ' ', instructor.apellidos) AS nombre_instructor"),
+                    'reservas.id_trainer_horario',
+                    'start_date',
+                    'start_time',
+                    'link_meet'
+                )
+                ->where('id_estudiante', $idEstudiante)
+                ->orderBy('start_date', 'desc')
+                ->orderBy('start_time', 'desc')
+                ->get();
             }
         } catch (Exception $e) {
             return response()->json("error_exception");
