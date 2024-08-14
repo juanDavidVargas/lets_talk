@@ -60,7 +60,7 @@ class AgendaEntrenadorStore implements Responsable
                     $usuario = session('username');
                     $state = 2;
                     $user_id = session('usuario_id');
-                    $id_instructor = null;
+                    $id_instructor = $entrenador_id;
                 }
 
                 $consultaDisponibilidades = $this->validarDisponibilidadUsuario($user_id);
