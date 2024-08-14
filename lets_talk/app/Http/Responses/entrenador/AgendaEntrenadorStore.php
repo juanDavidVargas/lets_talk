@@ -22,6 +22,7 @@ class AgendaEntrenadorStore implements Responsable
         $entrenador_id = request('trainer_id', null);
         $numDia = request('numero_dia', null);
         $dia = !is_null($numDia) ? implode("", $numDia) : null;
+        $idRol = session('rol');
 
         if(isset($disponibilidad) && !is_null($disponibilidad) && !empty($disponibilidad))
         {
@@ -48,8 +49,7 @@ class AgendaEntrenadorStore implements Responsable
                 $hora_inicio = substr($horas_disp->horario, 0, 5);
                 $hora_fin = substr($horas_disp->horario, 8);
 
-                if(isset($entrenador_id) && !is_null($entrenador_id) && !empty($entrenador_id) && $entrenador_id != "-1") {
-
+                if(isset($entrenador_id) && !is_null($entrenador_id) &&!empty($entrenador_id) && $entrenador_id != "-1" &&  $idRol == 2) {
                     $user = $this->traerNombreUsuario($entrenador_id);
                     $usuario = $user->usuario;
                     $state = 1; // Aprobado
