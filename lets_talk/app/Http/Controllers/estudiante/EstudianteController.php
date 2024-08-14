@@ -326,7 +326,6 @@ class EstudianteController extends Controller
 
         } catch (Exception $e)
         {
-            dd($e);
             alert()->error("Error", "Ha ocurrido un error, íntente de nuevo, si el problema persiste, contácte con soporte!");
         }
     }

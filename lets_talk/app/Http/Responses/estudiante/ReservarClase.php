@@ -184,7 +184,7 @@ class ReservarClase implements Responsable
         $client->setPrompt('consent');
 
         // Ignorar verificación de SSL solo para desarrollo local
-        $client->setHttpClient(new \GuzzleHttp\Client(['verify' => true]));
+        $client->setHttpClient(new \GuzzleHttp\Client(['verify' => false]));
 
         // Ó Usar el archivo de certificados CA
         // $client->setHttpClient(new \GuzzleHttp\Client(['verify' => 'ruta/a/tu/cacert.pem']));

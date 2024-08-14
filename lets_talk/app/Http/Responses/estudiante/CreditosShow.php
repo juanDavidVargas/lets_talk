@@ -42,10 +42,18 @@ class CreditosShow implements Responsable
         try
         {
             // Consulta para obtener la suma total de créditos disponibles
-            return Credito::where('id_estudiante', $idEstudiante)
+            $creditos = Credito::where('id_estudiante', $idEstudiante)
                     ->where('id_estado', 7)
                     ->whereNull('deleted_at')
                     ->count();
+
+        if($creditos > 0 || $creditos > "0")
+        {
+            return $creditos;
+        } else {
+            return "0";
+        }
+
         } catch (Exception $e)
         {
             return 'error_exception';
