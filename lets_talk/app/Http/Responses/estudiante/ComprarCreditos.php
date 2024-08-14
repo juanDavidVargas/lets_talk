@@ -102,7 +102,7 @@ class ComprarCreditos implements Responsable
         $email = $usuario->correo;
         $pais = intval(env('COUNTRY'));
         $orden = str_replace(" ", "", $usuarioStore->quitarCaracteresEspeciales($paquete->nombre_paquete)) .
-                    Carbon::now()->format('dmY') . $usuario->id_users;
+                    Carbon::now()->format('dmY') . $usuario->id_user;
         $moneda = env('MONEY');
         $monto = $paquete->valor_paquete;
         $cheksum = $email . $pais . $orden . $moneda . $monto . env('FIXED_HASH');
