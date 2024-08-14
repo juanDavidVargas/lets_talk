@@ -103,30 +103,6 @@ class UsuariosUpdate implements Responsable
                                         ]
                                     );
 
-                // $usuarioUpdateContacto = Contacto::where('id_user', $id_user)
-                //                     ->update(
-                //                         [
-                //                             'id_primer_contacto' => $idPrimerContacto,
-                //                             'primer_telefono' => $primerTelefono,
-                //                             'primer_celular' => $primerCelular,
-                //                             'primer_correo' => $primerCorreo,
-                //                             'primer_skype' => $primerSkype,
-                //                             'primer_zoom' => $primerZoom,
-                //                             'id_segundo_contacto' => $idSegundoContacto,
-                //                             'segundo_telefono' => $segundoTelefono,
-                //                             'segundo_celular' => $segundoCelular,
-                //                             'segundo_correo' => $segundoCorreo,
-                //                             'segundo_skype' => $segundoSkype,
-                //                             'segundo_zoom' => $segundoZoom,
-                //                             'id_opcional_contacto' => $idOpcionalContacto,
-                //                             'opcional_telefono' => $opcionalTelefono,
-                //                             'opcional_celular' => $opcionalCelular,
-                //                             'opcional_correo' => $opcionalCorreo,
-                //                             'opcional_skype' => $opcionalSkype,
-                //                             'opcional_zoom' => $opcionalZoom
-                //                         ]
-                //                     );
-
                 if($usuarioUpdate)
                 // if($usuarioUpdate || $usuarioUpdateContacto)
                 {

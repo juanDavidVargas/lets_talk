@@ -6,15 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Log;
-use OwenIt\Auditing\Contracts\Auditable;
+// use OwenIt\Auditing\Contracts\Auditable;
 use App\Models\usuarios\TipoDocumento;
 
-// class User extends Model implements Auditable
-class User extends Authenticatable implements Auditable
-// class User extends Authenticatable implements AuditableContract
+// class User extends Authenticatable
+class User extends Model
+// class User extends Authenticatable implements Auditable
 {
     use Notifiable;
-    use \OwenIt\Auditing\Auditable;
+    // use \OwenIt\Auditing\Auditable;
 
     protected $connection = 'mysql';
     protected $table = 'usuarios';
