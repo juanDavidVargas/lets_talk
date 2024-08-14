@@ -258,6 +258,8 @@
     const url_store = "{{route('trainer.store')}}";
     let  myData = [];
     let numDay = [];
+    let idRol = {{ session('rol') }};
+    let usuarioId = {{ session('usuario_id' ) }};
 
     document.addEventListener('DOMContentLoaded', function ()
     {
@@ -337,7 +339,6 @@
             eventClick: function (info)
             {
                 let ids = info.event.id;
-                console.log(ids);
 
                 // Convertir el string en un array
                 ids = ids.split(',');
@@ -347,12 +348,6 @@
                 let idInstructor = ids[2];
                 let claseEstado = ids[3];
                 let nombreInstructor = ids[4];
-
-                console.log(`Id Evento ${idEvento}`);
-                console.log(`Id Horario ${idHorario}`);
-                console.log(`Id Instructor ${idInstructor}`);
-                console.log(`Clase Estado ${claseEstado}`);
-                console.log(`Nombre Instructor ${nombreInstructor}`);
                 
                 if (claseEstado == 10 || claseEstado == "10") {
                     $("#trainer_id").val('-1');
@@ -414,7 +409,16 @@
             e.preventDefault();
             let horas = $("#horarios").val();
             let fecha_evento = $("#fecha_evento").val();
-            let trainer = $("#trainer_id").val();
+            let trainer;
+            
+            if(idRol == 2 || idRol == "2")
+            {
+                trainer = $("#trainer_id").val();
+
+            } else
+            {
+                trainer = usuarioId;
+            }
 
             if ((horas == '' || horas == null || horas == undefined) ||
                 (fecha_evento == '' || fecha_evento == null || fecha_evento == undefined))
@@ -425,8 +429,8 @@
                     'error'
                 );
                 return;
-            } else if (trainer == '' || trainer == null || trainer == undefined ||
-                    trainer == '-1' || trainer == -1)
+            } else if ((trainer == '' || trainer == null || trainer == undefined ||
+                    trainer == '-1' || trainer == -1) && (idRol == 2))// Rol admin == 2
             {
                 Swal.fire(
                     'Error',
