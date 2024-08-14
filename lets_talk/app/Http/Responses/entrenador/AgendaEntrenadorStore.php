@@ -63,7 +63,7 @@ class AgendaEntrenadorStore implements Responsable
                     $id_instructor = $entrenador_id;
                 }
 
-                $consultaDisponibilidades = $this->validarDisponibilidadUsuario($user_id);
+                $consultaDisponibilidades = $this->validarDisponibilidadUsuario($entrenador_id);
 
                 if ($consultaDisponibilidades > 0 && 
                     $consultaDisponibilidades != 'error_datos_disp') {
