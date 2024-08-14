@@ -55,7 +55,7 @@ class UsuariosUpdate implements Responsable
         $id_user = request('id_usuario', null);
         $id_nivel = request('id_nivel', null);
         $id_tipo_ingles = request('id_tipo_ingles', null);
-        $id_primer_contacto = request('id_primer_contacto_edit', null);
+        // $id_primer_contacto = request('id_primer_contacto_edit', null);
 
         if(isset($id_rol) && $id_rol == 3) {
             $nivel_ingles = $id_nivel;
@@ -103,31 +103,32 @@ class UsuariosUpdate implements Responsable
                                         ]
                                     );
 
-                $usuarioUpdateContacto = Contacto::where('id_user', $id_user)
-                                    ->update(
-                                        [
-                                            'id_primer_contacto' => $idPrimerContacto,
-                                            'primer_telefono' => $primerTelefono,
-                                            'primer_celular' => $primerCelular,
-                                            'primer_correo' => $primerCorreo,
-                                            'primer_skype' => $primerSkype,
-                                            'primer_zoom' => $primerZoom,
-                                            'id_segundo_contacto' => $idSegundoContacto,
-                                            'segundo_telefono' => $segundoTelefono,
-                                            'segundo_celular' => $segundoCelular,
-                                            'segundo_correo' => $segundoCorreo,
-                                            'segundo_skype' => $segundoSkype,
-                                            'segundo_zoom' => $segundoZoom,
-                                            'id_opcional_contacto' => $idOpcionalContacto,
-                                            'opcional_telefono' => $opcionalTelefono,
-                                            'opcional_celular' => $opcionalCelular,
-                                            'opcional_correo' => $opcionalCorreo,
-                                            'opcional_skype' => $opcionalSkype,
-                                            'opcional_zoom' => $opcionalZoom
-                                        ]
-                                    );
+                // $usuarioUpdateContacto = Contacto::where('id_user', $id_user)
+                //                     ->update(
+                //                         [
+                //                             'id_primer_contacto' => $idPrimerContacto,
+                //                             'primer_telefono' => $primerTelefono,
+                //                             'primer_celular' => $primerCelular,
+                //                             'primer_correo' => $primerCorreo,
+                //                             'primer_skype' => $primerSkype,
+                //                             'primer_zoom' => $primerZoom,
+                //                             'id_segundo_contacto' => $idSegundoContacto,
+                //                             'segundo_telefono' => $segundoTelefono,
+                //                             'segundo_celular' => $segundoCelular,
+                //                             'segundo_correo' => $segundoCorreo,
+                //                             'segundo_skype' => $segundoSkype,
+                //                             'segundo_zoom' => $segundoZoom,
+                //                             'id_opcional_contacto' => $idOpcionalContacto,
+                //                             'opcional_telefono' => $opcionalTelefono,
+                //                             'opcional_celular' => $opcionalCelular,
+                //                             'opcional_correo' => $opcionalCorreo,
+                //                             'opcional_skype' => $opcionalSkype,
+                //                             'opcional_zoom' => $opcionalZoom
+                //                         ]
+                //                     );
 
-                if($usuarioUpdate || $usuarioUpdateContacto)
+                if($usuarioUpdate)
+                // if($usuarioUpdate || $usuarioUpdateContacto)
                 {
                     DB::connection('mysql')->commit();
                     alert()->success('Successfull Process', 'User updated correctly.');
@@ -141,6 +142,7 @@ class UsuariosUpdate implements Responsable
 
             } catch (Exception $e)
             {
+                dd($e);
                 DB::connection('mysql')->rollback();
                 alert()->error('Error', 'An error occurred updating the user, try again, if the problem persists contact support.');
                 return back();
