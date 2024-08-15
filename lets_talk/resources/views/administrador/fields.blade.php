@@ -24,7 +24,7 @@
 
     <div class="col-xs-12 col-sm-12 col-md-3">
         <div class="wrap-input100 validate-input" data-validate="This Field is Required">
-            {!! Form::text('numero_documento', isset($usuario) ? $usuario->numero_documento : null, ['class' => 'input100', 'id' => 'numero_documento']) !!}
+            {!! Form::text('numero_documento', isset($usuario) ? $usuario->numero_documento : null, ['class' => 'input100', 'id' => 'numero_documento', 'minlength' => 6]) !!}
             <span class="focus-input100" data-placeholder="Document Number"></span>
         </div>
     </div>
