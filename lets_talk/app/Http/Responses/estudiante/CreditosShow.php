@@ -27,7 +27,6 @@ class CreditosShow implements Responsable
                 DB::raw('DATE_FORMAT(FROM_UNIXTIME(fecha_credito), "%d-%m-%Y")'),
                 'paquete'
             )
-            ->orderBy('fecha_credito', 'desc')
             ->orderBy('paquete', 'desc')
             ->get();
 
