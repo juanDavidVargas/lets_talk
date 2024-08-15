@@ -5,6 +5,7 @@
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Let's Talk - @yield('title')</title>
+    <link rel="icon" href="{{asset('img/logo.png')}}" type="image/x-icon">
     @yield('css')
     <!-- Google Fonts -->
     <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
