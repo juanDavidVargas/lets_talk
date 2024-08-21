@@ -88,7 +88,8 @@
 
     $(document).ready(function()
     {
-        setTimeout(() => {
+        setTimeout(() =>
+        {
             $("#loaderGif").hide();
             $("#loaderGif").addClass('ocultar');
         }, 1500);

@@ -34,7 +34,7 @@ class DisponibilidadShow implements Responsable
                                     ->where('usuarios.estado', 1)
                                     ->whereNull('usuarios.deleted_at')
                                     ->whereNull('evento_agenda_entrenador.deleted_at')
-                                    ->whereIn('evento_agenda_entrenador.state', [1,2,3])
+                                    ->whereIn('evento_agenda_entrenador.state', [1,2,3,11])
                                     ->orderBy('evento_agenda_entrenador.id', 'DESC')
                                     ->get();
         } catch (Exception $e)
@@ -52,8 +52,7 @@ class DisponibilidadShow implements Responsable
 
             $queryDisponibilidades = $this->consultarDisponibilidades($id, $numeroDia);
 
-            if(isset($queryDisponibilidades) &&
-               !empty($queryDisponibilidades) &&
+            if(isset($queryDisponibilidades) && !empty($queryDisponibilidades) &&
                !is_null($queryDisponibilidades) && count($queryDisponibilidades))
             {
                 return response()->json($queryDisponibilidades);

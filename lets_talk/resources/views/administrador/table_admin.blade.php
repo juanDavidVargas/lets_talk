@@ -18,6 +18,9 @@
         @elseif($disponibilidad->state == 3)
             <span class="badge badge-warning"
                     style="border-radius: 15px;">{{$disponibilidad->descripcion_estado}}</span>
+        @elseif($disponibilidad->state == 11)
+            <span class="badge badge-info"
+                    style="border-radius: 15px;">{{$disponibilidad->descripcion_estado}}</span>
         @else
             <span class="badge badge-danger"
                     style="border-radius: 15px;">{{$disponibilidad->descripcion_estado}}</span>
