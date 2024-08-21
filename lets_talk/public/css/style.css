@@ -3448,4 +3448,18 @@ div label input {margin-right: 100px;}
     padding: 2em;
 }
 
+.contenido-cuerpo {
+	width:100%;
+	/* margin-left: auto; */
+	/* margin-right: auto; */
+	margin-bottom: 5em;
+}
+
+.contenido-row {
+	display: block;
+}
+
+.padding-border {
+	padding-left:5rem;padding-right:5rem;
+}
 /* Fin estilos disponibilidad entrenadores vista estudiantes*/

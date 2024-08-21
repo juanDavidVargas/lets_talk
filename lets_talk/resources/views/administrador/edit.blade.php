@@ -10,7 +10,7 @@
     </div>
 </div>
 
-<div class="row m-b-30 m-t-30">
+<div class="row m-b-30 m-t-30 padding-border">
     <div class="col-xs-12 col-sm-12 col-md-12">
         <a class="btn btn-warning"
             href="{{route('administrador.index')}}">
@@ -21,7 +21,7 @@
 <hr>
 {!! Form::model($usuario, ['method' => 'PUT',
     'route' => ['administrador.update', $usuario->id_user],
-    'class' => 'login100-form validate-form', 'id' => 'form_edit_user', 'autocomplete' => 'off']) !!}
+    'class' => 'login100-form validate-form padding-border', 'id' => 'form_edit_user', 'autocomplete' => 'off']) !!}
     @include('administrador.fields')
 {!! Form::close() !!}
 
@@ -39,6 +39,9 @@
         setTimeout(() => {
             $("#loaderGif").hide();
             $("#loaderGif").addClass('ocultar');
+
+            $("#longitud_doc").hide();
+            $("#longitud_doc").addClass('ocultar');
         }, 1500);
 
         window.$(".select2").prepend(new Option("Select Contact...", "-1"));
@@ -61,7 +64,8 @@
 
         let id_rol = $("#id_rol").val();
 
-        if (id_rol == 3 || id_rol == "3") {
+        if (id_rol == 3 || id_rol == "3")
+        {
             $("#div_nivel").show('slow');
             $("#div_nivel").removeClass('ocultar');
             $("#div_tipo_ing").hide('slow');
@@ -69,8 +73,8 @@
 
             $("#id_nivel").trigger('focus');
 
-        } else {
-
+        } else
+        {
             $("#div_nivel").hide('slow');
             $("#div_nivel").addClass('ocultar');
             $("#div_tipo_ing").show('slow');
@@ -85,6 +89,19 @@
         let num_doc = $("#numero_documento").val();
         let id_usuario = $("#id_usuario").val();
         let tipo_doc = $("#id_tipo_documento").val();
+
+        if(num_doc.length < 6)
+        {
+            $("#longitud_doc").show('slow');
+            $("#longitud_doc").removeClass('ocultar');
+            $("#numero_documento").val(num_doc);
+
+            return;
+        } else
+        {
+            $("#longitud_doc").hide();
+            $("#longitud_doc").addClass('ocultar');
+        }
 
         $.ajax({
             async: true
@@ -152,8 +169,8 @@
         });
     });
 
-    $("#correo").blur(function() {
-
+    $("#correo").blur(function()
+    {
         let correo = $("#correo").val();
         let id_usuario = $("#id_usuario").val();
 
@@ -244,5 +261,11 @@
             $("#id_tipo_ingles").trigger('focus');
         }
     });
+
+    setTimeout(() =>
+    {
+        $("#longitud_doc").hide();
+        $("#longitud_doc").addClass('ocultar');
+    }, 1500);
 </script>
 @endsection

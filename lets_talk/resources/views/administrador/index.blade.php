@@ -269,6 +269,24 @@
             {
                 let new_clave = $("#change_clave").val();
 
+                if(new_clave === '' || new_clave == "" || new_clave == undefined)
+                {
+                    Swal.fire({
+                        position: 'center',
+                        title: 'Error!',
+                        html:  "The New Password is Required",
+                        icon: 'error',
+                        type: 'error',
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey:false,
+                        timer: 2000
+                    });
+
+                    return;
+                }
+
                 if (result.value)
                 {
                     $.ajax({

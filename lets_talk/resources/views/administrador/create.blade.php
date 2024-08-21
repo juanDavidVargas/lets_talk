@@ -21,11 +21,8 @@
 
     <hr>
 
-    {!! Form::open(['method' => 'POST',
-        'route' => ['administrador.store'],
-        'class' => 'login100-form validate-form',
-        'autocomplete' => 'off', 'id' => 'form_new_user', 'accept-charset' => 'UTF-8',
-        'style' => 'padding-left:5rem;padding-right:5rem;'])
+    {!! Form::open(['method' => 'POST', 'route' => ['administrador.store'], 'class' => 'login100-form validate-form padding-border',
+        'autocomplete' => 'off', 'id' => 'form_new_user', 'accept-charset' => 'UTF-8'])
     !!}
     @csrf
         @include('administrador.fields')
@@ -38,9 +35,13 @@
     <script>
         $(document).ready(function()
         {
-            setTimeout(() => {
+            setTimeout(() =>
+            {
                 $("#loaderGif").hide();
                 $("#loaderGif").addClass('ocultar');
+
+                $("#longitud_doc").hide();
+                $("#longitud_doc").addClass('ocultar');
             }, 1500);
 
             window.$(".select2").prepend(new Option("Select Contact...", "-1"));
@@ -63,7 +64,8 @@
 
             let id_rol = $("#id_rol").val();
 
-            if (id_rol == 3 || id_rol == "3") {
+            if (id_rol == 3 || id_rol == "3")
+            {
                 $("#div_nivel").show('slow');
                 $("#div_nivel").removeClass('ocultar');
                 $("#div_tipo_ing").hide('slow');
@@ -71,8 +73,8 @@
 
                 $("#id_nivel").trigger('focus');
 
-            } else {
-
+            } else
+            {
                 $("#div_nivel").hide('slow');
                 $("#div_nivel").addClass('ocultar');
                 $("#div_tipo_ing").show('slow');
@@ -86,6 +88,19 @@
         {
             let num_doc = $("#numero_documento").val();
             let tipo_doc = $("#id_tipo_documento").val();
+
+            if(num_doc.length < 6)
+            {
+                $("#longitud_doc").show('slow');
+                $("#longitud_doc").removeClass('ocultar');
+                $("#numero_documento").val('');
+
+                return;
+            } else
+            {
+                $("#longitud_doc").hide();
+                $("#longitud_doc").addClass('ocultar');
+            }
 
             $.ajax({
                 async: true
@@ -124,7 +139,8 @@
                         return;
                     }
 
-                    if (response == "error_exception") {
+                    if (response == "error_exception")
+                    {
                         $("#loaderGif").hide();
                         $("#loaderGif").addClass('ocultar');
                         Swal.fire({
@@ -170,7 +186,8 @@
                 },
                 success: function(response)
                 {
-                    if (response == "existe_correo") {
+                    if (response == "existe_correo")
+                    {
                         $("#loaderGif").hide();
                         $("#loaderGif").addClass('ocultar');
                         $("#correo").val('');
@@ -191,7 +208,8 @@
                         return;
                     }
 
-                    if (response == "error_exception_correo") {
+                    if (response == "error_exception_correo")
+                    {
                         $("#loaderGif").hide();
                         $("#loaderGif").addClass('ocultar');
                         Swal.fire({
@@ -223,7 +241,8 @@
         {
             let id_rol = $("#id_rol").val();
 
-            if (id_rol == 3 || id_rol == "3") {
+            if (id_rol == 3 || id_rol == "3")
+            {
                 $("#div_nivel").show('slow');
                 $("#div_nivel").removeClass('ocultar');
                 $("#div_tipo_ing").hide('slow');
@@ -231,8 +250,8 @@
 
                 $("#id_nivel").trigger('focus');
 
-            } else {
-
+            } else
+            {
                 $("#div_nivel").hide('slow');
                 $("#div_nivel").addClass('ocultar');
                 $("#div_tipo_ing").show('slow');
@@ -241,5 +260,11 @@
                 $("#id_tipo_ingles").trigger('focus');
             }
         });
+
+        setTimeout(() =>
+        {
+            $("#longitud_doc").hide();
+            $("#longitud_doc").addClass('ocultar');
+        }, 1500);
     </script>
 @endsection

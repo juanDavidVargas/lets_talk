@@ -27,6 +27,11 @@
             {!! Form::text('numero_documento', isset($usuario) ? $usuario->numero_documento : null, ['class' => 'input100', 'id' => 'numero_documento', 'minlength' => 6]) !!}
             <span class="focus-input100" data-placeholder="Document Number"></span>
         </div>
+
+        <div class="alert alert-danger ocultar" role="alert" id="longitud_doc">
+            The document number must be at least 6 characters long.
+        </div>
+
     </div>
 </div>
 

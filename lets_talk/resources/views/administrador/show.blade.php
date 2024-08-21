@@ -2,15 +2,15 @@
 @section('title', 'Show')
 @section('css')
 @stop
-@section('content')
 
+@section('content')
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12">
         <h1 class="text-center text-uppercase">Details User {{$usuario->nombres}}</h1>
     </div>
 </div>
 
-<div class="row m-b-30 m-t-30">
+<div class="row m-b-30 m-t-30 padding-border">
     <div class="col-xs-12 col-sm-12 col-md-12">
         <a class="btn btn-warning"
             href="{{route('administrador.index')}}">
@@ -20,8 +20,10 @@
 </div>
 
 <hr>
+<div class="padding-border">
+    @include('administrador.fields_show')
+</div>
 
-@include('administrador.fields_show')
 @include('layouts.loader')
 
 @stop
@@ -32,6 +34,9 @@
         setTimeout(() => {
             $("#loaderGif").hide();
             $("#loaderGif").addClass('ocultar');
+
+            $("#longitud_doc").hide();
+            $("#longitud_doc").addClass('ocultar');
         }, 1500);
 
         window.$(".select2").prepend(new Option("Select Contact...", "-1"));
@@ -56,7 +61,8 @@
 
         let id_rol = $("#id_rol").val();
 
-        if (id_rol == 3 || id_rol == "3") {
+        if (id_rol == 3 || id_rol == "3")
+        {
             $("#div_nivel").show('slow');
             $("#div_nivel").removeClass('ocultar');
             $("#div_tipo_ing").hide('slow');

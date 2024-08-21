@@ -11,20 +11,14 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Responses\administrador\UsuariosShow;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Traits\MetodosTrait;
 
 class UsuariosStore implements Responsable
 {
+    use MetodosTrait;
     
     public function toResponse($request)
     {
-        Log::info('Current user:', ['user' => auth()->user()]);
-
-        $webUser = Auth::guard('web')->user();
-        $apiUser = Auth::guard('api')->user();
-
-        Log::info('Current web user:', ['user' => $webUser]);
-        Log::info('Current api user:', ['user' => $apiUser]);
-
         $usuarioShow = new UsuariosShow();
         $nombres = request('nombres', null);
         $apellidos = request('apellidos', null);
@@ -42,11 +36,20 @@ class UsuariosStore implements Responsable
         $id_rol = request('id_rol', null);
         $id_nivel = request('id_nivel', null);
         $id_tipo_ingles = request('id_tipo_ingles', null);
+        $msgError = "";
+
+        if(strlen($numero_documento) < 6)
+        {
+            alert()->error('Info', 'The document number must be at least 6 characters long.');
+            return back();
+        }
         
-        if(isset($id_rol) && $id_rol == 3) {
+        if(isset($id_rol) && $id_rol == 3)
+        {
             $nivel_ingles = $id_nivel;
             $tipo_ingles = null;
-        } else {
+        } else
+        {
             $nivel_ingles = null;
             $tipo_ingles = $id_tipo_ingles;
         }
@@ -57,8 +60,7 @@ class UsuariosStore implements Responsable
         if(isset($consulta_cedula) && !empty($consulta_cedula) &&
            !is_null($consulta_cedula))
         {
-            alert()->info('Info', 'The document number already exists.');
-            return back();
+            $msgError .= "The document number already exists.";
         } else
         {
             // Contruimos el nombre de usuario
@@ -106,54 +108,43 @@ class UsuariosStore implements Responsable
                 if($nuevo_usuario)
                 {
                     DB::connection('mysql')->commit();
-
-                    alert()->success('Successful Process', 'User successfully created, the user name is: '
+                    alert()->success('Successfull Process', 'User successfully created, the user name is: '
                                         . $nuevo_usuario->usuario . ' and the password is you document number');
-
-                    // $user = Auth::user();
-                    // $request->session()->save();
                     return redirect()->to(route('administrador.index'));
 
-                } else {
+                } else
+                {
                     DB::connection('mysql')->rollback();
-                    alert()->error('Error', 'An error has occurred creating the user, please contact support.');
-                    return redirect()->to(route('administrador.index'));
+                    $msgError .= 'An error has occurred creating the user, please contact support.';
                 }
 
             } catch (Exception $e)
             {
                 DB::connection('mysql')->rollback();
-                alert()->error('Error', 'An error has occurred creating the user, try again,
-                                        if the problem persists contact support.');
-                return back();
+                $msgError .= 'An error has occurred creating the user, try again,
+                                        if the problem persists contact support.';
             }
+        }
+
+        if(isset($msgError) && !is_null($msgError) &&
+            !empty($msgError) && $msgError != "")
+        {
+            alert()->error('Error', $msgError);
+            return back();
         }
     }
 
     private function consultaUsuario($usuario)
     {
-        try {
+        try
+        {
 
-            $usuario = User::where('usuario', $usuario)
+            return User::where('usuario', $usuario)
                             ->first();
-            return $usuario;
-
-        } catch (Exception $e) {
+        } catch (Exception $e)
+        {
             alert()->error('Error', 'An error has occurred, try again, if the problem persists contact support.');
             return back();
         }
-    }
-
-    public function quitarCaracteresEspeciales($cadena)
-    {
-        $no_permitidas = array("á", "é", "í", "ó", "ú", "Á", "É", "Í", "Ó", "Ú", "ñ",
-        "À", "Ã", "Ì", "Ò", "Ù", "Ã™", "Ã ","Ã¨", "Ã¬", "Ã²", "Ã¹", "ç", "Ç", "Ã¢",
-        "ê", "Ã®", "Ã´", "Ã»", "Ã‚", "ÃŠ", "ÃŽ", "Ã”","Ã›", "ü", "Ã¶", "Ã–", "Ã¯",
-        "Ã¤", "«", "Ò", "Ã", "Ã„", "Ã‹", "ñ", "Ñ", "*");
-
-        $permitidas = array("a", "e", "i", "o", "u", "A", "E", "I", "O", "U", "n", "N", "A", "E", "I", "O", "U",
-                            "a", "e", "i", "o", "u", "c", "C", "a", "e", "i", "o", "u", "A", "E", "I", "O", "U",
-                            "u", "o", "O", "i", "a", "e", "U", "I", "A", "E", "n", "N", "");
-        return str_replace($no_permitidas, $permitidas, $cadena);
     }
 }

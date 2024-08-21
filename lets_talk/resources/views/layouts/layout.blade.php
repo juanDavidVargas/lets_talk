@@ -3,17 +3,6 @@
 
 <head>
     @include('layouts.header')
-    <style>
-        .contenido-cuerpo {
-            width:100%;
-            /* margin-left: auto; */
-            /* margin-right: auto; */
-            margin-bottom: 5em;
-        }
-        .contenido-row {
-            display: block;
-        }
-    </style>
 </head>
 <body>
     <div class="contenido-cuerpo">

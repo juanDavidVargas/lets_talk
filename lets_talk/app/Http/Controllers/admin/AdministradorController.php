@@ -479,9 +479,11 @@ class AdministradorController extends Controller
         $vista = 'administrador.disponibilidad_admin';
         $checkConnection = $this->checkDatabaseConnection($vista);
 
-        if($checkConnection->getName() == "database_connection") {
+        if($checkConnection->getName() == "database_connection")
+        {
             return view('database_connection');
-        } else {
+        } else
+        {
             $todasDisponibilidades = DisponibilidadEntrenadores::select('id_horario', 'horario', 'id_estado')
                                                                 ->orderBy('id_horario', 'DESC')
                                                                 ->get();

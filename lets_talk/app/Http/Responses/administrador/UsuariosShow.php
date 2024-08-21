@@ -17,8 +17,9 @@ class UsuariosShow implements Responsable
 
     public function todosLosUsuarios()
     {
-       try {
-            $usuarios = DB::table('usuarios')
+       try
+       {
+            return DB::table('usuarios')
                             ->join('tipo_documento', 'tipo_documento.id', '=', 'usuarios.id_tipo_documento')
                             ->join('municipios', 'municipios.id_municipio', '=', 'usuarios.id_municipio_nacimiento')
                             ->join('municipios as residencia', 'residencia.id_municipio', '=', 'usuarios.id_municipio_residencia')
@@ -82,7 +83,6 @@ class UsuariosShow implements Responsable
                             ->orderBy('usuarios.id_user', 'DESC')
                             ->get()
                             ->toarray();
-            return $usuarios;
 
        } catch (Exception $e)
        {
@@ -95,12 +95,9 @@ class UsuariosShow implements Responsable
     {
         try {
 
-            $tipos_documento = TipoDocumento::select('id', 'descripcion')
+            return TipoDocumento::select('id', 'descripcion')
                                             ->get()
                                             ->pluck('descripcion', 'id');
-
-            return $tipos_documento;
-
         } catch (Exception $e)
          {
             alert()->error('Error', 'An error has occurred, try again, if the problem persists contact support.');
@@ -112,11 +109,9 @@ class UsuariosShow implements Responsable
     {
         try {
 
-            $tipos_ingles= TipoIngles::select('id', 'descripcion')
+            return TipoIngles::select('id', 'descripcion')
                                             ->get()
                                             ->pluck('descripcion', 'id');
-
-            return $tipos_ingles;
 
         } catch (Exception $e)
          {
@@ -127,9 +122,9 @@ class UsuariosShow implements Responsable
 
     public function municipios()
     {
-        try 
+        try
         {
-            $municipios = DB::table('municipios')
+           return DB::table('municipios')
                         ->join('departamentos', 'departamentos.id_departamento', '=', 'municipios.id_departamento')
                         ->select(
                                     'municipios.id_municipio',
@@ -140,8 +135,6 @@ class UsuariosShow implements Responsable
                         ->whereNotNull('municipios.codigo_postal')
                         ->orderBy('municipios.descripcion', 'ASC')
                         ->pluck('nombre_ciudad', 'id_municipio');
-
-            return $municipios;
 
         } catch (Exception $e)
          {
@@ -154,13 +147,11 @@ class UsuariosShow implements Responsable
     {
         try {
 
-            $roles = Roles::select('id_rol', 'descripcion')
+            return Roles::select('id_rol', 'descripcion')
                                 ->where('estado', 1)
                                 ->orderBy('descripcion', 'ASC')
                                 ->get()
                                 ->pluck('descripcion', 'id_rol');
-
-            return $roles;
 
         } catch (Exception $e)
          {
@@ -241,7 +232,6 @@ class UsuariosShow implements Responsable
         } catch (Exception $e)
         {
             return response()->json("error_exception_correo");
-            exit;
         }
     }
 
@@ -317,7 +307,8 @@ class UsuariosShow implements Responsable
 
     public function datosEdicionUsuario($idUser)
     {
-        try {
+        try
+        {
             return DB::table('usuarios')
             ->join('tipo_documento', 'tipo_documento.id', '=', 'usuarios.id_tipo_documento')
             ->join('municipios', 'municipios.id_municipio', '=', 'usuarios.id_municipio_nacimiento')
