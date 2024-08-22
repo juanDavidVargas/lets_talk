@@ -17,17 +17,8 @@ class NivelesStore implements Responsable
 
     public function toResponse($request)
     {
-        // $messages = [
-        //     'file_crear_nivel.file' => 'Por favor, sube un archivo PDF o imagen (jpg, jpeg, png).',
-        //     'file_crear_nivel.max' => 'El tamaño máximo permitido para el archivo es de 2MB.',
-        // ];
-
-        // $request->validate([
-        //     'file_crear_nivel' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        // ], $messages);
-
+        $msgError = "";
         $nuevoNivel = strtoupper(request('nuevo_crear_nivel', null));
-
         $validarNivel = Nivel::select('nivel_descripcion')
                                 ->where('nivel_descripcion', $nuevoNivel)
                                 ->first();
@@ -42,9 +33,11 @@ class NivelesStore implements Responsable
 
             DB::connection('mysql')->beginTransaction();
 
-            try {
+            try
+            {
                 $archivoNivel= '';
-                if ($request->hasFile('file_crear_nivel')) {
+                if ($request->hasFile('file_crear_nivel'))
+                {
                     $archivoNivel = $this->upfileWithName($baseFileName, $carpetaArchivos, $request,
                                                             'file_crear_nivel', 'file_crear_nivel');
                 } else {
@@ -56,17 +49,25 @@ class NivelesStore implements Responsable
                                     'ruta_pdf_nivel' => $archivoNivel
                                 ]);
 
-                if($crearNivel) {
+                if($crearNivel)
+                {
                     DB::connection('mysql')->commit();
                     return response()->json("nivel_creado");
-                } else {
+                } else
+                {
                     DB::connection('mysql')->rollback();
-                    return response()->json("nivel_no_creado");
+                    $msgError .= "nivel_no_creado";
                 }
             } catch (Exception $e) {
                 DB::connection('mysql')->rollback();
-                return response()->json("error_exception");
+                $msgError .= "error_exception";
             }
+        }
+
+        if(isset($msgError) && !is_null($msgError) &&
+            !empty($msgError) && $msgError !== "")
+        {
+            return response()->json($msgError);
         }
     }
 }

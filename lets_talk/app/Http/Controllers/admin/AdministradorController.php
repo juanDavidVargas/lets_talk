@@ -546,7 +546,7 @@ class AdministradorController extends Controller
             return view('database_connection');
         } else {
             $niveles = Nivel::select('id_nivel','nivel_descripcion','ruta_pdf_nivel','deleted_at')
-                                    ->orderBy('nivel_descripcion', 'asc')
+                                    ->orderBy('id_nivel', 'DESC')
                                     ->get();
 
             return view($vista, compact('niveles'));

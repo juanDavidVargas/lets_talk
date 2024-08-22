@@ -11,12 +11,8 @@ Route::get('/', function ()
     return view('inicio_sesion.login');
 })->name('home');
 
-// ============================================================
-
 // RUTA COMPROBAR CONEXIÓN BASE DE DATOS
 Route::get('check_database_connection', 'inicio_sesion\LoginController@checkDatabaseConnection')->name('check_database_connection');
-
-// ============================================================
 
 // SERVIDOR REMOTO (CPANEL) DEL STORAGE:LINK
 Route::get('storage-link', function(){
@@ -33,8 +29,6 @@ Route::get('storage-link', function(){
     return 'El directorio "public/storage" ha sido vinculado (linked)';
 });
 
-// ============================================================
-
 Route::group(['middleware' => ['verify_current_user']], function () {
     // Rutas Login
     Route::resource('login', 'inicio_sesion\LoginController');
@@ -47,8 +41,6 @@ Route::group(['middleware' => ['verify_current_user']], function () {
     Route::post('recovery_password_post', 'inicio_sesion\LoginController@recoveryPasswordPost')->name('recovery_password_post');
     Route::get('logout', 'inicio_sesion\LoginController@logout')->name('logout');
 
-    // ============================================================
-
     // Rutas ADMINISTRADOR
     Route::resource('administrador', 'admin\AdministradorController');
     Route::post('cambiar_estado', 'admin\AdministradorController@cambiarEstadoUsuario')->name('cambiar_estado');
@@ -57,21 +49,22 @@ Route::group(['middleware' => ['verify_current_user']], function () {
     Route::post('validar_correo', 'admin\AdministradorController@validarCorreo')->name('validar_correo');
     Route::post('validar_correo_edicion', 'admin\AdministradorController@validarCorreoEdicion')->name('validar_correo_edicion');
     Route::post('actualizar_clave', 'admin\AdministradorController@actualizarClave')->name('actualizar_clave');
+    
+    // Rutas módulo disponibilidades
     Route::get('disponibilidad_entrenadores', 'admin\AdministradorController@disponibilidades')->name('administrador.disponibilidad_entrenadores');
     Route::post('actualizar_disponibilidad_entrenador', 'admin\AdministradorController@actualizarDisponibilidad')->name('actualizar_evento');
     Route::get('disponibilidad_admin', 'admin\AdministradorController@vistaAdminDisponibilidad')->name('administrador.disponibilidad_admin');
     Route::post('disponibilidad_admin_store', 'admin\AdministradorController@storeAdminDisponibilidad')->name('administrador.disponibilidad_admin_store');
     Route::post('disponibilidad_admin_state', 'admin\AdministradorController@changeStateAdminDisponibilidad')->name('disponibilidad_admin_state');
+    Route::get('disponibilidades_libres', 'admin\AdministradorController@disponibilidadesLibres')->name('administrador.disponibilidades_libres');
+    
+    // Rutas módulo niveles
     Route::get('niveles_index', 'admin\AdministradorController@nivelesIndex')->name('administrador.niveles_index');
     Route::post('crear_nivel', 'admin\AdministradorController@crearNivel')->name('crear_nivel');
     Route::post('editar_nivel', 'admin\AdministradorController@editarNivel')->name('editar_nivel');
     Route::post('inactivar_nivel', 'admin\AdministradorController@inactivarNivel')->name('inactivar_nivel');
     Route::post('activar_nivel', 'admin\AdministradorController@activarNivel')->name('activar_nivel');
     Route::post('consultar_nivel', 'admin\AdministradorController@consultarNivel')->name('consultar_nivel');
-    Route::get('disponibilidades_libres', 'admin\AdministradorController@disponibilidadesLibres')->name('administrador.disponibilidades_libres');
-// });
-
-    // ============================================================
 
     // Rutas ENTRENADOR
     Route::resource('trainer', 'entrenador\EntrenadorController');
@@ -84,8 +77,6 @@ Route::group(['middleware' => ['verify_current_user']], function () {
     Route::post('actualizacion_masiva_diponibilidades', 'entrenador\EntrenadorController@actualizacionMasivaDiponibilidades')->name('actualizacion_masiva_diponibilidades');
     Route::get('student_resume', 'entrenador\EntrenadorController@studentResume')->name('student_resume');
     Route::post('estudiante_hoja_vida', 'entrenador\EntrenadorController@estudianteHojaVida')->name('estudiante_hoja_vida');
-
-    // ============================================================
 
     // Rutas ESTUDIANTE
     Route::resource('estudiante', 'estudiante\EstudianteController');
@@ -102,13 +93,9 @@ Route::group(['middleware' => ['verify_current_user']], function () {
     Route::get('/auth/google/callback/cancelar', 'estudiante\EstudianteController@handleGoogleCallbackCancelar');
     Route::get('/create-meet', 'estudiante\EstudianteController@createMeet')->name('createMeet');
 
-    // ============================================================
-
     // Rutas FOOTER
     Route::get('about_us', 'comunes\ComunController@aboutUs')->name('about_us');
     Route::get('services', 'comunes\ComunController@services')->name('services');
-
-    // ============================================================
 });
 
 

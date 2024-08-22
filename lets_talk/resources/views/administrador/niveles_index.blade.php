@@ -122,7 +122,8 @@
     <script>
         $( document ).ready(function()
         {
-            setTimeout(() => {
+            setTimeout(() =>
+            {
                 $("#loaderGif").hide();
                 $("#loaderGif").addClass('ocultar');
             }, 1500);
@@ -171,10 +172,25 @@
 
             html += `       <div class="file-container" style="margin-top:5rem">
                                 <div class="div-file">
-                                    <input type="file" name="file_crear_nivel" id="file_crear_nivel" class="file" onchange="displaySelectedFile('file_crear_nivel', 'selected_file_crear_nivel')" />
+                                    <input type="file" name="file_crear_nivel" id="file_crear_nivel" class="file"
+                                            onchange="validationsSelectedFile()" />
                                 </div>
-                                <p id="fileError" style="color: red; display: none;">Please upload a valid PDF or image file.</p>
                             </div>
+                            <br>
+            `;
+
+            html += `
+                        <br>
+                        <div class="alert alert-danger ocultar" role="alert" id="alertFile">
+                            <span id="msgAlert"></span>
+                        </div>
+            `;
+
+            html += `
+                        <br>
+                        <div class="alert alert-danger ocultar" role="alert" id="alertFileSize">
+                            The file weight must not exceed 10 mb.
+                        </div>
             `;
 
             html += `<img  class="ocultar" src="{{asset('img/loading.gif')}}"
@@ -203,7 +219,6 @@
             $('#btn_crear_nivel').on('click', function ()
             {
                 let nuevoNivel = $('#crear_nivel').val();
-                let fileCrearNivel = $('#file_crear_nivel').val();
 
                 if (nuevoNivel == "" || nuevoNivel == undefined)
                 {
@@ -216,15 +231,22 @@
                     $("#level_alert").hide();
                     $("#level_alert").addClass('ocultar');
 
+                    var formData = new FormData();
+                    var fileData = $("#file_crear_nivel").prop("files")[0];
+
+                    formData.append("file_crear_nivel", fileData);
+                    formData.append("nuevo_crear_nivel", nuevoNivel);
+
                     $.ajax({
+                        cache: false,
+                        contentType: false,
                         async: true,
                         url: "{{route('crear_nivel')}}",
                         type: "POST",
                         dataType: "JSON",
-                        data: {
-                            'nuevo_crear_nivel': nuevoNivel,
-                            'file_crear_nivel': fileCrearNivel,
-                        },
+                        enctype: 'multipart/form-data',
+                        processData: false,
+                        data: formData,
                         beforeSend: function ()
                         {
                             $("#loading_ajax").show();
@@ -266,7 +288,7 @@
 
                                 Swal.fire(
                                     'Warning!',
-                                    'This level already exists!',
+                                    'This level name already exists!',
                                     'warning'
                                 );
                                 return;
@@ -289,7 +311,7 @@
                 }
             });
 
-            setTimeout(() => {
+            setInterval(() => {
                 $("#level_alert").hide();
                 $("#level_alert").addClass('ocultar');
             }, 6000);
@@ -318,20 +340,28 @@
                         </div>
                     `;
 
-            // html +=     `<div class="div-file">
-            //                 <input type="file" name="file_editar_nivel" id="file_editar_nivel" class="file" />
-            //             </div>
-            // `;
-
             html += `   <div class="file-container" style="margin-top:5rem">
                             <div class="div-file">
-                                <input type="file" name="file_editar_nivel" id="file_editar_nivel" class="file" onchange="displaySelectedFile('file_editar_nivel', 'selected_file_editar_nivel')" />
+                                <input type="file" name="file_editar_nivel" id="file_editar_nivel" class="file"
+                                     onchange="validationsSelectedFile()" />
                             </div>
-                            <p id="fileError" style="color: red; display: none;">Please upload a valid PDF or image file.</p>
+                            <p style="color: red;">If you want to replace the file, select a new file and the system will update it</p>
                         </div>
             `;
 
-            html += `<img class="ocultar" src="{{asset('img/loading.gif')}}" id="loading_ajax" alt="loading..." />`;
+            html += `
+                        <br>
+                        <div class="alert alert-danger ocultar" role="alert" id="alertFileEdit">
+                            <span id="msgAlertEditar"></span>
+                        </div>
+            `;
+
+            html += `
+                        <br>
+                        <div class="alert alert-danger ocultar" role="alert" id="alertFileSizeEdit">
+                            The file weight must not exceed 10 mb.
+                        </div>
+            `;
 
             html += `{!! Form::close() !!}`;
 
@@ -365,18 +395,8 @@
     
                     } else
                     {
-                        // $('#form_edit_nivel').on('submit', function(e) {
-                        //     var archivoInput = $('#file_editar_nivel');
-                        //     var fileType = archivoInput[0].files.length ? archivoInput[0].files[0].type : '';
-                        //     var allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
-
-                        //     if (fileType && !allowedTypes.includes(fileType)) {
-                        //         e.preventDefault();
-                        //         $('#fileError').text('Please upload a valid PDF or image file (jpg, jpeg, png).').show();
-                        //     } else {
-                        //         $('#fileError').hide();
-                        //     }
-                        // });
+                        $("#loaderGif").show();
+                        $("#loaderGif").removeClass('ocultar');
                         
                         formulario.submit();
                     }
@@ -392,8 +412,9 @@
             html += `@csrf`;
             html +=     `<input type="hidden" name="id_nivel" id="id_nivel" value="${idNivel}" required />`;
             html +=     `<label class="font14">This option inactive this level, ¿Are you sure?</label>`;
+            html += `<img  class="ocultar" src="{{asset('img/loading.gif')}}" id="loading_ajax" alt="loading..." />`;
             html +=     `<div class="div-level-name">
-                            <input type="submit" value="Yes, inactivate"
+                            <input type="button" value="Yes, inactivate"
                                     class="btn btn-primary" id="btn_inactivar_nivel">
                         </div>
             `;
@@ -411,6 +432,14 @@
                 cancelButtonText: 'Cancel',
                 allowOutsideClick: false,
             });
+
+            $("#btn_inactivar_nivel").click(function()
+            {
+                $("#loading_ajax").show();
+                $("#loading_ajax").removeClass('ocultar');
+                $("#btn_inactivar_nivel").attr('disabled', true);
+                $("#form_inactivar_nivel").submit();
+            });
         }
 
         function activarNivel(idNivel)
@@ -421,8 +450,9 @@
             html += `@csrf`;
             html +=     `<input type="hidden" name="id_nivel" id="id_nivel" value="${idNivel}" required />`;
             html +=     `<label class="font14">This option active this level, ¿Are you sure?</label>`;
+            html += `<img  class="ocultar" src="{{asset('img/loading.gif')}}" id="loading_ajax" alt="loading..." />`;
             html +=     `<div class="div-level-name">
-                            <input type="submit" value="Yes, activate" class="btn btn-primary" id="btn_activar_nivel">
+                            <input type="button" value="Yes, activate" class="btn btn-primary" id="btn_activar_nivel">
                         </div>
             `;
             html += `{!! Form::close() !!}`;
@@ -439,22 +469,106 @@
                 cancelButtonText: 'Cancel',
                 allowOutsideClick: false,
             });
+
+            $("#btn_activar_nivel").click(function()
+            {
+                $("#loading_ajax").show();
+                $("#loading_ajax").removeClass('ocultar');
+                $("#btn_activar_nivel").attr('disabled', true);
+                $("#form_activar_nivel").submit();
+            });
         }
 
-        // ============================================
+        function validationsSelectedFile()
+        {
+            // validacion extensiones archivo seleccionado
+            let ruta = $('#file_crear_nivel').val();
+            let rutaEditar = $('#file_editar_nivel').val();
+            let extension = undefined;
+            let extensionEditar = undefined;
+            let fileSize = undefined;
+            let fileSizeEditar = undefined;
+            
+            if(ruta !== undefined || ruta != undefined)
+            {
+                extension = ruta.split('.').pop().toLowerCase();
+            }
 
-        function displaySelectedFile(inputId, displayElementId) {
-            const input = document.getElementById(inputId);
-            const selectedFile = input.files[0];
-            const displayElement = document.getElementById(displayElementId);
+            if(rutaEditar !== undefined || rutaEditar != undefined)
+            {
+                extensionEditar = rutaEditar.split('.').pop().toLowerCase();
+            }
 
-            if (selectedFile) {
-                const selectedFileName = selectedFile.name;
-                displayElement.textContent = selectedFileName;
-                displayElement.classList.remove('hidden');
-            } else {
-                displayElement.textContent = '';
-                displayElement.classList.add('hidden');
+            let allowedFiles = ['jpeg','jpg','png','pdf'];
+
+            if((extension !== undefined && jQuery.inArray(extension, allowedFiles) !== -1) ||
+                (extensionEditar !== undefined && jQuery.inArray(extensionEditar, allowedFiles) !== -1))
+            {
+                $("#alertFile").hide('slow');
+                $("#alertFileEdit").hide('slow');
+                $("#alertFile").addClass('ocultar');
+                $("#alertFileEdit").addClass('ocultar');
+
+                $("#alertFileSize").hide('slow');
+                $("#alertFileSizeEdit").hide('slow');
+                $("#alertFileSize").addClass('ocultar');
+                $("#alertFileSizeEdit").addClass('ocultar');
+            } else
+            {
+                $("#alertFile").show('slow');
+                $("#alertFileEdit").show('slow');
+                $("#alertFile").removeClass('ocultar');
+                $("#alertFileEdit").removeClass('ocultar');
+                
+                $("#alertFileSize").hide('slow');
+                $("#alertFileSizeEdit").hide('slow');
+                $("#alertFileSize").addClass('ocultar');
+                $("#alertFileSizeEdit").addClass('ocultar');
+
+                $("#msgAlert").empty();
+                $("#msgAlertEditar").empty();
+                $("#msgAlert").append('The file must be extension: ' + allowedFiles);
+                $("#msgAlertEditar").append('The file must be extension: ' + allowedFiles);
+                $('#file_crear_nivel').val('');
+                $('#file_editar_nivel').val('');
+            }
+
+            // validacion peso del archivo seleccionado
+            const maxSize = 10 * 1024 * 1024; // 10 mb
+
+            if(ruta !== undefined || ruta != undefined)
+            {
+                fileSize = $('#file_crear_nivel')[0].files[0].size;
+            }
+
+            if(rutaEditar !== undefined || rutaEditar != undefined)
+            {
+                fileSizeEditar = $('#file_editar_nivel')[0].files[0].size;
+            }
+            
+            if((fileSize !== undefined && fileSize > maxSize) ||
+              (fileSizeEditar !== undefined && fileSizeEditar > maxSize))
+            {
+                $("#alertFile").hide('slow');
+                $("#alertFileEditar").hide('slow');
+                $("#alertFile").addClass('ocultar');
+                $("#alertFileEditar").addClass('ocultar');
+                $("#alertFileSize").show('slow');
+                $("#alertFileSizeEdiotar").show('slow');
+                $("#alertFileSize").removeClass('ocultar');
+                $("#alertFileSizeEditar").removeClass('ocultar');
+                $('#file_crear_nivel').val('');
+                $('#file_editar_nivel').val('');
+            } else
+            {
+                $("#alertFile").hide('slow');
+                $("#alertFileEditar").hide('slow');
+                $("#alertFile").addClass('ocultar');
+                $("#alertFileEditar").addClass('ocultar');
+                $("#alertFileSize").hide('slow');
+                $("#alertFileSizeEditar").hide('slow');
+                $("#alertFileSize").addClass('ocultar');
+                $("#alertFileSizeEditar").addClass('ocultar');
             }
         }
     </script>
