@@ -25,21 +25,21 @@ class HorarioState implements Responsable
 
             $verificarDisponibilidadesEntrenadores = $this->verificarDisponibilidades($idHorario);
 
-            if(count($verificarDisponibilidadesEntrenadores) > 0 &&
-               $verificarDisponibilidadesEntrenadores != "error_exception")
+            if($verificarDisponibilidadesEntrenadores != "error_exception" &&
+                !is_null($verificarDisponibilidadesEntrenadores))
             {
                 $estadoAgenda = DB::table('evento_agenda_entrenador')
                                     ->where('id_horario', $idHorario)
                                     ->update([
                                         'state' => DB::raw($estadoAgendaEntrenador)
                                     ]);
-
-            } else {
-                DB::connection('mysql')->rollback();
-                return response()->json('error_exception');
+            } else
+            {
+                $estadoAgenda = true;
             }
 
-            if ($estadoDisponibilidad && $estadoAgenda)
+            if ((isset($estadoDisponibilidad) && $estadoDisponibilidad) &&
+                (isset($estadoAgenda) && $estadoAgenda))
             {
                 DB::connection('mysql')->commit();
                 sleep(2);
@@ -52,6 +52,7 @@ class HorarioState implements Responsable
         } catch (Exception $e)
         {
             DB::connection('mysql')->rollback();
+            dd($e);
             return response()->json('error_exception');
         }
     }
@@ -60,7 +61,15 @@ class HorarioState implements Responsable
     {
         try
         {
-            return EventoAgendaEntrenador::where('id_horario', $idHorario)->get();
+            $disponibilidades = EventoAgendaEntrenador::where('id_horario', $idHorario)->get()->toarray();
+
+            if(!empty($disponibilidades) || $disponibilidades != [])
+            {
+                return $disponibilidades;
+            } else
+            {
+                return null;
+            }
 
         } catch (Exception $e)
         {

@@ -8,7 +8,7 @@
             <form class="login100-form validate-form" method="post" action="{{route('login.store')}}">
                 @csrf
                 <span class="login100-form-title p-b-26">
-                    Welcome
+                    Bienvenido
                 </span>
 
                 <div class="wrap-input100 validate-input" data-validate="Nombre de Usuario obligatorio">
@@ -24,31 +24,23 @@
                     <span class="focus-input100" data-placeholder="Password"></span>
                 </div>
 
-                {{-- <div class="text-right">
-                    <span class="txt1">
-                        <a class="txt2" href="{{route('reset_password_student')}}">
-                            Olvidé Contraseña
-                        </a>
-                    </span>
-                </div> --}}
-
                 <div class="container-login100-form-btn">
                     <div class="wrap-login100-form-btn">
                         <div class="login100-form-bgbtn"></div>
                         <button class="login100-form-btn"  type="submit">
-                            Access
+                            Iniciar Sesión
                         </button>
                     </div>
                 </div>
 
                 <div class="validate-input mt-5" style="margin-top: 4rem" data-validate="">
-                    <a href="{{route('recovery_password')}}">Password Recovery</a>
+                    <a href="{{route('recovery_password')}}">Recuperación de Contraseña</a>
                 </div>
 
                 <div class="text-left p-t-50">
                     <span class="txt1">
                         <a class="txt2 text-white btn btn-primary" href="/">
-                            <i class="fa fa-arrow-left" aria-hidden="true"></i>&nbsp;Back
+                            <i class="fa fa-arrow-left" aria-hidden="true"></i>&nbsp;Atrás
                         </a>
                     </span>
                 </div>

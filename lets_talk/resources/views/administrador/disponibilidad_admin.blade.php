@@ -21,8 +21,6 @@
     </style>
 @stop
 
-{{-- ================================================ --}}
-
 @section('content')
     <div class="row">
         <div class="col-12">
@@ -65,11 +63,11 @@
                                 @if($horario['id_estado'] == 1 )
                                     <a href="#" class="btn btn-sm btn-warning"
                                         id="btn_inactive_schedule_{{$horario['id_horario']}}"
-                                        onclick="changeStateSchedule('{{$horario['id_horario']}}')">Inactive Schedule</a>
+                                        onclick="changeStateSchedule('{{$horario['id_horario']}}')">Inactivate Schedule</a>
                                 @else
                                     <a href="#" class="btn btn-sm btn-success"
                                         id="btn_inactive_schedule_{{$horario['id_horario']}}"
-                                        onclick="changeStateSchedule('{{$horario['id_horario']}}')">Active Schedule</a>
+                                        onclick="changeStateSchedule('{{$horario['id_horario']}}')">Activate Schedule</a>
                                 @endif
                             </td>
                         </tr>
@@ -94,10 +92,10 @@
     <script>
         $(document).ready(function() {
 
-            // setTimeout(() => {
-            //     $("#loaderGif").hide();
-            //     $("#loaderGif").addClass('ocultar');
-            // }, 1500);
+            setTimeout(() => {
+                $("#loaderGif").hide();
+                $("#loaderGif").addClass('ocultar');
+            }, 1500);
 
             $('#tbl_trainer_sessions').DataTable({
                 'ordering': false
@@ -148,7 +146,7 @@
                 return;
             }
 
-            if(diferencia <= 0)
+            if(diferencia <= 0 || diferencia <= 29)
             {
                 Swal.fire(
                     'Error!',
@@ -181,6 +179,8 @@
                         The fields Initial Hour and Final Hour are required
                     </div>
             `;
+
+            form_shedule += `<img  class="ocultar" src="{{asset('img/loading.gif')}}" id="loading_ajax" alt="loading..." />`;
 
             form_shedule += `
                     <input type="button" class="btn btn-primary btnSch" id="btn_store_shedule" value="Create Schedule" >
@@ -350,8 +350,9 @@
                                 $("#loaderGif").addClass('ocultar');
                                 Swal.fire({
                                     position: 'center'
-                                    , title: 'Successful Process!'
-                                    , html: 'The state of schedule has been changed successfully!'
+                                    , title: 'Successfull Process!'
+                                    , html: 'The scheduling status has been successfully modified'
+                                    + ' and all availabilities associated with this schedule have also been changed.!'
                                     , icon: 'info'
                                     , type: 'success'
                                     , showCancelButton: false

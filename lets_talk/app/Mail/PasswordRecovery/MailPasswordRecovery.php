@@ -34,6 +34,7 @@ class MailPasswordRecovery extends Mailable //implements ShouldQueue
      */
     public function build()
     {
-        return $this->view('emails.PasswordRecovery.passwordRecoveryMail')->subject('Password Recovery Info');
+        return $this->view('emails.PasswordRecovery.passwordRecoveryMail')
+                    ->subject('Password Recovery Info');
     }
 }

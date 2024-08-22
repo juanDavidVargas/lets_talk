@@ -11,17 +11,20 @@ class HorarioStore implements Responsable
     public function toResponse($request)
     {
         DB::connection('mysql')->beginTransaction();
+        $msgError = "";
+
         try
         {
             $initialHour = request('hora_inicial', null);
             $finalHour = request('hora_final', null);
             $horario = $initialHour.' - '.$finalHour;
 
-            $consultaHorario = DisponibilidadEntrenadores::selec('horario')
+            $consultaHorario = DisponibilidadEntrenadores::select('horario')
                             ->where('horario', $horario)
                             ->first();
 
-            if (isset($consultaHorario) && !is_null($consultaHorario) && !empty($consultaHorario))
+            if (isset($consultaHorario) && !is_null($consultaHorario) &&
+                !empty($consultaHorario))
             {
                 return response()->json('schedule_exist');
             } else
@@ -38,13 +41,19 @@ class HorarioStore implements Responsable
                 } else
                 {
                     DB::connection('mysql')->rollback();
-                    return response()->json('error');
+                    $msgError .= "error";
                 }
             }
         } catch (Exception $e)
         {
             DB::connection('mysql')->rollback();
-            return response()->json('exception');
+            $msgError .= "exception";
+        }
+
+        if(isset($msgError) && !is_null($msgError) &&
+            !empty($msgError) && $msgError != "")
+        {
+            return response()->json($msgError);
         }
     }
 }

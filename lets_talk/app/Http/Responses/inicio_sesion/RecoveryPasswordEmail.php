@@ -23,7 +23,8 @@ class RecoveryPasswordEmail implements Responsable
                                         ->where('numero_documento', $documentRecovery)
                                         ->first();
     
-            if (isset($consultaRecoveryPass) && !empty($consultaRecoveryPass) && !is_null($consultaRecoveryPass))
+            if (isset($consultaRecoveryPass) &&
+                !empty($consultaRecoveryPass) && !is_null($consultaRecoveryPass))
             {
                 $idUserRecovery = $consultaRecoveryPass->id_user;
                 $usuarioRecovery = $consultaRecoveryPass->usuario;
@@ -33,7 +34,8 @@ class RecoveryPasswordEmail implements Responsable
                     ->send(new MailPasswordRecovery($idUserRecovery, $usuarioRecovery, $correoRecovery));
                 alert()->info('Info','The recovery password information has been sent to your email.');
                 return view('inicio_sesion.login');
-            } else {
+            } else
+            {
                 alert()->error('Error','No records were found in our database with the information entered.');
                 return back();
             }

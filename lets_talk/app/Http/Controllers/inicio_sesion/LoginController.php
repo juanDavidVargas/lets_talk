@@ -37,8 +37,6 @@ class LoginController extends Controller
         }
     }
 
-    // ==============================================================
-
     /**
      * Show the form for creating a new resource.
      *
@@ -48,8 +46,6 @@ class LoginController extends Controller
     {
         //
     }
-
-    // ==============================================================
 
     /**
      * Store a newly created resource in storage.
@@ -62,8 +58,6 @@ class LoginController extends Controller
         return new LoginStore();
     }
 
-    // ==============================================================
-
     /**
      * Display the specified resource.
      *
@@ -75,8 +69,6 @@ class LoginController extends Controller
         //
     }
 
-    // ==============================================================
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -87,8 +79,6 @@ class LoginController extends Controller
     {
         //
     }
-
-    // ==============================================================
 
     /**
      * Update the specified resource in storage.
@@ -102,8 +92,6 @@ class LoginController extends Controller
         //
     }
 
-    // ==============================================================
-
     /**
      * Remove the specified resource from storage.
      *
@@ -114,8 +102,6 @@ class LoginController extends Controller
     {
         //
     }
-
-    // ==============================================================
 
     public function resetPassword()
     {
@@ -129,8 +115,6 @@ class LoginController extends Controller
         }
     }
 
-    // ==============================================================
-
     public function resetPasswordStudent()
     {
         $vista = 'inicio_sesion.resetear_password_estudiante';
@@ -142,8 +126,6 @@ class LoginController extends Controller
             return view($vista);
         }
     }
-
-    // ==============================================================
 
     public function loginEstudiante()
     {
@@ -157,8 +139,6 @@ class LoginController extends Controller
         }
     }
 
-    // ==============================================================
-
     public function recoveryPassword(Request $request)
     {
         $vista = 'inicio_sesion.recovery_password';
@@ -170,8 +150,6 @@ class LoginController extends Controller
             return view($vista);
         }
     }
-
-    // ==============================================================
 
     public function logout(Request $request)
     {
@@ -194,14 +172,10 @@ class LoginController extends Controller
         }
     }
 
-    // ==============================================================
-
     public function recoveryPasswordEmail(Request $request)
     {
         return new RecoveryPasswordEmail();
     }
-
-    // ==============================================================
 
     public function recoveryPasswordLink($id)
     {
@@ -214,8 +188,6 @@ class LoginController extends Controller
             return view($vista, compact('id'));
         }
     }
-
-    // ==============================================================
 
     public function recoveryPasswordPost(Request $request)
     {
