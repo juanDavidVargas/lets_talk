@@ -41,6 +41,8 @@ https://developers.google.com/calendar/api/v3/reference/events/delete?hl=es-419
 calendarList
 https://developers.google.com/calendar/api/v3/reference/calendarList/list?hl=es-419
 
+===============================================================================================
+
 FTP
 Inicio de sesión User: letsTalk
 Pwd: LetsTalk2906204*
@@ -49,3 +51,12 @@ Dir: /home/softdimo/letstalk.softdimo.com/public
 Nombre de usuario de FTP: letsTalk@letstalk.softdimo.com
 Servidor FTP: ftp.softdimo.com
 Puerto FTPS explícito de FTP &:  21
+
+===============================================================================================
+
+https://sandbox-merchant.payvalida.com/login
+user: davidvargas.jdp@gmail.com
+pass: 90122363049David*
+https://docs.payvalida.com/api-tarjeta/v/master/tarjetas-de-prueba/tarjetas-de-prueba
+
+===============================================================================================
