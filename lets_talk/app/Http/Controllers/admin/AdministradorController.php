@@ -27,7 +27,6 @@ use App\Http\Responses\administrador\DisponibilidadUpdate;
 use App\Http\Responses\administrador\DisponibilidadesLibres;
 use App\Http\Controllers\DatabaseConnectionController;
 use App\Traits\MetodosTrait;
-
 class AdministradorController extends Controller
 {
     use MetodosTrait;

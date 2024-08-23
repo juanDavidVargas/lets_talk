@@ -17,99 +17,136 @@ class AgendaEntrenadorStore implements Responsable
 {
     public function toResponse($request)
     {
+        set_time_limit(0);
+        ini_set('max_execution_time', 0);
+
         $disponibilidad = request('hrs_disponibilidad', null);
         $fecha_disponibilidad = request('fecha_evento', null);
         $entrenador_id = request('trainer_id', null);
         $numDia = request('numero_dia', null);
         $dia = !is_null($numDia) ? implode("", $numDia) : null;
         $idRol = session('rol');
+        $msgError = "";
 
-        if(isset($disponibilidad) && !is_null($disponibilidad) && !empty($disponibilidad))
-        {
-            $array_disponibilidad = explode(",", $disponibilidad);
-        } else {
-            $array_disponibilidad = [];
-        }
-
-        if($array_disponibilidad == [] || count($array_disponibilidad) == 0 || empty($array_disponibilidad))
-        {
-            return response()->json("error_horas");
-        }
-
+        $array_disponibilidad = $this->llenarDiponibilidad($disponibilidad);
         DB::connection('mysql')->beginTransaction();
 
         try
         {
-            foreach ($array_disponibilidad as $disp)
+            if($array_disponibilidad != "error_exc_disp" &&
+                ($array_disponibilidad != [] || count($array_disponibilidad) > 0))
             {
-                $horas_disp= DisponibilidadEntrenadores::select('horario')
-                                                        ->where('id_horario', $disp)
-                                                        ->first();
+                foreach ($array_disponibilidad as $disp)
+                {
+                    $horas_disp = $this->disponibilidadEntrenadores($disp);
 
-                $hora_inicio = substr($horas_disp->horario, 0, 5);
-                $hora_fin = substr($horas_disp->horario, 8);
+                    $hora_inicio = substr($horas_disp->horario, 0, 5);
+                    $hora_fin = substr($horas_disp->horario, 8);
 
-                if(isset($entrenador_id) && !is_null($entrenador_id) &&!empty($entrenador_id) && $entrenador_id != "-1" &&  $idRol == 2) {
-                    $user = $this->traerNombreUsuario($entrenador_id);
-                    $usuario = $user->usuario;
-                    $state = 1; // Aprobado
-                    $id_instructor = $entrenador_id;
-                    $user_id = session('usuario_id');
+                    if(!is_null($entrenador_id) && $entrenador_id != "-1" && $idRol == 2)
+                    {
+                        $user = $this->traerNombreUsuario($entrenador_id);
+                        $usuario = $user->usuario;
+                        $state = 1; // Aprobado
+                        $user_id = session('usuario_id');
 
-                } else {
-                    $usuario = session('username');
-                    $state = 2;
-                    $user_id = session('usuario_id');
-                    $id_instructor = $entrenador_id;
+                    } else
+                    {
+                        $usuario = session('username');
+                        $state = 2;
+                        $user_id = session('usuario_id');
+                    }
+
+                    $consultaDisponibilidades = $this->validarDisponibilidadUsuario($entrenador_id, $disp);
+
+                    if ($consultaDisponibilidades > 0 &&
+                        $consultaDisponibilidades != 'error_datos_disp')
+                    {
+                        return response()->json("ya_existe");
+                    }
+
+                    $insert_evento = EventoAgendaEntrenador::create([
+                        'title' => 'Disp. ' . $usuario,
+                        'description' => 'Hrs de disp. ' . $usuario,
+                        'start_date' => $fecha_disponibilidad,
+                        'start_time' => trim($hora_inicio),
+                        'end_date' => $fecha_disponibilidad,
+                        'end_time' => trim($hora_fin),
+                        'color' => '#157347',
+                        'state' => $state,// Pendiente Aprobación
+                        'id_instructor' => $entrenador_id,
+                        'id_usuario' => $user_id,
+                        'id_horario' => $disp,
+                        'num_dia' => intval($dia),
+                        'clase_estado' => 10
+                    ]);
                 }
 
-                $consultaDisponibilidades = $this->validarDisponibilidadUsuario($entrenador_id);
-
-                if ($consultaDisponibilidades > 0 && 
-                    $consultaDisponibilidades != 'error_datos_disp') {
-
-                    return response()->json("ya_existe");
+                if($insert_evento)
+                {
+                    DB::connection('mysql')->commit();
+    
+                    if(!is_null($state) && !empty($state) &&  $state == 2)
+                    {
+                        $this->enviarCorreoAdminAprobacion($user_id);
+                    }
+    
+                    return response()->json("success_evento");
+    
+                } else
+                {
+                    DB::connection('mysql')->rollback();
+                    $msgError = "error_evento";
                 }
-
-                $insert_evento = EventoAgendaEntrenador::create([
-                    'title' => 'Disp. ' . $usuario,
-                    'description' => 'Hrs de disp. ' . $usuario,
-                    'start_date' => $fecha_disponibilidad,
-                    'start_time' => trim($hora_inicio),
-                    'end_date' => $fecha_disponibilidad,
-                    'end_time' => trim($hora_fin),
-                    'color' => '#157347',
-                    'state' => $state,// Pendiente Aprobación
-                    'id_instructor' => $id_instructor,
-                    'id_usuario' => $user_id,
-                    'id_horario' => $disp,
-                    'num_dia' => intval($dia),
-                    'clase_estado' => 10
-                ]);
-            }
-
-            if($insert_evento)
+            } else
             {
-                DB::connection('mysql')->commit();
-
-                if(isset($state) && !is_null($state) && !empty($state) &&  $state == 2) {
-
-                    $this->enviarCorreoAdminAprobacion($user_id);
-                }
-
-                return response()->json("success_evento");
-            } else {
-                DB::connection('mysql')->rollback();
-                return response()->json("error_evento");
+                $msgError = "exception_evento";
             }
 
         } catch (Exception $e)
         {
             DB::connection('mysql')->rollback();
+            dd($e);
             Logger("Error creando el evento: {$e}");
-            return response()->json('exception_evento');
+            $msgError = "exception_evento";
+        }
+
+        return response()->json($msgError);
+    }
+
+    private function llenarDiponibilidad($disponibilidad)
+    {
+        try
+        {
+            if(!is_null($disponibilidad) && !empty($disponibilidad))
+            {
+                $array_disponibilidad = explode(",", $disponibilidad);
+            } else {
+                $array_disponibilidad = [];
+            }
+
+        } catch (Exception $e)
+        {
+            return "error_exc_disp";
+        }
+
+        return $array_disponibilidad;
+    }
+
+    private function disponibilidadEntrenadores($disp)
+    {
+        try
+        {
+            return DisponibilidadEntrenadores::select('horario')
+                                                        ->where('id_horario', $disp)
+                                                        ->first();
+            
+        } catch (Exception $e)
+        {
+            return "error_disponibilidad";
         }
     }
+
     private function traerNombreUsuario($entrenador_id)
     {
         try {
@@ -126,8 +163,8 @@ class AgendaEntrenadorStore implements Responsable
     {
         $id_evento = request('id_evento', null);
 
-        try {
-
+        try
+        {
             $evento = EventoAgendaEntrenador::find($id_evento);
             $evento->delete();
 
@@ -152,8 +189,7 @@ class AgendaEntrenadorStore implements Responsable
            isset($datos_admin) && !empty($datos_admin) && !is_null($datos_admin)
            && $datos_admin != "error_datos_admin")
         {
-
-            if(isset($traer_disponibilidad) && $traer_disponibilidad != "error_datos_disp")
+            if(!is_null($traer_disponibilidad) && $traer_disponibilidad != "error_datos_disp")
             {
                 //Envio del correo
                 Mail::to($datos_admin->correo)
@@ -188,12 +224,13 @@ class AgendaEntrenadorStore implements Responsable
         }
     }
 
-    public function validarDisponibilidadUsuario($usuario_id)
+    public function validarDisponibilidadUsuario($usuario_id, $disp)
     {
         try
         {
             return EventoAgendaEntrenador::where('id_usuario', $usuario_id)
-                                            ->where('state', 2)
+                                            ->where('id_horario', $disp)
+                                            ->whereIn('state', [1,2])
                                             ->get()
                                             ->count();
         } catch (Exception $e)
@@ -208,7 +245,7 @@ class AgendaEntrenadorStore implements Responsable
         try
         {
             return EventoAgendaEntrenador::where('id_usuario', $usuario_id)
-                                            ->where('state', 2)
+                                            ->whereIn('state', [1,2])
                                             ->get();
         } catch (Exception $e)
         {

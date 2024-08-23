@@ -100,7 +100,8 @@
                 <div id="calendar"></div>
 
                 {{-- Inicio Modal --}}
-                <div class="modal" data-backdrop="static" data-keyboard="false" id="myModal" tabindex="-1" aria-labelledby="Label" aria-hidden="true" role="dialog">
+                <div class="modal" data-backdrop="static" data-keyboard="false" id="myModal"
+                    tabindex="-1" aria-labelledby="Label" aria-hidden="true" role="dialog">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header bg-primary text-center">
@@ -133,7 +134,7 @@
                                                 <input type="hidden" name="fecha_evento" id="fecha_evento" value="">
                                             </div>
                                         </div>
-                                    </div> {{-- FIN modal-body row --}}
+                                    </div>
 
                                     <div class="row">
                                         <div class="col-12">
@@ -144,11 +145,21 @@
                                             </div>
                                             @endif
                                         </div>
-                                    </div> {{-- FIN row --}}
-                                </div> {{-- FIN modal-body --}}
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 text-center">
+                                            <img  class="ocultar" src="{{asset('img/loading.gif')}}"
+                                                    id="loading_ajax" alt="loading..." width="250" height="250"
+                                                    style="margin-left: 20%;" />
+                                        </div>
+                                    </div>
+
+                                </div>
 
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnClose">Close</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                        id="btnClose">Close</button>
                                     <button type="submit" class="btn btn-success" id="btnAccion">Save</button>
                                 </div> {{-- FIN modal-footer --}}
                             {!! Form::close() !!}
@@ -160,6 +171,8 @@
         </div> {{-- FIN col-12 --}}
     </div> {{-- FIN row p-t-30 --}}
 </div> {{-- FIN container --}}
+
+@include('layouts.loader')
 
 <!-- Include Footer -->
 {{-- @include('layouts.footer') --}}
@@ -199,7 +212,8 @@
                 <!-- Grid column -->
                 <div class="col-md-2">
                     <h6 class="text-uppercase font-weight-bold">
-                        <a href="mailto:letstalkmedellin@gmail.com" class="text-white fw-bold" target="_blank" style="text-decoration: none;">Contact</a>
+                        <a href="mailto:letstalkmedellin@gmail.com" class="text-white fw-bold"
+                            target="_blank" style="text-decoration: none;">Contact</a>
                     </h6>
                 </div>
                 <!-- Grid column -->
@@ -305,7 +319,7 @@
                     dayName = daysArray[day];
                 }
 
-                // Validamos que no se puedan crear eventos más de 15 dias en el futurotrainer_id
+                // Validamos que no se puedan crear eventos más de 15 dias en el futuro
                 if(fechaEvento > nueva_fecha_formato)
                 {
                     Swal.fire(
@@ -367,9 +381,13 @@
                         "_token": "{{ csrf_token() }}",
                         'id_evento': idEvento,
                     },
+                    beforeSend: function()
+                    {
+                        $("#loaderGif").show();
+                        $("#loaderGif").removeClass('ocultar');
+                    },
                     success: function (response)
                     {
-                    
                         if(response == "error_exception")
                         {
                             Swal.fire(
@@ -395,7 +413,7 @@
 
                         $(`#${idHorario}`).attr('checked', true);
                         $(`#${idHorario}`).prop('checked',true);
-
+                        $("#trainer_id").val(response[0].id_instructor);
                         myModal.show();
                     }
                 });
@@ -456,24 +474,23 @@
                     },
                     beforeSend: function()
                     {
-                        $("#loaderGif").show();
-                        $("#loaderGif").removeClass('ocultar');
+                        $("#loading_ajax").show();
+                        $("#loading_ajax").removeClass('ocultar');
                         $("#btnAccion").attr('disabled', 'disabled');
                     },
                     success: function(response)
                     {
-                        $("#loaderGif").show();
-                        $("#loaderGif").removeClass('ocultar');
+                        $("#loading_ajax").show();
+                        $("#loading_ajax").removeClass('ocultar');
 
                         if(response == "exception_evento")
                         {
-                            $("#loaderGif").hide();
-                            $("#loaderGif").addClass('ocultar');
+                            $("#loading_ajax").hide();
+                            $("#loading_ajax").addClass('ocultar');
                             myModal.hide();
-                            $("#loaderGif").hide();
                             Swal.fire(
                                 'Error',
-                                'An error occurred, contact support.',
+                                'An unexpected error occurred, contact support.',
                                 'error'
                             );
                             return;
@@ -481,13 +498,12 @@
 
                         if(response == "error_evento")
                         {
-                            $("#loaderGif").hide();
-                            $("#loaderGif").addClass('ocultar');
+                            $("#loading_ajax").hide();
+                            $("#loading_ajax").addClass('ocultar');
                             myModal.hide();
-                            $("#loaderGif").hide();
                             Swal.fire(
                                 'Error',
-                                'An error occurred, try again, if the problem persists contact support.',
+                                'An unexpected error occurred, try again, if the problem persists contact support.',
                                 'error'
                             );
                             return;
@@ -495,10 +511,9 @@
 
                         if(response == "error_horas")
                         {
-                            $("#loaderGif").hide();
-                            $("#loaderGif").addClass('ocultar');
+                            $("#loading_ajax").hide();
+                            $("#loading_ajax").addClass('ocultar');
                             myModal.hide();
-                            $("#loaderGif").hide();
                             Swal.fire(
                                 'Error',
                                 'Not availability schedule was selected.',
@@ -507,10 +522,24 @@
                             return;
                         }
 
+                        if(response == "ya_existe")
+                        {
+                            $("#loading_ajax").hide();
+                            $("#loading_ajax").addClass('ocultar');
+                            Swal.fire(
+                                'Error!',
+                                'There is already an event for the same selected day and time!',
+                                'error'
+                            );
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 3500);
+                        }
+
                         if(response == "success_evento")
                         {
-                            $("#loaderGif").hide();
-                            $("#loaderGif").addClass('ocultar');
+                            $("#loading_ajax").hide();
+                            $("#loading_ajax").addClass('ocultar');
                             Swal.fire(
                                 'Successfully!',
                                 'Event successfully created!',
@@ -541,16 +570,11 @@
         $("#horarios").val(checked);
     }
 
-    $("#btnClose").click(function(info){
-
-        let datos = myData;
-        let array_datos = Object.values(datos);
-
-        array_datos.forEach(element =>
-        {
-            $(`#${element.id}`).removeAttr('checked', false);
-            $(`#${element.id}`).css('background-color', "#21277B");
-        });
+    $("#btnClose").click(function(info)
+    {
+        $("#loaderGif").show();
+        $("#loaderGif").removeClass('ocultar');
+        window.location.reload();
 
     });
 
@@ -588,7 +612,6 @@
 
                 $.each(response.agenda, function(index, element)
                 {
-                    console.log(element);
                     myData.push(
                         {
                             id: [element.id, element.id_horario, element.id_instructor, element.clase_estado, element.nombres],
