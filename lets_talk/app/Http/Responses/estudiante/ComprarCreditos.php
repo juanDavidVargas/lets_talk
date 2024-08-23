@@ -83,8 +83,9 @@ class ComprarCreditos implements Responsable
 
         } catch (Exception $e)
         {
+            // dd($e);
             DB::connection('mysql')->rollback();
-            $messageError .= 'Ha ocurrido un error, íntente de nuevo, si el problema persiste, contacte a soporte.!';
+            $messageError .= 'Error Exception, íntente de nuevo, si el problema persiste, contacte a soporte.!';
         }
 
         if(empty($messageError) || $messageError != "")
