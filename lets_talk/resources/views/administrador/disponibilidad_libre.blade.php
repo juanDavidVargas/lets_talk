@@ -47,7 +47,6 @@
     </div>
 </div>
 
-@include('administrador.modal')
 @include('layouts.loader')
 
 @stop
