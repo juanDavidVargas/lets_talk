@@ -211,8 +211,6 @@
                 // },
                 success: function(response)
                 {
-                    console.log(response);
-
                     if(response[0].original == "error_exception")
                     {
                         $("#loaderGif").hide();
@@ -237,72 +235,54 @@
                         return;
                     }
 
-                    html = `<p class="gral-font center-align"><strong>SESSION DETAILS</strong></p>`;
+                    html = `<p class="gral-font center-align fs-24"><strong>SESSION DETAILS</strong></p>`;
 
                     html += `
                             <div class="d-flex flex-row margin-top" style="padding:0; width:100%;">
                                 <div style="width:50%">
-                                    <p class="gral-font" style="color:#33326C;">${response[0].nombre_completo}</p>
+                                <p class="gral-font" style="color:#33326C;">
+                                    ${response[0].nombre_completo}</p>
                                 </div>
                     `;
-                                if (response[0].nivel_descripcion) {
-                                    if (response[0].nivel_descripcion == "LOW") {
-                                        html += `<div class="d-flex flex-row" style="padding:0; width:50%;">
-                                                    <p class="gral-font w50">LEVEL:</p>
-                                                    <p class="color-low center-align w50">${response[0].nivel_descripcion}</p>
-                                                 </div>
-                                        `;
-                                    } else if (response[0].nivel_descripcion == "MID") {
-                                        html += `<div class="d-flex flex-row" style="padding:0; width:50%;">
-                                                    <p class="gral-font w50">LEVEL:</p>
-                                                    <p class="color-mid center-align w50">${response[0].nivel_descripcion}</p>
-                                                 </div>
-                                        `;
-                                    } else if (response[0].nivel_descripcion == "HI") {
-                                        html += `<div class="d-flex flex-row" style="padding:0; width:50%;">
-                                                    <p class="gral-font w50">LEVEL:</p>
-                                                    <p class="color-hi center-align w50">${response[0].nivel_descripcion}</p>
-                                                 </div>
-                                        `;
-                                    }
-                                } else {
-                                    html += `<div class="col-md-6" style="padding:0"><p>LEVEL: </p></div>`;
-                                }
+
+                        if (response[0].nivel_descripcion) {
+                            if (response[0].nivel_descripcion == "LOW") {
+                                html += `<div class="d-flex flex-row" style="padding:0; width:50%;">
+                                            <p class="gral-font w50">LEVEL</p>
+                                            <p class="color-low center-align w50">${response[0].nivel_descripcion}</p>
+                                        </div>
+                                `;
+                            } else if (response[0].nivel_descripcion == "MID") {
+                                html += `<div class="d-flex flex-row" style="padding:0; width:50%;">
+                                            <p class="gral-font w50">LEVEL:</p>
+                                            <p class="color-mid center-align w50">${response[0].nivel_descripcion}</p>
+                                        </div>
+                                `;
+                            } else if (response[0].nivel_descripcion == "HI") {
+                                html += `<div class="d-flex flex-row" style="padding:0; width:50%;">
+                                            <p class="gral-font w50">LEVEL:</p>
+                                            <p class="color-hi center-align w50">${response[0].nivel_descripcion}</p>
+                                        </div>
+                                `;
+                            }
+                        } else {
+                            html += `<div class="col-md-6" style="padding:0"><p>LEVEL: </p></div>`;
+                        }
                     html += `
-                            </div>
+                        </div>
                     `;
 
-                    // ==============================================
-
-                    if (response[0].celular)
-                    {
-                        html += `<p class="gral-font w50">PHONE: ${response[0].celular}</p>`;
-                    }
-                    else
-                    {
-                        html += `<p class="gral-font w50">PHONE: </p>`;
-                    }
-
-                    if (response[0].correo)
-                    {
-                        html += `<p class="gral-font w50">EMAIL: ${response[0].correo}</p>`;
-                    }
-                    else
-                    {
-                        html += `<p class="gral-font w50">EMAIL: </p>`;
-                    }
-
-                    // ==============================================
-
                     html += `   <p class="gral-font margin-y">INTERNAL EVALUATION (NOTES)</p>`;
-                    html += `   {!! Form::open(['method' => 'POST', 'route' => ['evaluacion_interna_entrenador'],'class'=>['form-horizontal form-bordered'],'id'=>'form_evaluacion', 'enctype'=>'multipart/form-data']) !!}`;
+                    html += `   {!! Form::open(['method' => 'POST', 'route' => ['evaluacion_interna_entrenador'],
+                                    'class'=>['form-horizontal form-bordered'],'id'=>'form_evaluacion', 'enctype'=>'multipart/form-data']) !!}`;
                     html += `   @csrf`;
                     html += `       <input type="hidden" name="id_estudiante" id="id_estudiante" value="${response[0].id_user}"/>`;
                     html += `       <input type="hidden" name="id_trainer_horario" id="id_trainer_horario" value="${response[0].id_trainer_horario}"/>`;
-                    html += `       <textarea name="evaluacion_interna" class="w100" rows="10" required></textarea>`;
+                    html += `       <textarea name="evaluacion_interna" class="w100 fs-18" rows="6" required></textarea>`;
                     html += `       <div class="file-container" style="margin-top:5rem">
                                         <div class="div-file">
-                                            <input type="file" name="archivo_evaluacion" id="archivo_evaluacion" class="file" onchange="displaySelectedFile('archivo_evaluacion', 'selected_archivo_evaluacion')" />
+                                            <input type="file" name="archivo_evaluacion" id="archivo_evaluacion" 
+                                            class="file" onchange="displaySelectedFile('archivo_evaluacion', 'selected_archivo_evaluacion')" />
                                         </div>
                                         <p id="fileError" style="color: red; display: none;">Please upload a valid PDF or image file.</p>
                                     </div>
@@ -311,9 +291,8 @@
                                     <button type="submit" class="btn-evaluation">SAVE EVALUATION</button>
                                 </div>
                     `;
-                    html += `   {!! Form::close() !!}`;
 
-                    // ==============================================
+                    html += `   {!! Form::close() !!}`;
 
                     html += `   <div class="flex flex-start" style="margin-top:3rem;">
                                     <button class="btn-evaluation" id="old_valuation">OLD EVALUATION</button>
@@ -327,8 +306,8 @@
                         showConfirmButton: false,
                         focusConfirm: false,
                         allowOutsideClick: false,
-                        width: 850,
-                        padding: '5em',
+                        width: 600,
+                        padding: '3em',
                         background: '#fff',
                     });
 
@@ -374,10 +353,6 @@
                                 'id_estudiante': idEstudianteEvaluacion,
                                 'id_instructor': idInstructor
                             },
-                            // beforeSend: function() {
-                            //     $("#loaderGif").show();
-                            //     $("#loaderGif").removeClass('ocultar');
-                            // },
                             success: function(response) {
 
                                 if(response == 404) {

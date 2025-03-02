@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Support\Facades\DB;
 use App\Models\entrenador\DisponibilidadEntrenadores;
+use Carbon\Carbon;
 class HorarioStore implements Responsable
 {
     public function toResponse($request)
@@ -17,7 +18,9 @@ class HorarioStore implements Responsable
         {
             $initialHour = request('hora_inicial', null);
             $finalHour = request('hora_final', null);
-            $horario = $initialHour.' - '.$finalHour;
+            $convertionInitialHr = Carbon::createFromFormat('H:i:s', $initialHour.":00")->format('g:i A');
+            $convertionFinalHr = Carbon::createFromFormat('H:i:s', $finalHour.":00")->format('g:i A');
+            $horario = $convertionInitialHr.' - '.$convertionFinalHr;
 
             $consultaHorario = DisponibilidadEntrenadores::select('horario')
                             ->where('horario', $horario)

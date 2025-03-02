@@ -164,13 +164,13 @@
             form_shedule += `
                     <div style="margin-top:2rem;">
                         <label class="lb-time">Initial Hour</label>
-                        <input type="time" min="08:00" max="20:30"
+                        <input type="time"
                                 name="initial_hour" id="initial_hour" step="1800" class="hour" required>
                     </div>
 
                     <div>
                         <label class="lb-time">Final Hour</label>
-                        <input type="time" min="08:00" max="20:00"
+                        <input type="time"
                                 name="final_hour" id="final_hour" step="1800" class="hour"
                                 onblur="validarHoras()" required>
                     </div>

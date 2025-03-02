@@ -40,8 +40,8 @@ class AgendaEntrenadorStore implements Responsable
                 {
                     $horas_disp = $this->disponibilidadEntrenadores($disp);
 
-                    $hora_inicio = substr($horas_disp->horario, 0, 5);
-                    $hora_fin = substr($horas_disp->horario, 8);
+                    $hora_inicio = substr($horas_disp->horario, 0, 7);
+                    $hora_fin = substr($horas_disp->horario, 9);
 
                     if(!is_null($entrenador_id) && $entrenador_id != "-1" && $idRol == 2)
                     {

@@ -77,7 +77,7 @@ h1,h2,h3,h4,h5,h6 {
 
 p {
 	font-family: Poppins-Regular;
-	font-size: 14px;
+	font-size: 20px;
 	line-height: 1.7;
 	/* color: #666666; */
 	margin: 0px;
@@ -546,10 +546,11 @@ iframe {
   width: 50%;
   margin-left: auto !important;
   margin-right: auto !important;
+  background-color: #21277B;
 }
 
-.file-container .div-file::before {
-  background-color: #449D44;
+.file-container .div-file::before 
+{
   color: white;
   display: flex;
   justify-content: center;

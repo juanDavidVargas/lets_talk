@@ -1,7 +1,7 @@
 {{-- Rol Administrador (id = 2) --}}
 <ul class="nav nav-tabs" style="margin-bottom: 0vw !important;">
     <li role="presentation">
-        <a class="pointer" href="{{route('administrador.index')}}">Home</a>
+        <a class="pointer" href="{{route('administrador.index')}}">Users</a>
     </li>
 
     <li role="presentation">
@@ -28,9 +28,7 @@
         <a href="{{route('administrador.niveles_index')}}">Levels</a>
     </li>
 
-    <li>
-        <a href="{{route('logout')}}" title="Cerrar Sesión">
-            <i class="fa fa-sign-out fa-3x" aria-hidden="true"></i>
-        </a>
+    <li role="presentation">
+        <a href="{{route('logout')}}">Log Out</a>
     </li>
 </ul>
